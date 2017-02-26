@@ -1,5 +1,3 @@
-package ca.ualberta.cs.sizebook;
-
 import android.app.Activity;
 import android.location.Location;
 import android.test.ActivityInstrumentationTestCase2;
