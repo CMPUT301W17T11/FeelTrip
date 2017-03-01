@@ -1,0 +1,10 @@
+Maps:
+
+http://stackoverflow.com/questions/34300485/google-maps-offline-android-development
+Google maps does not allow offline map for applications
+possible maps API: (these support offline map if we want to use offline map support for our app)
+-Open street map
+-OSMDroid
+-ESRI/Arcgis
+
+Theme:
