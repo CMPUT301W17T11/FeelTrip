@@ -17,6 +17,7 @@ Project Part 2:
 
 Project Part 3:
 
+This will be generally how it is. As we go along with our release planning we will need to subdivide this work
 Profile Page: Henry & Kevin
 Google Maps API: Kevin & Michael
 Mood event: Brett
@@ -28,6 +29,8 @@ Sidemenu: Brett & Ivan
 Navbar: ivan
 
  ----------------- Meeting notes Feb 28 2017 -----------------
+ Next time we need to decide who researches this stuff
+ 
 1. Research different methods to sync offline/online
 2. How to display images and storing them
 3. How to use google maps API (Open street maps)
