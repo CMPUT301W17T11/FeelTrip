@@ -1,4 +1,4 @@
-Maps:
+Maps: (TA recommend openstreetmaps, i want to use google maps)
 
 http://stackoverflow.com/questions/34300485/google-maps-offline-android-development
 Google maps does not allow offline map for applications
@@ -10,8 +10,15 @@ list of what functionality different 3rd party api have: http://wiki.openstreetm
 -OSMDroid
 -ESRI/Arcgis
 
+My choice: Google(need api key)/osmdroid
+how to get google maps api key: 
+https://developers.google.com/maps/documentation/android-api/signup
+
 how to create markers for our mood events using google maps API: 
 https://developers.google.com/maps/documentation/android-api/marker
+
+how to use osmdroid:
+https://github.com/osmdroid/osmdroid/wiki/How-to-use-the-osmdroid-library
 
 Theme:
 
