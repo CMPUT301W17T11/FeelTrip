@@ -2,13 +2,15 @@ import android.app.Activity;
 import android.location.Location;
 import android.test.ActivityInstrumentationTestCase2;
 
+import com.example.henzoshimada.feeltrip.MainScreen;
+
 import java.util.ArrayList;
 import java.util.Date;
 
 public class FeelTripTest extends ActivityInstrumentationTestCase2 {
 
     public FeelTripTest() {
-        super(MainActivity.class);
+        super(MainScreen.class);
     }
 
     // The following are tests for the MainActivity class
