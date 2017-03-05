@@ -31,7 +31,7 @@ Navbar: ivan
  ----------------- Meeting notes Feb 28 2017 -----------------
  Next time we need to decide who researches this stuff
  
-1. Research different methods to sync offline/online
+1. Research different methods to sync offline/online. We are supposed to use Elastic search and to deal with its shortcomings
 2. How to display images and storing them
 3. How to use google maps API (Open street maps)
 4. Elastic search skills 
