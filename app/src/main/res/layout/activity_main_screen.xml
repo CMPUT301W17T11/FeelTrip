@@ -10,8 +10,85 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.example.henzoshimada.feeltrip.MainScreen">
 
-    <TextView
+    <Button
+        android:id="@+id/friend_menu"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello World!" />
+        android:text="Friends"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true" />
+
+    <EditText
+        android:id="@+id/keyword_search"
+        android:layout_width="256dp"
+        android:layout_height="wrap_content"
+        android:inputType="text"
+        android:hint="@string/filter_keyword"
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@id/friend_menu" />
+
+    <Button
+        android:id="@+id/apply_filter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Submit"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"/>
+
+    <Spinner
+        android:id="@+id/filter_spinner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:prompt="@string/filter_prompt"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@id/keyword_search"
+        >
+    </Spinner>
+
+    <Button
+        android:id="@+id/goto_map"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Maps"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="47dp" />
+
+    <Button
+        android:id="@+id/post_mood_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Add a new post"
+        android:layout_below="@id/goto_map"/>
+
+    <ListView
+        android:layout_width="fill_parent"
+        android:layout_height="256dp"
+        android:scrollbars="vertical"
+        android:layout_below="@id/post_mood_button"
+        android:layout_marginTop="10dp">
+    </ListView>
+
+    <Button
+        android:id="@+id/goto_profile"
+        android:layout_width="120dp"
+        android:layout_height="wrap_content"
+        android:text="Profile Page"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"/>
+    <Button
+        android:id="@+id/goto_home"
+        android:layout_width="120dp"
+        android:layout_height="wrap_content"
+        android:text="Home"
+        android:layout_alignParentBottom="true"
+        android:layout_toRightOf="@+id/goto_profile"/>
+    <Button
+        android:id="@+id/goto_world"
+        android:layout_width="120dp"
+        android:layout_height="wrap_content"
+        android:text="World"
+        android:layout_alignParentBottom="true"
+        android:layout_toRightOf="@id/goto_home"/>
+
 </RelativeLayout>

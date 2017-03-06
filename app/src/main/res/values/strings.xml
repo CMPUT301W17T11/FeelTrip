@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">FeelTrip</string>
+    <string name="filter_prompt">Select a filter</string>
+    <string name="filter_keyword">Filter by keyword(s)</string>
 </resources>
