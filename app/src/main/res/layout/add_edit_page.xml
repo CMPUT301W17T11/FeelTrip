@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <EditText android:id="@+id/moodEventDescription"
+        android:layout_weight="0.38"
+        android:layout_width="match_parent"
+        android:layout_height="350dp"
+        android:inputType="text"
+        android:hint="@string/mood_prompt"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_margin="5dp"/>
+
+    <TextView
+        android:id="@+id/spinner1_desc"
+        android:layout_width="wrap_content"
+        android:layout_height="24dp"
+        android:textSize="16sp"
+        android:text="Mood: "
+        android:layout_below="@id/moodEventDescription"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="5dp"/>
+
+    <Spinner
+        android:id="@+id/filter_spinner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:prompt="@string/filter_prompt"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@id/spinner1_desc"
+        android:layout_marginLeft="5dp">
+    </Spinner>
+
+    <TextView
+        android:id="@+id/spinner2_desc"
+        android:layout_width="wrap_content"
+        android:layout_height="24dp"
+        android:textSize="16sp"
+        android:text="Mood: "
+        android:layout_below="@id/filter_spinner"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="30dp"/>
+
+    <Spinner
+        android:id="@+id/social_event_spinner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:prompt="@string/filter_prompt"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@id/spinner2_desc"
+        android:layout_marginLeft="5dp">
+    </Spinner>
+
+    <Button
+        android:id="@+id/toggle_location"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Show location?"
+        android:layout_below="@id/moodEventDescription"
+        android:layout_toRightOf="@id/spinner1_desc"
+        android:layout_marginTop="5dp"/>
+
+    <Button
+        android:id="@+id/toggle_public"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Make Public?"
+        android:layout_below="@id/toggle_location"
+        android:layout_toRightOf="@id/spinner2_desc"
+        android:layout_marginTop="30dp"/>
+
+    <TextView
+        android:id="@+id/image_name"
+        android:layout_width="wrap_content"
+        android:layout_height="24dp"
+        android:textSize="16sp"
+        android:text="filename:"
+        android:layout_below="@id/moodEventDescription"
+        android:layout_toRightOf="@id/toggle_location"
+        android:layout_marginLeft="5dp"/>
+
+    <Button
+        android:id="@+id/select_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Choose Image"
+        android:layout_below="@id/image_name"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="5dp"/>
+
+    <Button
+        android:id="@+id/select_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Select Date"
+        android:layout_below="@id/select_image"
+        android:layout_toRightOf="@id/toggle_public"
+        android:layout_marginRight="5dp"/>
+
+    <Button
+        android:id="@+id/post_mood_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Submit"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="5dp"/>
+
+</RelativeLayout>
