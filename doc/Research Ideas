@@ -10,7 +10,7 @@ list of what functionality different 3rd party api have: http://wiki.openstreetm
 -OSMDroid
 -ESRI/Arcgis
 
-My choice: Google(need api key)/osmdroid
+My choice: Google(need api key: AIzaSyBNi0E73lwt_qFLGVX3-7gUQviCDrjhVuU)/osmdroid
 how to get google maps api key: 
 https://developers.google.com/maps/documentation/android-api/signup
 
