@@ -3,4 +3,5 @@
     <string name="filter_prompt">Select a filter</string>
     <string name="filter_keyword">Filter by keyword(s)</string>
     <string name="mood_prompt">How do you feel?</string>
+    <string name="title_activity_map">Map</string>
 </resources>

@@ -1,8 +1,11 @@
 package com.example.henzoshimada.feeltrip;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.Spinner;
 
 import java.util.ArrayList;
@@ -18,8 +21,15 @@ public class MainScreen extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_screen);
-
+        Button goToMapButton = (Button) findViewById(R.id.goto_map);
         addItemsOnFilterSpinner();
+
+        goToMapButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Intent intent = new Intent(v.getContext(), MapActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     // Taken from: https://www.mkyong.com/android/android-spinner-drop-down-list-example/
