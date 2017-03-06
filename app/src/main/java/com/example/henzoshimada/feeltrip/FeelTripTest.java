@@ -14,7 +14,7 @@ public class FeelTripTest extends ActivityInstrumentationTestCase2 {
     }
 
     // The following are tests for the MainActivity class
-
+/*
     public void testCreateMoodEvent() throws Exception {
         //TODO
     }
@@ -171,5 +171,5 @@ public class FeelTripTest extends ActivityInstrumentationTestCase2 {
     //
 
 
-
+*/
 }
