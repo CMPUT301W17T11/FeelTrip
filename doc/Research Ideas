@@ -27,3 +27,11 @@ Theme:
 Dynamic UIs:
 https://developer.android.com/training/basics/fragments/index.html
 http://stackoverflow.com/questions/9260359/how-to-create-dynamic-ui-in-android
+
+
+STORING IMAGES:
+https://github.com/elastic/elasticsearch-mapper-attachments
+http://stackoverflow.com/questions/30440224/possible-to-store-images-in-elasticsearch
+https://github.com/kzwang/elasticsearch-image
+https://www.elastic.co/blog/found-getting-started-with-lire-and-elasticsearch
+https://github.com/dermotte/lire
