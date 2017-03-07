@@ -1,6 +1,9 @@
 package com.example.henzoshimada.feeltrip;
 
+import android.location.Location;
 import android.test.ActivityInstrumentationTestCase2;
+
+import java.util.Date;
 
 /**
  * Created by HenzoShimada on 2017-03-05.
@@ -22,6 +25,7 @@ public class FeelTripTests extends ActivityInstrumentationTestCase2 {
     public void testGetMoodEvent() {
         //TODO
     }
+    */
 
     // The following are tests for the NewMoodEvent class
 
@@ -37,6 +41,7 @@ public class FeelTripTests extends ActivityInstrumentationTestCase2 {
         assertEquals(mood.getDescription(), "test description");
     }
 
+    /* TODO: discuss about how to set mood
     public void testSetMoodOption() {
         Mood mood = new Mood();
         mood.setMoodOption("Happy");
@@ -48,6 +53,7 @@ public class FeelTripTests extends ActivityInstrumentationTestCase2 {
         mood.setMoodOption("Happy");
         assertEquals(mood.getMoodOption(), "Happy");
     }
+    */
 
     public void testSetSocialSit() {
         Mood mood = new Mood();
@@ -75,12 +81,14 @@ public class FeelTripTests extends ActivityInstrumentationTestCase2 {
         assertTrue(mood.getPrivate());
     }
 
+    /*
     public void testSetMapPosition() {
         Mood mood = new Mood();
         Location loc = null; //TODO: properly initialize a test loc
         mood.setMapPosition(loc);
         assertNotNull(mood.getMapPosition());
     }
+    */
 
     public void testGetMapPosition() {
         Mood mood = new Mood();
@@ -89,6 +97,7 @@ public class FeelTripTests extends ActivityInstrumentationTestCase2 {
         assertEquals(mood.getMapPosition(), loc);
     }
 
+    /* TODO: (question) user set date manually or generate date automatically
     public void testSetDate() {
         Mood mood = new Mood();
         Date date = null;
@@ -102,7 +111,9 @@ public class FeelTripTests extends ActivityInstrumentationTestCase2 {
         mood.setDate(date);
         assertEquals(mood.getDate(), date);
     }
+    */
 
+/*
     public void testSetImageFile() {
         //TODO: Figure out what data type an image file is stored in
     }
