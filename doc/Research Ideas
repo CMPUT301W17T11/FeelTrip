@@ -41,3 +41,5 @@ https://github.com/dermotte/lire
 ***http://stackoverflow.com/questions/42571558/bitmapfactory-unable-to-decode-stream-java-io-filenotfoundexception****
 ^Idk how the permissions work for photos
 http://stackoverflow.com/questions/8854359/exception-open-failed-eacces-permission-denied-on-android
+
+http://stackoverflow.com/questions/9768611/encode-and-decode-bitmap-object-in-base64-string-in-android
