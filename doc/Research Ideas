@@ -38,3 +38,5 @@ https://github.com/dermotte/lire
 
 ***** http://viralpatel.net/blogs/pick-image-from-galary-android-app/
 ***** http://stackoverflow.com/questions/9107900/how-to-upload-image-from-gallery-in-android
+***http://stackoverflow.com/questions/42571558/bitmapfactory-unable-to-decode-stream-java-io-filenotfoundexception****
+^Idk how the permissions work for photos
