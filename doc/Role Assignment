@@ -41,3 +41,10 @@ Project Part 4:
 Need to get half the code base done.
 Thinking that we need the main screen, profile page, mood events, and started on maps 
 hopefully can also start on elastic search and storing images
+
+Michael: Store Mood events locally and on a queue to interact with the  "online controller"
+Brett: Make the "online controller", it pulls from the queue and updates accordingly with the database. 
+        This controller will also be what we use to pull mood events from the database
+Kevin: Get the map to work
+Ivan and Henry: Sidemenu, login screen, nav bar, functionality for both the main screen and the profile page and the new mood event.
+
