@@ -16,7 +16,7 @@ Project Part 2:
   - Due by Friday
 
 Project Part 3:
-<del>
+OLD ASSIGNMENT
 This will be generally how it is. As we go along with our release planning we will need to subdivide this work
 Profile Page: Henry & Kevin
 Google Maps API: Kevin & Michael
@@ -27,7 +27,7 @@ Login: Brett
 Main: Henry & Kevin
 Sidemenu: Brett & Ivan
 Navbar: ivan
-</del>
+
  ----------------- Meeting notes Feb 28 2017 -----------------
  Next time we need to decide who researches this stuff
  
@@ -42,6 +42,7 @@ Need to get half the code base done.
 Thinking that we need the main screen, profile page, mood events, and started on maps 
 hopefully can also start on elastic search and storing images
 
+NEW ASSIGNMENT
 Michael: Store Mood events locally and on a queue to interact with the  "online controller"
 Brett: Make the "online controller", it pulls from the queue and updates accordingly with the database. 
         This controller will also be what we use to pull mood events from the database
