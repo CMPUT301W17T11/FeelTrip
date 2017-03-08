@@ -162,18 +162,21 @@ public class MapActivity extends FragmentActivity
             // for ActivityCompat#requestPermissions for more details.
             return false;
         }
-        //get last known location
+        //get last known location todo handle when location or wifi is off
         mLastKnownLocation = LocationServices.FusedLocationApi
                 .getLastLocation(mGoogleApiClient);
-        Log.d("mapTag", "Lat= "+String.valueOf(mLastKnownLocation.getLatitude())+" and Long= "+String.valueOf(mLastKnownLocation.getLongitude()));
+        if (mLastKnownLocation != null) {
+            Log.d("mapTag", "Lat= " + String.valueOf(mLastKnownLocation.getLatitude()) + " and Long= " + String.valueOf(mLastKnownLocation.getLongitude()));
 
-        //5km radius circle for debug
-        Circle circle = mMap.addCircle(new CircleOptions()
-                .center(new LatLng(mLastKnownLocation.getLatitude(),
-                        mLastKnownLocation.getLongitude()))
-                .radius(5000) //in meters
-                .strokeColor(Color.RED));
-
+            //5km radius circle for debug
+            Circle circle = mMap.addCircle(new CircleOptions()
+                    .center(new LatLng(mLastKnownLocation.getLatitude(),
+                            mLastKnownLocation.getLongitude()))
+                    .radius(5000) //in meters
+                    .strokeColor(Color.RED));
+        } else {
+            Toast.makeText(this, "Please turn on Location Service and retry", Toast.LENGTH_SHORT).show();
+        }
         return false;
     }
 
