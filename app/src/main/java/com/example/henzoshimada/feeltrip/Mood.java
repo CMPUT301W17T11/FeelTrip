@@ -1,6 +1,11 @@
 package com.example.henzoshimada.feeltrip;
 
 import android.location.Location;
+
+import java.lang.reflect.Array;
+import java.lang.reflect.Modifier;
+import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.Date;
 
 /**
@@ -19,6 +24,22 @@ public class Mood {
     private byte[] image;
     private Location geoLocation;
 
+    // vector for tracking states of different attributes
+    private int size = 7;
+
+    /* Index - attribute mapping:
+    0 ----> moodChanged;
+    1 ----> descriptionChanged;
+    2 ----> dateChanged;
+    3 ----> socialSitChanged;
+    4 ----> isPrivateChanged;
+    5 ----> imageChanged;
+    6 ----> geoLocationChanged;
+    */
+
+    private ArrayList<Boolean> stateVector;
+
+
     public Mood(){
         user = null;
         mood = null;
@@ -26,17 +47,51 @@ public class Mood {
         date = null;
         socialSit = null;
         isPrivate = false;
+        stateVector = new ArrayList<>(size);
+
+        for (int i = 0; i < size; i++){
+            stateVector.add(Boolean.FALSE);
+        }
+
     }
 
 
-    public Mood(String user, String description){
+    public Mood(String user){
         this.user = user;
-        this.description = description;
         this.date = new Date();
-
+        stateVector = new ArrayList<>(size);
+        for (int i = 0; i < size; i++){
+            stateVector.add(Boolean.FALSE);
+        }
     }
 
 
+    public ArrayList<Boolean> getAllMoodState(){
+        return stateVector;
+    }
+
+    // Evaluate stateVector and check if this mood event is changed.
+    public Boolean isChanged(){
+        Boolean result = Boolean.FALSE;
+        for (int i = 0; i < size; i++){
+            result = result || stateVector.get(i);
+        }
+        return result;
+    }
+
+
+    public Boolean getStateByIndex(int index) {
+        return stateVector.get(index);
+    }
+
+    public void setStateByIndex(int index){
+        stateVector.set(index, Boolean.TRUE);
+    }
+
+
+    public String getUser(){
+        return user;
+    }
 
     public byte[] getImage() {
         return image;
@@ -78,16 +133,19 @@ public class Mood {
         isPrivate = true;
     }
 
-    public String getMood() {
+    public String getMoodOption() {
         return mood;
     }
 
-    public void setHappyMood() {
-        this.mood = "Happy";
+    public void setMoodOption(String mood) {
+        this.mood = mood;
     }
 
-    public void setSadMood() {
-        this.mood = "Sad";
+    public Date getDate() {
+        return date;
     }
-    // more moods goes here
+
+    public void setDate(Date date) {
+        this.date = date;
+    }
 }
