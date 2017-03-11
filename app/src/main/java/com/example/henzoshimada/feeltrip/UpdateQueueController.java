@@ -1,6 +1,5 @@
 package com.example.henzoshimada.feeltrip;
 
-import java.util.ArrayDeque;
 
 /**
  * Created by Esus2 on 2017-03-09.
@@ -19,7 +18,6 @@ public class UpdateQueueController {
 
     public Mood popMood(){
         if (updateQueue.isEmpty()){
-            // throw exception
             return null;
         }
         else{

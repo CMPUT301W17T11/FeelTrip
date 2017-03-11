@@ -8,6 +8,8 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Date;
 
+import io.searchbox.annotations.JestId;
+
 /**
  * Created by Esus2 on 2017-03-07.
  */
@@ -23,6 +25,9 @@ public class Mood {
 
     private byte[] image;
     private Location geoLocation;
+
+    @JestId
+    private String id;
 
     // vector for tracking states of different attributes
     private int size = 7;
@@ -65,9 +70,12 @@ public class Mood {
         }
     }
 
+    public String getId() {
+        return id;
+    }
 
-    public ArrayList<Boolean> getAllMoodState(){
-        return stateVector;
+    public void setId(String id) {
+        this.id = id;
     }
 
     // Evaluate stateVector and check if this mood event is changed.
@@ -79,6 +87,15 @@ public class Mood {
         return result;
     }
 
+    public ArrayList<Boolean> getAllMoodState(){
+        return stateVector;
+    }
+
+    public void resetState(){
+        for (int i = 0; i < size; i++){
+            stateVector.set(i, Boolean.FALSE);
+        }
+    }
 
     public Boolean getStateByIndex(int index) {
         return stateVector.get(index);
@@ -105,8 +122,18 @@ public class Mood {
         return description;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setDescription(String description) throws DescriptionTooLongException {
+        int count = 0;
+        for (int i = 0; i < description.length(); i++){
+            if (description.charAt(i) == ' '){
+                count++;
+            }
+        }
+        if (description.length() > 20 || count > 2){
+            throw new DescriptionTooLongException();
+        }else {
+            this.description = description;
+        }
     }
 
     public String getSocialSit() {
