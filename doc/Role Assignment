@@ -50,4 +50,15 @@ Kevin: Get the map to work
 Ivan and Henry: Sidemenu, login screen, nav bar, 
                 functionality for both the main screen and the profile page and the new mood event,
                 storing images as encoded base64 byte array
+                
+Checkist:
+Main page
+Profile page
+Mood Class
+New Mood Class
+Maps
+Images
+Elastic search
+  store on queue
+  online controller
 
