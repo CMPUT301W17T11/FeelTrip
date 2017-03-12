@@ -137,27 +137,29 @@ client.execute(new Delete.Builder("1")
         }
     }
 
-
+    // call constructor GetMoodTask(String filterBy) if filtering by a specific field
+    // call constructor GetMoodTask() if fetching all moods
     public static class GetMoodTask extends AsyncTask<String, Void, ArrayList<Mood>> {
         private String fieldToSearch;
         public GetMoodTask(String filterBy){
             this.fieldToSearch = filterBy;
         }
+        public GetMoodTask(){this.fieldToSearch = null; }
+
         @Override
         protected ArrayList<Mood> doInBackground(String... search_parameters) {
             verifySettings();
-            if (search_parameters.length == 0){
-                return null;
-            }
-
             ArrayList<Mood> moods = new ArrayList<Mood>();
-
-            // build the query
-            String query = "{"+
-                            "\"query\" : {" +
-                                fieldToSearch + ":" + search_parameters[0] + "\"}" +
-                            " }";
-
+            String query;
+            if (fieldToSearch == null){
+                query = "";
+            }
+            else {
+                query = "{" +
+                        "\"query\" : {" +
+                        fieldToSearch + ":" + search_parameters[0] + "\"}" +
+                        " }";
+            }
             Log.d("query", query);
 
             Search search = new Search.Builder(query)
