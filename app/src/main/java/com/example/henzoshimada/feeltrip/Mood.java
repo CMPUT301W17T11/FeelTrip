@@ -87,7 +87,7 @@ public class Mood {
         return result;
     }
 
-    public ArrayList<Boolean> getAllMoodState(){
+    public ArrayList<Boolean> getAllState(){
         return stateVector;
     }
 
@@ -134,6 +134,7 @@ public class Mood {
         }else {
             this.description = description;
         }
+        setStateByIndex(1);
     }
 
     public String getSocialSit() {
@@ -142,6 +143,7 @@ public class Mood {
 
     public void setSocialSit(String socialSit) {
         this.socialSit = socialSit;
+        setStateByIndex(3);
     }
 
     public void setMapPosition(Location location){
@@ -157,7 +159,9 @@ public class Mood {
     }
 
     public void setPrivate() {
-        isPrivate = true;
+        isPrivate = !isPrivate;
+        setStateByIndex(4);
+
     }
 
     public String getMoodOption() {
@@ -166,6 +170,7 @@ public class Mood {
 
     public void setMoodOption(String mood) {
         this.mood = mood;
+        setStateByIndex(0);
     }
 
     public Date getDate() {
@@ -174,5 +179,6 @@ public class Mood {
 
     public void setDate(Date date) {
         this.date = date;
+        setStateByIndex(2);
     }
 }
