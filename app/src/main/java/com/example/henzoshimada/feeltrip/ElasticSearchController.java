@@ -10,6 +10,7 @@ import com.searchly.jestdroid.JestDroidClient;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.searchbox.core.Delete;
 import io.searchbox.core.DocumentResult;
 import io.searchbox.core.Index;
 import io.searchbox.core.Search;
@@ -89,25 +90,53 @@ public class ElasticSearchController {
                                 break;
                         }
                     }
+
+                    // TODO: find out how to update certain fields
+                    try{
+                        // no idea about correctness
+                        Update update = new Update.Builder(query).index(groupIndex).type("mood").id(moodId).build();
+                        client.execute(update);
+
+                    }catch (Exception e){
+                        Log.i("Error", "The application failed to build and send the moods");
+                    }
+
                     mood.resetState();
                     query += "}";
                     Log.d("update query: ", query);
-                }
-
-
-                // TODO: find out how to update certain fields
-                try{
-                    // no idea about correctness
-                    Update update = new Update.Builder(query).index(groupIndex).type("mood").id(moodId).build();
-                     client.execute(update);
-
-                }catch (Exception e){
-                    Log.i("Error", "The application failed to build and send the moods");
                 }
             }
                 return null;
         }
     }
+/* delete query:
+client.execute(new Delete.Builder("1")
+                .index("twitter")
+                .type("tweet")
+                .build());
+ */
+
+    public static class DeleteMoodTask extends AsyncTask<Mood, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Mood ... moods ) {
+            verifySettings();
+
+            for (Mood mood : moods) {
+                String moodId = mood.getId();
+                Delete delete = new Delete.Builder(moodId).index(groupIndex).type("mood").build();
+
+                try {
+                    client.execute(delete);
+                }
+                catch (Exception e) {
+                    Log.i("Error", "The application failed to build and delete the moods");
+                }
+            }
+            return null;
+        }
+    }
+
 
     public static class GetMoodTask extends AsyncTask<String, Void, ArrayList<Mood>> {
         private String fieldToSearch;
@@ -155,12 +184,7 @@ public class ElasticSearchController {
         }
     }
 
-/* delete query:
-client.execute(new Delete.Builder("1")
-                .index("twitter")
-                .type("tweet")
-                .build());
- */
+
     // singleton
     public static void verifySettings() {
         if (client == null) {
