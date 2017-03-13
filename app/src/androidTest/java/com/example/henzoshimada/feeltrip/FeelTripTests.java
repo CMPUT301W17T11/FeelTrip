@@ -27,6 +27,18 @@ public class FeelTripTests extends ActivityInstrumentationTestCase2 {
     }
     */
 
+    public void testUpdateQueueController(){
+        UpdateQueueController qc = FeelTripApplication.getUpdateQueueController();
+        Mood mood = new Mood("user1");
+        qc.addMood(mood);
+
+        UpdateQueueController qc2 = FeelTripApplication.getUpdateQueueController();
+        assertTrue("msg", qc2.getSize() == 1);
+
+        assertTrue("MSG", qc2.popMood().getUser() == "user1");
+    }
+
+
     // The following are tests for the NewMoodEvent class
 
     public void testSetDescription() {
@@ -41,7 +53,6 @@ public class FeelTripTests extends ActivityInstrumentationTestCase2 {
         assertEquals(mood.getDescription(), "test description");
     }
 
-    /* TODO: discuss about how to set mood
     public void testSetMoodOption() {
         Mood mood = new Mood();
         mood.setMoodOption("Happy");
@@ -53,7 +64,6 @@ public class FeelTripTests extends ActivityInstrumentationTestCase2 {
         mood.setMoodOption("Happy");
         assertEquals(mood.getMoodOption(), "Happy");
     }
-    */
 
     public void testSetSocialSit() {
         Mood mood = new Mood();
@@ -97,7 +107,7 @@ public class FeelTripTests extends ActivityInstrumentationTestCase2 {
         assertEquals(mood.getMapPosition(), loc);
     }
 
-    /* TODO: (question) user set date manually or generate date automatically
+    /*
     public void testSetDate() {
         Mood mood = new Mood();
         Date date = null;
