@@ -41,13 +41,13 @@ public class FeelTripTests extends ActivityInstrumentationTestCase2 {
 
     // The following are tests for the NewMoodEvent class
 
-    public void testSetDescription() {
+    public void testSetDescription() throws DescriptionTooLongException {
         Mood mood = new Mood();
         mood.setDescription("test description");
         assertNotNull(mood.getDescription());
     }
 
-    public void testGetDescription() {
+    public void testGetDescription() throws DescriptionTooLongException {
         Mood mood = new Mood();
         mood.setDescription("test description");
         assertEquals(mood.getDescription(), "test description");
