@@ -1,14 +1,15 @@
 package com.example.henzoshimada.feeltrip;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.Spinner;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static android.R.id.list;
 
 // This is the main screen: This is what the Participant first sees
 public class MainScreen extends AppCompatActivity {
@@ -20,6 +21,15 @@ public class MainScreen extends AppCompatActivity {
         setContentView(R.layout.activity_main_screen);
 
         addItemsOnFilterSpinner();
+        Button addMoodButton = (Button) findViewById(R.id.post_mood_button);
+
+        addMoodButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(v.getContext(), EditMoodActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     // Taken from: https://www.mkyong.com/android/android-spinner-drop-down-list-example/
