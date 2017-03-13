@@ -2,8 +2,11 @@ package com.example.henzoshimada.feeltrip;
 
 import android.location.Location;
 import android.test.ActivityInstrumentationTestCase2;
+import android.util.Log;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.concurrent.ExecutionException;
 
 /**
  * Created by HenzoShimada on 2017-03-05.
@@ -35,12 +38,36 @@ public class FeelTripTests extends ActivityInstrumentationTestCase2 {
         UpdateQueueController qc2 = FeelTripApplication.getUpdateQueueController();
         assertTrue("msg", qc2.getSize() == 1);
 
-        assertTrue("MSG", qc2.popMood().getUser() == "user1");
+        assertTrue("MSG", qc2.popMood().getUser().equals("user1"));
     }
 
+    public void testAddMoodTask(){
+        Mood mood = new Mood("user3");
+        try {
+            mood.setDescription("description3");
+        } catch (DescriptionTooLongException e) {
+            e.printStackTrace();
+        }
+        ElasticSearchController.AddMoodTask add = new ElasticSearchController.AddMoodTask();
+        add.execute(mood);
+    }
+
+    public void testGetMoodTask(){
+        ArrayList<Mood> moods = new ArrayList<>();
+        ElasticSearchController.GetMoodTask get = new ElasticSearchController.GetMoodTask("user");
+        get.execute("user1");
+        try {
+            moods.addAll(get.get());
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+        assertEquals("test getMood", "user1", moods.get(0).getUser());
+    }
 
     // The following are tests for the NewMoodEvent class
-
+/*
     public void testSetDescription() throws DescriptionTooLongException {
         Mood mood = new Mood();
         mood.setDescription("test description");
@@ -52,7 +79,7 @@ public class FeelTripTests extends ActivityInstrumentationTestCase2 {
         mood.setDescription("test description");
         assertEquals(mood.getDescription(), "test description");
     }
-
+*/
     public void testSetMoodOption() {
         Mood mood = new Mood();
         mood.setMoodOption("Happy");

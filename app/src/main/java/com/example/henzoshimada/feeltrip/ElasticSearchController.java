@@ -23,7 +23,7 @@ import io.searchbox.core.Update;
 
 public class ElasticSearchController {
     private static JestDroidClient client;
-    private static final String groupIndex = "cmput301W17T11";
+    private static final String groupIndex = "cmput301w17t11";
 
     public static class AddMoodTask extends AsyncTask<Mood, Void, Void> {
 
@@ -157,8 +157,9 @@ client.execute(new Delete.Builder("1")
             else {
                 query = "{" +
                         "\"query\" : {" +
-                        fieldToSearch + ":" + search_parameters[0] + "\"}" +
-                        " }";
+                            "\"match\" : {" +
+                        "\"" + fieldToSearch + "\""+ ": \"" + search_parameters[0] + "\"}" +
+                        " }}";
             }
             Log.d("query", query);
 

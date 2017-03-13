@@ -16,7 +16,7 @@ import io.searchbox.annotations.JestId;
 
 public class Mood {
     private String user;
-    private String mood;
+    private String emotionalState;
     private String description;
     private Date date;
 
@@ -33,7 +33,7 @@ public class Mood {
     private int size = 7;
 
     /* Index - attribute mapping:
-    0 ----> moodChanged;
+    0 ----> emotionalStateChanged;
     1 ----> descriptionChanged;
     2 ----> dateChanged;
     3 ----> socialSitChanged;
@@ -47,7 +47,7 @@ public class Mood {
 
     public Mood(){
         user = null;
-        mood = null;
+        emotionalState = null;
         description = null;
         date = null;
         socialSit = null;
@@ -65,6 +65,7 @@ public class Mood {
         this.user = user;
         this.date = new Date();
         stateVector = new ArrayList<>(size);
+        isPrivate = false;
         for (int i = 0; i < size; i++){
             stateVector.add(Boolean.FALSE);
         }
@@ -165,11 +166,11 @@ public class Mood {
     }
 
     public String getMoodOption() {
-        return mood;
+        return emotionalState;
     }
 
-    public void setMoodOption(String mood) {
-        this.mood = mood;
+    public void setMoodOption(String emotionalState) {
+        this.emotionalState = emotionalState;
         setStateByIndex(0);
     }
 

@@ -14,6 +14,12 @@ import android.app.Application;
 public class FeelTripApplication extends Application {
     // Singleton
     private static UpdateQueue updateQueue = null;
+
+    /**
+     * Get update queue update queue.
+     * Create a UpdateQueue object
+     * @return the update queue
+     */
     static UpdateQueue getUpdateQueue(){
         if (updateQueue == null){
             updateQueue = new UpdateQueue();
@@ -24,6 +30,12 @@ public class FeelTripApplication extends Application {
     // Singleton
     private static UpdateQueueController updateQueueController = null;
 
+    /**
+     * Get update queue controller update queue controller.
+     * Create an UpdateQueue object and return it if it does not exist.
+     * return the existing UpdateQueue otherwise
+     * @return the update queue controller
+     */
     public static UpdateQueueController getUpdateQueueController(){
         if (updateQueueController == null){
             updateQueueController = new UpdateQueueController(getUpdateQueue());
