@@ -1,3 +1,6 @@
+How to merge:
+http://stackoverflow.com/questions/14168677/merge-development-branch-with-master
+
 Maps: (TA recommend openstreetmaps, i want to use google maps)
 
 http://stackoverflow.com/questions/34300485/google-maps-offline-android-development
@@ -20,6 +23,9 @@ https://developers.google.com/maps/documentation/android-api/marker
 how to use osmdroid:
 https://github.com/osmdroid/osmdroid/wiki/How-to-use-the-osmdroid-library
 
+how to make custom info window:
+https://developers.google.com/maps/documentation/android-api/infowindows
+
 Theme:
 
 
@@ -35,3 +41,11 @@ http://stackoverflow.com/questions/30440224/possible-to-store-images-in-elastics
 https://github.com/kzwang/elasticsearch-image
 https://www.elastic.co/blog/found-getting-started-with-lire-and-elasticsearch
 https://github.com/dermotte/lire
+
+***** http://viralpatel.net/blogs/pick-image-from-galary-android-app/
+***** http://stackoverflow.com/questions/9107900/how-to-upload-image-from-gallery-in-android
+***http://stackoverflow.com/questions/42571558/bitmapfactory-unable-to-decode-stream-java-io-filenotfoundexception****
+^Idk how the permissions work for photos
+http://stackoverflow.com/questions/8854359/exception-open-failed-eacces-permission-denied-on-android
+
+http://stackoverflow.com/questions/9768611/encode-and-decode-bitmap-object-in-base64-string-in-android
