@@ -1,3 +1,6 @@
+How to merge:
+http://stackoverflow.com/questions/14168677/merge-development-branch-with-master
+
 Maps: (TA recommend openstreetmaps, i want to use google maps)
 
 http://stackoverflow.com/questions/34300485/google-maps-offline-android-development
@@ -19,6 +22,9 @@ https://developers.google.com/maps/documentation/android-api/marker
 
 how to use osmdroid:
 https://github.com/osmdroid/osmdroid/wiki/How-to-use-the-osmdroid-library
+
+how to make custom info window:
+https://developers.google.com/maps/documentation/android-api/infowindows
 
 Theme:
 
