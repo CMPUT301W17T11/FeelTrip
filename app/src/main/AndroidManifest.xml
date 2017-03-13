@@ -2,10 +2,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.henzoshimada.feeltrip">
 
-<<<<<<< HEAD
+
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-=======
+
 
     <uses-permission android:name="android.permission.INTERNET" />
 
@@ -15,8 +15,6 @@
          location permissions for the 'MyLocation' functionality. 
     -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-
->>>>>>> 8fbc2ec60c7cf5462ca56cf6c84b041d49ebd2e2
 
     <application
         android:allowBackup="true"
