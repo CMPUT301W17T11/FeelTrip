@@ -16,7 +16,7 @@ Project Part 2:
   - Due by Friday
 
 Project Part 3:
-
+OLD ASSIGNMENT
 This will be generally how it is. As we go along with our release planning we will need to subdivide this work
 Profile Page: Henry & Kevin
 Google Maps API: Kevin & Michael
@@ -36,3 +36,29 @@ Navbar: ivan
 3. How to use google maps API (Open street maps)
 4. Elastic search skills 
 5. How to implement themes
+
+Project Part 4:
+Need to get half the code base done.
+Thinking that we need the main screen, profile page, mood events, and started on maps 
+hopefully can also start on elastic search and storing images
+
+NEW ASSIGNMENT
+Michael: Store Mood events locally and on a queue to interact with the  "online controller"
+Brett: Make the "online controller", it pulls from the queue and updates accordingly with the database. 
+        This controller will also be what we use to pull mood events from the database
+Kevin: Get the map to work
+Ivan and Henry: Sidemenu, login screen, nav bar, 
+                functionality for both the main screen and the profile page and the new mood event,
+                storing images as encoded base64 byte array
+                
+Checkist:
+Main page
+Profile page
+Mood Class
+New Mood Class
+Maps
+Images
+Elastic search
+  store on queue
+  online controller
+
