@@ -24,6 +24,7 @@ import io.searchbox.core.Update;
 public class ElasticSearchController {
     private static JestDroidClient client;
     private static final String groupIndex = "cmput301w17t11";
+    private static final String typeMood = "mood";
 
     public static class AddMoodTask extends AsyncTask<Mood, Void, Void> {
 
@@ -32,7 +33,8 @@ public class ElasticSearchController {
             verifySettings();
 
             for (Mood mood : moods) {
-                Index index = new Index.Builder(mood).index(groupIndex).type("mood").build();
+                mood.resetState();
+                Index index = new Index.Builder(mood).index(groupIndex).type(typeMood).build();
 
                 try {
                     // where is the client?
@@ -72,7 +74,7 @@ public class ElasticSearchController {
                     if (changed){
                         switch (i){
                             case 0:
-                                query += ("mood : " + mood.getMoodOption());
+                                query += ("\"mood : \"" + "\"" + mood.getMoodOption() + "\"");
                                 break;
                             case 1:
                                 query += ("description : " + mood.getDescription());
@@ -90,6 +92,7 @@ public class ElasticSearchController {
                                 break;
                         }
                     }
+                    query += "}";
 
                     // TODO: find out how to update certain fields
                     try{
@@ -102,7 +105,6 @@ public class ElasticSearchController {
                     }
 
                     mood.resetState();
-                    query += "}";
                     Log.d("update query: ", query);
                 }
             }

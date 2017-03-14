@@ -63,6 +63,9 @@ public class Mood {
 
     public Mood(String user){
         this.user = user;
+        emotionalState = null;
+        description = null;
+        socialSit = null;
         this.date = new Date();
         stateVector = new ArrayList<>(size);
         isPrivate = false;
