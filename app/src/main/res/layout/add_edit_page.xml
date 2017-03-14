@@ -25,14 +25,14 @@
         android:id="@+id/spinner1_desc"
         android:layout_width="wrap_content"
         android:layout_height="24dp"
-        android:textSize="16sp"
-        android:text="Mood: "
         android:layout_below="@id/imgView"
         android:layout_marginLeft="5dp"
-        android:layout_marginTop="5dp"/>
+        android:layout_marginTop="5dp"
+        android:text="Emotional State"
+        android:textSize="16sp" />
 
     <Spinner
-        android:id="@+id/filter_spinner"
+        android:id="@+id/emotional_state_spinner"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:prompt="@string/filter_prompt"
@@ -45,11 +45,11 @@
         android:id="@+id/spinner2_desc"
         android:layout_width="wrap_content"
         android:layout_height="24dp"
-        android:textSize="16sp"
-        android:text="Mood: "
-        android:layout_below="@id/filter_spinner"
+        android:layout_below="@id/emotional_state_spinner"
         android:layout_marginLeft="5dp"
-        android:layout_marginTop="30dp"/>
+        android:layout_marginTop="30dp"
+        android:text="Social Situation:"
+        android:textSize="16sp" />
 
     <Spinner
         android:id="@+id/social_event_spinner"
@@ -61,7 +61,7 @@
         android:layout_marginLeft="5dp">
     </Spinner>
 
-    <Button
+<!--    <Button
         android:id="@+id/toggle_location"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -69,12 +69,32 @@
         android:layout_below="@id/imgView"
         android:layout_toRightOf="@id/spinner1_desc"
         android:layout_marginTop="5dp"/>
-
+-->
+    <ToggleButton
+        android:id="@+id/toggle_location"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textOn="Location On"
+        android:textOff="Location Off"
+        android:layout_below="@id/imgView"
+        android:layout_toRightOf="@id/spinner1_desc"
+        android:layout_marginTop="5dp"/>
+<!--
     <Button
         android:id="@+id/toggle_public"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Make Public?"
+        android:layout_below="@id/toggle_location"
+        android:layout_toRightOf="@id/spinner2_desc"
+        android:layout_marginTop="30dp"/>
+-->
+    <ToggleButton
+        android:id="@+id/toggle_public"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textOn="Public"
+        android:textOff="Private"
         android:layout_below="@id/toggle_location"
         android:layout_toRightOf="@id/spinner2_desc"
         android:layout_marginTop="30dp"/>

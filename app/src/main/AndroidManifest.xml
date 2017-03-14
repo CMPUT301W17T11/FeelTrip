@@ -27,6 +27,8 @@
             </intent-filter>
         </activity>
 
+        <activity android:name=".EditMoodActivity" />
+
         <activity
             android:name=".MainScreen"
             android:label="Main screen"
@@ -47,6 +49,7 @@
         <activity
             android:name=".MapActivity"
             android:label="@string/title_activity_map"></activity>
+
 
     </application>
 

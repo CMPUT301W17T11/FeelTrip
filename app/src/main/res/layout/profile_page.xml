@@ -37,7 +37,7 @@
         android:layout_alignParentTop="true"/>
 
     <Spinner
-        android:id="@+id/filter_spinner"
+        android:id="@+id/emotional_state_spinner"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:prompt="@string/filter_prompt"
