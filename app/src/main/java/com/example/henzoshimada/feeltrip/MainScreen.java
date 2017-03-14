@@ -20,7 +20,7 @@ public class MainScreen extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main_screen);
+        setContentView(R.layout.activity_side_menu);
         Button goToMapButton = (Button) findViewById(R.id.goto_map);
         addItemsOnFilterSpinner();
 
@@ -47,5 +47,6 @@ public class MainScreen extends AppCompatActivity {
         filterListAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         filterSpinner.setAdapter(filterListAdapter);
     }
+
 
 }
