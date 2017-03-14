@@ -1,7 +1,14 @@
 package com.example.henzoshimada.feeltrip;
 
 import android.location.Location;
+
+import java.lang.reflect.Array;
+import java.lang.reflect.Modifier;
+import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.Date;
+
+import io.searchbox.annotations.JestId;
 
 /**
  * Created by Esus2 on 2017-03-07.
@@ -9,7 +16,7 @@ import java.util.Date;
 
 public class Mood {
     private String user;
-    private String mood;
+    private String emotionalState;
     private String description;
     private Date date;
 
@@ -19,24 +26,93 @@ public class Mood {
     private byte[] image;
     private Location geoLocation;
 
+    @JestId
+    private String id;
+
+    // vector for tracking states of different attributes
+    private int size = 7;
+
+    /* Index - attribute mapping:
+    0 ----> emotionalStateChanged;
+    1 ----> descriptionChanged;
+    2 ----> dateChanged;
+    3 ----> socialSitChanged;
+    4 ----> isPrivateChanged;
+    5 ----> imageChanged;
+    6 ----> geoLocationChanged;
+    */
+
+    private ArrayList<Boolean> stateVector;
+
+
     public Mood(){
         user = null;
-        mood = null;
+        emotionalState = null;
         description = null;
         date = null;
         socialSit = null;
         isPrivate = false;
+        stateVector = new ArrayList<>(size);
+
+        for (int i = 0; i < size; i++){
+            stateVector.add(Boolean.FALSE);
+        }
+
     }
 
 
-    public Mood(String user, String description){
+    public Mood(String user){
         this.user = user;
-        this.description = description;
+        emotionalState = null;
+        description = null;
+        socialSit = null;
         this.date = new Date();
+        stateVector = new ArrayList<>(size);
+        isPrivate = false;
+        for (int i = 0; i < size; i++){
+            stateVector.add(Boolean.FALSE);
+        }
+    }
 
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    // Evaluate stateVector and check if this mood event is changed.
+    public Boolean isChanged(){
+        Boolean result = Boolean.FALSE;
+        for (int i = 0; i < size; i++){
+            result = result || stateVector.get(i);
+        }
+        return result;
+    }
+
+    public ArrayList<Boolean> getAllState(){
+        return stateVector;
+    }
+
+    public void resetState(){
+        for (int i = 0; i < size; i++){
+            stateVector.set(i, Boolean.FALSE);
+        }
+    }
+
+    public Boolean getStateByIndex(int index) {
+        return stateVector.get(index);
+    }
+
+    public void setStateByIndex(int index){
+        stateVector.set(index, Boolean.TRUE);
     }
 
 
+    public String getUser(){
+        return user;
+    }
 
     public byte[] getImage() {
         return image;
@@ -50,8 +126,19 @@ public class Mood {
         return description;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setDescription(String description) throws DescriptionTooLongException {
+        int count = 0;
+        for (int i = 0; i < description.length(); i++){
+            if (description.charAt(i) == ' '){
+                count++;
+            }
+        }
+        if (description.length() > 20 || count > 2){
+            throw new DescriptionTooLongException();
+        }else {
+            this.description = description;
+        }
+        setStateByIndex(1);
     }
 
     public String getSocialSit() {
@@ -60,6 +147,7 @@ public class Mood {
 
     public void setSocialSit(String socialSit) {
         this.socialSit = socialSit;
+        setStateByIndex(3);
     }
 
     public void setMapPosition(Location location){
@@ -75,19 +163,26 @@ public class Mood {
     }
 
     public void setPrivate() {
-        isPrivate = true;
+        isPrivate = !isPrivate;
+        setStateByIndex(4);
+
     }
 
-    public String getMood() {
-        return mood;
+    public String getMoodOption() {
+        return emotionalState;
     }
 
-    public void setHappyMood() {
-        this.mood = "Happy";
+    public void setMoodOption(String emotionalState) {
+        this.emotionalState = emotionalState;
+        setStateByIndex(0);
     }
 
-    public void setSadMood() {
-        this.mood = "Sad";
+    public Date getDate() {
+        return date;
     }
-    // more moods goes here
+
+    public void setDate(Date date) {
+        this.date = date;
+        setStateByIndex(2);
+    }
 }

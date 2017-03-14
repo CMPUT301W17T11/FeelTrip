@@ -2,8 +2,11 @@ package com.example.henzoshimada.feeltrip;
 
 import android.location.Location;
 import android.test.ActivityInstrumentationTestCase2;
+import android.util.Log;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.concurrent.ExecutionException;
 
 /**
  * Created by HenzoShimada on 2017-03-05.
@@ -27,21 +30,78 @@ public class FeelTripTests extends ActivityInstrumentationTestCase2 {
     }
     */
 
-    // The following are tests for the NewMoodEvent class
+    public void testUpdateQueueController(){
+        UpdateQueueController qc = FeelTripApplication.getUpdateQueueController();
+        Mood mood = new Mood("user1");
+        qc.addMood(mood);
 
-    public void testSetDescription() {
+        UpdateQueueController qc2 = FeelTripApplication.getUpdateQueueController();
+        assertTrue("msg", qc2.getSize() == 1);
+
+        assertTrue("MSG", qc2.popMood().getUser().equals("user1"));
+    }
+
+    public void testAddMoodTask(){
+        ElasticSearchController.AddMoodTask addMoodTask = new ElasticSearchController.AddMoodTask();
+        Mood mood = new Mood("user1");
+        try {
+            mood.setDescription("description1");
+            mood.setPrivate();
+        } catch (DescriptionTooLongException e) {
+            e.printStackTrace();
+        }
+        addMoodTask.execute(mood);
+    }
+
+    public void testGetMoodTask(){
+        ArrayList<Mood> moods = new ArrayList<>();
+        ElasticSearchController.GetMoodTask get = new ElasticSearchController.GetMoodTask("user");
+        get.execute("user1");
+        try {
+            moods.addAll(get.get());
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+        assertEquals("test getMood", "user1", moods.get(0).getUser());
+    }
+
+    // does not pass
+    public void testEditTask() throws DescriptionTooLongException {
+        ArrayList<Mood> moods = new ArrayList<>();
+        ElasticSearchController.GetMoodTask getMoodTask = new ElasticSearchController.GetMoodTask("user");
+        ElasticSearchController.EditMoodTask editMoodTask = new ElasticSearchController.EditMoodTask();
+        getMoodTask.execute("user1");
+        try {
+            moods.addAll(getMoodTask.get());
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+
+        Mood mood = moods.get(0);
+        mood.setDescription("test edit");
+        editMoodTask.execute(mood);
+
+    }
+
+
+    // The following are tests for the NewMoodEvent class
+/*
+    public void testSetDescription() throws DescriptionTooLongException {
         Mood mood = new Mood();
         mood.setDescription("test description");
         assertNotNull(mood.getDescription());
     }
 
-    public void testGetDescription() {
+    public void testGetDescription() throws DescriptionTooLongException {
         Mood mood = new Mood();
         mood.setDescription("test description");
         assertEquals(mood.getDescription(), "test description");
     }
-
-    /* TODO: discuss about how to set mood
+*/
     public void testSetMoodOption() {
         Mood mood = new Mood();
         mood.setMoodOption("Happy");
@@ -53,7 +113,6 @@ public class FeelTripTests extends ActivityInstrumentationTestCase2 {
         mood.setMoodOption("Happy");
         assertEquals(mood.getMoodOption(), "Happy");
     }
-    */
 
     public void testSetSocialSit() {
         Mood mood = new Mood();
@@ -97,7 +156,7 @@ public class FeelTripTests extends ActivityInstrumentationTestCase2 {
         assertEquals(mood.getMapPosition(), loc);
     }
 
-    /* TODO: (question) user set date manually or generate date automatically
+    /*
     public void testSetDate() {
         Mood mood = new Mood();
         Date date = null;

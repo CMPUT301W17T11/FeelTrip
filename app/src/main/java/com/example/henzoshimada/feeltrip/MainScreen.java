@@ -19,14 +19,21 @@ public class MainScreen extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_screen);
-
+        Button goToMapButton = (Button) findViewById(R.id.goto_map);
         addItemsOnFilterSpinner();
+
         Button addMoodButton = (Button) findViewById(R.id.post_mood_button);
 
         addMoodButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(v.getContext(), EditMoodActivity.class);
+
+
+        goToMapButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Intent intent = new Intent(v.getContext(), MapActivity.class);
+
                 startActivity(intent);
             }
         });
