@@ -13,4 +13,11 @@
     tools:context="com.example.henzoshimada.feeltrip.sideMenu"
     tools:showIn="@layout/app_bar_side_menu">
 
+    <FrameLayout
+        android:id = "@+id/content_frame"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    </FrameLayout>
+
 </RelativeLayout>
