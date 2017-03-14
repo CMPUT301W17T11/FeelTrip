@@ -11,8 +11,6 @@ import android.widget.Spinner;
 import java.util.ArrayList;
 import java.util.List;
 
-import static android.R.id.list;
-
 // This is the main screen: This is what the Participant first sees
 public class MainScreen extends AppCompatActivity {
 
@@ -22,14 +20,26 @@ public class MainScreen extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_side_menu);
         Button goToMapButton = (Button) findViewById(R.id.goto_map);
+        Button addMoodButton = (Button) findViewById(R.id.post_mood_button);
+
         addItemsOnFilterSpinner();
 
         goToMapButton.setOnClickListener(new View.OnClickListener() {
+            @Override
             public void onClick(View v) {
                 Intent intent = new Intent(v.getContext(), MapActivity.class);
                 startActivity(intent);
             }
         });
+
+        addMoodButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(v.getContext(), EditMoodActivity.class);
+                startActivity(intent);
+            }
+        });
+
     }
 
     // Taken from: https://www.mkyong.com/android/android-spinner-drop-down-list-example/
