@@ -47,4 +47,8 @@ public class UpdateQueueController {
     public int getSize(){
         return updateQueue.getSize();
     }
+
+    public boolean isEmpty(){
+        return updateQueue.isEmpty();
+    }
 }

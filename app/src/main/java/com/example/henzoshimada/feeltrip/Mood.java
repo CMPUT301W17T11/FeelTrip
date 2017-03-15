@@ -24,6 +24,8 @@ public class Mood {
     private byte[] image;
     private Location geoLocation;
 
+    private Boolean delState; // 1 for delete, 0 for add
+
     @JestId
     private String id;
 
@@ -55,6 +57,7 @@ public class Mood {
         for (int i = 0; i < size; i++){
             stateVector.add(Boolean.FALSE);
         }
+        delState = Boolean.FALSE;
 
     }
 
@@ -70,6 +73,7 @@ public class Mood {
         for (int i = 0; i < size; i++){
             stateVector.add(Boolean.FALSE);
         }
+        delState = Boolean.FALSE;
     }
 
     public String getId() {
@@ -183,4 +187,17 @@ public class Mood {
         this.date = date;
         setStateByIndex(2);
     }
+
+    public void setDel() {
+        this.delState = Boolean.TRUE;
+    }
+
+    public void setAdd() {
+        this.delState = Boolean.FALSE;
+    }
+
+    public Boolean getDelState() {
+        return delState;
+    }
+
 }

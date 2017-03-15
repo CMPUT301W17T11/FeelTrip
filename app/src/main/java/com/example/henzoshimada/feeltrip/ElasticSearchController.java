@@ -25,6 +25,7 @@ public class ElasticSearchController {
     private static JestDroidClient client;
     private static final String groupIndex = "cmput301w17t11";
     private static final String typeMood = "mood";
+    private UpdateQueue queue;
 
     public static class AddMoodTask extends AsyncTask<Mood, Void, Void> {
 
@@ -33,7 +34,6 @@ public class ElasticSearchController {
             verifySettings();
 
             for (Mood mood : moods) {
-                mood.resetState();
                 Index index = new Index.Builder(mood).index(groupIndex).type(typeMood).build();
 
                 try {
@@ -44,10 +44,16 @@ public class ElasticSearchController {
                     }
                     else{
                         Log.i("Error", "Elasticsearch was not able to add the mood");
+                        mood.setAdd();
+                        UpdateQueueController updateQueueController = FeelTripApplication.getUpdateQueueController();
+                        updateQueueController.addMood(mood);
                     }
                 }
                 catch (Exception e) {
                     Log.i("Error", "The application failed to build and send the moods");
+                    mood.setAdd();
+                    UpdateQueueController updateQueueController = FeelTripApplication.getUpdateQueueController();
+                    updateQueueController.addMood(mood);
                 }
             }
             return null;
@@ -133,6 +139,9 @@ client.execute(new Delete.Builder("1")
                 }
                 catch (Exception e) {
                     Log.i("Error", "The application failed to build and delete the moods");
+                    mood.setDel();
+                    UpdateQueueController updateQueueController = FeelTripApplication.getUpdateQueueController();
+                    updateQueueController.addMood(mood);
                 }
             }
             return null;
