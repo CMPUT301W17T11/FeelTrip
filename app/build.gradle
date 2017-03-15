@@ -7,6 +7,7 @@ android {
     compileSdkVersion 25
     buildToolsVersion "25.0.2"
     defaultConfig {
+        multiDexEnabled = true
         applicationId "com.example.henzoshimada.feeltrip"
         minSdkVersion 18
         targetSdkVersion 25
@@ -34,10 +35,10 @@ dependencies {
     // These fixes were to consolidate the version of gradle so that all are using the same version
     // This is important in case there are any problems
     // A newer version of com.android.support:appcompat-v7 than 25.1.0 is available: 25.3.0
-    compile 'com.android.support:appcompat-v7:25.3.0'
-    compile 'com.android.support.constraint:constraint-layout:1.0.2'
+    compile 'com.android.support:appcompat-v7:25.1.0'
+    //compile 'com.android.support.constraint:constraint-layout:1.0.0'
     // A newer version of com.android.support:design than 25.2.0 is available: 25.3.0
-    compile 'com.android.support:design:25.3.0'
+    compile 'com.android.support:design:25.1.0'
     compile 'com.google.android.gms:play-services-maps:10.2.0'
     compile 'com.google.android.gms:play-services-location:10.2.0'
     compile 'com.google.android.gms:play-services-places:10.2.0'
