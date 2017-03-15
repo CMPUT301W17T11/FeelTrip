@@ -30,11 +30,6 @@
 
         <activity android:name=".EditMoodActivity" />
 
-        <activity
-            android:name=".MainScreen"
-            android:label="Main screen"
-            android:theme="@style/AppTheme"></activity>
-
 
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
