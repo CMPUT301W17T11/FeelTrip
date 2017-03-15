@@ -60,6 +60,7 @@ public class GetImage extends AppCompatActivity{
 
             Cursor cursor = getContentResolver().query(selectedImage,
                     filePathColumn, null, null, null);
+            //TODO: May cause a nullPointerException
             cursor.moveToFirst();
 
             int columnIndex = cursor.getColumnIndex(filePathColumn[0]);

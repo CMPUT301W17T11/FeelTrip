@@ -46,13 +46,13 @@ public class MainScreen extends AppCompatActivity {
     // On: March 5, 2017 17:03
     public void addItemsOnFilterSpinner(){
         filterSpinner = (Spinner) findViewById(R.id.filter_spinner);
-        List<String> filterList = new ArrayList<String>();
+        List<String> filterList = new ArrayList<>();
 
         filterList.add("filter1");
         filterList.add("filter2");
         filterList.add("filter3");
 
-        ArrayAdapter<String> filterListAdapter = new ArrayAdapter<String>(this,
+        ArrayAdapter<String> filterListAdapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_spinner_item, filterList);
         filterListAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         filterSpinner.setAdapter(filterListAdapter);

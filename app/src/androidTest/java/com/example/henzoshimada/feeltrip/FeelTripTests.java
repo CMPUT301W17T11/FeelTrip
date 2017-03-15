@@ -5,7 +5,7 @@ import android.test.ActivityInstrumentationTestCase2;
 import android.util.Log;
 
 import java.util.ArrayList;
-import java.util.Date;
+// Using calendar instead of date
 import java.util.concurrent.ExecutionException;
 
 /**

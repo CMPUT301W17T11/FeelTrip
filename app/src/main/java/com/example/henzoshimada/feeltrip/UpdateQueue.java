@@ -16,7 +16,7 @@ public class UpdateQueue {
      * Instantiates a new Update queue.
      */
     public UpdateQueue(){
-        queue = new ArrayDeque<Mood>();
+        queue = new ArrayDeque<>();
     }
 
     /**

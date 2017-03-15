@@ -151,7 +151,7 @@ client.execute(new Delete.Builder("1")
         @Override
         protected ArrayList<Mood> doInBackground(String... search_parameters) {
             verifySettings();
-            ArrayList<Mood> moods = new ArrayList<Mood>();
+            ArrayList<Mood> moods = new ArrayList<>();
             String query;
             if (fieldToSearch == null){
                 query = "";
@@ -167,7 +167,8 @@ client.execute(new Delete.Builder("1")
 
             Search search = new Search.Builder(query)
                     .addIndex(groupIndex)
-                    .addType("mood")
+                    //from refactor found hardcode, changed it
+                    .addType(typeMood)
                     .build();
 
 

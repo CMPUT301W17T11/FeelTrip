@@ -2,9 +2,7 @@ package com.example.henzoshimada.feeltrip;
 
 import android.location.Location;
 
-import java.lang.reflect.Array;
-import java.lang.reflect.Modifier;
-import java.util.ArrayDeque;
+// Removed unused imports
 import java.util.ArrayList;
 import java.util.Date;
 

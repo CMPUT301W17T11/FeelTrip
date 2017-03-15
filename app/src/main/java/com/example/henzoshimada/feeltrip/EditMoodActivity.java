@@ -1,10 +1,8 @@
 package com.example.henzoshimada.feeltrip;
-
+// removed unused imports, may slow down build
 import android.app.DatePickerDialog;
-import android.content.Context;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.util.DiffUtil;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -130,7 +128,7 @@ public class EditMoodActivity extends AppCompatActivity {
 
     private void addItemsOnEmotionalStateSpinner(){
         emotionalStateSpinner = (Spinner) findViewById(R.id.emotional_state_spinner);
-        List<String> emotionalStateList = new ArrayList<String>();
+        List<String> emotionalStateList = new ArrayList<>();
         emotionalStateList.add("Anger");
         emotionalStateList.add("Confusion");
         emotionalStateList.add("Disgust");
@@ -140,7 +138,7 @@ public class EditMoodActivity extends AppCompatActivity {
         emotionalStateList.add("Shame");
 
 
-        ArrayAdapter<String> emotionalStateAdapter = new ArrayAdapter<String>(this,
+        ArrayAdapter<String> emotionalStateAdapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_spinner_item, emotionalStateList);
         emotionalStateAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         emotionalStateSpinner.setAdapter(emotionalStateAdapter);
@@ -149,7 +147,7 @@ public class EditMoodActivity extends AppCompatActivity {
 
     private void addItemsOnSocialSitualtionSpinner(){
         socialSituationSpinner = (Spinner) findViewById(R.id.social_event_spinner);
-        List<String> socialSituationList = new ArrayList<String>();
+        List<String> socialSituationList = new ArrayList<>();
 
         socialSituationList.add("Alone");
         socialSituationList.add("With one other person");
@@ -157,7 +155,7 @@ public class EditMoodActivity extends AppCompatActivity {
         socialSituationList.add("With a crowd");
 
 
-        ArrayAdapter<String> socialSituationAdapter = new ArrayAdapter<String>(this,
+        ArrayAdapter<String> socialSituationAdapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_spinner_item, socialSituationList);
         socialSituationAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         socialSituationSpinner.setAdapter(socialSituationAdapter);
