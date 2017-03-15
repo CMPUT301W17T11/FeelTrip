@@ -1,13 +1,10 @@
-//noinspection GradleCompatible
-//noinspection GradleCompatible
-//noinspection GradleCompatible
 apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 25
     buildToolsVersion "25.0.2"
     defaultConfig {
-        applicationId "com.example.henzoshimada.feeltrip"
+        applicationId "com.example.henzoshimada.camera"
         minSdkVersion 18
         targetSdkVersion 25
         versionCode 1
@@ -20,28 +17,14 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-    productFlavors {
-    }
 }
 
 dependencies {
-    compile fileTree(include: ['*.jar'], dir: 'libs')
-    compile 'com.google.android.gms:play-services:10.2.0'
-    compile fileTree(include: ['*.jar'], dir: 'libs')
+    compile fileTree(dir: 'libs', include: ['*.jar'])
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    // These fixes were to consolidate the version of gradle so that all are using the same version
-    // This is important in case there are any problems
-    // A newer version of com.android.support:appcompat-v7 than 25.1.0 is available: 25.3.0
     compile 'com.android.support:appcompat-v7:25.3.0'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
-    // A newer version of com.android.support:design than 25.2.0 is available: 25.3.0
-    compile 'com.android.support:design:25.3.0'
-    compile 'com.google.android.gms:play-services-maps:10.2.0'
-    compile 'com.google.android.gms:play-services-location:10.2.0'
-    compile 'com.google.android.gms:play-services-places:10.2.0'
     testCompile 'junit:junit:4.12'
-    compile 'com.jayway.android.robotium:robotium-solo:5.6.3'
-    compile files('src/include/jest-droid-2.0.1-SNAPSHOT.jar')
 }

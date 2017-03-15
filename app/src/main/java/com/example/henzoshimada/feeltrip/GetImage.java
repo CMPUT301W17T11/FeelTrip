@@ -44,7 +44,7 @@ public class GetImage extends AppCompatActivity{
             }
         });
 
-        //TODO: Should ENCODE and STORE the image into the mood event here
+
     }
 
     //Taken from: http://viralpatel.net/blogs/pick-image-from-galary-android-app/
