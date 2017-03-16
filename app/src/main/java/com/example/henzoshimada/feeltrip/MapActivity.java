@@ -18,6 +18,9 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -29,6 +32,9 @@ import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+
+import java.util.ArrayList;
+import java.util.concurrent.ExecutionException;
 
 //http://www.latlong.net/
 //(PermissionUtils.java, MyLocationDemoActivity.java)https://github.com/googlemaps/android-samples
@@ -62,6 +68,8 @@ public class MapActivity extends FragmentActivity
     private static final String KEY_LOCATION = "location";
 
 
+    private ArrayList<Mood> moodArrayList = new ArrayList<Mood>();
+
     //creates and sets up map
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +77,18 @@ public class MapActivity extends FragmentActivity
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_map);
+
+        //testing get array of moods
+        try {
+            Log.d("mapTag","before");
+            testCreateMoodArray();
+            Log.d("mapTag","after");
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
 
         // Build the Play services client for use by the Fused Location Provider and the Places API.
         // Use the addApi() method to request the Google Places API and the Fused Location Provider.
@@ -115,19 +135,56 @@ public class MapActivity extends FragmentActivity
     @Override
     public void onMapReady(GoogleMap map) {
         mMap = map;
+        mMap.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
+            @Override
+            public View getInfoWindow(Marker marker) {
+                //use default InfoWindow frame
+                return null;
+            }
 
+            @Override
+            public View getInfoContents(Marker marker) {
+                Log.d("mapTag", "get info contents");
+                View view = getLayoutInflater().inflate(R.layout.info_window_layout, null);
+                view.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT)); //width, height
+
+                int index = Integer.parseInt(marker.getSnippet());
+                Mood mood = moodArrayList.get(index);
+                TextView usernameView = (TextView) view.findViewById(R.id.person);
+                TextView social_situationView = (TextView) view.findViewById(R.id.social_situation);
+                usernameView.setText(mood.getUser());
+                //social_situationView.setText(mood.getSocialSit());
+
+                return view;
+            }
+        });
         mMap.setOnMyLocationButtonClickListener(this);
         enableMyLocation();
         setMoodMarker();
     }
 
     private void setMoodMarker(){
+        Log.d("mapTag", "set mood marker");
         if (mMap != null) {
+            /*
             //Log.d("mapTag","set marker");
-            Marker marker = mMap.addMarker(new MarkerOptions()
+            Marker marker1 = mMap.addMarker(new MarkerOptions()
                     .position(new LatLng(53.528033, -113.525355))
                     .title("This is a title")
                     .snippet("Some snippet"));
+                    */
+            Mood mood;
+            Marker marker;
+            Log.d("mapTag","mood array size: "+moodArrayList.size());
+            for(int i = 0; i < moodArrayList.size(); i++){
+                mood = moodArrayList.get(i);
+                //get longitude
+                //get latitude
+                marker = mMap.addMarker(new MarkerOptions()
+                        .position(new LatLng(53.528033+i, -113.525355+i))
+                        .snippet(String.valueOf(i)));
+                Log.d("mapTag", "i= "+String.valueOf(i));
+            }
         }
     }
     /**
@@ -217,6 +274,11 @@ public class MapActivity extends FragmentActivity
         .newInstance(true).show(getSupportFragmentManager(), "dialog");
     }
 
+    private void testCreateMoodArray() throws ExecutionException, InterruptedException {
+        ElasticSearchController.GetMoodTask getMoodTask = new ElasticSearchController.GetMoodTask();
+        getMoodTask.execute("user");
+        moodArrayList.addAll(getMoodTask.get());
 
+    }
 
 }
