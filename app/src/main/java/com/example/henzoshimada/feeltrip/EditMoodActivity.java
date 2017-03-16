@@ -78,37 +78,7 @@ public class EditMoodActivity extends AppCompatActivity {
         ToggleButton toggleLocationButton = (ToggleButton) findViewById(R.id.toggle_location);
         toggleLocationButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    // The toggle is enabled
-                    locationOn = true;
-                } else {
-                    // The toggle is disabled
-                    locationOn = false;
-                }
-                Log.d("myTag", "location on is: " + String.valueOf(locationOn));
-                /*
-                if (locationOn) {
-                    if (ActivityCompat.checkSelfPermission(buttonView.getContext(), android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
-                            && ActivityCompat.checkSelfPermission(buttonView.getContext(), android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                        // TODO: Consider calling
-                        //    ActivityCompat#requestPermissions
-                        // here to request the missing permissions, and then overriding
-                        //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                        //                                          int[] grantResults)
-                        // to handle the case where the user grants the permission. See the documentation
-                        // for ActivityCompat#requestPermissions for more details.
-                        return;
-                    }
-                    mLastKnownLocation = LocationServices.FusedLocationApi
-                            .getLastLocation(mGoogleApiClient);
-                    if (mLastKnownLocation != null) {
-                        Log.d("myTag", "Lat= " + String.valueOf(mLastKnownLocation.getLatitude()) + " and Long= " + String.valueOf(mLastKnownLocation.getLongitude()));
-
-                    }else{
-                        Log.d("myTag", "mlastknownlocation is null");
-                    }
-                }
-                */
+                toggleLocation(isChecked, buttonView);
             }
         });
 
@@ -212,7 +182,7 @@ public class EditMoodActivity extends AppCompatActivity {
     /**
      * Enables the My Location layer if the fine location permission has been granted.
      */
-    /*
+
     private void enableMyLocation() {
         if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED) {
@@ -221,6 +191,35 @@ public class EditMoodActivity extends AppCompatActivity {
                     android.Manifest.permission.ACCESS_FINE_LOCATION, true);
         }
     }
-    */
+
+    private void toggleLocation(boolean isChecked, CompoundButton button){
+        if (isChecked) {
+            // The toggle is enabled
+            locationOn = true;
+            enableMyLocation();
+            Log.d("myTag", "try to get location");
+            GPSLocation gps = new GPSLocation(EditMoodActivity.this);
+
+            // Check if GPS enabled
+            if (gps.canGetLocation()) {
+
+                double latitude = gps.getLatitude();
+                double longitude = gps.getLongitude();
+
+                // \n is for new line
+                Toast.makeText(getApplicationContext(), "Your Location is - \nLat: " + latitude + "\nLong: " + longitude, Toast.LENGTH_LONG).show();
+            } else {
+                // Can't get location.
+                // GPS or network is not enabled.
+                // Ask user to enable GPS/network in settings.
+                gps.showSettingsAlert();
+                button.toggle();
+            }
+        } else {
+            // The toggle is disabled
+            locationOn = false;
+        }
+        Log.d("myTag", "location on is: " + String.valueOf(locationOn));
+    }
 
 }

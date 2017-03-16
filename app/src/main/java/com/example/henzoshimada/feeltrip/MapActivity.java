@@ -43,6 +43,8 @@ public class MapActivity extends FragmentActivity
         implements
         OnMyLocationButtonClickListener,
         OnMapReadyCallback,
+        GoogleMap.OnMarkerClickListener,
+        GoogleMap.OnMapClickListener,
         ActivityCompat.OnRequestPermissionsResultCallback {
 
     /**
@@ -70,6 +72,7 @@ public class MapActivity extends FragmentActivity
 
     private ArrayList<Mood> moodArrayList = new ArrayList<Mood>();
 
+    private  Marker mSelectedMarker;
     //creates and sets up map
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -135,6 +138,11 @@ public class MapActivity extends FragmentActivity
     @Override
     public void onMapReady(GoogleMap map) {
         mMap = map;
+        // Set listener for marker click event.  See the bottom of this class for its behavior.
+        mMap.setOnMarkerClickListener(this);
+        // Set listener for map click event.  See the bottom of this class for its behavior.
+        mMap.setOnMapClickListener(this);
+        mMap.setOnMyLocationButtonClickListener(this);
         mMap.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
             @Override
             public View getInfoWindow(Marker marker) {
@@ -158,7 +166,7 @@ public class MapActivity extends FragmentActivity
                 return view;
             }
         });
-        mMap.setOnMyLocationButtonClickListener(this);
+
         enableMyLocation();
         setMoodMarker();
     }
@@ -166,13 +174,6 @@ public class MapActivity extends FragmentActivity
     private void setMoodMarker(){
         Log.d("mapTag", "set mood marker");
         if (mMap != null) {
-            /*
-            //Log.d("mapTag","set marker");
-            Marker marker1 = mMap.addMarker(new MarkerOptions()
-                    .position(new LatLng(53.528033, -113.525355))
-                    .title("This is a title")
-                    .snippet("Some snippet"));
-                    */
             Mood mood;
             Marker marker;
             Log.d("mapTag","mood array size: "+moodArrayList.size());
@@ -281,4 +282,32 @@ public class MapActivity extends FragmentActivity
 
     }
 
+    @Override
+    public boolean onMarkerClick(final Marker marker) {
+        // The user has re-tapped on the marker which was already showing an info window.
+        Log.d("markerTag","marker clicked");
+        if (marker.equals(mSelectedMarker)) {
+            Log.d("markerTag","equal");
+            // The showing info window has already been closed - that's the first thing to happen
+            // when any marker is clicked.
+            // Return true to indicate we have consumed the event and that we do not want the
+            // the default behavior to occur (which is for the camera to move such that the
+            // marker is centered and for the marker's info window to open, if it has one).
+            mSelectedMarker = null;
+            return true;
+        }
+        Log.d("markerTag","not equal");
+        mSelectedMarker = marker;
+
+        // Return false to indicate that we have not consumed the event and that we wish
+        // for the default behavior to occur.
+        return false;
+    }
+
+    @Override
+    public void onMapClick(final LatLng point) {
+        // Any showing info window closes when the map is clicked.
+        // Clear the currently selected marker.
+        mSelectedMarker = null;
+    }
 }
