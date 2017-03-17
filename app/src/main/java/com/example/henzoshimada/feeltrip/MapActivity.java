@@ -63,7 +63,7 @@ public class MapActivity extends FragmentActivity
     private GoogleMap mMap;
 
     private GoogleApiClient mGoogleApiClient;
-    private Location mLastKnownLocation;
+    private static Location mLastKnownLocation;
 
     private CameraPosition mCameraPosition;
     private static final String KEY_CAMERA_POSITION = "camera_position";
@@ -72,7 +72,8 @@ public class MapActivity extends FragmentActivity
 
     private ArrayList<Mood> moodArrayList = new ArrayList<Mood>();
 
-    private  Marker mSelectedMarker;
+    private Marker mSelectedMarker;
+
     //creates and sets up map
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,9 +84,9 @@ public class MapActivity extends FragmentActivity
 
         //testing get array of moods
         try {
-            Log.d("mapTag","before");
+            Log.d("mapTag", "before");
             testCreateMoodArray();
-            Log.d("mapTag","after");
+            Log.d("mapTag", "after");
         } catch (ExecutionException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {
@@ -108,31 +109,6 @@ public class MapActivity extends FragmentActivity
                 (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
     }
-
-    /*
-    @Override
-    protected void onResume(){
-        super.onResume();
-        Log.d("mapTag","on resume");
-        if (mLastKnownLocation != null) {
-            Log.d("mapTag", "use last known location");
-            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
-                    new LatLng(mLastKnownLocation.getLatitude(),
-                            mLastKnownLocation.getLongitude()), 15));
-            Circle circle = mMap.addCircle(new CircleOptions()
-                    .center(new LatLng(mLastKnownLocation.getLatitude(),
-                            mLastKnownLocation.getLongitude()))
-                    .radius(5000) //in meters
-                    .strokeColor(Color.RED));
-        }
-    }
-
-    @Override
-    protected void onPause(){
-        super.onPause();
-
-    }
-*/
 
     //called when map is ready
     @Override
@@ -172,11 +148,11 @@ public class MapActivity extends FragmentActivity
     }
 
     private void setMoodMarker(){
-        Log.d("mapTag", "set mood marker");
+        //Log.d("mapTag", "set mood marker");
         if (mMap != null) {
             Mood mood;
             Marker marker;
-            Log.d("mapTag","mood array size: "+moodArrayList.size());
+            //Log.d("mapTag","mood array size: "+moodArrayList.size());
             for(int i = 0; i < moodArrayList.size(); i++){
                 mood = moodArrayList.get(i);
                 //get longitude
@@ -184,7 +160,7 @@ public class MapActivity extends FragmentActivity
                 marker = mMap.addMarker(new MarkerOptions()
                         .position(new LatLng(53.528033+i, -113.525355+i))
                         .snippet(String.valueOf(i)));
-                Log.d("mapTag", "i= "+String.valueOf(i));
+                //Log.d("mapTag", "i= "+String.valueOf(i));
             }
         }
     }
