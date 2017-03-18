@@ -38,5 +38,12 @@
     <string name="ProfilePicDesc">Displays the user\'s profile picture.</string>
     <string name="my_profile">My Profile</string>
     <string name="login_name">#LOGIN NAME#</string>
+    <string name="title_home">Home</string>
+    <string name="title_map">Maps</string>
+    <string name="title_profile">Profile</string>
+    <string name="hintfilter">Enter a keyword to filter</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

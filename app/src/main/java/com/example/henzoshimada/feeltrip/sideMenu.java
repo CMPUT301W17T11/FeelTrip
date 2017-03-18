@@ -22,8 +22,8 @@ public class sideMenu extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_side_menu);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setContentView(R.layout.activity_main);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.nav_view);
         setSupportActionBar(toolbar);
 
         /*FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -45,7 +45,7 @@ public class sideMenu extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         android.app.FragmentManager fm = getFragmentManager();
-        fm.beginTransaction().replace(R.id.content_side_menu, new mainFragment()).commit();
+        fm.beginTransaction().replace(R.id.content_main, new mainFragment()).commit();
 
 
     }
@@ -63,7 +63,7 @@ public class sideMenu extends AppCompatActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.side_menu, menu);
+        getMenuInflater().inflate(R.menu.activity_main_drawer, menu);
         return true;
     }
 
