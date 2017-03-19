@@ -31,6 +31,8 @@ public class ElasticSearchController {
 
         @Override
         protected Void doInBackground(Mood ... moods ) {
+            if(android.os.Debug.isDebuggerConnected())
+                android.os.Debug.waitForDebugger();
             verifySettings();
 
             for (Mood mood : moods) {
@@ -64,46 +66,84 @@ public class ElasticSearchController {
 
         @Override
         protected Void doInBackground(Mood ... moods ) {
+            if(android.os.Debug.isDebuggerConnected())
+                android.os.Debug.waitForDebugger();
             verifySettings();
 
             for (Mood mood : moods) {
                 if (!mood.isChanged()){
                     return null;
                 }
-                String moodId = mood.getId();
-                //Index index = new Index.Builder(mood).index(groupIndex).type("mood").id(moodId).build();
-                String query = "{\n";
-                Boolean changed;
+                String moodId = mood.getId(); //TODO: WHat happens if there's no valid ID? Shouldn't happen, but still
+                String query = "{\"doc\" : {";
                 // find out what fields have been changed and build query accordingly
-                for (int i = 0; i < 7; i++){
-                    changed = mood.getStateByIndex(i);
-                    if (changed){
-                        switch (i){
+                int notDone = 0;
+                for (int i = 0; i < 8; i++) { //find out how many fields were changed
+                    if (mood.getStateByIndex(i)) {
+                        notDone += 1;
+                    }
+                }
+                for (int i = 0; i < 8; i++) {
+                    if (mood.getStateByIndex(i)) {
+                        notDone -= 1;
+                        switch (i) {
                             case 0:
-                                query += ("\"mood : \"" + "\"" + mood.getMoodOption() + "\"");
+                                query += ("\"emotionalState\" : \"" + mood.getMoodOption() + "\"");
+                                if (notDone != 0) {
+                                    query += (",");
+                                }
                                 break;
                             case 1:
-                                query += ("description : " + mood.getDescription());
+                                query += ("\"description\" : \"" + mood.getDescription() + "\"");
+                                if (notDone != 0) {
+                                    query += (",");
+                                }
                                 break;
                             case 2:
-                                query += ("date : " + mood.getDate());
+                                query += ("\"date\" : " + mood.getDate().getTime());
+                                if (notDone != 0) {
+                                    query += (",");
+                                }
                                 break;
                             case 3:
-                                query += ("socialSit : " + mood.getSocialSit());
+                                query += ("\"socialSit\" : \"" + mood.getSocialSit() + "\"");
+                                if (notDone != 0) {
+                                    query += (",");
+                                }
                                 break;
                             case 4:
-                                query += ("isPrivate : " + mood.getPrivate());
+                                query += ("\"isPrivate\" : " + mood.getPrivate());
+                                if (notDone != 0) {
+                                    query += (",");
+                                }
+                                break;
+                            case 5:
+                                query += ("\"image\" : \"" + mood.getImage() + "\"");
+                                if (notDone != 0) {
+                                    query += (",");
+                                }
+                                break;
+                            case 6:
+                                query += ("\"latitude\" : " + mood.getLatitude());
+                                if (notDone != 0) {
+                                    query += (",");
+                                }
+                                break;
+                            case 7:
+                                query += ("\"longitude\" : " + mood.getLongitude());
+                                if (notDone != 0) {
+                                    query += (",");
+                                }
                                 break;
                             default:
                                 break;
                         }
                     }
-                    query += "}";
+                }
+                    query += "}}";
 
-                    // TODO: find out how to update certain fields
                     try{
-                        // no idea about correctness
-                        Update update = new Update.Builder(query).index(groupIndex).type("mood").id(moodId).build();
+                        Update update = new Update.Builder(query).index(groupIndex).type(typeMood).id(moodId).build();
                         client.execute(update);
 
                     }catch (Exception e){
@@ -113,26 +153,22 @@ public class ElasticSearchController {
                     mood.resetState();
                     Log.d("update query: ", query);
                 }
-            }
                 return null;
         }
     }
-/* delete query:
-client.execute(new Delete.Builder("1")
-                .index("twitter")
-                .type("tweet")
-                .build());
- */
+
 
     public static class DeleteMoodTask extends AsyncTask<Mood, Void, Void> {
 
         @Override
         protected Void doInBackground(Mood ... moods ) {
+            if(android.os.Debug.isDebuggerConnected())
+                android.os.Debug.waitForDebugger();
             verifySettings();
 
             for (Mood mood : moods) {
                 String moodId = mood.getId();
-                Delete delete = new Delete.Builder(moodId).index(groupIndex).type("mood").build();
+                Delete delete = new Delete.Builder(moodId).index(groupIndex).type(typeMood).build();
 
                 try {
                     client.execute(delete);
@@ -159,10 +195,13 @@ client.execute(new Delete.Builder("1")
 
         @Override
         protected ArrayList<Mood> doInBackground(String... search_parameters) {
+            if(android.os.Debug.isDebuggerConnected())
+                android.os.Debug.waitForDebugger();
             verifySettings();
+
             ArrayList<Mood> moods = new ArrayList<>();
             String query;
-            if (fieldToSearch == null){
+            if (fieldToSearch == null){ //must specify what field you want to search upon creation of controller, should suffice for our purposes
                 query = "";
             }
             else {
@@ -176,7 +215,6 @@ client.execute(new Delete.Builder("1")
 
             Search search = new Search.Builder(query)
                     .addIndex(groupIndex)
-                    //from refactor found hardcode, changed it
                     .addType(typeMood)
                     .build();
 

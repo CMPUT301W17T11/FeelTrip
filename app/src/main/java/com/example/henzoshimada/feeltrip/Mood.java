@@ -1,9 +1,8 @@
 package com.example.henzoshimada.feeltrip;
 
-import android.location.Location;
-
 // Removed unused imports
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 
 import io.searchbox.annotations.JestId;
@@ -14,23 +13,32 @@ import io.searchbox.annotations.JestId;
 
 public class Mood {
     private String user;
+
     private String emotionalState;
     private String description;
-    private Date date;
+    private long date; //for actually storing value in Elasticsearch, since it doesn't have a Date type
+    private static Date trueDate; //the real date as a Date object
 
     private String socialSit;
-    private Boolean isPrivate;
+    private boolean isPrivate;
 
-    private byte[] image;
-    private Location geoLocation;
+    private String image;
 
-    private Boolean delState; // 1 for delete, 0 for add
+    private Double latitude;
+    private Double longitude;
+
+    private static boolean delState; // 1 for delete, 0 for add
+    //TODO: Test deleting a mood from ES after popping from local queue
 
     @JestId
     private String id;
 
     // vector for tracking states of different attributes
-    private int size = 7;
+    private static final int size = 8;
+
+    public static int getSize() {
+        return size;
+    }
 
     /* Index - attribute mapping:
     0 ----> emotionalStateChanged;
@@ -39,26 +47,25 @@ public class Mood {
     3 ----> socialSitChanged;
     4 ----> isPrivateChanged;
     5 ----> imageChanged;
-    6 ----> geoLocationChanged;
+    6 ----> latitudeChanged;
+    7 ----> longitudeChanged;
     */
 
-    private ArrayList<Boolean> stateVector;
+    private static boolean[] stateVector;
 
 
     public Mood(){
         user = null;
         emotionalState = null;
         description = null;
-        date = null;
+        date = 0;
         socialSit = null;
         isPrivate = false;
-        stateVector = new ArrayList<>(size);
-
-        for (int i = 0; i < size; i++){
-            stateVector.add(Boolean.FALSE);
-        }
-        delState = Boolean.FALSE;
-
+        image = null;
+        latitude = null;
+        longitude = null;
+        stateVector = new boolean[size];
+        delState = false;
     }
 
 
@@ -67,13 +74,14 @@ public class Mood {
         emotionalState = null;
         description = null;
         socialSit = null;
-        this.date = new Date();
-        stateVector = new ArrayList<>(size);
+        trueDate = new Date();
+        date = trueDate.getTime();
         isPrivate = false;
-        for (int i = 0; i < size; i++){
-            stateVector.add(Boolean.FALSE);
-        }
-        delState = Boolean.FALSE;
+        image = null;
+        latitude = null;
+        longitude = null;
+        stateVector = new boolean[size];
+        delState = false;
     }
 
     public String getId() {
@@ -85,30 +93,27 @@ public class Mood {
     }
 
     // Evaluate stateVector and check if this mood event is changed.
-    public Boolean isChanged(){
-        Boolean result = Boolean.FALSE;
-        for (int i = 0; i < size; i++){
-            result = result || stateVector.get(i);
+    public boolean isChanged(){
+        for (boolean value: stateVector){
+            if(value){return true;}
         }
-        return result;
+        return false;
     }
 
-    public ArrayList<Boolean> getAllState(){
+    public boolean[] getAllState(){
         return stateVector;
     }
 
     public void resetState(){
-        for (int i = 0; i < size; i++){
-            stateVector.set(i, Boolean.FALSE);
-        }
+        Arrays.fill(stateVector, false);
     }
 
-    public Boolean getStateByIndex(int index) {
-        return stateVector.get(index);
+    public boolean getStateByIndex(int index) {
+        return stateVector[index];
     }
 
     public void setStateByIndex(int index){
-        stateVector.set(index, Boolean.TRUE);
+        stateVector[index] = true;
     }
 
 
@@ -116,12 +121,22 @@ public class Mood {
         return user;
     }
 
-    public byte[] getImage() {
+    public String getImage() {
         return image;
     }
 
-    public void setImage(byte[] image) {
+    public String getEmotionalState() {
+        return emotionalState;
+    }
+
+    public void setEmotionalState(String emotionalState) {
+        this.emotionalState = emotionalState;
+        setStateByIndex(0);
+    }
+
+    public void setImage(String image) {
         this.image = image;
+        setStateByIndex(5);
     }
 
     public String getDescription() {
@@ -152,22 +167,32 @@ public class Mood {
         setStateByIndex(3);
     }
 
-    public void setMapPosition(Location location){
-        this.geoLocation = location;
+    public void setMapPosition(Double latitude, Double longitude){
+        this.latitude = latitude;
+        this.longitude = longitude;
+        setStateByIndex(6);
+        setStateByIndex(7);
     }
 
-    public Location getMapPosition(){
-        return this.geoLocation;
+    public Double[] getMapPosition(){
+        Double[] location = new Double[2];
+        location[0] = this.latitude;
+        location[1] = this.longitude;
+        return location;
     }
 
-    public Boolean getPrivate() {
+    public boolean getPrivate() {
         return isPrivate;
     }
 
     public void setPrivate() {
-        isPrivate = !isPrivate;
+        isPrivate = true;
         setStateByIndex(4);
+    }
 
+    public void setPublic() {
+        isPrivate = false;
+        setStateByIndex(4);
     }
 
     public String getMoodOption() {
@@ -180,24 +205,45 @@ public class Mood {
     }
 
     public Date getDate() {
-        return date;
+        trueDate = new Date(date);
+        return trueDate;
     }
 
     public void setDate(Date date) {
-        this.date = date;
+        this.date = date.getTime();
+        this.trueDate = date;
         setStateByIndex(2);
     }
 
     public void setDel() {
-        this.delState = Boolean.TRUE;
+        this.delState = true;
     }
 
     public void setAdd() {
-        this.delState = Boolean.FALSE;
+        this.delState = false;
     }
 
-    public Boolean getDelState() {
+    public boolean getDelState() {
         return delState;
     }
+
+    public Double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(Double latitude) {
+        this.latitude = latitude;
+        setStateByIndex(6);
+    }
+
+    public Double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(Double longitude) {
+        this.longitude = longitude;
+        setStateByIndex(7);
+    }
+
 
 }
