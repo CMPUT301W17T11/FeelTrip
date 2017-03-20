@@ -74,8 +74,12 @@ public class ElasticSearchController {
                 if (!mood.isChanged()){
                     return null;
                 }
-                String moodId = mood.getId(); //TODO: WHat happens if there's no valid ID? Shouldn't happen, but still
-                String query = "{\"doc\" : {";
+                String moodId = mood.getId();
+                if (moodId == "-1") { //mood doesn't exist within the elasticsearch database yet, so we can't edit it
+                    Log.i("Error", "This mood does not exist within the Elasticsearch database");
+                    return null;
+                }
+                String query = "{\"doc\" : {"; // calls the doc function in _update query, automatically upserts if field doesn't exist yet
                 // find out what fields have been changed and build query accordingly
                 int notDone = 0;
                 for (int i = 0; i < 8; i++) { //find out how many fields were changed
@@ -100,7 +104,7 @@ public class ElasticSearchController {
                                 }
                                 break;
                             case 2:
-                                query += ("\"date\" : " + mood.getDate().getTime());
+                                query += ("\"date\" : " + mood.getDate().getTime()); //Date types are compatible with Calendar classes
                                 if (notDone != 0) {
                                     query += (",");
                                 }

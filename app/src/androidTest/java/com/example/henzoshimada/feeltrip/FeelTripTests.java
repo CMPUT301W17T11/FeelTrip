@@ -195,6 +195,12 @@ public class FeelTripTests extends ActivityInstrumentationTestCase2 {
         assertEquals(mood.getMapPosition()[1], lon);
     }
 
+    public void testGetinvalidID() {
+        Mood mood = new Mood();
+        String moodID = mood.getId();
+        assertEquals("test for invalid ID mood",moodID, "-1");
+    }
+
     /*
     public void testSetDate() {
         Mood mood = new Mood();

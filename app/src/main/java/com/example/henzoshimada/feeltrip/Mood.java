@@ -85,7 +85,12 @@ public class Mood {
     }
 
     public String getId() {
-        return id;
+        if (id == null){ //mood does not yet exist within the Elasticsearch database
+            return "-1";
+        }
+        else {//return ID that the mood is stored under in the Elasticsearch database
+            return id;
+        }
     }
 
     public void setId(String id) {
