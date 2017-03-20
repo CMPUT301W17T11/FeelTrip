@@ -133,7 +133,7 @@ public class FeelTripTests extends ActivityInstrumentationTestCase2 {
 
     public void testGetUserTask(){
         ArrayList<User> users = new ArrayList<>();
-        ElasticSearchController.GetUserTask get = new ElasticSearchController.GetUserTask();
+        ElasticSearchController.GetUserTask get = new ElasticSearchController.GetUserTask("user1","pass1");
         get.execute();
         try {
             users.addAll(get.get());
@@ -148,7 +148,7 @@ public class FeelTripTests extends ActivityInstrumentationTestCase2 {
     public void testDeleteUserTask(){
         ArrayList<User> users = new ArrayList<>();
         ElasticSearchController.DeleteUserTask deleteUserTask = new ElasticSearchController.DeleteUserTask();
-        ElasticSearchController.GetUserTask getUserTask = new ElasticSearchController.GetUserTask();
+        ElasticSearchController.GetUserTask getUserTask = new ElasticSearchController.GetUserTask("user1","pass1");
         getUserTask.execute();
         try {
             users.addAll(getUserTask.get());

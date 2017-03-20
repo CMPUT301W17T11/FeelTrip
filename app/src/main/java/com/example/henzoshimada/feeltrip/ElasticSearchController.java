@@ -212,7 +212,7 @@ public class ElasticSearchController {
             else {
                 query = "{" +
                         "\"query\" : {" +
-                            "\"match\" : {" +
+                        "\"match\" : {" +
                         "\"" + fieldToSearch + "\""+ ": \"" + search_parameters[0] + "\"}" +
                         " }}";
             }
@@ -242,7 +242,7 @@ public class ElasticSearchController {
         }
     }
 
-    public static class AddUserTask extends AsyncTask<User, Void, Void> {
+    public static class AddUserTask extends AsyncTask<User, Void, Void> { //TODO: What if username already exists within the database? We need usernames to be UNIQUE for proper sorting.
 
         @Override
         protected Void doInBackground(User ... users ) {
@@ -296,6 +296,14 @@ public class ElasticSearchController {
 
     public static class GetUserTask extends AsyncTask<String, Void, ArrayList<User>> {
 
+        private String username;
+        private String password;
+
+        public GetUserTask(String username, String password) { // must specify username and password upon creation of the controller
+            this.username = username;
+            this.password = password;
+        }
+
         @Override
         protected ArrayList<User> doInBackground(String... params) {
             if(android.os.Debug.isDebuggerConnected())
@@ -303,15 +311,14 @@ public class ElasticSearchController {
             verifySettings();
 
             ArrayList<User> users = new ArrayList<>();
-            String query;
-            String username = params[0];
-            String password = params[1];
+            String query; // elasticsearch bool queries are amazing in every way
             query = "{" +
                     "\"query\" : {" +
-                    "\"match\" : {" +
-                    "\"name\" : \"" + username + "\"," +
-                    "\"pass\" : \"" + password + "\"}" +
-                    "}}";
+                    "\"bool\" : {" +
+                    "\"must\" : [" +
+                    "{ \"match\": { \"username\": \"" + username + "\" }}," +
+                    "{ \"match\": { \"password\": \"" + password + "\" }}" +
+                    "]}}}";
 
             Log.d("query", query);
 
