@@ -28,7 +28,9 @@ https://developers.google.com/maps/documentation/android-api/infowindows
 
 Theme:
 
-
+Swipe element on listview to delete:
+http://stackoverflow.com/questions/14398733/remove-item-listview-with-slide-like-gmail
+https://www.youtube.com/watch?v=RVT3K8NsseY&feature=share
 
 Dynamic UIs:
 https://developer.android.com/training/basics/fragments/index.html

@@ -4,7 +4,6 @@
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-
     <uses-permission android:name="android.permission.INTERNET" />
 
     <!--
@@ -16,21 +15,18 @@
 
     <application
         android:allowBackup="true"
+        android:fullBackupContent="@xml/backup_descriptor"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme.NoActionBar"
-        android:fullBackupContent="@xml/backup_descriptor">
-        <activity android:name=".MainScreen">
+        android:theme="@style/AppTheme.NoActionBar">
+        <activity android:name=".loginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-
         <activity android:name=".EditMoodActivity" />
-
 
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
@@ -47,8 +43,7 @@
         <activity
             android:name=".MapActivity"
             android:label="@string/title_activity_map" />
-
-
+        <activity android:name=".MainScreen"/>
     </application>
 
 </manifest>

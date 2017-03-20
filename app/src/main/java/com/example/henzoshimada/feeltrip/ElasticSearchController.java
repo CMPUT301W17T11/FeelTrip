@@ -25,12 +25,15 @@ public class ElasticSearchController {
     private static JestDroidClient client;
     private static final String groupIndex = "cmput301w17t11";
     private static final String typeMood = "mood";
+    private static final String typeUser = "user";
     private UpdateQueue queue;
 
     public static class AddMoodTask extends AsyncTask<Mood, Void, Void> {
 
         @Override
         protected Void doInBackground(Mood ... moods ) {
+            if(android.os.Debug.isDebuggerConnected())
+                android.os.Debug.waitForDebugger();
             verifySettings();
 
             for (Mood mood : moods) {
@@ -64,6 +67,8 @@ public class ElasticSearchController {
 
         @Override
         protected Void doInBackground(Mood ... moods ) {
+            if(android.os.Debug.isDebuggerConnected())
+                android.os.Debug.waitForDebugger();
             verifySettings();
 
             for (Mood mood : moods) {
@@ -71,39 +76,79 @@ public class ElasticSearchController {
                     return null;
                 }
                 String moodId = mood.getId();
-                //Index index = new Index.Builder(mood).index(groupIndex).type("mood").id(moodId).build();
-                String query = "{\n";
-                Boolean changed;
+                if (moodId == "-1") { //mood doesn't exist within the elasticsearch database yet, so we can't edit it
+                    Log.i("Error", "This mood does not exist within the Elasticsearch database");
+                    return null;
+                }
+                String query = "{\"doc\" : {"; // calls the doc function in _update query, automatically upserts if field doesn't exist yet
                 // find out what fields have been changed and build query accordingly
-                for (int i = 0; i < 7; i++){
-                    changed = mood.getStateByIndex(i);
-                    if (changed){
-                        switch (i){
+                int notDone = 0;
+                for (int i = 0; i < 8; i++) { //find out how many fields were changed
+                    if (mood.getStateByIndex(i)) {
+                        notDone += 1;
+                    }
+                }
+                for (int i = 0; i < 8; i++) {
+                    if (mood.getStateByIndex(i)) {
+                        notDone -= 1;
+                        switch (i) {
                             case 0:
-                                query += ("\"mood : \"" + "\"" + mood.getMoodOption() + "\"");
+                                query += ("\"emotionalState\" : \"" + mood.getMoodOption() + "\"");
+                                if (notDone != 0) {
+                                    query += (",");
+                                }
                                 break;
                             case 1:
-                                query += ("description : " + mood.getDescription());
+                                query += ("\"description\" : \"" + mood.getDescription() + "\"");
+                                if (notDone != 0) {
+                                    query += (",");
+                                }
                                 break;
                             case 2:
-                                query += ("date : " + mood.getDate());
+                                query += ("\"date\" : " + mood.getDate().getTime()); //Date types are compatible with Calendar classes
+                                if (notDone != 0) {
+                                    query += (",");
+                                }
                                 break;
                             case 3:
-                                query += ("socialSit : " + mood.getSocialSit());
+                                query += ("\"socialSit\" : \"" + mood.getSocialSit() + "\"");
+                                if (notDone != 0) {
+                                    query += (",");
+                                }
                                 break;
                             case 4:
-                                query += ("isPrivate : " + mood.getPrivate());
+                                query += ("\"isPrivate\" : " + mood.getPrivate());
+                                if (notDone != 0) {
+                                    query += (",");
+                                }
+                                break;
+                            case 5:
+                                query += ("\"image\" : \"" + mood.getImage() + "\"");
+                                if (notDone != 0) {
+                                    query += (",");
+                                }
+                                break;
+                            case 6:
+                                query += ("\"latitude\" : " + mood.getLatitude());
+                                if (notDone != 0) {
+                                    query += (",");
+                                }
+                                break;
+                            case 7:
+                                query += ("\"longitude\" : " + mood.getLongitude());
+                                if (notDone != 0) {
+                                    query += (",");
+                                }
                                 break;
                             default:
                                 break;
                         }
                     }
-                    query += "}";
+                }
+                    query += "}}";
 
-                    // TODO: find out how to update certain fields
                     try{
-                        // no idea about correctness
-                        Update update = new Update.Builder(query).index(groupIndex).type("mood").id(moodId).build();
+                        Update update = new Update.Builder(query).index(groupIndex).type(typeMood).id(moodId).build();
                         client.execute(update);
 
                     }catch (Exception e){
@@ -113,26 +158,22 @@ public class ElasticSearchController {
                     mood.resetState();
                     Log.d("update query: ", query);
                 }
-            }
                 return null;
         }
     }
-/* delete query:
-client.execute(new Delete.Builder("1")
-                .index("twitter")
-                .type("tweet")
-                .build());
- */
+
 
     public static class DeleteMoodTask extends AsyncTask<Mood, Void, Void> {
 
         @Override
         protected Void doInBackground(Mood ... moods ) {
+            if(android.os.Debug.isDebuggerConnected())
+                android.os.Debug.waitForDebugger();
             verifySettings();
 
             for (Mood mood : moods) {
                 String moodId = mood.getId();
-                Delete delete = new Delete.Builder(moodId).index(groupIndex).type("mood").build();
+                Delete delete = new Delete.Builder(moodId).index(groupIndex).type(typeMood).build();
 
                 try {
                     client.execute(delete);
@@ -159,16 +200,19 @@ client.execute(new Delete.Builder("1")
 
         @Override
         protected ArrayList<Mood> doInBackground(String... search_parameters) {
+            if(android.os.Debug.isDebuggerConnected())
+                android.os.Debug.waitForDebugger();
             verifySettings();
+
             ArrayList<Mood> moods = new ArrayList<>();
             String query;
-            if (fieldToSearch == null){
+            if (fieldToSearch == null){ //must specify what field you want to search upon creation of controller, should suffice for our purposes
                 query = "";
             }
             else {
                 query = "{" +
                         "\"query\" : {" +
-                            "\"match\" : {" +
+                        "\"match\" : {" +
                         "\"" + fieldToSearch + "\""+ ": \"" + search_parameters[0] + "\"}" +
                         " }}";
             }
@@ -176,7 +220,6 @@ client.execute(new Delete.Builder("1")
 
             Search search = new Search.Builder(query)
                     .addIndex(groupIndex)
-                    //from refactor found hardcode, changed it
                     .addType(typeMood)
                     .build();
 
@@ -196,6 +239,110 @@ client.execute(new Delete.Builder("1")
             }
 
             return moods;
+        }
+    }
+
+    public static class AddUserTask extends AsyncTask<User, Void, Void> { //TODO: What if username already exists within the database? We need usernames to be UNIQUE for proper sorting.
+
+        @Override
+        protected Void doInBackground(User ... users ) {
+            if(android.os.Debug.isDebuggerConnected())
+                android.os.Debug.waitForDebugger();
+            verifySettings();
+
+            for (User user : users) {
+                Index index = new Index.Builder(user).index(groupIndex).type(typeUser).build();
+
+                try {
+                    // where is the client?
+                    DocumentResult result = client.execute(index);
+                    if (result.isSucceeded()){
+                        user.setId(result.getId());
+                    }
+                    else{
+                        Log.i("Error", "Elasticsearch was not able to create user");
+                    }
+                }
+                catch (Exception e) {
+                    Log.i("Error", "The application was not able to create the user");
+                }
+            }
+            return null;
+        }
+    }
+
+    public static class DeleteUserTask extends AsyncTask<User, Void, Void> {
+
+        @Override
+        protected Void doInBackground(User ... users ) {
+            if(android.os.Debug.isDebuggerConnected())
+                android.os.Debug.waitForDebugger();
+            verifySettings();
+
+            for (User user : users) {
+                String userId = user.getId();
+                Delete delete = new Delete.Builder(userId).index(groupIndex).type(typeUser).build();
+
+                try {
+                    client.execute(delete);
+                }
+                catch (Exception e) {
+                    Log.i("Error", "The application failed to delete the user");
+                }
+            }
+            return null;
+        }
+    }
+
+    public static class GetUserTask extends AsyncTask<String, Void, ArrayList<User>> {
+
+        private String username;
+        private String password;
+
+        public GetUserTask(String username, String password) { // must specify username and password upon creation of the controller
+            this.username = username;
+            this.password = password;
+        }
+
+        @Override
+        protected ArrayList<User> doInBackground(String... params) {
+            if(android.os.Debug.isDebuggerConnected())
+                android.os.Debug.waitForDebugger();
+            verifySettings();
+
+            ArrayList<User> users = new ArrayList<>();
+            String query; // elasticsearch bool queries are amazing in every way
+            query = "{" +
+                    "\"query\" : {" +
+                    "\"bool\" : {" +
+                    "\"must\" : [" +
+                    "{ \"match\": { \"username\": \"" + username + "\" }}," +
+                    "{ \"match\": { \"password\": \"" + password + "\" }}" +
+                    "]}}}";
+
+            Log.d("query", query);
+
+            Search search = new Search.Builder(query)
+                    .addIndex(groupIndex)
+                    .addType(typeUser)
+                    .build();
+
+
+            try {
+                SearchResult result = client.execute(search);
+                if (result.isSucceeded()){
+                    List<User> foundUsers = result.getSourceAsObjectList(User.class);
+                    users.addAll(foundUsers);
+                }
+                else {
+                    Log.i("Error", "the search query failed to find any moods that matched");
+                }
+            }
+            catch (Exception e) {
+                Log.i("Error", "Something went wrong when we tried to communicate with the elasticsearch server!");
+            }
+
+            return users;
         }
     }
 

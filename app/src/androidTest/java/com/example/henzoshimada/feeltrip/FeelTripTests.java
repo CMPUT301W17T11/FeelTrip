@@ -1,11 +1,11 @@
 package com.example.henzoshimada.feeltrip;
 
-import android.location.Location;
+import android.os.AsyncTask;
 import android.test.ActivityInstrumentationTestCase2;
-import android.util.Log;
 
 import java.util.ArrayList;
 // Using calendar instead of date
+import java.util.Date;
 import java.util.concurrent.ExecutionException;
 
 /**
@@ -45,7 +45,7 @@ public class FeelTripTests extends ActivityInstrumentationTestCase2 {
         ElasticSearchController.AddMoodTask addMoodTask = new ElasticSearchController.AddMoodTask();
         Mood mood = new Mood("user1");
         try {
-            mood.setDescription("description1");
+            mood.setDescription("description1", " -Feeling sleepy");
             mood.setPrivate();
         } catch (DescriptionTooLongException e) {
             e.printStackTrace();
@@ -55,8 +55,8 @@ public class FeelTripTests extends ActivityInstrumentationTestCase2 {
 
     public void testGetMoodTask(){
         ArrayList<Mood> moods = new ArrayList<>();
-        ElasticSearchController.GetMoodTask get = new ElasticSearchController.GetMoodTask("user");
-        get.execute("user1");
+        ElasticSearchController.GetMoodTask get = new ElasticSearchController.GetMoodTask();
+        get.execute();
         try {
             moods.addAll(get.get());
         } catch (InterruptedException e) {
@@ -67,12 +67,51 @@ public class FeelTripTests extends ActivityInstrumentationTestCase2 {
         assertEquals("test getMood", "user1", moods.get(0).getUser());
     }
 
-    // does not pass
     public void testEditTask() throws DescriptionTooLongException {
-        ArrayList<Mood> moods = new ArrayList<>();
-        ElasticSearchController.GetMoodTask getMoodTask = new ElasticSearchController.GetMoodTask("user");
+        ArrayList<Mood> moods = new ArrayList<Mood>();
+        ElasticSearchController.GetMoodTask getMoodTask = new ElasticSearchController.GetMoodTask();
         ElasticSearchController.EditMoodTask editMoodTask = new ElasticSearchController.EditMoodTask();
-        getMoodTask.execute("user1");
+        getMoodTask.execute();
+        try {
+            moods.addAll(getMoodTask.get());
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+
+        Date date = new Date();
+        Mood mood = moods.get(0);
+        mood.setDescription("test edit", " -Feeling tested");
+        mood.setEmotionalState("happy");
+        mood.setMapPosition(12320.23143, 901273.000);
+        mood.setPrivate();
+        mood.setDate(date);
+        mood.setImage("Mona Lisa");
+        mood.setSocialSit("With friends");
+        mood.setDel();
+        editMoodTask.execute(mood);
+    }
+
+    public void testSearchMoodTask(){
+        ArrayList<Mood> moods = new ArrayList<>();
+        ElasticSearchController.GetMoodTask get = new ElasticSearchController.GetMoodTask("description");
+        get.execute("test edit");
+        try {
+            moods.addAll(get.get());
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+        assertEquals("test getMood", "test edit", moods.get(0).getDescription());
+    }
+
+    public void testDeleteMoodTask(){
+        ArrayList<Mood> moods = new ArrayList<Mood>();
+        ElasticSearchController.DeleteMoodTask deleteMoodTask = new ElasticSearchController.DeleteMoodTask();
+        ElasticSearchController.GetMoodTask getMoodTask = new ElasticSearchController.GetMoodTask();
+        getMoodTask.execute();
         try {
             moods.addAll(getMoodTask.get());
         } catch (InterruptedException e) {
@@ -82,9 +121,45 @@ public class FeelTripTests extends ActivityInstrumentationTestCase2 {
         }
 
         Mood mood = moods.get(0);
-        mood.setDescription("test edit");
-        editMoodTask.execute(mood);
+        deleteMoodTask.execute(mood);
+    }
 
+    public void testAddUserTask(){
+        ElasticSearchController.AddUserTask addUserTask = new ElasticSearchController.AddUserTask();
+        User user = new User("user1","pass1");
+
+        addUserTask.execute(user);
+    }
+
+    public void testGetUserTask(){
+        ArrayList<User> users = new ArrayList<>();
+        ElasticSearchController.GetUserTask get = new ElasticSearchController.GetUserTask("user1","pass1");
+        get.execute();
+        try {
+            users.addAll(get.get());
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+        assertEquals("test getUser", "user1", users.get(0).getUsername());
+    }
+
+    public void testDeleteUserTask(){
+        ArrayList<User> users = new ArrayList<>();
+        ElasticSearchController.DeleteUserTask deleteUserTask = new ElasticSearchController.DeleteUserTask();
+        ElasticSearchController.GetUserTask getUserTask = new ElasticSearchController.GetUserTask("user1","pass1");
+        getUserTask.execute();
+        try {
+            users.addAll(getUserTask.get());
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+
+        User user = users.get(0);
+        deleteUserTask.execute(user);
     }
 
 
@@ -140,20 +215,28 @@ public class FeelTripTests extends ActivityInstrumentationTestCase2 {
         assertTrue(mood.getPrivate());
     }
 
-    /*
-    public void testSetMapPosition() {
+    public void testSettMapPosition() {
         Mood mood = new Mood();
-        Location loc = null; //TODO: properly initialize a test loc
-        mood.setMapPosition(loc);
-        assertNotNull(mood.getMapPosition());
+        Double lat = 123213.000324;
+        Double lon = 324324.0000;
+        mood.setMapPosition(lat, lon);
+        assertEquals(mood.getMapPosition()[0], lat);
+        assertEquals(mood.getMapPosition()[1], lon);
     }
-    */
 
     public void testGetMapPosition() {
         Mood mood = new Mood();
-        Location loc = null; //TODO: properly initialize a test loc
-        mood.setMapPosition(loc);
-        assertEquals(mood.getMapPosition(), loc);
+        Double lat = 8324892.32948324;
+        Double lon = 32904239048.3333;
+        mood.setMapPosition(lat, lon);
+        assertEquals(mood.getMapPosition()[0], lat);
+        assertEquals(mood.getMapPosition()[1], lon);
+    }
+
+    public void testGetinvalidID() {
+        Mood mood = new Mood();
+        String moodID = mood.getId();
+        assertEquals("test for invalid ID mood",moodID, "-1");
     }
 
     /*
@@ -174,11 +257,11 @@ public class FeelTripTests extends ActivityInstrumentationTestCase2 {
 
 /*
     public void testSetImageFile() {
-        //TODO: Figure out what data type an image file is stored in
+        //
     }
 
     public void testGetImageFile() {
-        //TODO: Figure out what data type an image file is stored in
+        //
     }
 
     // The following are tests for the Participant class
