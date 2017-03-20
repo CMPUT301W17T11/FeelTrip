@@ -126,7 +126,7 @@ public class MapActivity extends FragmentActivity
         mMap = map;
 
         mMap.setOnMyLocationButtonClickListener(this);
-        enableMyLocation();
+        //enableMyLocation();
         setMoodMarker();
     }
 
@@ -142,6 +142,7 @@ public class MapActivity extends FragmentActivity
     /**
      * Enables the My Location layer if the fine location permission has been granted.
      */
+    /*
     private void enableMyLocation() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED) {
@@ -153,7 +154,7 @@ public class MapActivity extends FragmentActivity
             mMap.setMyLocationEnabled(true);
         }
     }
-
+*/
     //https://developers.google.com/android/reference/com/google/android/gms/maps/GoogleMap.OnMyLocationButtonClickListener
     //called when pressing  my location button
     @Override
@@ -200,7 +201,7 @@ public class MapActivity extends FragmentActivity
         if (PermissionUtils.isPermissionGranted(permissions, grantResults,
             Manifest.permission.ACCESS_FINE_LOCATION)) {
             // Enable the my location layer if the permission has been granted.
-            enableMyLocation();
+            //enableMyLocation();
         } else {
             // Display the missing permission error dialog when the fragments resume.
             mPermissionDenied = true;

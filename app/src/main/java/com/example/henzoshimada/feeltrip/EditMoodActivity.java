@@ -123,6 +123,7 @@ public class EditMoodActivity extends AppCompatActivity {
             dateTime.set(Calendar.MONTH, month);
             dateTime.set(Calendar.DAY_OF_MONTH, dayOfMonth);
             Log.d("myTag","Date: "+formatDateTime.format(dateTime.getTime()));
+            date = dateTime.getTime();
         }
     };
 
