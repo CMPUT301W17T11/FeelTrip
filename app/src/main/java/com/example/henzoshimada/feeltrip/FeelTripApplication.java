@@ -18,6 +18,7 @@ public class FeelTripApplication extends Application {
     /**
      * Get update queue update queue.
      * Create a UpdateQueue object
+     *
      * @return the update queue
      */
     static UpdateQueue getUpdateQueue(){
@@ -34,6 +35,7 @@ public class FeelTripApplication extends Application {
      * Get update queue controller update queue controller.
      * Create an UpdateQueue object and return it if it does not exist.
      * return the existing UpdateQueue otherwise
+     *
      * @return the update queue controller
      */
     public static UpdateQueueController getUpdateQueueController(){
@@ -41,6 +43,20 @@ public class FeelTripApplication extends Application {
             updateQueueController = new UpdateQueueController(getUpdateQueue());
         }
         return updateQueueController;
+    }
+
+
+    private static Participant participant = null;
+    /**
+     * Get participant participant.
+     * call FeelTripApplication.getParticipant() to access current participant
+     * @return the participant
+     */
+    public static Participant getParticipant(){
+        if (participant == null){
+            participant = new Participant();
+        }
+        return participant;
     }
 
 }
