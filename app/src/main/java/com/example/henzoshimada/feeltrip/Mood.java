@@ -148,7 +148,7 @@ public class Mood {
         return description;
     }
 
-    public void setDescription(String description) throws DescriptionTooLongException {
+    public void setDescription(String description, String append) throws DescriptionTooLongException {
         int count = 0;
         for (int i = 0; i < description.length(); i++){
             if (description.charAt(i) == ' '){
@@ -158,7 +158,7 @@ public class Mood {
         if (description.length() > 20 || count > 2){
             throw new DescriptionTooLongException();
         }else {
-            this.description = description;
+            this.description = description + append;
         }
         setStateByIndex(1);
     }
