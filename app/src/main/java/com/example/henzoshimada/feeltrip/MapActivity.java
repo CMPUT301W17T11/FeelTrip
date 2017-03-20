@@ -17,17 +17,12 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-<<<<<<< HEAD
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-=======
-import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
->>>>>>> b68fe67afe72ee34bcd4bd4a4dcb073174b4a35a
 import android.widget.Toast;
 
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -117,7 +112,7 @@ public class MapActivity extends FragmentActivity
         mapFragment.getMapAsync(this);
     }
 
-<<<<<<< HEAD
+
     /*
     @Override
     protected void onResume(){
@@ -142,14 +137,8 @@ public class MapActivity extends FragmentActivity
 
     }
 */
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_map, container, false);
-    }
 
-=======
->>>>>>> b68fe67afe72ee34bcd4bd4a4dcb073174b4a35a
+
     //called when map is ready
     @Override
     public void onMapReady(GoogleMap map) {

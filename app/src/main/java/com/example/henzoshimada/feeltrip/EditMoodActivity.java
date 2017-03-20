@@ -81,19 +81,10 @@ public class EditMoodActivity extends AppCompatActivity {
         enableMyLocation();
 */
         addItemsOnEmotionalStateSpinner();
-<<<<<<< HEAD
-        addItemsOnSocialSitualtionSpinner();
-        addListenerOnSubmitButton();
-=======
+
         addItemsOnSocialSituationSpinner();
-        Button submitButton = (Button) findViewById(R.id.post_mood_button);
-        submitButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //submitMood();
-            }
-        });
->>>>>>> b68fe67afe72ee34bcd4bd4a4dcb073174b4a35a
+        addListenerOnSubmitButton();
+
 
         ToggleButton toggleLocationButton = (ToggleButton) findViewById(R.id.toggle_location);
         toggleLocationButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -253,7 +244,6 @@ public class EditMoodActivity extends AppCompatActivity {
         socialSituationSpinner.setAdapter(socialSituationAdapter);
     }
 
-<<<<<<< HEAD
     // get the selected dropdown list value
     public void addListenerOnSubmitButton() {
 
@@ -280,9 +270,6 @@ public class EditMoodActivity extends AppCompatActivity {
 
         });
     }
-
-
-=======
 
     /**
      * Enables the My Location layer if the fine location permission has been granted.
@@ -327,5 +314,4 @@ public class EditMoodActivity extends AppCompatActivity {
         Log.d("myTag", "location on is: " + String.valueOf(locationOn));
     }
 
->>>>>>> b68fe67afe72ee34bcd4bd4a4dcb073174b4a35a
 }
