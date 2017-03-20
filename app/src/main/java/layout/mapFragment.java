@@ -1,15 +1,24 @@
 package layout;
 
+<<<<<<< HEAD
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.support.v4.app.ActivityCompat;
+=======
+import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
+>>>>>>> Changed buttons to work and disabled maps
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.henzoshimada.feeltrip.MapActivity;
 import com.example.henzoshimada.feeltrip.R;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -28,14 +37,21 @@ import com.google.android.gms.maps.model.MarkerOptions;
   Use the {@link mapFragment#newInstance} factory method to
   create an instance of this fragment.
  */
+<<<<<<< HEAD
 /*
 public class mapFragment extends Fragment  {
+=======
+public class mapFragment extends Fragment {
+>>>>>>> Changed buttons to work and disabled maps
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+        Intent firstpage= new Intent(getActivity(),MapActivity.class);
+        getActivity().startActivity(firstpage);
         return inflater.inflate(R.layout.fragment_map, container, false);
     }
+
 }
 */
 //18 March 2017 http://stackoverflow.com/questions/19353255/how-to-put-google-maps-v2-on-a-fragment-using-viewpager
