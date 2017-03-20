@@ -29,6 +29,8 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/user_text"
             android:layout_centerHorizontal="true"
+            android:inputType="textPassword"
+            android:fontFamily="sans-serif"
             android:layout_marginTop="17dp"
             android:hint="Please enter password: " />
 
