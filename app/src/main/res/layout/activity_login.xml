@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.henzoshimada.feeltrip.loginActivity">
+
+    <RelativeLayout
+        android:layout_width="344dp"
+        android:layout_height="551dp"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="0dp">
+
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="Please enter username: "
+            android:id="@+id/user_text"
+            android:layout_marginTop="220dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignStart="@+id/pass_text" />
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="Please enter password: "
+            android:layout_marginTop="17dp"
+            android:id="@+id/pass_text"
+            android:layout_below="@+id/user_text"
+            android:layout_centerHorizontal="true" />
+
+        <Button
+            android:id="@+id/login_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/pass_text"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="68dp"
+            android:onClick="checkLogin"
+            android:text="Button" />
+    </RelativeLayout>
+</android.support.constraint.ConstraintLayout>
