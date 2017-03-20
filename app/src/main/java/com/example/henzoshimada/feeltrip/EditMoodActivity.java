@@ -1,6 +1,12 @@
 package com.example.henzoshimada.feeltrip;
 // removed unused imports, may slow down build
+
+import android.*;
 import android.app.DatePickerDialog;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -14,6 +20,10 @@ import android.widget.Spinner;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.places.Places;
+
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -25,9 +35,18 @@ public class EditMoodActivity extends AppCompatActivity {
     private EditText inputMoodDescription;
     private boolean locationOn;
     private boolean showPublicOn;
-    private Date date;
     private Spinner emotionalStateSpinner;
     private Spinner socialSituationSpinner;
+
+    /**
+     * Request code for location permission request.
+     *
+     * @see #onRequestPermissionsResult(int, String[], int[])
+     */
+    private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
+    private GoogleApiClient mGoogleApiClient;
+    private Location mLastKnownLocation;
+
 
     DateFormat formatDateTime = DateFormat.getDateInstance();
     private Calendar dateTime = Calendar.getInstance();
@@ -51,23 +70,35 @@ public class EditMoodActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.add_edit_page);
-        inputMoodDescription = (EditText)findViewById(R.id.moodEventDescription);
-
+        inputMoodDescription = (EditText) findViewById(R.id.moodEventDescription);
+/*
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .addApi(LocationServices.API)
+                .addApi(Places.GEO_DATA_API)
+                .addApi(Places.PLACE_DETECTION_API)
+                .build();
+        mGoogleApiClient.connect();
+        enableMyLocation();
+*/
         addItemsOnEmotionalStateSpinner();
+<<<<<<< HEAD
         addItemsOnSocialSitualtionSpinner();
         addListenerOnSubmitButton();
+=======
+        addItemsOnSocialSituationSpinner();
+        Button submitButton = (Button) findViewById(R.id.post_mood_button);
+        submitButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //submitMood();
+            }
+        });
+>>>>>>> b68fe67afe72ee34bcd4bd4a4dcb073174b4a35a
 
-        ToggleButton toggleLocationButton = (ToggleButton)findViewById(R.id.toggle_location);
+        ToggleButton toggleLocationButton = (ToggleButton) findViewById(R.id.toggle_location);
         toggleLocationButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    // The toggle is enabled
-                    locationOn = true;
-                } else {
-                    // The toggle is disabled
-                    locationOn = false;
-                }
-                Log.d("myTag","location on is: "+String.valueOf(locationOn));
+                toggleLocation(isChecked, buttonView);
             }
         });
 
@@ -172,10 +203,7 @@ public class EditMoodActivity extends AppCompatActivity {
         Toast.makeText(getApplicationContext(), "Get Image", Toast.LENGTH_SHORT).show();
     }
 
-    private void selectDate(){
-        new DatePickerDialog(this, datePickerDialogListener, dateTime.get(Calendar.YEAR),
-                dateTime.get(Calendar.MONTH), dateTime.get(Calendar.DAY_OF_MONTH)).show();
-    }
+
 
     //https://www.youtube.com/watch?v=8mFW6dA5xDE
     DatePickerDialog.OnDateSetListener datePickerDialogListener = new DatePickerDialog.OnDateSetListener() {
@@ -209,7 +237,7 @@ public class EditMoodActivity extends AppCompatActivity {
     }
 
 
-    private void addItemsOnSocialSitualtionSpinner(){
+    private void addItemsOnSocialSituationSpinner(){
         socialSituationSpinner = (Spinner) findViewById(R.id.social_event_spinner);
         List<String> socialSituationList = new ArrayList<>();
 
@@ -225,6 +253,7 @@ public class EditMoodActivity extends AppCompatActivity {
         socialSituationSpinner.setAdapter(socialSituationAdapter);
     }
 
+<<<<<<< HEAD
     // get the selected dropdown list value
     public void addListenerOnSubmitButton() {
 
@@ -253,4 +282,50 @@ public class EditMoodActivity extends AppCompatActivity {
     }
 
 
+=======
+
+    /**
+     * Enables the My Location layer if the fine location permission has been granted.
+     */
+
+    private void enableMyLocation() {
+        if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
+            // Permission to access the location is missing.
+            PermissionUtils.requestPermission(this, LOCATION_PERMISSION_REQUEST_CODE,
+                    android.Manifest.permission.ACCESS_FINE_LOCATION, true);
+        }
+    }
+
+    private void toggleLocation(boolean isChecked, CompoundButton button){
+        if (isChecked) {
+            // The toggle is enabled
+            locationOn = true;
+            enableMyLocation();
+            Log.d("myTag", "try to get location");
+            GPSLocation gps = new GPSLocation(EditMoodActivity.this);
+
+            // Check if GPS enabled
+            if (gps.canGetLocation()) {
+
+                double latitude = gps.getLatitude();
+                double longitude = gps.getLongitude();
+
+                // \n is for new line
+                Toast.makeText(getApplicationContext(), "Your Location is - \nLat: " + latitude + "\nLong: " + longitude, Toast.LENGTH_LONG).show();
+            } else {
+                // Can't get location.
+                // GPS or network is not enabled.
+                // Ask user to enable GPS/network in settings.
+                gps.showSettingsAlert();
+                button.toggle();
+            }
+        } else {
+            // The toggle is disabled
+            locationOn = false;
+        }
+        Log.d("myTag", "location on is: " + String.valueOf(locationOn));
+    }
+
+>>>>>>> b68fe67afe72ee34bcd4bd4a4dcb073174b4a35a
 }

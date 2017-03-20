@@ -19,9 +19,15 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+<<<<<<< HEAD
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+=======
+import android.view.View;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+>>>>>>> b68fe67afe72ee34bcd4bd4a4dcb073174b4a35a
 import android.widget.Toast;
 
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -34,6 +40,9 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.util.ArrayList;
+import java.util.concurrent.ExecutionException;
+
 //http://www.latlong.net/
 //(PermissionUtils.java, MyLocationDemoActivity.java)https://github.com/googlemaps/android-samples
 //https://developers.google.com/maps/documentation/android-api/current-place-tutorial
@@ -41,6 +50,8 @@ public class MapActivity extends FragmentActivity
         implements
         OnMyLocationButtonClickListener,
         OnMapReadyCallback,
+        GoogleMap.OnMarkerClickListener,
+        GoogleMap.OnMapClickListener,
         ActivityCompat.OnRequestPermissionsResultCallback {
 
     /**
@@ -59,12 +70,16 @@ public class MapActivity extends FragmentActivity
     private GoogleMap mMap;
 
     private GoogleApiClient mGoogleApiClient;
-    private Location mLastKnownLocation;
+    private static Location mLastKnownLocation;
 
     private CameraPosition mCameraPosition;
     private static final String KEY_CAMERA_POSITION = "camera_position";
     private static final String KEY_LOCATION = "location";
 
+
+    private ArrayList<Mood> moodArrayList = new ArrayList<Mood>();
+
+    private Marker mSelectedMarker;
 
     //creates and sets up map
     @Override
@@ -73,6 +88,18 @@ public class MapActivity extends FragmentActivity
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.fragment_map);
+
+        //testing get array of moods
+        try {
+            Log.d("mapTag", "before");
+            testCreateMoodArray();
+            Log.d("mapTag", "after");
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
 
         // Build the Play services client for use by the Fused Location Provider and the Places API.
         // Use the addApi() method to request the Google Places API and the Fused Location Provider.
@@ -90,6 +117,7 @@ public class MapActivity extends FragmentActivity
         mapFragment.getMapAsync(this);
     }
 
+<<<<<<< HEAD
     /*
     @Override
     protected void onResume(){
@@ -120,23 +148,60 @@ public class MapActivity extends FragmentActivity
         return inflater.inflate(R.layout.fragment_map, container, false);
     }
 
+=======
+>>>>>>> b68fe67afe72ee34bcd4bd4a4dcb073174b4a35a
     //called when map is ready
     @Override
     public void onMapReady(GoogleMap map) {
         mMap = map;
-
+        // Set listener for marker click event.  See the bottom of this class for its behavior.
+        mMap.setOnMarkerClickListener(this);
+        // Set listener for map click event.  See the bottom of this class for its behavior.
+        mMap.setOnMapClickListener(this);
         mMap.setOnMyLocationButtonClickListener(this);
+        mMap.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
+            @Override
+            public View getInfoWindow(Marker marker) {
+                //use default InfoWindow frame
+                return null;
+            }
+
+            @Override
+            public View getInfoContents(Marker marker) {
+                Log.d("mapTag", "get info contents");
+                View view = getLayoutInflater().inflate(R.layout.info_window_layout, null);
+                view.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT)); //width, height
+
+                int index = Integer.parseInt(marker.getSnippet());
+                Mood mood = moodArrayList.get(index);
+                TextView usernameView = (TextView) view.findViewById(R.id.person);
+                TextView social_situationView = (TextView) view.findViewById(R.id.social_situation);
+                usernameView.setText(mood.getUser());
+                //social_situationView.setText(mood.getSocialSit());
+
+                return view;
+            }
+        });
+
         enableMyLocation();
         setMoodMarker();
     }
 
     private void setMoodMarker(){
+        //Log.d("mapTag", "set mood marker");
         if (mMap != null) {
-            //Log.d("mapTag","set marker");
-            Marker marker = mMap.addMarker(new MarkerOptions()
-                    .position(new LatLng(53.528033, -113.525355))
-                    .title("This is a title")
-                    .snippet("Some snippet"));
+            Mood mood;
+            Marker marker;
+            //Log.d("mapTag","mood array size: "+moodArrayList.size());
+            for(int i = 0; i < moodArrayList.size(); i++){
+                mood = moodArrayList.get(i);
+                //get longitude
+                //get latitude
+                marker = mMap.addMarker(new MarkerOptions()
+                        .position(new LatLng(53.528033+i, -113.525355+i))
+                        .snippet(String.valueOf(i)));
+                //Log.d("mapTag", "i= "+String.valueOf(i));
+            }
         }
     }
     /**
@@ -226,6 +291,39 @@ public class MapActivity extends FragmentActivity
         .newInstance(true).show(getSupportFragmentManager(), "dialog");
     }
 
+    private void testCreateMoodArray() throws ExecutionException, InterruptedException {
+        ElasticSearchController.GetMoodTask getMoodTask = new ElasticSearchController.GetMoodTask();
+        getMoodTask.execute("user");
+        moodArrayList.addAll(getMoodTask.get());
 
+    }
 
+    @Override
+    public boolean onMarkerClick(final Marker marker) {
+        // The user has re-tapped on the marker which was already showing an info window.
+        Log.d("markerTag","marker clicked");
+        if (marker.equals(mSelectedMarker)) {
+            Log.d("markerTag","equal");
+            // The showing info window has already been closed - that's the first thing to happen
+            // when any marker is clicked.
+            // Return true to indicate we have consumed the event and that we do not want the
+            // the default behavior to occur (which is for the camera to move such that the
+            // marker is centered and for the marker's info window to open, if it has one).
+            mSelectedMarker = null;
+            return true;
+        }
+        Log.d("markerTag","not equal");
+        mSelectedMarker = marker;
+
+        // Return false to indicate that we have not consumed the event and that we wish
+        // for the default behavior to occur.
+        return false;
+    }
+
+    @Override
+    public void onMapClick(final LatLng point) {
+        // Any showing info window closes when the map is clicked.
+        // Clear the currently selected marker.
+        mSelectedMarker = null;
+    }
 }
