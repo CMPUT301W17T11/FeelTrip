@@ -28,16 +28,24 @@ public class loginActivity extends AppCompatActivity {
         get.execute();
         try {
             users.addAll(get.get());
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
         }
-        if(users.get(0)!=null) {
-            Intent intent = new Intent(this, MainScreen.class);
-            startActivity(intent);
+        catch (InterruptedException e) {
+            e.printStackTrace();
+            Toast.makeText(getApplicationContext(),e.toString(),Toast.LENGTH_SHORT).show();
         }
-
+        catch (ExecutionException e) {
+            e.printStackTrace();
+            Toast.makeText(getApplicationContext(),e.toString(),Toast.LENGTH_SHORT).show();
+        }
+        try{
+            if(users.get(0)!=null) {
+                Intent intent = new Intent(this, MainScreen.class);
+                startActivity(intent);
+            }
+        }
+        catch (Exception e){
+            Toast.makeText(getApplicationContext(),"Error username/pass does not exist.",Toast.LENGTH_SHORT).show();
+        }
     }
     public void regUser(View v){
         EditText userField = (EditText) this.findViewById(R.id.user_text);
