@@ -45,7 +45,7 @@ public class FeelTripTests extends ActivityInstrumentationTestCase2 {
         ElasticSearchController.AddMoodTask addMoodTask = new ElasticSearchController.AddMoodTask();
         Mood mood = new Mood("user1");
         try {
-            mood.setDescription("description1");
+            mood.setDescription("description1", " -Feeling sleepy");
             mood.setPrivate();
         } catch (DescriptionTooLongException e) {
             e.printStackTrace();
@@ -82,7 +82,7 @@ public class FeelTripTests extends ActivityInstrumentationTestCase2 {
 
         Date date = new Date();
         Mood mood = moods.get(0);
-        mood.setDescription("test edit");
+        mood.setDescription("test edit", " -Feeling tested");
         mood.setEmotionalState("happy");
         mood.setMapPosition(12320.23143, 901273.000);
         mood.setPrivate();
@@ -122,6 +122,44 @@ public class FeelTripTests extends ActivityInstrumentationTestCase2 {
 
         Mood mood = moods.get(0);
         deleteMoodTask.execute(mood);
+    }
+
+    public void testAddUserTask(){
+        ElasticSearchController.AddUserTask addUserTask = new ElasticSearchController.AddUserTask();
+        User user = new User("user1","pass1");
+
+        addUserTask.execute(user);
+    }
+
+    public void testGetUserTask(){
+        ArrayList<User> users = new ArrayList<>();
+        ElasticSearchController.GetUserTask get = new ElasticSearchController.GetUserTask();
+        get.execute();
+        try {
+            users.addAll(get.get());
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+        assertEquals("test getUser", "user1", users.get(0).getUsername());
+    }
+
+    public void testDeleteUserTask(){
+        ArrayList<User> users = new ArrayList<>();
+        ElasticSearchController.DeleteUserTask deleteUserTask = new ElasticSearchController.DeleteUserTask();
+        ElasticSearchController.GetUserTask getUserTask = new ElasticSearchController.GetUserTask();
+        getUserTask.execute();
+        try {
+            users.addAll(getUserTask.get());
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+
+        User user = users.get(0);
+        deleteUserTask.execute(user);
     }
 
 

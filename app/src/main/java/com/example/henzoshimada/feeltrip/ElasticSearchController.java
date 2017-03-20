@@ -25,6 +25,7 @@ public class ElasticSearchController {
     private static JestDroidClient client;
     private static final String groupIndex = "cmput301w17t11";
     private static final String typeMood = "mood";
+    private static final String typeUser = "user";
     private UpdateQueue queue;
 
     public static class AddMoodTask extends AsyncTask<Mood, Void, Void> {
@@ -238,6 +239,103 @@ public class ElasticSearchController {
             }
 
             return moods;
+        }
+    }
+
+    public static class AddUserTask extends AsyncTask<User, Void, Void> {
+
+        @Override
+        protected Void doInBackground(User ... users ) {
+            if(android.os.Debug.isDebuggerConnected())
+                android.os.Debug.waitForDebugger();
+            verifySettings();
+
+            for (User user : users) {
+                Index index = new Index.Builder(user).index(groupIndex).type(typeUser).build();
+
+                try {
+                    // where is the client?
+                    DocumentResult result = client.execute(index);
+                    if (result.isSucceeded()){
+                        user.setId(result.getId());
+                    }
+                    else{
+                        Log.i("Error", "Elasticsearch was not able to create user");
+                    }
+                }
+                catch (Exception e) {
+                    Log.i("Error", "The application was not able to create the user");
+                }
+            }
+            return null;
+        }
+    }
+
+    public static class DeleteUserTask extends AsyncTask<User, Void, Void> {
+
+        @Override
+        protected Void doInBackground(User ... users ) {
+            if(android.os.Debug.isDebuggerConnected())
+                android.os.Debug.waitForDebugger();
+            verifySettings();
+
+            for (User user : users) {
+                String userId = user.getId();
+                Delete delete = new Delete.Builder(userId).index(groupIndex).type(typeUser).build();
+
+                try {
+                    client.execute(delete);
+                }
+                catch (Exception e) {
+                    Log.i("Error", "The application failed to delete the user");
+                }
+            }
+            return null;
+        }
+    }
+
+    public static class GetUserTask extends AsyncTask<String, Void, ArrayList<User>> {
+
+        @Override
+        protected ArrayList<User> doInBackground(String... params) {
+            if(android.os.Debug.isDebuggerConnected())
+                android.os.Debug.waitForDebugger();
+            verifySettings();
+
+            ArrayList<User> users = new ArrayList<>();
+            String query;
+            String username = params[0];
+            String password = params[1];
+            query = "{" +
+                    "\"query\" : {" +
+                    "\"match\" : {" +
+                    "\"name\" : \"" + username + "\"," +
+                    "\"pass\" : \"" + password + "\"}" +
+                    "}}";
+
+            Log.d("query", query);
+
+            Search search = new Search.Builder(query)
+                    .addIndex(groupIndex)
+                    .addType(typeUser)
+                    .build();
+
+
+            try {
+                SearchResult result = client.execute(search);
+                if (result.isSucceeded()){
+                    List<User> foundUsers = result.getSourceAsObjectList(User.class);
+                    users.addAll(foundUsers);
+                }
+                else {
+                    Log.i("Error", "the search query failed to find any moods that matched");
+                }
+            }
+            catch (Exception e) {
+                Log.i("Error", "Something went wrong when we tried to communicate with the elasticsearch server!");
+            }
+
+            return users;
         }
     }
 
