@@ -19,7 +19,7 @@ public class mainFragment extends Fragment{
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        View rootView = inflater.inflate(R.layout.content_side_menu,container,false);
+        View rootView = inflater.inflate(R.layout.content_main,container,false);
 
         return rootView;
     }
