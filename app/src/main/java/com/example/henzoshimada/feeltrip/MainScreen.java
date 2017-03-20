@@ -49,9 +49,11 @@ public class MainScreen extends AppCompatActivity {
                     ft.commit();
                     return true;
                 case R.id.navigation_map:
-                    /*ft.replace(R.id.fragent_frame,fragment);
+                    Log.d("Mytag","Tapped on map");
+                    fragment = new mapFragment();
+                    ft.replace(R.id.fragent_frame,fragment);
                     ft.addToBackStack(null);
-                    ft.commit();*/
+                    ft.commit();
                     return true;
                 default:
                     fragment = new homeFragmment();
