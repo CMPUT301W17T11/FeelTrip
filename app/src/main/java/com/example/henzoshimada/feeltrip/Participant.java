@@ -11,7 +11,7 @@ import io.searchbox.annotations.JestId;
 public class Participant {
     private String userName;
     private String password;
-    private ArrayList<String> followers;
+    private ArrayList<String> followRequest;
     private ArrayList<String> following;
 
     @JestId
@@ -20,7 +20,7 @@ public class Participant {
     public Participant(){
         this.userName = null;
         this.password = null;
-        this.followers = new ArrayList<>();
+        this.followRequest = new ArrayList<>();
         this.following = new ArrayList<>();
     }
 
@@ -44,12 +44,18 @@ public class Participant {
         this.following.add(nameWantToFollow);
     }
 
-    public void addFollower(String followerName){
-        followers.add(followerName);
+    public void addFollowRequest(String followerName){
+        followRequest.add(followerName);
     }
 
-    public ArrayList<String> getFollowers() {
-        return followers;
+    public void deleteFollowRequest(String nameWantToDelete){
+        if (followRequest.contains(nameWantToDelete)){
+            followRequest.remove(nameWantToDelete);
+        }
+    }
+
+    public ArrayList<String> getFollowRequest() {
+        return followRequest;
     }
 
     public ArrayList<String> getFollowing() {
