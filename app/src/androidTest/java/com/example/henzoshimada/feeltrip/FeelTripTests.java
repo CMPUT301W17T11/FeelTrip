@@ -183,7 +183,9 @@ public class FeelTripTests extends ActivityInstrumentationTestCase2 {
         stringArrayList.add("Old");
         stringArrayList.add("Friend");
         String output = TextUtils.join(" ", stringArrayList);
+        String output2 = "[\"" + TextUtils.join("\",\"", stringArrayList) + "\"]";
         assertEquals("Hello Darkness My Old Friend", output);
+        assertEquals("[\"Hello\",\"Darkness\",\"My\",\"Old\",\"Friend\"]", output2);
     }
 
 

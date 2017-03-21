@@ -24,14 +24,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.concurrent.ExecutionException;
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link profileFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link profileFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+
 public class profileFragment extends Fragment {
 
     private ListView oldMoodListView;
@@ -237,8 +230,8 @@ public class profileFragment extends Fragment {
         Log.d("listTag", "load from ES");
         moodArrayList = new ArrayList<Mood>();
         Log.d("myTag","inside load: "+moodArrayList.size());
-        ElasticSearchController.GetMoodTask getMoodTask = new ElasticSearchController.GetMoodTask();
-        getMoodTask.execute("user");
+        ElasticSearchController.GetFilteredMoodsTask getMoodTask = new ElasticSearchController.GetFilteredMoodsTask("profile","","","","");
+        getMoodTask.execute();
         try {
             moodArrayList.addAll(getMoodTask.get());
             Log.d("myTag","inside load2 : "+moodArrayList.size());

@@ -26,6 +26,8 @@ public class Mood {
     private Double latitude;
     private Double longitude;
 
+    private Long made; //for storing when the mood event is first posted to elasticsearch
+
     private static boolean delState; // 1 for delete, 0 for add
     //TODO: Test deleting a mood from ES after popping from local queue
 
@@ -57,7 +59,7 @@ public class Mood {
         username = null;
         emotionalState = null;
         description = null;
-        date = 0;
+        date = 0L;
         socialSit = null;
         isPrivate = false;
         image = null;
@@ -65,6 +67,7 @@ public class Mood {
         longitude = null;
         stateVector = new boolean[size];
         delState = false;
+        made = null;
     }
 
 
@@ -81,6 +84,7 @@ public class Mood {
         longitude = null;
         stateVector = new boolean[size];
         delState = false;
+        made = null;
     }
 
     public String getId() {
@@ -247,6 +251,14 @@ public class Mood {
     public void setLongitude(Double longitude) {
         this.longitude = longitude;
         setStateByIndex(7);
+    }
+
+    public Long getMade() {
+        return made;
+    }
+
+    public void setMade(Date date) {
+        this.made = date.getTime();
     }
 
 

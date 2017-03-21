@@ -46,6 +46,8 @@ public class EditMoodActivity extends AppCompatActivity {
 
     private EditText inputMoodDescription;
     private boolean locationOn;
+    private double latitude;
+    private double longitude;
     private boolean showPublicOn;
     private Spinner emotionalStateSpinner;
     private Spinner socialSituationSpinner;
@@ -169,8 +171,8 @@ public class EditMoodActivity extends AppCompatActivity {
         else {
             mood.setPrivate();
         }
-        if(locationOn) {
-            //TODO: mood.setMapPosition();
+        if(locationOn) { // TODO: Ensure correctness of this
+            mood.setMapPosition(latitude, longitude);
             // this is the setter for latitude and longitude
         }
         mood.setEmotionalState(emotionalState);
@@ -365,8 +367,8 @@ public class EditMoodActivity extends AppCompatActivity {
             // Check if GPS enabled
             if (gps.canGetLocation()) {
 
-                double latitude = gps.getLatitude();
-                double longitude = gps.getLongitude();
+                latitude = gps.getLatitude();
+                longitude = gps.getLongitude();
 
                 // \n is for new line
                 Toast.makeText(getApplicationContext(), "Your Location is - \nLat: " + latitude + "\nLong: " + longitude, Toast.LENGTH_LONG).show();
