@@ -24,6 +24,13 @@ public class Participant {
         this.following = new ArrayList<>();
     }
 
+    public Participant(String userName, String password){
+        this.userName = userName;
+        this.password = password;
+        this.followRequest = new ArrayList<>();
+        this.following = new ArrayList<>();
+    }
+
     public String getUserName() {
         return userName;
     }
@@ -38,6 +45,14 @@ public class Participant {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public void addAllFollowing(ArrayList<String> following){
+        this.following.addAll(following);
+    }
+
+    public void addAllFollowRequest(ArrayList<String> followRequest){
+        this.followRequest.addAll(followRequest);
     }
 
     public void addFollowing(String nameWantToFollow){

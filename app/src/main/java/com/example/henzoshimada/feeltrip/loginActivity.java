@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -22,21 +21,25 @@ public class loginActivity extends AppCompatActivity {
     public void checkUser(View v){
         EditText userField = (EditText) this.findViewById(R.id.user_text);
         EditText passField = (EditText) this.findViewById(R.id.pass_text);
-        ArrayList<User> users = new ArrayList<>();
-        ElasticSearchController.GetUserTask get = new ElasticSearchController.GetUserTask(userField.getText().toString(),
+        ArrayList<Participant> participants = new ArrayList<>();
+        ElasticSearchController.GetParticipantTask get = new ElasticSearchController.GetParticipantTask(userField.getText().toString(),
         passField.getText().toString());
         get.execute();
         try {
-            users.addAll(get.get());
+            participants.addAll(get.get());
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {
             e.printStackTrace();
         }
-        if(!users.isEmpty()) {
+        if(!participants.isEmpty()) {
             Participant participant = FeelTripApplication.getParticipant();
-            participant.setUserName(userField.getText().toString());
-            participant.setPassword(passField.getText().toString());
+            participant.setUserName(participants.get(0).getUserName());
+            participant.setPassword(participants.get(0).getPassword());
+            participant.addAllFollowing(participants.get(0).getFollowing());
+            participant.addAllFollowRequest(participants.get(0).getFollowRequest());
+
+
             Intent intent = new Intent(this, MainScreen.class);
             startActivity(intent);
         }
@@ -48,23 +51,23 @@ public class loginActivity extends AppCompatActivity {
     public void regUser(View v){
         EditText userField = (EditText) this.findViewById(R.id.user_text);
         EditText passField = (EditText) this.findViewById(R.id.pass_text);
-        ArrayList<User> users = new ArrayList<>();
+        ArrayList<Participant> participants = new ArrayList<>();
         ElasticSearchController.GetUsernameTask get = new ElasticSearchController.GetUsernameTask(userField.getText().toString());
         get.execute();
         try {
-            users.addAll(get.get());
+            participants.addAll(get.get());
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {
             e.printStackTrace();
         }
-        if(users.isEmpty()) {
+        if(participants.isEmpty()) {
             String userString = userField.getText().toString();
             String passString = passField.getText().toString();
             if(!passString.isEmpty() && !userString.isEmpty()) {
-                ElasticSearchController.AddUserTask addUserTask = new ElasticSearchController.AddUserTask();
-                User user = new User(userString, passString);
-                addUserTask.execute(user);
+                ElasticSearchController.AddParticipantTask addParticipantTask = new ElasticSearchController.AddParticipantTask();
+                Participant participant = new Participant(userString, passString);
+                addParticipantTask.execute(participant);
                 Toast.makeText(getApplicationContext(),"User Creation sucessful!",Toast.LENGTH_SHORT).show();
             }
             else {
