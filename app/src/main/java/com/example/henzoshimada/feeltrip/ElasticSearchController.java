@@ -404,7 +404,7 @@ public class ElasticSearchController {
         private boolean keywordfilter;
 
         private String emotion; // stores the passed emotion we're filtering by
-        private String following; // stores the string containing all the users the participant follows
+        private String following = "[\"\"]"; // stores the string containing all the users the participant follows, initialize it to "blank" array by default
         private String participant; // stores the participant's username
         private Double currentlat;
         private Double currentlon; // TODO: actually pass in the user's current lat and lon to these variables
