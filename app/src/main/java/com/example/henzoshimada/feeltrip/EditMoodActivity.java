@@ -130,7 +130,8 @@ public class EditMoodActivity extends AppCompatActivity {
 
     private void submitMood() throws DescriptionTooLongException {
         ElasticSearchController.AddMoodTask addMoodTask = new ElasticSearchController.AddMoodTask();
-        Mood mood = new Mood("user"); //TODO: pass logged in user to here
+        Participant participant = FeelTripApplication.getParticipant();
+        Mood mood = new Mood(participant.getUserName());
         if(showPublicOn){
             mood.setPublic();
         }

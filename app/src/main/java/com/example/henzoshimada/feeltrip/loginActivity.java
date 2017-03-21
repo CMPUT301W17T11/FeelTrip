@@ -34,6 +34,9 @@ public class loginActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         if(!users.isEmpty()) {
+            Participant participant = FeelTripApplication.getParticipant();
+            participant.setUserName(userField.getText().toString());
+            participant.setPassword(passField.getText().toString());
             Intent intent = new Intent(this, MainScreen.class);
             startActivity(intent);
         }
