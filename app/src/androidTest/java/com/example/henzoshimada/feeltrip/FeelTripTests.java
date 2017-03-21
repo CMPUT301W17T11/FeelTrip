@@ -1,6 +1,5 @@
 package com.example.henzoshimada.feeltrip;
 
-import android.os.AsyncTask;
 import android.test.ActivityInstrumentationTestCase2;
 
 import java.util.ArrayList;
@@ -29,6 +28,17 @@ public class FeelTripTests extends ActivityInstrumentationTestCase2 {
         //TODO
     }
     */
+
+    public void testGetParticipant(){
+        Participant participant = new Participant("user1", "pass");
+        Participant p1 = FeelTripApplication.getParticipant();
+        p1.setUserName(participant.getUserName());
+        Participant p2 = FeelTripApplication.getParticipant();
+        assertEquals("username is: ", "user1", p2.getUserName());
+    }
+
+
+
 
     public void testUpdateQueueController(){
         UpdateQueueController qc = FeelTripApplication.getUpdateQueueController();
@@ -124,16 +134,17 @@ public class FeelTripTests extends ActivityInstrumentationTestCase2 {
         deleteMoodTask.execute(mood);
     }
 
+    /*
     public void testAddUserTask(){
-        ElasticSearchController.AddUserTask addUserTask = new ElasticSearchController.AddUserTask();
+        ElasticSearchController.AddParticipantTask addParticipantTask = new ElasticSearchController.AddParticipantTask();
         User user = new User("user1","pass1");
 
-        addUserTask.execute(user);
+        addParticipantTask.execute(user);
     }
 
     public void testGetUserTask(){
         ArrayList<User> users = new ArrayList<>();
-        ElasticSearchController.GetUserTask get = new ElasticSearchController.GetUserTask("user1","pass1");
+        ElasticSearchController.GetParticipantTask get = new ElasticSearchController.GetParticipantTask("user1","pass1");
         get.execute();
         try {
             users.addAll(get.get());
@@ -147,11 +158,11 @@ public class FeelTripTests extends ActivityInstrumentationTestCase2 {
 
     public void testDeleteUserTask(){
         ArrayList<User> users = new ArrayList<>();
-        ElasticSearchController.DeleteUserTask deleteUserTask = new ElasticSearchController.DeleteUserTask();
-        ElasticSearchController.GetUserTask getUserTask = new ElasticSearchController.GetUserTask("user1","pass1");
-        getUserTask.execute();
+        ElasticSearchController.DeleteParticipantTask deleteParticipantTask = new ElasticSearchController.DeleteParticipantTask();
+        ElasticSearchController.GetParticipantTask getParticipantTask = new ElasticSearchController.GetParticipantTask("user1","pass1");
+        getParticipantTask.execute();
         try {
-            users.addAll(getUserTask.get());
+            users.addAll(getParticipantTask.get());
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {
@@ -159,8 +170,9 @@ public class FeelTripTests extends ActivityInstrumentationTestCase2 {
         }
 
         User user = users.get(0);
-        deleteUserTask.execute(user);
+        deleteParticipantTask.execute(user);
     }
+    */
 
 
     // The following are tests for the NewMoodEvent class

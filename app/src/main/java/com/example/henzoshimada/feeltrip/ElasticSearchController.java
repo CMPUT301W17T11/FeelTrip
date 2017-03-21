@@ -26,7 +26,6 @@ public class ElasticSearchController {
     private static final String groupIndex = "cmput301w17t11";
     private static final String typeMood = "mood";
     private static final String typeUser = "user";
-    private UpdateQueue queue;
 
     public static class AddMoodTask extends AsyncTask<Mood, Void, Void> {
 
@@ -242,22 +241,22 @@ public class ElasticSearchController {
         }
     }
 
-    public static class AddUserTask extends AsyncTask<User, Void, Void> { //TODO: What if username already exists within the database? We need usernames to be UNIQUE for proper sorting.
+    public static class AddParticipantTask extends AsyncTask<Participant, Void, Void> { //TODO: What if username already exists within the database? We need usernames to be UNIQUE for proper sorting.
 
         @Override
-        protected Void doInBackground(User ... users ) {
+        protected Void doInBackground(Participant ... participants ) {
             if(android.os.Debug.isDebuggerConnected())
                 android.os.Debug.waitForDebugger();
             verifySettings();
 
-            for (User user : users) {
-                Index index = new Index.Builder(user).index(groupIndex).type(typeUser).build();
+            for (Participant participant : participants) {
+                Index index = new Index.Builder(participant).index(groupIndex).type(typeUser).build();
 
                 try {
                     // where is the client?
                     DocumentResult result = client.execute(index);
                     if (result.isSucceeded()){
-                        user.setId(result.getId());
+                        participant.setId(result.getId());
                     }
                     else{
                         Log.i("Error", "Elasticsearch was not able to create user");
@@ -271,16 +270,16 @@ public class ElasticSearchController {
         }
     }
 
-    public static class DeleteUserTask extends AsyncTask<User, Void, Void> {
+    public static class DeleteParticipantTask extends AsyncTask<Participant, Void, Void> {
 
         @Override
-        protected Void doInBackground(User ... users ) {
+        protected Void doInBackground(Participant ... participants ) {
             if(android.os.Debug.isDebuggerConnected())
                 android.os.Debug.waitForDebugger();
             verifySettings();
 
-            for (User user : users) {
-                String userId = user.getId();
+            for (Participant participant : participants) {
+                String userId = participant.getId();
                 Delete delete = new Delete.Builder(userId).index(groupIndex).type(typeUser).build();
 
                 try {
@@ -294,29 +293,29 @@ public class ElasticSearchController {
         }
     }
 
-    public static class GetUserTask extends AsyncTask<String, Void, ArrayList<User>> {
+    public static class GetParticipantTask extends AsyncTask<String, Void, ArrayList<Participant>> {
 
         private String username;
         private String password;
 
-        public GetUserTask(String username, String password) { // must specify username and password upon creation of the controller
+        public GetParticipantTask(String username, String password) { // must specify username and password upon creation of the controller
             this.username = username;
             this.password = password;
         }
 
         @Override
-        protected ArrayList<User> doInBackground(String... params) {
+        protected ArrayList<Participant> doInBackground(String... params) {
             if (android.os.Debug.isDebuggerConnected())
                 android.os.Debug.waitForDebugger();
             verifySettings();
 
-            ArrayList<User> users = new ArrayList<>();
+            ArrayList<Participant> participants = new ArrayList<>();
             String query; // elasticsearch bool queries are amazing in every way
             query = "{" +
                     "\"query\" : {" +
                     "\"bool\" : {" +
                     "\"must\" : [" +
-                    "{ \"match\": { \"username\": \"" + username + "\" }}," +
+                    "{ \"match\": { \"userName\": \"" + username + "\" }}," +
                     "{ \"match\": { \"password\": \"" + password + "\" }}" +
                     "]}}}";
 
@@ -331,8 +330,8 @@ public class ElasticSearchController {
             try {
                 SearchResult result = client.execute(search);
                 if (result.isSucceeded()) {
-                    List<User> foundUsers = result.getSourceAsObjectList(User.class);
-                    users.addAll(foundUsers);
+                    List<Participant> foundParticipants = result.getSourceAsObjectList(Participant.class);
+                    participants.addAll(foundParticipants);
                 } else {
                     Log.i("Error", "the search query failed to find any moods that matched");
                 }
@@ -340,11 +339,11 @@ public class ElasticSearchController {
                 Log.i("Error", "Something went wrong when we tried to communicate with the elasticsearch server!");
             }
 
-            return users;
+            return participants;
         }
     }
 
-        public static class GetUsernameTask extends AsyncTask<String, Void, ArrayList<User>> {
+        public static class GetUsernameTask extends AsyncTask<String, Void, ArrayList<Participant>> {
 
             private String username;
 
@@ -353,17 +352,17 @@ public class ElasticSearchController {
             }
 
             @Override
-            protected ArrayList<User> doInBackground(String... params) {
+            protected ArrayList<Participant> doInBackground(String... params) {
                 if(android.os.Debug.isDebuggerConnected())
                     android.os.Debug.waitForDebugger();
                 verifySettings();
 
-                ArrayList<User> users = new ArrayList<>();
+                ArrayList<Participant> participants = new ArrayList<>();
                 String query; // elasticsearch bool queries are amazing in every way
                 query = "{" +
                         "\"query\" : {" +
                         "\"match\" : {" +
-                        "\"username\""+ ": \"" + username + "\"}" +
+                        "\"userName\""+ ": \"" + username + "\"}" +
                         " }}";
 
                 Log.d("query", query);
@@ -377,8 +376,8 @@ public class ElasticSearchController {
                 try {
                     SearchResult result = client.execute(search);
                     if (result.isSucceeded()){
-                        List<User> foundUsers = result.getSourceAsObjectList(User.class);
-                        users.addAll(foundUsers);
+                        List<Participant> foundParticipants = result.getSourceAsObjectList(Participant.class);
+                        participants.addAll(foundParticipants);
                     }
                     else {
                         Log.i("Error", "the search query failed to find any moods that matched");
@@ -388,7 +387,7 @@ public class ElasticSearchController {
                     Log.i("Error", "Something went wrong when we tried to communicate with the elasticsearch server!");
                 }
 
-                return users;
+                return participants;
             }
     }
 
