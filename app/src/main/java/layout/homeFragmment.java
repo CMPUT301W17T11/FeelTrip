@@ -8,21 +8,37 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
+import android.widget.ListView;
+import android.widget.TextView;
 
 import com.example.henzoshimada.feeltrip.EditMoodActivity;
+import com.example.henzoshimada.feeltrip.ElasticSearchController;
+import com.example.henzoshimada.feeltrip.Mood;
+import com.example.henzoshimada.feeltrip.MoodAdapter;
 import com.example.henzoshimada.feeltrip.R;
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link homeFragmment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link homeFragmment#newInstance} factory method to
- * create an instance of this fragment.
+import java.util.ArrayList;
+import java.util.concurrent.ExecutionException;
+
+/*
+  A simple {@link Fragment} subclass.
+  Activities that contain this fragment must implement the
+  {@link homeFragmment.OnFragmentInteractionListener} interface
+  to handle interaction events.
+  Use the {@link homeFragmment#newInstance} factory method to
+  create an instance of this fragment.
  */
 public class homeFragmment extends Fragment{
+
+    private ListView oldMoodListView;
+    private ArrayList<Mood> moodArrayList;
+
+    private ArrayAdapter<Mood> adapter;
+
     @Override
     public View onCreateView(LayoutInflater inflater, final ViewGroup container,
                              Bundle savedInstanceState) {
@@ -38,8 +54,64 @@ public class homeFragmment extends Fragment{
                 startActivity(intent);
             }
         });
+
+        oldMoodListView = (ListView) view.findViewById(R.id.homeList);
+
+        //http://stackoverflow.com/questions/20922036/android-cant-call-setonitemclicklistener-from-a-listview
+        //2017-02-02
+        //when click an item in list
+        oldMoodListView.setOnItemClickListener(
+                new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        Log.d("listTag","on click");
+                        Mood mood = moodArrayList.get(position);
+                        Log.d("listTag","on click2");
+                        if (mood.getImage() == null){
+                            Log.d("myTag","selected have no image ");
+                        }else{
+                            Log.d("myTag","image:"+mood.getImage());
+                        }
+                        /*
+                        Intent intent = new Intent(view.getContext(), EditMoodActivity.class);
+                        Mood selected = moodArrayList.get(position);
+                        Bundle bundle = selected.toBundle();
+
+                        intent.putExtras(bundle);
+                        startActivity(intent);
+*/
+                    }
+                });
+
         return view;
     }
 
+
+    @Override
+    public void onStart() {
+        // TODO Auto-generated method stub
+        super.onStart();
+        moodArrayList = new ArrayList<Mood>();
+        loadFromElasticSearch();
+
+        adapter= new MoodAdapter(moodArrayList,getActivity());
+
+        //adapter = new ArrayAdapter<Mood>(getActivity(), R.layout.list_item, moodArrayList); //view,dataArray
+        oldMoodListView.setAdapter(adapter);
+        Log.d("listTag","done loading3");
+    }
+
+    private void loadFromElasticSearch(){
+        Log.d("listTag", "load from ES");
+        ElasticSearchController.GetMoodTask getMoodTask = new ElasticSearchController.GetMoodTask();
+        getMoodTask.execute("user");
+        try {
+            moodArrayList.addAll(getMoodTask.get());
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+    }
 
 }
