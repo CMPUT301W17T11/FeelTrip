@@ -10,11 +10,41 @@
     android:descendantFocusability="beforeDescendants"
     android:focusableInTouchMode="true">
 
+    <ToggleButton
+        android:id="@+id/toggleRecent"
+        android:layout_width="40dp"
+        android:layout_height="25dp"
+        android:background="@drawable/toggle_selector"
+        android:checked="false"
+        android:text=""
+        android:textOff=""
+        android:textOn=""
+        android:layout_marginStart="12dp"
+        android:layout_below="@+id/textView2"
+        android:layout_toEndOf="@+id/editText3" />
+
+    <ToggleButton
+        android:id="@+id/toggleFriends"
+        android:layout_width="40dp"
+        android:layout_height="25dp"
+        android:background="@drawable/toggle_selector"
+        android:checked="false"
+        android:text=""
+        android:textOff=""
+        android:textOn=""
+        android:layout_below="@+id/textView2"
+        android:layout_toEndOf="@+id/textView2"
+        android:layout_marginStart="52dp" />
+
     <fragment
+        android:id="@+id/fragent_frame"
+        android:name="layout.BlankFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/fragent_frame"
-        android:name="layout.BlankFragment">
+        android:layout_weight="1"
+        tools:layout="@layout/fragment_blank"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true">
     </fragment>
 
     <android.support.design.widget.AppBarLayout
@@ -27,13 +57,15 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-            <EditText
-                android:layout_width="310dp"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:hint="@string/hintfilter"/>
+                <EditText
+                    android:id="@+id/editText2"
+                    android:layout_width="307dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:hint="@string/hintfilter" />
 
-            <ImageButton
+
+                <ImageButton
                 android:id="@+id/imageButton"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
@@ -42,6 +74,7 @@
 
         </LinearLayout>
     </android.support.design.widget.AppBarLayout>
+
 
 
     <android.support.design.widget.BottomNavigationView
@@ -54,6 +87,49 @@
         android:layout_marginBottom="1dp"
         android:layout_alignParentBottom="true"
         android:layout_marginEnd="1dp" />
+
+    <EditText
+        android:id="@+id/editText3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/toggleRecent"
+        android:layout_marginTop="40dp"
+        android:layout_toStartOf="@+id/navigation"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:text="Name" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Filter by: 7 days"
+        android:layout_below="@+id/appBarLayout"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/appBarLayout"
+        android:layout_marginStart="42dp"
+        android:layout_toEndOf="@+id/textView2"
+        android:text="Filter by: friends" />
+
+    <Spinner
+        android:id="@+id/filterMood"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/toggleFriends"
+        android:layout_toEndOf="@+id/textView4" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/filterMood"
+        android:layout_alignParentEnd="true"
+        android:text="Filter by: moods" />
 
 
 </RelativeLayout>
