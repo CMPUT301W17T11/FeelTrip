@@ -1,14 +1,11 @@
 package com.example.henzoshimada.feeltrip;
 
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnMyLocationButtonClickListener;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 
 import android.Manifest;
-import android.app.Fragment;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Location;
@@ -18,9 +15,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -165,7 +160,7 @@ public class MapActivity extends FragmentActivity
                 Mood mood = moodArrayList.get(index);
                 TextView usernameView = (TextView) view.findViewById(R.id.person);
                 TextView social_situationView = (TextView) view.findViewById(R.id.social_situation);
-                usernameView.setText(mood.getUser());
+                usernameView.setText(mood.getUsername());
                 //social_situationView.setText(mood.getSocialSit());
 
                 return view;

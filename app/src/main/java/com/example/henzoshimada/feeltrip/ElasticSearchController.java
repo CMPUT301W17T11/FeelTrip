@@ -8,6 +8,7 @@ import com.searchly.jestdroid.JestClientFactory;
 import com.searchly.jestdroid.JestDroidClient;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import io.searchbox.core.Delete;
@@ -391,6 +392,115 @@ public class ElasticSearchController {
             }
     }
 
+
+    // The following method is to call respective filter queries on Elasticsearch.
+        public static class GetFilteredMoodsTask extends AsyncTask<String, Void, ArrayList<Mood>> { // fetch user's moods, sorted by newest to oldest.
+        private String numFilters;
+        private boolean recentfilter;
+        private boolean mostrecentfilter;
+        private boolean emotionfilter;
+        private boolean friendsonlyfilter;
+
+        public GetFilteredMoodsTask(String recent, String mostrecent, String emotion, String friendsonly){ // must pass this specific set of Strings in this order while constructing
+            if(!recent.isEmpty()) {
+                recentfilter = true;
+            }
+            if(!mostrecent.isEmpty()) {
+                mostrecentfilter = true;
+                recentfilter = false; //mostrecent overrides recent
+            }
+            if(!emotion.isEmpty()) {
+                emotionfilter = true;
+            }
+            if(!friendsonly.isEmpty()) {
+                friendsonlyfilter = true;
+            }
+        }
+
+        @Override
+        protected ArrayList<Mood> doInBackground(String... search_parameters) {
+            if(android.os.Debug.isDebuggerConnected())
+                android.os.Debug.waitForDebugger();
+            verifySettings();
+
+            ArrayList<Mood> moods = new ArrayList<>();
+            String query;
+            query = "{";
+
+            Log.d("query", query);
+
+            Search search = new Search.Builder(query)
+                    .addIndex(groupIndex)
+                    .addType(typeMood)
+                    .build();
+
+
+            try {
+                SearchResult result = client.execute(search);
+                if (result.isSucceeded()){
+                    List<Mood> foundMoods = result.getSourceAsObjectList(Mood.class);
+                    moods.addAll(foundMoods);
+                }
+                else {
+                    Log.i("Error", "the search query failed to find any moods that matched");
+                }
+            }
+            catch (Exception e) {
+                Log.i("Error", "Something went wrong when we tried to communicate with the elasticsearch server!");
+            }
+
+            return moods;
+        }
+    }
+
+        public static class GetMyMoodsTask extends AsyncTask<String, Void, ArrayList<Mood>> { // fetch user's moods, sorted by newest to oldest.
+        private String username;
+        public GetMyMoodsTask(String filterBy){ // must pass username through on creation of controller
+            this.username = filterBy;
+        }
+
+        @Override
+        protected ArrayList<Mood> doInBackground(String... search_parameters) {
+            if(android.os.Debug.isDebuggerConnected())
+                android.os.Debug.waitForDebugger();
+            verifySettings();
+
+            ArrayList<Mood> moods = new ArrayList<>();
+            String query;
+            // bool queries are absolutely positively amazing
+            query = "{" +
+                    "\"query\" : {" +
+                    "\"bool\" : {" +
+                    "\"filter\" : { \"term\" : { \"user\" : \"" + username + "\" }}" +
+                    "}}," +
+                    "\"sort\": { \"date\": { \"order\": \"desc\" }}" +
+                    "}";
+
+            Log.d("query", query);
+
+            Search search = new Search.Builder(query)
+                    .addIndex(groupIndex)
+                    .addType(typeMood)
+                    .build();
+
+
+            try {
+                SearchResult result = client.execute(search);
+                if (result.isSucceeded()){
+                    List<Mood> foundMoods = result.getSourceAsObjectList(Mood.class);
+                    moods.addAll(foundMoods);
+                }
+                else {
+                    Log.i("Error", "the search query failed to find any moods that matched");
+                }
+            }
+            catch (Exception e) {
+                Log.i("Error", "Something went wrong when we tried to communicate with the elasticsearch server!");
+            }
+
+            return moods;
+        }
+    }
 
     // singleton
     public static void verifySettings() {

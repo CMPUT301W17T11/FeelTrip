@@ -1,7 +1,6 @@
 package com.example.henzoshimada.feeltrip;
 
 // Removed unused imports
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 
@@ -12,7 +11,7 @@ import io.searchbox.annotations.JestId;
  */
 
 public class Mood {
-    private String user;
+    private String username;
 
     private String emotionalState;
     private String description;
@@ -55,7 +54,7 @@ public class Mood {
 
 
     public Mood(){
-        user = null;
+        username = null;
         emotionalState = null;
         description = null;
         date = 0;
@@ -70,7 +69,7 @@ public class Mood {
 
 
     public Mood(String user){
-        this.user = user;
+        this.username = user;
         emotionalState = null;
         description = null;
         socialSit = null;
@@ -122,8 +121,8 @@ public class Mood {
     }
 
 
-    public String getUser(){
-        return user;
+    public String getUsername(){
+        return username;
     }
 
     public String getImage() {
