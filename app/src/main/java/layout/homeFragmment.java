@@ -85,8 +85,18 @@ public class homeFragmment extends Fragment{
 
         return view;
     }
+    //start when we click home button
+/*
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        Log.d("myTag","onAttach");
+        //moodArrayList = new ArrayList<Mood>();
+        loadFromElasticSearch();
+    }
+*/
 
-
+    //start when come back from add mood activity
     @Override
     public void onStart() {
         // TODO Auto-generated method stub
@@ -100,6 +110,16 @@ public class homeFragmment extends Fragment{
         oldMoodListView.setAdapter(adapter);
         Log.d("listTag","done loading3");
     }
+
+    /*
+    @Override
+    public void onResume(){
+        super.onResume();
+        Log.d("myTag","onResume");
+        loadFromElasticSearch();
+        adapter.notifyDataSetChanged();
+    }
+*/
 
     private void loadFromElasticSearch(){
         Log.d("listTag", "load from ES");
