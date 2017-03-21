@@ -30,6 +30,16 @@ public class FeelTripTests extends ActivityInstrumentationTestCase2 {
     }
     */
 
+    public void testGetParticipant(){
+        Participant p1 = FeelTripApplication.getParticipant();
+        p1.setUserName("user");
+        Participant p2 = FeelTripApplication.getParticipant();
+        assertEquals("username is: ", "user", p2.getUserName());
+    }
+
+
+
+
     public void testUpdateQueueController(){
         UpdateQueueController qc = FeelTripApplication.getUpdateQueueController();
         Mood mood = new Mood("user1");
