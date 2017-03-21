@@ -1,7 +1,6 @@
 package com.example.henzoshimada.feeltrip;
 
 // Removed unused imports
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 
@@ -12,7 +11,7 @@ import io.searchbox.annotations.JestId;
  */
 
 public class Mood {
-    private String user;
+    private String username;
 
     private String emotionalState;
     private String description;
@@ -24,8 +23,12 @@ public class Mood {
 
     private String image;
 
-    private Double latitude;
-    private Double longitude;
+    private static Double latitude;
+    private static Double longitude;
+
+    private String location;
+
+    private Long made; //for storing when the mood event is first posted to elasticsearch
 
     private static boolean delState; // 1 for delete, 0 for add
     //TODO: Test deleting a mood from ES after popping from local queue
@@ -47,18 +50,17 @@ public class Mood {
     3 ----> socialSitChanged;
     4 ----> isPrivateChanged;
     5 ----> imageChanged;
-    6 ----> latitudeChanged;
-    7 ----> longitudeChanged;
+    6 ----> locationChanged;
     */
 
     private static boolean[] stateVector;
 
 
     public Mood(){
-        user = null;
+        username = null;
         emotionalState = null;
         description = null;
-        date = 0;
+        date = 0L;
         socialSit = null;
         isPrivate = false;
         image = null;
@@ -66,11 +68,12 @@ public class Mood {
         longitude = null;
         stateVector = new boolean[size];
         delState = false;
+        made = null;
     }
 
 
     public Mood(String user){
-        this.user = user;
+        this.username = user;
         emotionalState = null;
         description = null;
         socialSit = null;
@@ -82,6 +85,7 @@ public class Mood {
         longitude = null;
         stateVector = new boolean[size];
         delState = false;
+        made = null;
     }
 
     public String getId() {
@@ -122,8 +126,8 @@ public class Mood {
     }
 
 
-    public String getUser(){
-        return user;
+    public String getUsername(){
+        return username;
     }
 
     public String getImage() {
@@ -175,15 +179,15 @@ public class Mood {
     public void setMapPosition(Double latitude, Double longitude){
         this.latitude = latitude;
         this.longitude = longitude;
+        this.location = latitude + ", " + longitude;
         setStateByIndex(6);
-        setStateByIndex(7);
     }
 
     public Double[] getMapPosition(){
-        Double[] location = new Double[2];
-        location[0] = this.latitude;
-        location[1] = this.longitude;
-        return location;
+        Double[] loc = new Double[2];
+        loc[0] = this.latitude;
+        loc[1] = this.longitude;
+        return loc;
     }
 
     public boolean getPrivate() {
@@ -238,6 +242,7 @@ public class Mood {
 
     public void setLatitude(Double latitude) {
         this.latitude = latitude;
+        this.location = latitude + ", " + longitude;
         setStateByIndex(6);
     }
 
@@ -247,8 +252,20 @@ public class Mood {
 
     public void setLongitude(Double longitude) {
         this.longitude = longitude;
-        setStateByIndex(7);
+        this.location = latitude + ", " + longitude;
+        setStateByIndex(6);
     }
 
+    public Long getMade() {
+        return made;
+    }
+
+    public void setMade(Date date) {
+        this.made = date.getTime();
+    }
+
+    public String getLocation() {
+        return location;
+    }
 
 }

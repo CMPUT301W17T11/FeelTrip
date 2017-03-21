@@ -123,8 +123,8 @@ public class homeFragmment extends Fragment{
 
     private void loadFromElasticSearch(){
         Log.d("listTag", "load from ES");
-        ElasticSearchController.GetMoodTask getMoodTask = new ElasticSearchController.GetMoodTask();
-        getMoodTask.execute("user");
+        ElasticSearchController.GetFilteredMoodsTask getMoodTask = new ElasticSearchController.GetFilteredMoodsTask("main","","","","");
+        getMoodTask.execute();
         try {
             moodArrayList.addAll(getMoodTask.get());
         } catch (InterruptedException e) {

@@ -73,7 +73,7 @@ public class MoodAdapter extends ArrayAdapter<Mood> {
         lastPosition = position;
 */
         Log.d("imageTag","new array list");
-        viewHolder.userName.setText(mood.getUser());
+        viewHolder.userName.setText(mood.getUsername());
         viewHolder.date.setText(mood.getDate().toString());
         viewHolder.description.setText(mood.getDescription());
         viewHolder.socialSituation.setText(mood.getSocialSit());

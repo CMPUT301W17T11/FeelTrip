@@ -1,6 +1,7 @@
 package com.example.henzoshimada.feeltrip;
 
 import android.test.ActivityInstrumentationTestCase2;
+import android.text.TextUtils;
 
 import java.util.ArrayList;
 // Using calendar instead of date
@@ -48,7 +49,7 @@ public class FeelTripTests extends ActivityInstrumentationTestCase2 {
         UpdateQueueController qc2 = FeelTripApplication.getUpdateQueueController();
         assertTrue("msg", qc2.getSize() == 1);
 
-        assertTrue("MSG", qc2.popMood().getUser().equals("user1"));
+        assertTrue("MSG", qc2.popMood().getUsername().equals("user1"));
     }
 
     public void testAddMoodTask(){
@@ -74,7 +75,7 @@ public class FeelTripTests extends ActivityInstrumentationTestCase2 {
         } catch (ExecutionException e) {
             e.printStackTrace();
         }
-        assertEquals("test getMood", "user1", moods.get(0).getUser());
+        assertEquals("test getMood", "user1", moods.get(0).getUsername());
     }
 
     public void testEditTask() throws DescriptionTooLongException {
@@ -153,7 +154,7 @@ public class FeelTripTests extends ActivityInstrumentationTestCase2 {
         } catch (ExecutionException e) {
             e.printStackTrace();
         }
-        assertEquals("test getUser", "user1", users.get(0).getUsername());
+        assertEquals("test getUsername", "user1", users.get(0).getUsername());
     }
 
     public void testDeleteUserTask(){
@@ -173,6 +174,19 @@ public class FeelTripTests extends ActivityInstrumentationTestCase2 {
         deleteParticipantTask.execute(user);
     }
     */
+
+    public void testArraytoString() {
+        ArrayList<String> stringArrayList = new ArrayList<>();
+        stringArrayList.add("Hello");
+        stringArrayList.add("Darkness");
+        stringArrayList.add("My");
+        stringArrayList.add("Old");
+        stringArrayList.add("Friend");
+        String output = TextUtils.join(" ", stringArrayList);
+        String output2 = "[\"" + TextUtils.join("\",\"", stringArrayList) + "\"]";
+        assertEquals("Hello Darkness My Old Friend", output);
+        assertEquals("[\"Hello\",\"Darkness\",\"My\",\"Old\",\"Friend\"]", output2);
+    }
 
 
     // The following are tests for the NewMoodEvent class
