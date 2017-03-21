@@ -30,7 +30,7 @@ public class GetImage extends AppCompatActivity{
 
         //Taken from: http://viralpatel.net/blogs/pick-image-from-galary-android-app/
         // On: March 8, 2017 15:11
-        Button buttonLoadImage = (Button) findViewById(R.id.select_image);
+        Button buttonLoadImage = (Button) findViewById(R.id.take_photo);
         buttonLoadImage.setOnClickListener(new View.OnClickListener() {
 
             @Override

@@ -306,7 +306,7 @@ public class ElasticSearchController {
 
         @Override
         protected ArrayList<User> doInBackground(String... params) {
-            if(android.os.Debug.isDebuggerConnected())
+            if (android.os.Debug.isDebuggerConnected())
                 android.os.Debug.waitForDebugger();
             verifySettings();
 
@@ -330,20 +330,66 @@ public class ElasticSearchController {
 
             try {
                 SearchResult result = client.execute(search);
-                if (result.isSucceeded()){
+                if (result.isSucceeded()) {
                     List<User> foundUsers = result.getSourceAsObjectList(User.class);
                     users.addAll(foundUsers);
-                }
-                else {
+                } else {
                     Log.i("Error", "the search query failed to find any moods that matched");
                 }
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 Log.i("Error", "Something went wrong when we tried to communicate with the elasticsearch server!");
             }
 
             return users;
         }
+    }
+
+        public static class GetUsernameTask extends AsyncTask<String, Void, ArrayList<User>> {
+
+            private String username;
+
+            public GetUsernameTask(String username) { // must specify username and password upon creation of the controller
+                this.username = username;
+            }
+
+            @Override
+            protected ArrayList<User> doInBackground(String... params) {
+                if(android.os.Debug.isDebuggerConnected())
+                    android.os.Debug.waitForDebugger();
+                verifySettings();
+
+                ArrayList<User> users = new ArrayList<>();
+                String query; // elasticsearch bool queries are amazing in every way
+                query = "{" +
+                        "\"query\" : {" +
+                        "\"match\" : {" +
+                        "\"username\""+ ": \"" + username + "\"}" +
+                        " }}";
+
+                Log.d("query", query);
+
+                Search search = new Search.Builder(query)
+                        .addIndex(groupIndex)
+                        .addType(typeUser)
+                        .build();
+
+
+                try {
+                    SearchResult result = client.execute(search);
+                    if (result.isSucceeded()){
+                        List<User> foundUsers = result.getSourceAsObjectList(User.class);
+                        users.addAll(foundUsers);
+                    }
+                    else {
+                        Log.i("Error", "the search query failed to find any moods that matched");
+                    }
+                }
+                catch (Exception e) {
+                    Log.i("Error", "Something went wrong when we tried to communicate with the elasticsearch server!");
+                }
+
+                return users;
+            }
     }
 
 
