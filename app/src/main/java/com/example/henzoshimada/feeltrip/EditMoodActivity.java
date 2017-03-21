@@ -2,13 +2,21 @@ package com.example.henzoshimada.feeltrip;
 // removed unused imports, may slow down build
 
 import android.*;
+import android.app.Activity;
 import android.app.DatePickerDialog;
+import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.location.Location;
+import android.net.Uri;
+import android.os.Environment;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -16,7 +24,9 @@ import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
@@ -24,6 +34,8 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.places.Places;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -65,12 +77,23 @@ public class EditMoodActivity extends AppCompatActivity {
     public static final int cool = 0x1F60E;
     public static final int somethingwentwrong = 0x1F31A;
 
+    // Used for taking a photo
+    private ByteArrayOutputStream photoStream = new ByteArrayOutputStream();
+    private String encodedPhoto;
+    private String imagePathAndFileName;
+    Uri imageFileUri;
+    private static int TAKE_PHOTO = 2;
+    Activity activity;
+    Context context;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.add_edit_page);
         inputMoodDescription = (EditText) findViewById(R.id.moodEventDescription);
+        activity = this;
+        context = this;
 /*
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .addApi(LocationServices.API)
@@ -108,11 +131,19 @@ public class EditMoodActivity extends AppCompatActivity {
         });
 
 
-        Button selectImageButton = (Button) findViewById(R.id.select_image);
+        Button selectImageButton = (Button) findViewById(R.id.take_photo);
         selectImageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                selectImage();
+                int loginPermissionCheck = ContextCompat.checkSelfPermission(context, android.Manifest.permission.CAMERA);
+                if (loginPermissionCheck != PackageManager.PERMISSION_GRANTED) {
+                    Log.d("tag", "Camera permission not granted");
+                    ActivityCompat.requestPermissions(activity, new String[]{android.Manifest.permission.CAMERA}, 1);
+                } else {
+                    Log.d("tag", "Camera permission granted");
+                    takeAPhoto();
+                }
+
             }
         });
 
@@ -145,8 +176,7 @@ public class EditMoodActivity extends AppCompatActivity {
         mood.setSocialSit(socialSit);
         mood.setDescription(String.valueOf(inputMoodDescription.getText()), " -Feeling " + emotionalState); //TODO: We might not need to send this append part to Elasticsearch, but rather add it to our displayed description after we fetch from Elasticsearch
         mood.setDate(dateTime.getTime());
-        // TODO: mood.setImage();
-        // this is the setter for image
+        mood.setImage(encodedPhoto);
         addMoodTask.execute(mood);
     }
 
@@ -190,8 +220,47 @@ public class EditMoodActivity extends AppCompatActivity {
     }
 */
 
-    private void selectImage(){
-        Toast.makeText(getApplicationContext(), "Get Image", Toast.LENGTH_SHORT).show();
+    private void takeAPhoto(){
+        String path = Environment.getExternalStorageDirectory().getAbsolutePath() + "/Camera";
+        File folder = new File(path);
+        if (!folder.exists())
+            folder.mkdir();
+        imagePathAndFileName = path + File.separator + String.valueOf(System.currentTimeMillis()) + ".jpg";
+        File imageFile = new File(imagePathAndFileName);
+        imageFileUri = Uri.fromFile(imageFile);
+
+        Log.d("tag", "Can make file path?");
+        Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
+
+        Log.d("tag", "Take photo");
+        startActivityForResult(intent, TAKE_PHOTO);
+    }
+
+    protected void onActivityResult(int requestCode, int resultCode, Intent intent){
+        Log.d("tag", "In Take Photo");
+        if (requestCode == TAKE_PHOTO){
+
+            if (resultCode == RESULT_OK){
+                Log.d("tag", "Taking photo");
+
+                Bitmap photo = (Bitmap) intent.getExtras().get("data");
+                photo.compress(Bitmap.CompressFormat.JPEG, 100, photoStream);
+                byte [] compressedPhoto = photoStream.toByteArray();
+                encodedPhoto = Base64.encodeToString(compressedPhoto, Base64.DEFAULT);
+
+                //byte[] decodedString = Base64.decode(encodedPhoto, Base64.DEFAULT);
+                //Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+
+                ImageView imageView = (ImageView)findViewById(R.id.imgView);
+                imageView.setImageBitmap(photo);
+
+            }
+            else
+            if (resultCode == RESULT_CANCELED)
+                Toast.makeText(getApplicationContext(), "Photo Cancelled", Toast.LENGTH_SHORT).show();
+            else
+                Toast.makeText(getApplicationContext(), "Something went wrong", Toast.LENGTH_SHORT).show();
+        }
     }
 
 
