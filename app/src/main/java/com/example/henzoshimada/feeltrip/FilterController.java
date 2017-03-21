@@ -5,4 +5,19 @@ package com.example.henzoshimada.feeltrip;
  */
 
 class FilterController {
+    private boolean pastweekfilter;
+    private boolean mostrecentfilter;
+    private boolean friendsonlyfilter;
+
+    public static void togglePastweek() {
+
+    }
+
+    public static void toggleMostrecent() {
+
+    }
+
+    public static void toggleFriendsonly() {
+
+    }
 }
