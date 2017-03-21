@@ -23,8 +23,10 @@ public class Mood {
 
     private String image;
 
-    private Double latitude;
-    private Double longitude;
+    private static Double latitude;
+    private static Double longitude;
+
+    private String location;
 
     private Long made; //for storing when the mood event is first posted to elasticsearch
 
@@ -48,8 +50,7 @@ public class Mood {
     3 ----> socialSitChanged;
     4 ----> isPrivateChanged;
     5 ----> imageChanged;
-    6 ----> latitudeChanged;
-    7 ----> longitudeChanged;
+    6 ----> locationChanged;
     */
 
     private static boolean[] stateVector;
@@ -178,15 +179,15 @@ public class Mood {
     public void setMapPosition(Double latitude, Double longitude){
         this.latitude = latitude;
         this.longitude = longitude;
+        this.location = latitude + ", " + longitude;
         setStateByIndex(6);
-        setStateByIndex(7);
     }
 
     public Double[] getMapPosition(){
-        Double[] location = new Double[2];
-        location[0] = this.latitude;
-        location[1] = this.longitude;
-        return location;
+        Double[] loc = new Double[2];
+        loc[0] = this.latitude;
+        loc[1] = this.longitude;
+        return loc;
     }
 
     public boolean getPrivate() {
@@ -241,6 +242,7 @@ public class Mood {
 
     public void setLatitude(Double latitude) {
         this.latitude = latitude;
+        this.location = latitude + ", " + longitude;
         setStateByIndex(6);
     }
 
@@ -250,7 +252,8 @@ public class Mood {
 
     public void setLongitude(Double longitude) {
         this.longitude = longitude;
-        setStateByIndex(7);
+        this.location = latitude + ", " + longitude;
+        setStateByIndex(6);
     }
 
     public Long getMade() {
@@ -261,5 +264,8 @@ public class Mood {
         this.made = date.getTime();
     }
 
+    public String getLocation() {
+        return location;
+    }
 
 }

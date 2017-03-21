@@ -134,13 +134,7 @@ public class ElasticSearchController {
                                 }
                                 break;
                             case 6:
-                                query += ("\"latitude\" : " + mood.getLatitude());
-                                if (notDone != 0) {
-                                    query += (",");
-                                }
-                                break;
-                            case 7:
-                                query += ("\"longitude\" : " + mood.getLongitude());
+                                query += ("\"location\" : \"" + mood.getLocation() + "\"");
                                 if (notDone != 0) {
                                     query += (",");
                                 }
@@ -412,6 +406,8 @@ public class ElasticSearchController {
         private String emotion; // stores the passed emotion we're filtering by
         private String following; // stores the string containing all the users the participant follows
         private String participant; // stores the participant's username
+        private Double currentlat;
+        private Double currentlon; // TODO: actually pass in the user's current lat and lon to these variables
 
         public GetFilteredMoodsTask(String searchmode, String pastweek, String mostrecent, String emotion, String friendsonly){ // must pass this specific set of Strings in this order while constructing
             switch(searchmode) {
@@ -497,7 +493,7 @@ public class ElasticSearchController {
             }
 
             else if (mapmode) {
-                query += "\"must\" : { \"terms\" : { \"username\" : \"" + following + "\" }},"; //TODO: geolocation distance
+                query += "\"must\" : { \"geo_distance\" : { \"distance\" : \"2km\", \"location\" : { \"lat\" : " + currentlat + ", \"lon\" : " + currentlon + "}}},";
                 query += "\"must\" : { \"bool\" : {";
                 if(!friendsonlyfilter) { // note this line says if NOT friendsonly filter... aka we add public as well
                     query += "\"should\" : { \"term\" : { \"isPrivate\" : false }},";
