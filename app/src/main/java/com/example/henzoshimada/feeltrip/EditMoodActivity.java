@@ -52,12 +52,18 @@ public class EditMoodActivity extends AppCompatActivity {
     private Spinner emotionalStateSpinner;
     private Spinner socialSituationSpinner;
 
+    private boolean permissionDenied = false;
     /**
      * Request code for location permission request.
      *
      * @see #onRequestPermissionsResult(int, String[], int[])
      */
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
+    private static String[] PERMISSIONS_LOCATION = {
+            Manifest.permission.ACCESS_FINE_LOCATION
+    };
+
+
     private GoogleApiClient mGoogleApiClient;
     private Location mLastKnownLocation;
 
@@ -96,6 +102,7 @@ public class EditMoodActivity extends AppCompatActivity {
         inputMoodDescription = (EditText) findViewById(R.id.moodEventDescription);
         activity = this;
         context = this;
+        verifyLocationPermissions(this);
 /*
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .addApi(LocationServices.API)
@@ -347,20 +354,17 @@ public class EditMoodActivity extends AppCompatActivity {
      * Enables the My Location layer if the fine location permission has been granted.
      */
 
-    private void enableMyLocation() {
-        if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED) {
-            // Permission to access the location is missing.
-            PermissionUtils.requestPermission(this, LOCATION_PERMISSION_REQUEST_CODE,
-                    android.Manifest.permission.ACCESS_FINE_LOCATION, true);
-        }
-    }
-
     private void toggleLocation(boolean isChecked, CompoundButton button){
         if (isChecked) {
+            verifyLocationPermissions(this);
+            if (permissionDenied == true){
+                Log.d("permTag", "checked but no permi");
+                button.toggle();
+                return;
+            }
             // The toggle is enabled
             locationOn = true;
-            enableMyLocation();
+            //enableMyLocation();
             Log.d("myTag", "try to get location");
             GPSLocation gps = new GPSLocation(EditMoodActivity.this);
 
@@ -382,8 +386,23 @@ public class EditMoodActivity extends AppCompatActivity {
         } else {
             // The toggle is disabled
             locationOn = false;
+            Log.d("permTag","location off");
         }
-        Log.d("myTag", "location on is: " + String.valueOf(locationOn));
+
     }
+
+    public void verifyLocationPermissions(Activity activity) {
+        // Check if we have location permission
+        int permission = ActivityCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_FINE_LOCATION);
+        if (permission != PackageManager.PERMISSION_GRANTED) {
+            permissionDenied = true;
+            Log.d("permTag","verify: permissionDenied");
+            // We don't have permission so prompt the user
+            ActivityCompat.requestPermissions(activity, PERMISSIONS_LOCATION, LOCATION_PERMISSION_REQUEST_CODE);
+        }else{
+            permissionDenied = false;
+        }
+    }
+
 
 }
