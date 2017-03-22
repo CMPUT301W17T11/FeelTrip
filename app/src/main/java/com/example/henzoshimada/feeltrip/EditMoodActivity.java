@@ -44,6 +44,7 @@ import java.util.List;
 
 public class EditMoodActivity extends AppCompatActivity {
 
+    public static final int MAX_PHOTO_SIZE = 65536;
     private EditText inputMoodDescription;
     private boolean locationOn;
     private double latitude;
@@ -84,7 +85,7 @@ public class EditMoodActivity extends AppCompatActivity {
     private String encodedPhoto;
     private String imagePathAndFileName;
     Uri imageFileUri;
-    private static int TAKE_PHOTO = 2;
+    private static final int TAKE_PHOTO = 2;
     Activity activity;
     Context context;
 
@@ -239,6 +240,28 @@ public class EditMoodActivity extends AppCompatActivity {
         startActivityForResult(intent, TAKE_PHOTO);
     }
 
+    private byte[] compress(Bitmap photo){
+        int quality = 100;
+
+        //
+        if (photo.getByteCount()<= MAX_PHOTO_SIZE) {
+            photo.compress(Bitmap.CompressFormat.PNG, quality, photoStream);
+            return photoStream.toByteArray();
+        }
+
+        //
+        while(true) {
+            photo.compress(Bitmap.CompressFormat.JPEG, quality, photoStream);
+            byte [] compressedPhoto = photoStream.toByteArray();
+            if(compressedPhoto.length <= MAX_PHOTO_SIZE || quality == 5){
+                return compressedPhoto;
+            }
+            else {
+                quality -= 5;
+            }
+        }
+    }
+
     protected void onActivityResult(int requestCode, int resultCode, Intent intent){
         Log.d("tag", "In Take Photo");
         if (requestCode == TAKE_PHOTO){
@@ -247,8 +270,8 @@ public class EditMoodActivity extends AppCompatActivity {
                 Log.d("tag", "Taking photo");
 
                 Bitmap photo = (Bitmap) intent.getExtras().get("data");
-                photo.compress(Bitmap.CompressFormat.JPEG, 100, photoStream);
-                byte [] compressedPhoto = photoStream.toByteArray();
+
+                byte [] compressedPhoto = compress(photo);
                 encodedPhoto = Base64.encodeToString(compressedPhoto, Base64.DEFAULT);
 
                 //byte[] decodedString = Base64.decode(encodedPhoto, Base64.DEFAULT);
