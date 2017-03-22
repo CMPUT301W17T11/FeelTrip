@@ -271,14 +271,20 @@ public class EditMoodActivity extends AppCompatActivity {
 
                 Bitmap photo = (Bitmap) intent.getExtras().get("data");
 
+                // Compress the photo if needed
                 byte [] compressedPhoto = compress(photo);
+
+                // Encode photo to string here
                 encodedPhoto = Base64.encodeToString(compressedPhoto, Base64.DEFAULT);
 
-                //byte[] decodedString = Base64.decode(encodedPhoto, Base64.DEFAULT);
-                //Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+                // This is how to decode the photo
+                                                    // Give it a String encoded[Photo/Emoji]
+                byte[] decodedString = Base64.decode(encodedPhoto, Base64.DEFAULT);
+                Bitmap decodedPhoto = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
 
+                // Set the image here
                 ImageView imageView = (ImageView)findViewById(R.id.imgView);
-                imageView.setImageBitmap(photo);
+                imageView.setImageBitmap(decodedPhoto);
 
             }
             else
