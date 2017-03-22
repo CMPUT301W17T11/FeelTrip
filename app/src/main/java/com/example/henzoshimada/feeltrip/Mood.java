@@ -152,8 +152,9 @@ public class Mood {
         return description;
     }
 
-    public void setDescription(String description, String append) throws DescriptionTooLongException {
+    public void setDescription(String descriptionin, String append) throws DescriptionTooLongException {
         int count = 0;
+        String description = descriptionin.trim();
         for (int i = 0; i < description.length(); i++){
             if (description.charAt(i) == ' '){
                 count++;

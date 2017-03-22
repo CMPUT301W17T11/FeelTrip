@@ -20,6 +20,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.henzoshimada.feeltrip.ElasticSearchController;
+import com.example.henzoshimada.feeltrip.FeelTripApplication;
 import com.example.henzoshimada.feeltrip.Mood;
 import com.example.henzoshimada.feeltrip.PermissionUtils;
 import com.example.henzoshimada.feeltrip.R;
@@ -72,6 +73,8 @@ public class mapFragment extends Fragment implements
     private GoogleApiClient mGoogleApiClient;
     private Location mLastKnownLocation;
 
+    private static final String frag = "map";
+
     private CameraPosition mCameraPosition;
     private static final String KEY_CAMERA_POSITION = "camera_position";
     private static final String KEY_LOCATION = "location";
@@ -83,6 +86,8 @@ public class mapFragment extends Fragment implements
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_map, container, false);
+
+        FeelTripApplication.setFrag(frag); //TODO: Put this wherever we initialize the fragment, I think here works fine.
 
         mMapView = (MapView) rootView.findViewById(R.id.mapView);
         mMapView.onCreate(savedInstanceState);

@@ -129,7 +129,10 @@ public class MainScreen extends AppCompatActivity {
 
             @Override
             public void onCheckedChanged(CompoundButton arg0, boolean isChecked) {
-                Toast.makeText(getApplicationContext(),"Toggled filter for recent posts!",Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getApplicationContext(),"Toggled filter for recent posts!",Toast.LENGTH_SHORT).show();
+                FeelTripApplication.getFilterController().setPastweekfilter(isChecked);
+                FeelTripApplication.loadFromElasticSearch();
+                FeelTripApplication.getMoodAdapter(getBaseContext()).notifyDataSetChanged();
             }
         });
 
@@ -138,7 +141,10 @@ public class MainScreen extends AppCompatActivity {
 
             @Override
             public void onCheckedChanged(CompoundButton arg0, boolean isChecked) {
-                Toast.makeText(getApplicationContext(),"Toggled filter for friends!",Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getApplicationContext(),"Toggled filter for friends!",Toast.LENGTH_SHORT).show();
+                FeelTripApplication.getFilterController().setFriendsonlyfilter(isChecked);
+                FeelTripApplication.loadFromElasticSearch();
+                FeelTripApplication.getMoodAdapter(getBaseContext()).notifyDataSetChanged();
             }
         });
 

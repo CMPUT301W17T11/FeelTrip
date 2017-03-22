@@ -409,7 +409,7 @@ public class ElasticSearchController {
         private Double currentlat;
         private Double currentlon; // TODO: actually pass in the user's current lat and lon to these variables
 
-        public GetFilteredMoodsTask(String searchmode, String pastweek, String mostrecent, String emotion, String friendsonly){ // must pass this specific set of Strings in this order while constructing
+        public GetFilteredMoodsTask(String searchmode){ // must pass this specific set of Strings in this order while constructing
             switch(searchmode) {
                 case "main":
                     participant = FeelTripApplication.getParticipant().getUserName();
@@ -433,17 +433,17 @@ public class ElasticSearchController {
                     Log.i("Error", "The given search mode is invalid.");
                     return;
             }
-            if(!pastweek.isEmpty()) {
+            if(FeelTripApplication.getFilterController().isPastweekfilter()) {
                 pastweekfilter = true;
             }
-            if(!mostrecent.isEmpty()) {
+            if(FeelTripApplication.getFilterController().isMostrecentfilter()) {
                 mostrecentfilter = true;
             }
-            if(!emotion.isEmpty()) {
+            if(!FeelTripApplication.getFilterController().getEmotionfilter().isEmpty()) {
                 emotionfilter = true;
-                this.emotion = emotion;
+                this.emotion = FeelTripApplication.getFilterController().getEmotionfilter();
             }
-            if(!friendsonly.isEmpty()) {
+            if(FeelTripApplication.getFilterController().isFriendsonlyfilter()) {
                 friendsonlyfilter = true;
             }
         }

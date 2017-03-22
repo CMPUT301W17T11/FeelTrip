@@ -16,6 +16,7 @@ import android.widget.FrameLayout;
 import android.widget.ListView;
 
 import com.example.henzoshimada.feeltrip.ElasticSearchController;
+import com.example.henzoshimada.feeltrip.FeelTripApplication;
 import com.example.henzoshimada.feeltrip.Mood;
 import com.example.henzoshimada.feeltrip.MoodAdapter;
 import com.example.henzoshimada.feeltrip.R;
@@ -31,6 +32,8 @@ public class profileFragment extends Fragment {
     private ArrayList<Mood> moodArrayList;
 
     private ArrayAdapter<Mood> adapter;
+
+    private static final String frag = "profile";
 
     //Swiping
     private boolean mSwiping = false; // detects if user is swiping on ACTION_UP
@@ -206,10 +209,10 @@ public class profileFragment extends Fragment {
         Log.d("myTag","onStart");
         // TODO Auto-generated method stub
         super.onStart();
-        //moodArrayList = new ArrayList<Mood>();
-        loadFromElasticSearch();
 
-        adapter= new MoodAdapter(moodArrayList,getActivity());
+        FeelTripApplication.setFrag(frag);
+        FeelTripApplication.loadFromElasticSearch();
+        adapter = FeelTripApplication.getMoodAdapter(getActivity());
 
         //adapter = new ArrayAdapter<Mood>(getActivity(), R.layout.list_item, moodArrayList); //view,dataArray
         oldMoodListView.setAdapter(adapter);
@@ -226,26 +229,6 @@ public class profileFragment extends Fragment {
     }
 */
 
-    private void loadFromElasticSearch(){
-        Log.d("listTag", "load from ES");
-        moodArrayList = new ArrayList<Mood>();
-        Log.d("myTag","inside load: "+moodArrayList.size());
-        ElasticSearchController.GetFilteredMoodsTask getMoodTask = new ElasticSearchController.GetFilteredMoodsTask("profile","","","","");
-        getMoodTask.execute();
-        try {
-            moodArrayList.addAll(getMoodTask.get());
-            Log.d("myTag","inside load2 : "+moodArrayList.size());
-
-        } catch (InterruptedException e) {
-            Log.d("myTag","bad1");
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            Log.d("myTag","bad2");
-            e.printStackTrace();
-        }
-    }
-
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         // If the activity result was received from the "Get Car" request
@@ -256,7 +239,7 @@ public class profileFragment extends Fragment {
                 // setResult(int, Intent)
                 //final int carId = data.getIntExtra(CarActivity.EXTRA_CAR_ID, -1);
                 Log.d("myTag", "we are back"+moodArrayList.size());
-                loadFromElasticSearch();
+                FeelTripApplication.loadFromElasticSearch();
 
                 Log.d("myTag", "done load from ES after back"+moodArrayList.size());
                 adapter.notifyDataSetChanged();

@@ -17,6 +17,7 @@ import android.widget.TextView;
 
 import com.example.henzoshimada.feeltrip.EditMoodActivity;
 import com.example.henzoshimada.feeltrip.ElasticSearchController;
+import com.example.henzoshimada.feeltrip.FeelTripApplication;
 import com.example.henzoshimada.feeltrip.Mood;
 import com.example.henzoshimada.feeltrip.MoodAdapter;
 import com.example.henzoshimada.feeltrip.R;
@@ -38,6 +39,8 @@ public class homeFragmment extends Fragment{
     private ArrayList<Mood> moodArrayList;
 
     private ArrayAdapter<Mood> adapter;
+
+    private static final String frag = "main";
 
     @Override
     public View onCreateView(LayoutInflater inflater, final ViewGroup container,
@@ -101,10 +104,10 @@ public class homeFragmment extends Fragment{
     public void onStart() {
         // TODO Auto-generated method stub
         super.onStart();
-        moodArrayList = new ArrayList<Mood>();
-        loadFromElasticSearch();
 
-        adapter= new MoodAdapter(moodArrayList,getActivity());
+        FeelTripApplication.setFrag(frag);
+        FeelTripApplication.loadFromElasticSearch();
+        adapter = FeelTripApplication.getMoodAdapter(getActivity());
 
         //adapter = new ArrayAdapter<Mood>(getActivity(), R.layout.list_item, moodArrayList); //view,dataArray
         oldMoodListView.setAdapter(adapter);
@@ -120,18 +123,5 @@ public class homeFragmment extends Fragment{
         adapter.notifyDataSetChanged();
     }
 */
-
-    private void loadFromElasticSearch(){
-        Log.d("listTag", "load from ES");
-        ElasticSearchController.GetFilteredMoodsTask getMoodTask = new ElasticSearchController.GetFilteredMoodsTask("main","","","","");
-        getMoodTask.execute();
-        try {
-            moodArrayList.addAll(getMoodTask.get());
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        }
-    }
 
 }
