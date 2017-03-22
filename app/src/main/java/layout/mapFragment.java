@@ -2,6 +2,7 @@ package layout;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Location;
@@ -22,7 +23,6 @@ import android.widget.Toast;
 import com.example.henzoshimada.feeltrip.ElasticSearchController;
 import com.example.henzoshimada.feeltrip.FeelTripApplication;
 import com.example.henzoshimada.feeltrip.Mood;
-import com.example.henzoshimada.feeltrip.PermissionUtils;
 import com.example.henzoshimada.feeltrip.R;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
@@ -49,8 +49,8 @@ public class mapFragment extends Fragment implements
         GoogleMap.OnMyLocationButtonClickListener,
         OnMapReadyCallback,
         GoogleMap.OnMarkerClickListener,
-        GoogleMap.OnMapClickListener,
-        ActivityCompat.OnRequestPermissionsResultCallback{
+        GoogleMap.OnMapClickListener{
+       // ActivityCompat.OnRequestPermissionsResultCallback{
 
     MapView mMapView;
     //private GoogleMap googleMap;
@@ -66,7 +66,10 @@ public class mapFragment extends Fragment implements
      * Flag indicating whether a requested permission has been denied after returning in
      * {@link #onRequestPermissionsResult(int, String[], int[])}.
      */
-    private boolean mPermissionDenied = false;
+    private boolean permissionDenied = false;
+    private static String[] PERMISSIONS_LOCATION = {
+            Manifest.permission.ACCESS_FINE_LOCATION
+    };
 
     private GoogleMap mMap;
 
@@ -91,6 +94,7 @@ public class mapFragment extends Fragment implements
 
         mMapView = (MapView) rootView.findViewById(R.id.mapView);
         mMapView.onCreate(savedInstanceState);
+        verifyLocationPermissions(getActivity());
         View locationButton = ((View) mMapView.findViewById(1).getParent()).findViewById(2);
 
         // and next place it, for exemple, on bottom right (as Google Maps app)
@@ -179,7 +183,8 @@ public class mapFragment extends Fragment implements
             }
         });
 
-        enableMyLocation();
+        verifyLocationPermissions(getActivity());
+
         setMoodMarker();
     }
 
@@ -247,25 +252,19 @@ public class mapFragment extends Fragment implements
         }
         return false;
     }
-
+/*
     //handle the result of the permission request
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
                                            @NonNull int[] grantResults) {
+        Log.d("permTag","on request perm result");
         if (requestCode != LOCATION_PERMISSION_REQUEST_CODE) {
             return;
         }
 
-        if (PermissionUtils.isPermissionGranted(permissions, grantResults,
-                Manifest.permission.ACCESS_FINE_LOCATION)) {
-            // Enable the my location layer if the permission has been granted.
-            enableMyLocation();
-        } else {
-            // Display the missing permission error dialog when the fragments resume.
-            mPermissionDenied = true;
-        }
+        Log.d("permTag","on request perm result");
     }
-
+*/
     /*
     @Override
     protected void onResumeFragments() {
@@ -279,7 +278,7 @@ public class mapFragment extends Fragment implements
     }
 */
 
-
+/*
     //new stuff
     @Override
     public void onResume(){
@@ -291,7 +290,7 @@ public class mapFragment extends Fragment implements
         }
         Log.d("mapTag","on resume fragments");
     }
-
+*/
     private void testCreateMoodArray() throws ExecutionException, InterruptedException {
         ElasticSearchController.GetMoodTask getMoodTask = new ElasticSearchController.GetMoodTask();
         getMoodTask.execute("user");
@@ -328,27 +327,22 @@ public class mapFragment extends Fragment implements
         mSelectedMarker = null;
     }
 
-    /**
-     * Enables the My Location layer if the fine location permission has been granted.
-     */
-    private void enableMyLocation() {
-        if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED) {
-            // Permission to access the location is missing.
-            //// TODO: 19-Mar-17 ask for permission here
-            //PermissionUtils.requestPermission(this, LOCATION_PERMISSION_REQUEST_CODE,
-            //        Manifest.permission.ACCESS_FINE_LOCATION, true);
-        } else if (mMap != null) {
-            // Access to the location has been granted to the app.
-            mMap.setMyLocationEnabled(true);
+    public void verifyLocationPermissions(Activity activity) {
+        Log.d("permTag","in verify perm");
+        // Check if we have location permission
+        int permission = ActivityCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_FINE_LOCATION);
+        if (permission != PackageManager.PERMISSION_GRANTED) {
+            permissionDenied = true;
+            Log.d("permTag","verify: permissionDenied");
+            // We don't have permission so prompt the user
+            ActivityCompat.requestPermissions(activity, PERMISSIONS_LOCATION, LOCATION_PERMISSION_REQUEST_CODE);
+        }else{
+            permissionDenied = false;
+            if (mMap != null) {
+                // Access to the location has been granted to the app.
+                mMap.setMyLocationEnabled(true);
+            }
         }
     }
 
-    /**
-     * Displays a dialog with error message explaining that the location permission is missing.
-     */
-    private void showMissingPermissionError() {
-        //PermissionUtils.PermissionDeniedDialog
-        //       .newInstance(true).show(getFragmentManager(), "dialog");
-    }
 }
