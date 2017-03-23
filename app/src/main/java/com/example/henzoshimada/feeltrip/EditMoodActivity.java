@@ -16,6 +16,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
@@ -304,7 +305,7 @@ public class EditMoodActivity extends AppCompatActivity {
             }
             mood.setEmotionalState(emotionalState);
             mood.setSocialSit(socialSit);
-            mood.setDescription(String.valueOf(inputMoodDescription.getText()), " -Feeling "); //TODO: append the emotionalState upon fetching from Elasticsearch
+            mood.setDescription(inputMoodDescription.getText().toString().replace("\\","\\\\"), " -Feeling "); //TODO: append the emotionalState upon fetching from Elasticsearch
             mood.setDate(dateTime.getTime());
             mood.setImage(encodedPhoto);
 

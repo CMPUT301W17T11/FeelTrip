@@ -1,6 +1,8 @@
 package com.example.henzoshimada.feeltrip;
 
 // Removed unused imports
+import android.text.TextUtils;
+
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -185,7 +187,7 @@ public class Mood {
             if (description.length() > 20 || count > 2) {
                 throw new DescriptionTooLongException();
             } else {
-                this.description = description;
+                this.description = TextUtils.htmlEncode(description);
                 this.append = append;
             }
             setStateByIndex(1);

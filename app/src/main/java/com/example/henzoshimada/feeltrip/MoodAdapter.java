@@ -3,6 +3,7 @@ package com.example.henzoshimada.feeltrip;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.text.Html;
 import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -79,7 +80,7 @@ public class MoodAdapter extends ArrayAdapter<Mood> {
         Log.d("imageTag","new array list");
         viewHolder.userName.setText(mood.getUsername());
         viewHolder.date.setText(mood.getDate().toString());
-        viewHolder.description.setText(mood.getDescription());
+        viewHolder.description.setText(Html.fromHtml(mood.getDescription())); //TODO: This is depreciated, maybe replace?
         viewHolder.append.setText(mood.getAppend() + mood.getEmotionalState());
         viewHolder.emoji.setImageBitmap(null); //TODO: pass the emoji into here
         viewHolder.socialSituation.setText(mood.getSocialSit());
