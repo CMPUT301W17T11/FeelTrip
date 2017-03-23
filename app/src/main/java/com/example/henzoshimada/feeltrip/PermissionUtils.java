@@ -189,11 +189,11 @@ public abstract class PermissionUtils {
         public void onDismiss(DialogInterface dialog) {
             super.onDismiss(dialog);
             if (mFinishActivity) {
-                Toast.makeText(getActivity(),
+                /*Toast.makeText(getActivity(),
                         R.string.permission_required_toast,
                         Toast.LENGTH_SHORT)
-                        .show();
-                getActivity().finish();
+                        .show();*/
+                //getActivity().finish();
             }
         }
     }
