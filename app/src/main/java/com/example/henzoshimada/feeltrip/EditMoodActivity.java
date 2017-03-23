@@ -154,7 +154,7 @@ public class EditMoodActivity extends AppCompatActivity {
                 Log.d("tag", "No description found in editmood");
             }
             try {
-                socialSit = editmood.getSocialSit();
+                socialSit = editmood.getSocialSit(); //TODO: There is a massive UI bug where if editmood's privacy settings are currently set to public, and the user then changes the socialsit, it changes the privacy settings too.
             }
             catch (Exception e) {
                 Log.d("tag", "No socialsit found in editmood");

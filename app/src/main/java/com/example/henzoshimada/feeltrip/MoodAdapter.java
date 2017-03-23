@@ -26,6 +26,8 @@ public class MoodAdapter extends ArrayAdapter<Mood> {
         TextView userName;
         TextView date;
         TextView description;
+        TextView append;
+        ImageView emoji;
         TextView socialSituation;
         ImageView image;
     }
@@ -57,6 +59,8 @@ public class MoodAdapter extends ArrayAdapter<Mood> {
             viewHolder.userName = (TextView) convertView.findViewById(R.id.userName);
             viewHolder.date = (TextView) convertView.findViewById(R.id.date);
             viewHolder.description = (TextView) convertView.findViewById(R.id.description);
+            viewHolder.append = (TextView) convertView.findViewById(R.id.append);
+            viewHolder.emoji = (ImageView) convertView.findViewById(R.id.emoji);
             viewHolder.socialSituation = (TextView) convertView.findViewById(R.id.socialSituation);
             viewHolder.image = (ImageView) convertView.findViewById(R.id.image);
 
@@ -76,6 +80,8 @@ public class MoodAdapter extends ArrayAdapter<Mood> {
         viewHolder.userName.setText(mood.getUsername());
         viewHolder.date.setText(mood.getDate().toString());
         viewHolder.description.setText(mood.getDescription());
+        viewHolder.append.setText(mood.getAppend() + mood.getEmotionalState());
+        viewHolder.emoji.setImageBitmap(null); //TODO: pass the emoji into here
         viewHolder.socialSituation.setText(mood.getSocialSit());
 
         String encodedImageString = mood.getImage();
