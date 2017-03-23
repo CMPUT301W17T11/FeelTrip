@@ -330,4 +330,8 @@ public class Mood {
             setStateByIndex(6);
         }
     }
+
+    public String getAppend() {
+        return append;
+    }
 }
