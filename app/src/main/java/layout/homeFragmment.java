@@ -98,7 +98,9 @@ public class homeFragmment extends Fragment{
         // TODO Auto-generated method stub
         super.onStart();
 
-        FeelTripApplication.setFrag(frag);
+        if(!FeelTripApplication.getFrag().equals(frag)) {
+            FeelTripApplication.setFrag(frag);
+        }
         FeelTripApplication.loadFromElasticSearch();
         adapter = FeelTripApplication.getMoodAdapter(getActivity());
 

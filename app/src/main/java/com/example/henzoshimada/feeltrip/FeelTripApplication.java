@@ -93,21 +93,18 @@ public class FeelTripApplication extends Application {
         FeelTripApplication.moodArrayList = moodArrayList;
     }
 
-    private static int frag; // 0 for  Home frag, 1 for Profile frag, 2 for Map frag
+    public static String getFrag() {
+        return frag;
+    }
+
+    private static String frag = "main"; // main by default
     public static void setFrag(String fragstr) {
-        switch(fragstr) {
-            case "main":
-                frag = 0;
-                break;
-            case "profile":
-                frag = 1;
-                break;
-            case "map":
-                frag = 2;
-                break;
-            default:
-                Log.i("Error", "The given search mode is invalid.");
-                return;
+        if(fragstr.equals("main") || fragstr.equals("profile") || fragstr.equals("map")) {
+            frag = fragstr;
+        }
+        else {
+            Log.i("Error", "The given search mode is invalid.");
+            return;
         }
     }
 
@@ -115,19 +112,12 @@ public class FeelTripApplication extends Application {
         Log.d("listTag", "load from ES");
         moodArrayList.clear();
         ElasticSearchController.GetFilteredMoodsTask getMoodTask;
-        switch(frag) {
-            case 0:
-                getMoodTask = new ElasticSearchController.GetFilteredMoodsTask("main");
-                break;
-            case 1:
-                getMoodTask = new ElasticSearchController.GetFilteredMoodsTask("profile");
-                break;
-            case 2:
-                getMoodTask = new ElasticSearchController.GetFilteredMoodsTask("map");
-                break;
-            default:
-                Log.i("Error", "The given search mode is invalid.");
-                return;
+        if(frag.equals("main") || frag.equals("profile") || frag.equals("map")) {
+            getMoodTask = new ElasticSearchController.GetFilteredMoodsTask(frag);
+        }
+        else {
+            Log.i("Error", "The given search mode is invalid.");
+            return;
         }
         getMoodTask.execute();
         try {

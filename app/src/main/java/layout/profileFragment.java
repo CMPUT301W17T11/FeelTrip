@@ -219,9 +219,13 @@ public class profileFragment extends Fragment {
         // TODO Auto-generated method stub
         super.onStart();
 
-        FeelTripApplication.setFrag(frag);
+        if(!FeelTripApplication.getFrag().equals(frag)) {
+            FeelTripApplication.setFrag(frag);
+        }
         FeelTripApplication.loadFromElasticSearch();
         adapter = FeelTripApplication.getMoodAdapter(getActivity());
+
+
 
         //adapter = new ArrayAdapter<Mood>(getActivity(), R.layout.list_item, moodArrayList); //view,dataArray
         oldMoodListView.setAdapter(adapter);
