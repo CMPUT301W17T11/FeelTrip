@@ -76,12 +76,6 @@ public class homeFragmment extends Fragment{
                         }else{
                             Log.d("myTag","image:"+mood.getImage());
                         }
-                        Intent intent = new Intent(view.getContext(), EditMoodActivity.class);
-                        Mood selected = FeelTripApplication.getMoodArrayList().get(position);
-                        Bundle bundle = new Bundle();
-                        bundle.putString("editmood", new Gson().toJson(selected));
-                        intent.putExtras(bundle);
-                        startActivity(intent);
                     }
                 });
 
