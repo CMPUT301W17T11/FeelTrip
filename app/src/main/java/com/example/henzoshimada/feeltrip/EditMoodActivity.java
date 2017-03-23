@@ -112,6 +112,11 @@ public class EditMoodActivity extends AppCompatActivity {
         activity = this;
         context = this;
         verifyLocationPermissions(this);
+        editmood = null;
+        encodedPhoto = null;
+//        socialSit = null;
+//        emotionalState = null;
+//        dateTime = null;
 
         String jsonEditMood = "";
         Bundle extras = getIntent().getExtras();

@@ -194,7 +194,7 @@ public class ElasticSearchController {
                     query += "}}";
 
                     try{
-                        client.execute(putMapping); // Sets type of location to be "geo_point" on elasticsearch
+                        
                         Update update = new Update.Builder(query).index(groupIndex).type(typeMood).id(moodId).refresh(true).build();
                         client.execute(update);
 
@@ -223,7 +223,7 @@ public class ElasticSearchController {
                 Delete delete = new Delete.Builder(moodId).index(groupIndex).type(typeMood).refresh(true).build();
 
                 try {
-                    client.execute(putMapping); // Sets type of location to be "geo_point" on elasticsearch
+                    
                     client.execute(delete);
                 }
                 catch (Exception e) {
@@ -269,11 +269,11 @@ public class ElasticSearchController {
             Search search = new Search.Builder(query)
                     .addIndex(groupIndex)
                     .addType(typeMood)
-                    .refresh(true).build();
+                    .build();
 
 
             try {
-                client.execute(putMapping); // Sets type of location to be "geo_point" on elasticsearch
+                
                 SearchResult result = client.execute(search);
                 if (result.isSucceeded()){
                     List<Mood> foundMoods = result.getSourceAsObjectList(Mood.class);
@@ -304,7 +304,7 @@ public class ElasticSearchController {
 
                 try {
                     // where is the client?
-                    client.execute(putMapping); // Sets type of location to be "geo_point" on elasticsearch
+                    
                     DocumentResult result = client.execute(index);
                     if (result.isSucceeded()){
                         participant.setId(result.getId());
@@ -334,7 +334,7 @@ public class ElasticSearchController {
                 Delete delete = new Delete.Builder(userId).index(groupIndex).type(typeUser).refresh(true).build();
 
                 try {
-                    client.execute(putMapping); // Sets type of location to be "geo_point" on elasticsearch
+                    
                     client.execute(delete);
                 }
                 catch (Exception e) {
@@ -376,11 +376,11 @@ public class ElasticSearchController {
             Search search = new Search.Builder(query)
                     .addIndex(groupIndex)
                     .addType(typeUser)
-                    .refresh(true).build();
+                    .build();
 
 
             try {
-                client.execute(putMapping); // Sets type of location to be "geo_point" on elasticsearch
+                
                 SearchResult result = client.execute(search);
                 if (result.isSucceeded()) {
                     List<Participant> foundParticipants = result.getSourceAsObjectList(Participant.class);
@@ -423,11 +423,11 @@ public class ElasticSearchController {
             Search search = new Search.Builder(query)
                     .addIndex(groupIndex)
                     .addType(typeUser)
-                    .refresh(true).build();
+                    .build();
 
 
             try {
-                client.execute(putMapping); // Sets type of location to be "geo_point" on elasticsearch
+                
                 SearchResult result = client.execute(search);
                 if (result.isSucceeded()){
                     List<Participant> foundParticipants = result.getSourceAsObjectList(Participant.class);
@@ -580,7 +580,7 @@ public class ElasticSearchController {
 
 
             try {
-                client.execute(putMapping); // Sets type of location to be "geo_point" on elasticsearch
+                
                 SearchResult result = client.execute(search);
                 if (result.isSucceeded()){
                     List<Mood> foundMoods = result.getSourceAsObjectList(Mood.class);
@@ -607,11 +607,6 @@ public class ElasticSearchController {
             JestClientFactory factory = new JestClientFactory();
             factory.setDroidClientConfig(config);
             client = (JestDroidClient) factory.getObject();
-            try {
-                client.execute(putMapping); // Sets type of location to be "geo_point" on elasticsearch
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
         }
     }
 }
