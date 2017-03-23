@@ -21,6 +21,7 @@ import com.example.henzoshimada.feeltrip.FeelTripApplication;
 import com.example.henzoshimada.feeltrip.Mood;
 import com.example.henzoshimada.feeltrip.MoodAdapter;
 import com.example.henzoshimada.feeltrip.R;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
@@ -75,14 +76,12 @@ public class homeFragmment extends Fragment{
                         }else{
                             Log.d("myTag","image:"+mood.getImage());
                         }
-                        /*
                         Intent intent = new Intent(view.getContext(), EditMoodActivity.class);
-                        Mood selected = moodArrayList.get(position);
-                        Bundle bundle = selected.toBundle();
-
+                        Mood selected = FeelTripApplication.getMoodArrayList().get(position);
+                        Bundle bundle = new Bundle();
+                        bundle.putString("editmood", new Gson().toJson(selected));
                         intent.putExtras(bundle);
                         startActivity(intent);
-*/
                     }
                 });
 
