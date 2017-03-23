@@ -22,6 +22,7 @@ import io.searchbox.core.Index;
 import io.searchbox.core.Search;
 import io.searchbox.core.SearchResult;
 import io.searchbox.core.Update;
+import io.searchbox.indices.mapping.PutMapping;
 
 /**
  * Created by Esus2 on 2017-03-11.
@@ -32,6 +33,13 @@ public class ElasticSearchController {
     private static final String groupIndex = "cmput301w17t11";
     private static final String typeMood = "mood";
     private static final String typeUser = "user";
+
+    static PutMapping putMapping = new PutMapping.Builder(
+            "cmput301w17t11",
+            "mood",
+            "{ \"mood\" : { \"properties\" : { \"location\" : {\"type\" : \"geo_point\"} } } }"
+            ).build();
+
 
     public static class AddMoodTask extends AsyncTask<Mood, Void, Boolean> {
 
@@ -60,6 +68,7 @@ public class ElasticSearchController {
 
                     try {
                         // where is the client?
+                        client.execute(putMapping); // Sets type of location to be "geo_point" on elasticsearch
                         DocumentResult result = client.execute(index);
                         if (result.isSucceeded()) {
                             mood.setId(result.getId());
@@ -443,8 +452,8 @@ public class ElasticSearchController {
         private String emotion; // stores the passed emotion we're filtering by
         private String following = "[\"\"]"; // stores the string containing all the users the participant follows, initialize it to "blank" array by default
         private String participant; // stores the participant's username
-        private Double currentlat;
-        private Double currentlon; // TODO: actually pass in the user's current lat and lon to these variables
+        private Double currentlat = 53.5141543;
+        private Double currentlon = -113.6701809; // TODO: actually pass in the user's current lat and lon to these variables
 
         public GetFilteredMoodsTask(String searchmode){ // must pass this specific set of Strings in this order while constructing
             switch(searchmode) {
@@ -498,6 +507,8 @@ public class ElasticSearchController {
             String query; // things are going to get complicated very fast now, booleans are here to understand whether a filter is being applied or not
             query = "{" +
                     "\"query\" : {" +
+                    "\"filtered\" : {" +
+                    "\"query\" : {" +
                     "\"bool\" : {";
 
             if(pastweekfilter) {
@@ -523,24 +534,27 @@ public class ElasticSearchController {
                 query += "\"should\" : { \"terms\" : { \"username\" : " + following + " }}" +
                          "}}," +
                          "\"must_not\" : { \"term\" : { \"username\" : \"" + participant + "\" }}";
+                query += "}}";
             }
 
             else if (profilemode) {
                 query += "\"must\" : { \"term\" : { \"username\" : \"" + participant + "\" }}";
+                query += "}}";
             }
 
             else if (mapmode) {
-                query += "\"must\" : { \"geo_distance\" : { \"distance\" : \"5km\", \"location\" : { \"lat\" : " + currentlat + ", \"lon\" : " + currentlon + "}}},";
                 query += "\"must\" : { \"bool\" : {";
-                if(!friendsonlyfilter) { // note this line says if NOT friendsonly filter... aka we add public as well
+                if (!friendsonlyfilter) { // note this line says if NOT friendsonly filter... aka we add public as well
                     query += "\"should\" : { \"term\" : { \"isPrivate\" : false }},";
                 }
                 query += "\"should\" : { \"terms\" : { \"username\" : " + following + " }}" +
                         "}}," +
-                        "\"must_not\" : { \"term\" : { \"username\" : \"" + participant + "\" }}";
+                        "\"must_not\" : { \"term\" : { \"username\" : \"" + participant + "\" }}" +
+                        "}}," +
+                        "\"filter\" : { \"geo_distance\" : { \"distance\" : \"5km\", \"location\" : { \"lat\" : " + currentlat + ", \"lon\" : " + currentlon + "}}}";
             }
 
-            query +="}},";
+            query += "}},";
 
             if (mostrecentfilter) {
                 query += "\"size\" : 1,";
