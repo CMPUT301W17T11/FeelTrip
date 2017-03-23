@@ -82,21 +82,21 @@ public class MainScreen extends AppCompatActivity {
                     Log.d("Mytag","Tapped on home");
                     fragment = new homeFragmment();
                     ft.replace(R.id.fragent_frame,fragment);
-                    ft.addToBackStack(null);
+                    //ft.addToBackStack(null);
                     ft.commit();
                     return true;
                 case R.id.navigation_profile:
                     Log.d("Mytag","Tapped on profile");
                     fragment = new profileFragment();
                     ft.replace(R.id.fragent_frame,fragment);
-                    ft.addToBackStack(null);
+                    //ft.addToBackStack(null);
                     ft.commit();
                     return true;
                 case R.id.navigation_map:
                     Log.d("Mytag","Tapped on map");
                     fragment = new mapFragment();
                     ft.replace(R.id.fragent_frame,fragment);
-                    ft.addToBackStack(null);
+                    //ft.addToBackStack(null);
                     ft.commit();
                     return true;
                 default:
