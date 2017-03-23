@@ -16,6 +16,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Html;
 import android.text.TextUtils;
 import android.util.Base64;
 import android.util.Log;
@@ -149,7 +150,7 @@ public class EditMoodActivity extends AppCompatActivity {
                 Log.d("tag", "No longitude found in editmood");
             }
             try {
-                inputMoodDescription.setText(editmood.getDescription());
+                inputMoodDescription.setText(Html.fromHtml(editmood.getDescription())); //TODO: Possibly fix depreciated method.
             }
             catch (Exception e) {
                 Log.d("tag", "No description found in editmood");
