@@ -9,6 +9,7 @@ import com.searchly.jestdroid.DroidClientConfig;
 import com.searchly.jestdroid.JestClientFactory;
 import com.searchly.jestdroid.JestDroidClient;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -35,10 +36,10 @@ public class ElasticSearchController {
     private static final String typeUser = "user";
 
     static PutMapping putMapping = new PutMapping.Builder(
-            "cmput301w17t11",
-            "mood",
+            groupIndex,
+            typeMood,
             "{ \"mood\" : { \"properties\" : { \"location\" : {\"type\" : \"geo_point\"} } } }"
-            ).build();
+            ).refresh(true).build();
 
 
     public static class AddMoodTask extends AsyncTask<Mood, Void, Boolean> {
@@ -193,6 +194,7 @@ public class ElasticSearchController {
                     query += "}}";
 
                     try{
+                        client.execute(putMapping); // Sets type of location to be "geo_point" on elasticsearch
                         Update update = new Update.Builder(query).index(groupIndex).type(typeMood).id(moodId).refresh(true).build();
                         client.execute(update);
 
@@ -218,9 +220,10 @@ public class ElasticSearchController {
 
             for (Mood mood : moods) {
                 String moodId = mood.getId();
-                Delete delete = new Delete.Builder(moodId).index(groupIndex).type(typeMood).build();
+                Delete delete = new Delete.Builder(moodId).index(groupIndex).type(typeMood).refresh(true).build();
 
                 try {
+                    client.execute(putMapping); // Sets type of location to be "geo_point" on elasticsearch
                     client.execute(delete);
                 }
                 catch (Exception e) {
@@ -266,10 +269,11 @@ public class ElasticSearchController {
             Search search = new Search.Builder(query)
                     .addIndex(groupIndex)
                     .addType(typeMood)
-                    .build();
+                    .refresh(true).build();
 
 
             try {
+                client.execute(putMapping); // Sets type of location to be "geo_point" on elasticsearch
                 SearchResult result = client.execute(search);
                 if (result.isSucceeded()){
                     List<Mood> foundMoods = result.getSourceAsObjectList(Mood.class);
@@ -296,10 +300,11 @@ public class ElasticSearchController {
             verifySettings();
 
             for (Participant participant : participants) {
-                Index index = new Index.Builder(participant).index(groupIndex).type(typeUser).build();
+                Index index = new Index.Builder(participant).index(groupIndex).type(typeUser).refresh(true).build();
 
                 try {
                     // where is the client?
+                    client.execute(putMapping); // Sets type of location to be "geo_point" on elasticsearch
                     DocumentResult result = client.execute(index);
                     if (result.isSucceeded()){
                         participant.setId(result.getId());
@@ -326,9 +331,10 @@ public class ElasticSearchController {
 
             for (Participant participant : participants) {
                 String userId = participant.getId();
-                Delete delete = new Delete.Builder(userId).index(groupIndex).type(typeUser).build();
+                Delete delete = new Delete.Builder(userId).index(groupIndex).type(typeUser).refresh(true).build();
 
                 try {
+                    client.execute(putMapping); // Sets type of location to be "geo_point" on elasticsearch
                     client.execute(delete);
                 }
                 catch (Exception e) {
@@ -370,10 +376,11 @@ public class ElasticSearchController {
             Search search = new Search.Builder(query)
                     .addIndex(groupIndex)
                     .addType(typeUser)
-                    .build();
+                    .refresh(true).build();
 
 
             try {
+                client.execute(putMapping); // Sets type of location to be "geo_point" on elasticsearch
                 SearchResult result = client.execute(search);
                 if (result.isSucceeded()) {
                     List<Participant> foundParticipants = result.getSourceAsObjectList(Participant.class);
@@ -416,10 +423,11 @@ public class ElasticSearchController {
             Search search = new Search.Builder(query)
                     .addIndex(groupIndex)
                     .addType(typeUser)
-                    .build();
+                    .refresh(true).build();
 
 
             try {
+                client.execute(putMapping); // Sets type of location to be "geo_point" on elasticsearch
                 SearchResult result = client.execute(search);
                 if (result.isSucceeded()){
                     List<Participant> foundParticipants = result.getSourceAsObjectList(Participant.class);
@@ -533,13 +541,13 @@ public class ElasticSearchController {
                 }
                 query += "\"should\" : { \"terms\" : { \"username\" : " + following + " }}" +
                          "}}," +
-                         "\"must_not\" : { \"term\" : { \"username\" : \"" + participant + "\" }}";
-                query += "}}";
+                         "\"must_not\" : { \"term\" : { \"username\" : \"" + participant + "\" }}" +
+                         "}}";
             }
 
             else if (profilemode) {
-                query += "\"must\" : { \"term\" : { \"username\" : \"" + participant + "\" }}";
-                query += "}}";
+                query += "\"must\" : { \"term\" : { \"username\" : \"" + participant + "\" }}" +
+                         "}}";
             }
 
             else if (mapmode) {
@@ -548,10 +556,10 @@ public class ElasticSearchController {
                     query += "\"should\" : { \"term\" : { \"isPrivate\" : false }},";
                 }
                 query += "\"should\" : { \"terms\" : { \"username\" : " + following + " }}" +
-                        "}}," +
-                        "\"must_not\" : { \"term\" : { \"username\" : \"" + participant + "\" }}" +
-                        "}}," +
-                        "\"filter\" : { \"geo_distance\" : { \"distance\" : \"5km\", \"location\" : { \"lat\" : " + currentlat + ", \"lon\" : " + currentlon + "}}}";
+                         "}}," +
+                         "\"must_not\" : { \"term\" : { \"username\" : \"" + participant + "\" }}" +
+                         "}}," +
+                         "\"filter\" : { \"geo_distance\" : { \"distance\" : \"5km\", \"location\" : { \"lat\" : " + currentlat + ", \"lon\" : " + currentlon + "}}}";
             }
 
             query += "}},";
@@ -568,59 +576,11 @@ public class ElasticSearchController {
             Search search = new Search.Builder(query)
                     .addIndex(groupIndex)
                     .addType(typeMood)
-                    .build();
+                    .refresh(true).build();
 
 
             try {
-                SearchResult result = client.execute(search);
-                if (result.isSucceeded()){
-                    List<Mood> foundMoods = result.getSourceAsObjectList(Mood.class);
-                    moods.addAll(foundMoods);
-                }
-                else {
-                    Log.i("Error", "the search query failed to find any moods that matched");
-                }
-            }
-            catch (Exception e) {
-                Log.i("Error", "Something went wrong when we tried to communicate with the elasticsearch server!");
-            }
-
-            return moods;
-        }
-    }
-
-        public static class GetMyMoodsTask extends AsyncTask<String, Void, ArrayList<Mood>> { // fetch user's moods, sorted by newest to oldest.
-        private String username;
-        public GetMyMoodsTask(String filterBy){ // must pass username through on creation of controller
-            this.username = filterBy;
-        }
-
-        @Override
-        protected ArrayList<Mood> doInBackground(String... search_parameters) {
-            if(android.os.Debug.isDebuggerConnected())
-                android.os.Debug.waitForDebugger();
-            verifySettings();
-
-            ArrayList<Mood> moods = new ArrayList<>();
-            String query;
-            // bool queries are absolutely positively amazing
-            query = "{" +
-                    "\"query\" : {" +
-                    "\"bool\" : {" +
-                    "\"must\" : { \"term\" : { \"user\" : \"" + username + "\" }}" +
-                    "}}," +
-                    "\"sort\": { \"made\": { \"order\": \"desc\" }}" +
-                    "}";
-
-            Log.d("query", query);
-
-            Search search = new Search.Builder(query)
-                    .addIndex(groupIndex)
-                    .addType(typeMood)
-                    .build();
-
-
-            try {
+                client.execute(putMapping); // Sets type of location to be "geo_point" on elasticsearch
                 SearchResult result = client.execute(search);
                 if (result.isSucceeded()){
                     List<Mood> foundMoods = result.getSourceAsObjectList(Mood.class);
@@ -647,6 +607,11 @@ public class ElasticSearchController {
             JestClientFactory factory = new JestClientFactory();
             factory.setDroidClientConfig(config);
             client = (JestDroidClient) factory.getObject();
+            try {
+                client.execute(putMapping); // Sets type of location to be "geo_point" on elasticsearch
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 }
