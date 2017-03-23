@@ -493,7 +493,7 @@ public class ElasticSearchController {
             }
 
             else if (mapmode) {
-                query += "\"must\" : { \"geo_distance\" : { \"distance\" : \"2km\", \"location\" : { \"lat\" : " + currentlat + ", \"lon\" : " + currentlon + "}}},";
+                query += "\"must\" : { \"geo_distance\" : { \"distance\" : \"5km\", \"location\" : { \"lat\" : " + currentlat + ", \"lon\" : " + currentlon + "}}},";
                 query += "\"must\" : { \"bool\" : {";
                 if(!friendsonlyfilter) { // note this line says if NOT friendsonly filter... aka we add public as well
                     query += "\"should\" : { \"term\" : { \"isPrivate\" : false }},";

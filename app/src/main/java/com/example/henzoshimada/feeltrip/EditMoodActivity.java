@@ -56,6 +56,7 @@ import layout.profileFragment;
 
 public class EditMoodActivity extends AppCompatActivity {
 
+    public static final int MAX_PHOTO_SIZE = 65536;
     private EditText inputMoodDescription;
     private boolean locationOn;
     private double latitude;
@@ -96,7 +97,7 @@ public class EditMoodActivity extends AppCompatActivity {
     private String encodedPhoto;
     private String imagePathAndFileName;
     Uri imageFileUri;
-    private static int TAKE_PHOTO = 2;
+    private static final int TAKE_PHOTO = 2;
     Activity activity;
     private static Context context;
 
@@ -265,6 +266,28 @@ public class EditMoodActivity extends AppCompatActivity {
         startActivityForResult(intent, TAKE_PHOTO);
     }
 
+    private byte[] compress(Bitmap photo){
+        int quality = 100;
+
+        //
+        if (photo.getByteCount()<= MAX_PHOTO_SIZE) {
+            photo.compress(Bitmap.CompressFormat.PNG, quality, photoStream);
+            return photoStream.toByteArray();
+        }
+
+        //
+        while(true) {
+            photo.compress(Bitmap.CompressFormat.JPEG, quality, photoStream);
+            byte [] compressedPhoto = photoStream.toByteArray();
+            if(compressedPhoto.length <= MAX_PHOTO_SIZE || quality == 5){
+                return compressedPhoto;
+            }
+            else {
+                quality -= 5;
+            }
+        }
+    }
+
     protected void onActivityResult(int requestCode, int resultCode, Intent intent){
         Log.d("tag", "In Take Photo");
         TextView modePicture = (TextView) findViewById(R.id.modePhoto);
@@ -274,18 +297,23 @@ public class EditMoodActivity extends AppCompatActivity {
                 Log.d("tag", "Taking photo");
 
                 Bitmap photo = (Bitmap) intent.getExtras().get("data");
-                photo.compress(Bitmap.CompressFormat.JPEG, 100, photoStream);
-                byte [] compressedPhoto = photoStream.toByteArray();
+
+                // Compress the photo if needed
+                byte [] compressedPhoto = compress(photo);
+
+                // Encode photo to string here
                 encodedPhoto = Base64.encodeToString(compressedPhoto, Base64.DEFAULT);
 
-                //byte[] decodedString = Base64.decode(encodedPhoto, Base64.DEFAULT);
-                //Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+                // This is how to decode the photo
+                                                    // Give it a String encoded[Photo/Emoji]
+                byte[] decodedString = Base64.decode(encodedPhoto, Base64.DEFAULT);
+                Bitmap decodedPhoto = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
 
+                // Set the image here
                 ImageView imageView = (ImageView)findViewById(R.id.imgView);
                 imageView.setImageBitmap(photo);
                 modePicture.setText(R.string.default_photo_on);
                 modePicture.setTextColor(getResources().getColor(R.color.green));
-
             }
             else
             if (resultCode == RESULT_CANCELED)
