@@ -36,7 +36,7 @@
                 android:orientation="horizontal">
 
                     <EditText
-                        android:id="@+id/editText2"
+                        android:id="@+id/keyword"
                         android:layout_width="307dp"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="10dp"
@@ -44,11 +44,12 @@
 
 
                     <ImageButton
-                    android:id="@+id/imageButton"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:background="@color/colorPrimary"
-                    app:srcCompat="@android:drawable/ic_menu_search" />
+                        android:id="@+id/imageButton"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:background="@color/colorPrimary"
+                        android:onClick="searchKeyword"
+                        app:srcCompat="@android:drawable/ic_menu_search" />
 
             </LinearLayout>
             <LinearLayout
@@ -76,7 +77,18 @@
                     android:text=""
                     android:textOff=""
                     android:textOn=""
-                    android:layout_marginStart="110dp" />
+                    android:layout_marginStart="50dp" />
+
+                <ToggleButton
+                    android:id="@+id/toggleMostRecent"
+                    android:layout_width="40dp"
+                    android:layout_height="25dp"
+                    android:background="@drawable/toggle_selector"
+                    android:checked="false"
+                    android:text=""
+                    android:textOff=""
+                    android:textOn=""
+                    android:layout_marginStart="50dp" />
 
                 <Spinner
                     android:id="@+id/filterMood"
@@ -93,21 +105,32 @@
                     android:id="@+id/textView2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Filter by: 7 days" />
+                    android:text="Filter by: 7 days"
+                    android:textSize="10dp"/>
 
                 <TextView
                     android:id="@+id/textView4"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="20dp"
-                    android:text="Filter by: friends" />
+                    android:text="Filter by: friends"
+                    android:textSize="10dp"/>
+
+                <TextView
+                    android:id="@+id/textView5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:text="Filter by: Most recent"
+                    android:textSize="10dp"/>
 
                 <TextView
                     android:id="@+id/textView3"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Filter by: moods"
-                    android:layout_marginStart="20dp"/>
+                    android:layout_marginStart="20dp"
+                    android:textSize="10dp"/>
 
             </LinearLayout>
 

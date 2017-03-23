@@ -13,6 +13,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
+import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.app.Fragment;
 import android.app.FragmentManager;
@@ -151,9 +153,22 @@ public class MainScreen extends AppCompatActivity {
         return new String(Character.toChars(unicode));
     }
 
+    public void searchKeyword(View v){
+        EditText string_keyword = (EditText) findViewById(R.id.keyword);
+        try {
+            Toast.makeText(getApplicationContext(), string_keyword.getText().toString(), Toast.LENGTH_SHORT).show();
+        }
+        catch(Exception e){
+            Toast.makeText(getApplicationContext(), "No string entered into search!", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+
+
     private void addItemsOnEmotionalStateSpinner(){
         emotionalStateSpinner = (Spinner) findViewById(R.id.filterMood);
         List<String> emotionalStateList = new ArrayList<>();
+        emotionalStateList.add("None");
         emotionalStateList.add("Angry " + getEmojiByUnicode(emojiUnicode("Angry")));
         emotionalStateList.add("Confused " + getEmojiByUnicode(emojiUnicode("Confused")));
         emotionalStateList.add("Disgusted " + getEmojiByUnicode(emojiUnicode("Disgusted")));

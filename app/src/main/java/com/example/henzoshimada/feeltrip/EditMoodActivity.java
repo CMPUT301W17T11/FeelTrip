@@ -4,20 +4,27 @@ package com.example.henzoshimada.feeltrip;
 import android.*;
 import android.app.Activity;
 import android.app.DatePickerDialog;
+import android.app.Fragment;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Environment;
+import android.support.annotation.NonNull;
+import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -25,6 +32,7 @@ import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -41,6 +49,10 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+
+import layout.homeFragmment;
+import layout.mapFragment;
+import layout.profileFragment;
 
 public class EditMoodActivity extends AppCompatActivity {
 
@@ -86,16 +98,50 @@ public class EditMoodActivity extends AppCompatActivity {
     Uri imageFileUri;
     private static int TAKE_PHOTO = 2;
     Activity activity;
-    Context context;
+    private static Context context;
 
+    private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
+            = new BottomNavigationView.OnNavigationItemSelectedListener() {
 
+        @Override
+        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+            switch (item.getItemId()) {
+                case R.id.location_toggle:
+                    Log.d("Mytag", "Tapped on location");
+                    enableMyLocation();
+                    toggleLocation();
+                    return true;
+                case R.id.private_toggle:
+                    Log.d("Mytag", "Tapped on private");
+                    setPostMode();
+                    return true;
+                case R.id.check_bottom_button:
+                    Log.d("Mytag", "Tapped on submit");
+                    addListenerOnSubmitButton();
+                    return true;
+                case R.id.date_bottom_button:
+                    Log.d("Mytag", "Tapped on date");
+                    datePick();
+                    return true;
+                case R.id.photo_bottom_button:
+                    Log.d("Mytag", "Tapped on photo");
+                    cameraPerm();
+                    return true;
+            }
+            return true;
+        }
+
+    };
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.add_edit_page);
+        EditMoodActivity.context = getApplicationContext();
         inputMoodDescription = (EditText) findViewById(R.id.moodEventDescription);
         activity = this;
         context = this;
+        showPublicOn = false;
+        locationOn = false;
 /*
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .addApi(LocationServices.API)
@@ -105,13 +151,12 @@ public class EditMoodActivity extends AppCompatActivity {
         mGoogleApiClient.connect();
         enableMyLocation();
 */
-        addItemsOnEmotionalStateSpinner();
 
         addItemsOnSocialSituationSpinner();
-        addListenerOnSubmitButton();
+        BottomNavigationView options_bar = (BottomNavigationView) findViewById(R.id.options_post);
+        options_bar.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
-
-        ToggleButton toggleLocationButton = (ToggleButton) findViewById(R.id.toggle_location);
+        /*ToggleButton toggleLocationButton = (ToggleButton) findViewById(R.id.toggle_location);
         toggleLocationButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 toggleLocation(isChecked, buttonView);
@@ -130,36 +175,43 @@ public class EditMoodActivity extends AppCompatActivity {
                 }
                 Log.d("myTag","show public is: "+String.valueOf(showPublicOn));
             }
-        });
-
-
-        Button selectImageButton = (Button) findViewById(R.id.take_photo);
-        selectImageButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                int loginPermissionCheck = ContextCompat.checkSelfPermission(context, android.Manifest.permission.CAMERA);
-                if (loginPermissionCheck != PackageManager.PERMISSION_GRANTED) {
-                    Log.d("tag", "Camera permission not granted");
-                    ActivityCompat.requestPermissions(activity, new String[]{android.Manifest.permission.CAMERA}, 1);
-                } else {
-                    Log.d("tag", "Camera permission granted");
-                    takeAPhoto();
-                }
-
-            }
-        });
-
-        Button selectDateButton = (Button) findViewById(R.id.select_date);
-        selectDateButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //selectDate();
-                new DatePickerDialog(v.getContext(), datePickerDialogListener, dateTime.get(Calendar.YEAR),
-                        dateTime.get(Calendar.MONTH), dateTime.get(Calendar.DAY_OF_MONTH)).show();
-            }
-        });
+        });*/
 
     }
+
+    public void setPostMode(){
+        TextView modeShowPublic = (TextView) findViewById(R.id.modePost);
+        if(showPublicOn == true){
+            modeShowPublic.setText(R.string.mode_private);
+            modeShowPublic.setTextColor(getResources().getColor(R.color.red));
+            showPublicOn = false;
+        }
+        else{
+            modeShowPublic.setText(R.string.mode_public);
+            modeShowPublic.setTextColor(getResources().getColor(R.color.green));
+            showPublicOn = true;
+        }
+    }
+
+    public void cameraPerm (){
+        int loginPermissionCheck = ContextCompat.checkSelfPermission(context, android.Manifest.permission.CAMERA);
+        if (loginPermissionCheck != PackageManager.PERMISSION_GRANTED) {
+            Log.d("tag", "Camera permission not granted");
+            ActivityCompat.requestPermissions(activity, new String[]{android.Manifest.permission.CAMERA}, 1);
+        } else {
+            Log.d("tag", "Camera permission granted");
+            takeAPhoto();
+        }
+
+    };
+
+    public void datePick() {
+        //selectDate();
+        Log.d("Mytag","Went into date");
+        new DatePickerDialog(getAppContext(), datePickerDialogListener, dateTime.get(Calendar.YEAR),
+                dateTime.get(Calendar.MONTH), dateTime.get(Calendar.DAY_OF_MONTH)).show();
+    }
+
 
     private void submitMood() throws DescriptionTooLongException {
         ElasticSearchController.AddMoodTask addMoodTask = new ElasticSearchController.AddMoodTask();
@@ -183,36 +235,10 @@ public class EditMoodActivity extends AppCompatActivity {
         addMoodTask.execute(mood);
     }
 
-    public int emojiUnicode(String emotion) {
-        switch(emotion) {
-            case "Angry":
-                return angry;
-            case "Confused":
-                return confused;
-            case "Disgusted":
-                return disgusted;
-            case "Fearful":
-                return fearful;
-            case "Happy":
-                return happy;
-            case "Sad":
-                return sad;
-            case "Shameful":
-                return shameful;
-            case "Cool":
-                return cool;
-            default:
-                return somethingwentwrong; // the secret "only accessible by hacks" face
-        }
-    }
 
-    public String getEmojiByUnicode(int unicode){
-        if (unicode == 0) {
-            return "";
-        }
-        return new String(Character.toChars(unicode));
+    public static Context getAppContext() {
+        return EditMoodActivity.context;
     }
-
 /*
     private Mood submitMood(){
     //create mood obj
@@ -241,6 +267,7 @@ public class EditMoodActivity extends AppCompatActivity {
 
     protected void onActivityResult(int requestCode, int resultCode, Intent intent){
         Log.d("tag", "In Take Photo");
+        TextView modePicture = (TextView) findViewById(R.id.modePhoto);
         if (requestCode == TAKE_PHOTO){
 
             if (resultCode == RESULT_OK){
@@ -256,6 +283,8 @@ public class EditMoodActivity extends AppCompatActivity {
 
                 ImageView imageView = (ImageView)findViewById(R.id.imgView);
                 imageView.setImageBitmap(photo);
+                modePicture.setText(R.string.default_photo_on);
+                modePicture.setTextColor(getResources().getColor(R.color.green));
 
             }
             else
@@ -279,25 +308,6 @@ public class EditMoodActivity extends AppCompatActivity {
         }
     };
 
-    private void addItemsOnEmotionalStateSpinner(){
-        emotionalStateSpinner = (Spinner) findViewById(R.id.emotional_state_spinner);
-        List<String> emotionalStateList = new ArrayList<>();
-        emotionalStateList.add("Angry " + getEmojiByUnicode(emojiUnicode("Angry")));
-        emotionalStateList.add("Confused " + getEmojiByUnicode(emojiUnicode("Confused")));
-        emotionalStateList.add("Disgusted " + getEmojiByUnicode(emojiUnicode("Disgusted")));
-        emotionalStateList.add("Fearful " + getEmojiByUnicode(emojiUnicode("Fearful")));
-        emotionalStateList.add("Happy " + getEmojiByUnicode(emojiUnicode("Happy")));
-        emotionalStateList.add("Sad " + getEmojiByUnicode(emojiUnicode("Sad")));
-        emotionalStateList.add("Shameful " + getEmojiByUnicode(emojiUnicode("Shameful")));
-        emotionalStateList.add("Cool " + getEmojiByUnicode(emojiUnicode("Cool")));
-
-
-
-        ArrayAdapter<String> emotionalStateAdapter = new ArrayAdapter<>(this,
-                android.R.layout.simple_spinner_item, emotionalStateList);
-        emotionalStateAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        emotionalStateSpinner.setAdapter(emotionalStateAdapter);
-    }
 
 
     private void addItemsOnSocialSituationSpinner(){
@@ -321,69 +331,61 @@ public class EditMoodActivity extends AppCompatActivity {
 
         emotionalStateSpinner = (Spinner) findViewById(R.id.emotional_state_spinner);
         socialSituationSpinner = (Spinner) findViewById(R.id.social_event_spinner);
-        Button submitButton = (Button) findViewById(R.id.post_mood_button);
+        //ooemotionalState = String.valueOf(emotionalStateSpinner.getSelectedItem());
+        socialSit = String.valueOf(socialSituationSpinner.getSelectedItem());
 
-        submitButton.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-
-                emotionalState = String.valueOf(emotionalStateSpinner.getSelectedItem());
-                socialSit = String.valueOf(socialSituationSpinner.getSelectedItem());
-
-                try {
-                    submitMood();
-                    Toast.makeText(getApplicationContext(), "Successfully posted!", Toast.LENGTH_SHORT).show();
-                    finish();
-                } catch (DescriptionTooLongException e) {
-                    Toast.makeText(getApplicationContext(), "Your description is too long.", Toast.LENGTH_SHORT).show();
-                }
-            }
-
-        });
+        try {
+            submitMood();
+            Toast.makeText(getApplicationContext(), "Successfully posted!", Toast.LENGTH_SHORT).show();
+            finish();
+        } catch (DescriptionTooLongException e) {
+            Toast.makeText(getApplicationContext(), "Your description is too long.", Toast.LENGTH_SHORT).show();
+        }
     }
 
     /**
      * Enables the My Location layer if the fine location permission has been granted.
      */
 
-    private void enableMyLocation() {
+    private Boolean enableMyLocation() {
         if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED) {
             // Permission to access the location is missing.
             PermissionUtils.requestPermission(this, LOCATION_PERMISSION_REQUEST_CODE,
                     android.Manifest.permission.ACCESS_FINE_LOCATION, true);
+            return true;
+        }
+        else{
+            return false;
         }
     }
 
-    private void toggleLocation(boolean isChecked, CompoundButton button){
-        if (isChecked) {
+    private void toggleLocation(){
+        TextView modeLocation = (TextView) findViewById(R.id.modeLocation);
             // The toggle is enabled
-            locationOn = true;
-            enableMyLocation();
-            Log.d("myTag", "try to get location");
-            GPSLocation gps = new GPSLocation(EditMoodActivity.this);
-
-            // Check if GPS enabled
-            if (gps.canGetLocation()) {
-
+        GPSLocation gps = new GPSLocation(EditMoodActivity.this);
+        enableMyLocation();
+        gps.canGetLocation();
+            if(gps.getLocation() != null && !locationOn) {
+                locationOn = true;
+                Log.d("myTag", "try to get location");
+                // Check if GPS enabled
                 latitude = gps.getLatitude();
                 longitude = gps.getLongitude();
-
+                modeLocation.setText("On");
+                modeLocation.setTextColor(getResources().getColor(R.color.green));
                 // \n is for new line
                 Toast.makeText(getApplicationContext(), "Your Location is - \nLat: " + latitude + "\nLong: " + longitude, Toast.LENGTH_LONG).show();
-            } else {
+            }else{
+                locationOn = false;
                 // Can't get location.
                 // GPS or network is not enabled.
                 // Ask user to enable GPS/network in settings.
-                gps.showSettingsAlert();
-                button.toggle();
+                //gps.showSettingsAlert();
+                modeLocation.setText("Off");
+                modeLocation.setTextColor(getResources().getColor(R.color.red));
             }
-        } else {
             // The toggle is disabled
-            locationOn = false;
-        }
         Log.d("myTag", "location on is: " + String.valueOf(locationOn));
     }
-
 }
