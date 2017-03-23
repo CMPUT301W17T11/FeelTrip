@@ -33,6 +33,7 @@ import android.widget.ToggleButton;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.places.Places;
+import com.google.gson.Gson;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -41,6 +42,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 public class EditMoodActivity extends AppCompatActivity {
 
@@ -95,6 +97,10 @@ public class EditMoodActivity extends AppCompatActivity {
     Activity activity;
     Context context;
 
+    // Used for edit functionality
+    private Mood editmood;
+    private boolean editflag;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,6 +110,69 @@ public class EditMoodActivity extends AppCompatActivity {
         activity = this;
         context = this;
         verifyLocationPermissions(this);
+
+        String jsonEditMood = "";
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            jsonEditMood = extras.getString("editmood");
+        }
+        editmood = new Gson().fromJson(jsonEditMood, Mood.class);
+        if(editmood != null) {
+            try {
+                dateTime.setTime(editmood.getDate());
+            }
+            catch (Exception e) {
+                Log.d("tag", "No date found in editmood");
+            }
+            try {
+                encodedPhoto = editmood.getImage();
+                if (encodedPhoto != null) {
+                    byte[] decodedString = Base64.decode(encodedPhoto, Base64.DEFAULT);
+                    Bitmap decodedPhoto = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+                    ImageView imageView = (ImageView) findViewById(R.id.imgView);
+                    imageView.setImageBitmap(decodedPhoto);
+                }
+            } catch (Exception e) {
+                Log.d("tag", "No image found in editmood");
+            }
+            try {
+                latitude = editmood.getLatitude();
+            }
+            catch (Exception e) {
+                Log.d("tag", "No latitude found in editmood");
+            }
+            try {
+                longitude = editmood.getLongitude();
+            }
+            catch (Exception e) {
+                Log.d("tag", "No longitude found in editmood");
+            }
+            try {
+                inputMoodDescription.setText(editmood.getDescription());
+            }
+            catch (Exception e) {
+                Log.d("tag", "No description found in editmood");
+            }
+            try {
+                socialSit = editmood.getSocialSit();
+            }
+            catch (Exception e) {
+                Log.d("tag", "No socialsit found in editmood");
+            }
+            try {
+                emotionalState = editmood.getEmotionalState();
+            }
+            catch (Exception e) {
+                Log.d("tag", "No emotionalstate found in editmood");
+            }
+
+            editflag = true;
+
+        }
+        else{
+            editflag = false;
+        }
+
 /*
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .addApi(LocationServices.API)
@@ -113,13 +182,11 @@ public class EditMoodActivity extends AppCompatActivity {
         mGoogleApiClient.connect();
         enableMyLocation();
 */
-        addItemsOnEmotionalStateSpinner();
-
-        addItemsOnSocialSituationSpinner();
-        addListenerOnSubmitButton();
-
-
-        ToggleButton toggleLocationButton = (ToggleButton) findViewById(R.id.toggle_location);
+        ToggleButton toggleLocationButton = (ToggleButton) findViewById(R.id.toggle_location); //TODO: I don't think this should be a toggle due to the editflag, let's find some other UI method?
+        if(editflag) {
+            assert editmood != null;
+            toggleLocationButton.setChecked(editmood.getLocation() != null);
+        }
         toggleLocationButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 toggleLocation(isChecked, buttonView);
@@ -127,6 +194,10 @@ public class EditMoodActivity extends AppCompatActivity {
         });
 
         ToggleButton togglePublicButton = (ToggleButton)findViewById(R.id.toggle_public);
+        if(editflag) {
+            assert editmood != null;
+            togglePublicButton.setChecked(!editmood.getPrivate());
+        }
         togglePublicButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
@@ -142,6 +213,11 @@ public class EditMoodActivity extends AppCompatActivity {
 
 
         Button selectImageButton = (Button) findViewById(R.id.take_photo);
+        // TODO: Replace this code with whatever is compatible with our final UI design, display image if editflag
+//        if(editflag) {
+//            assert editmood != null;
+//            selectImageButton.setSelected(!editmood.getImage().isEmpty());
+//        }
         selectImageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -162,33 +238,79 @@ public class EditMoodActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //selectDate();
+//                if(editflag) {
+//                    dateTime.setTime(editmood.getDate());
+//                    new DatePickerDialog(v.getContext(), datePickerDialogListener, dateTime.get(Calendar.YEAR),
+//                            dateTime.get(Calendar.MONTH), dateTime.get(Calendar.DAY_OF_MONTH)).show(); //TODO: Also highlight the current date if editflag
+//                }
                 new DatePickerDialog(v.getContext(), datePickerDialogListener, dateTime.get(Calendar.YEAR),
                         dateTime.get(Calendar.MONTH), dateTime.get(Calendar.DAY_OF_MONTH)).show();
             }
         });
 
+        //TODO: if editflag, highlight whichever emoji the editmood references. This can only be done once we've finalized our UI.
+
+        addItemsOnEmotionalStateSpinner(editmood);
+
+        addItemsOnSocialSituationSpinner(editmood);
+        addListenerOnSubmitButton();
+
     }
 
     private void submitMood() throws DescriptionTooLongException {
-        ElasticSearchController.AddMoodTask addMoodTask = new ElasticSearchController.AddMoodTask();
-        Participant participant = FeelTripApplication.getParticipant();
-        Mood mood = new Mood(participant.getUserName());
-        if(showPublicOn){
-            mood.setPublic();
+        if(editflag) {
+            Mood mood = editmood;
+            ElasticSearchController.EditMoodTask editMoodTask = new ElasticSearchController.EditMoodTask(this);
+            if (showPublicOn) {
+                mood.setPublic();
+            } else {
+                mood.setPrivate();
+            }
+            if (locationOn) {
+                mood.setMapPosition(latitude, longitude);
+                // this is the setter for latitude and longitude
+            }
+            else {
+                mood.setNullLocation();
+            }
+            mood.setEmotionalState(emotionalState);
+            mood.setSocialSit(socialSit);
+            mood.setDescription(String.valueOf(inputMoodDescription.getText()), " -Feeling "); //TODO: append the emotionalState upon fetching from Elasticsearch
+            mood.setDate(dateTime.getTime());
+
+            if(encodedPhoto != null) {
+                mood.setImage(encodedPhoto);
+            }
+            else {
+                mood.setNullImage();
+            }
+
+            editMoodTask.execute(mood);
+
+            Log.d("tag", "Editing mood");
         }
         else {
-            mood.setPrivate();
+            ElasticSearchController.AddMoodTask addMoodTask = new ElasticSearchController.AddMoodTask(this);
+            Participant participant = FeelTripApplication.getParticipant();
+            Mood mood = new Mood(participant.getUserName());
+            if (showPublicOn) {
+                mood.setPublic();
+            } else {
+                mood.setPrivate();
+            }
+            if (locationOn) {
+                mood.setMapPosition(latitude, longitude);
+                // this is the setter for latitude and longitude
+            }
+            mood.setEmotionalState(emotionalState);
+            mood.setSocialSit(socialSit);
+            mood.setDescription(String.valueOf(inputMoodDescription.getText()), " -Feeling "); //TODO: append the emotionalState upon fetching from Elasticsearch
+            mood.setDate(dateTime.getTime());
+            mood.setImage(encodedPhoto);
+
+            addMoodTask.execute(mood);
+            Log.d("tag", "Adding mood");
         }
-        if(locationOn) { // TODO: Ensure correctness of this
-            mood.setMapPosition(latitude, longitude);
-            // this is the setter for latitude and longitude
-        }
-        mood.setEmotionalState(emotionalState);
-        mood.setSocialSit(socialSit);
-        mood.setDescription(String.valueOf(inputMoodDescription.getText()), " -Feeling " + emotionalState); //TODO: We might not need to send this append part to Elasticsearch, but rather add it to our displayed description after we fetch from Elasticsearch
-        mood.setDate(dateTime.getTime());
-        mood.setImage(encodedPhoto);
-        addMoodTask.execute(mood);
     }
 
     public int emojiUnicode(String emotion) {
@@ -308,14 +430,16 @@ public class EditMoodActivity extends AppCompatActivity {
     DatePickerDialog.OnDateSetListener datePickerDialogListener = new DatePickerDialog.OnDateSetListener() {
         @Override
         public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-            dateTime.set(Calendar.YEAR, year);
-            dateTime.set(Calendar.MONTH, month);
-            dateTime.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+            if(!editflag) {
+                dateTime.set(Calendar.YEAR, year);
+                dateTime.set(Calendar.MONTH, month);
+                dateTime.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+            }
             Log.d("myTag","Date: "+formatDateTime.format(dateTime.getTime()));
         }
     };
 
-    private void addItemsOnEmotionalStateSpinner(){
+    private void addItemsOnEmotionalStateSpinner(Mood editmood){
         emotionalStateSpinner = (Spinner) findViewById(R.id.emotional_state_spinner);
         List<String> emotionalStateList = new ArrayList<>();
         emotionalStateList.add("Angry " + getEmojiByUnicode(emojiUnicode("Angry")));
@@ -336,7 +460,7 @@ public class EditMoodActivity extends AppCompatActivity {
     }
 
 
-    private void addItemsOnSocialSituationSpinner(){
+    private void addItemsOnSocialSituationSpinner(Mood editmood){
         socialSituationSpinner = (Spinner) findViewById(R.id.social_event_spinner);
         List<String> socialSituationList = new ArrayList<>();
 
@@ -350,33 +474,28 @@ public class EditMoodActivity extends AppCompatActivity {
                 android.R.layout.simple_spinner_item, socialSituationList);
         socialSituationAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         socialSituationSpinner.setAdapter(socialSituationAdapter);
-    }
 
-    // get the selected dropdown list value
-    public void addListenerOnSubmitButton() {
-
-        emotionalStateSpinner = (Spinner) findViewById(R.id.emotional_state_spinner);
-        socialSituationSpinner = (Spinner) findViewById(R.id.social_event_spinner);
-        Button submitButton = (Button) findViewById(R.id.post_mood_button);
-
-        submitButton.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-
-                emotionalState = String.valueOf(emotionalStateSpinner.getSelectedItem());
-                socialSit = String.valueOf(socialSituationSpinner.getSelectedItem());
-
-                try {
-                    submitMood();
-                    Toast.makeText(getApplicationContext(), "Successfully posted!", Toast.LENGTH_SHORT).show();
-                    finish();
-                } catch (DescriptionTooLongException e) {
-                    Toast.makeText(getApplicationContext(), "Your description is too long.", Toast.LENGTH_SHORT).show();
-                }
+        if(editflag) {
+            int selectposition = 0;
+            switch(editmood.getSocialSit()) {
+                case "Alone":
+                    selectposition = 0;
+                    break;
+                case "With one other person":
+                    selectposition = 1;
+                    break;
+                case "With two to several people":
+                    selectposition = 2;
+                    break;
+                case "With a crowd":
+                    selectposition = 3;
+                    break;
+                default:
+                    selectposition = 0;
+                    break;
             }
-
-        });
+            socialSituationSpinner.setSelection(selectposition);
+        }
     }
 
     /**
@@ -433,5 +552,35 @@ public class EditMoodActivity extends AppCompatActivity {
         }
     }
 
+    // get the selected dropdown list value
+    public void addListenerOnSubmitButton() {
 
+        emotionalStateSpinner = (Spinner) findViewById(R.id.emotional_state_spinner);
+        socialSituationSpinner = (Spinner) findViewById(R.id.social_event_spinner);
+        Button submitButton = (Button) findViewById(R.id.post_mood_button);
+
+        submitButton.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+
+                emotionalState = String.valueOf(emotionalStateSpinner.getSelectedItem());
+                socialSit = String.valueOf(socialSituationSpinner.getSelectedItem());
+
+                try {
+                    submitMood();
+                    if(editflag) {
+                        Toast.makeText(getApplicationContext(), "Successfully updated!", Toast.LENGTH_SHORT).show();
+                    }
+                    else{
+                        Toast.makeText(getApplicationContext(), "Successfully posted!", Toast.LENGTH_SHORT).show();
+                    }
+                    finish();
+                } catch (DescriptionTooLongException e) {
+                    Toast.makeText(getApplicationContext(), "Your description is too long.", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+        });
+    }
 }

@@ -1,5 +1,6 @@
 package com.example.henzoshimada.feeltrip;
 
+import android.content.Context;
 import android.os.AsyncTask;
 import android.text.TextUtils;
 import android.util.Log;
@@ -32,10 +33,22 @@ public class ElasticSearchController {
     private static final String typeMood = "mood";
     private static final String typeUser = "user";
 
-    public static class AddMoodTask extends AsyncTask<Mood, Void, Void> {
+    public static class AddMoodTask extends AsyncTask<Mood, Void, Boolean> {
+
+        private Context context;
+
+        public AddMoodTask(Context context) {
+            this.context = context.getApplicationContext();
+        }
 
         @Override
-        protected Void doInBackground(Mood ... moods ) {
+        protected void onPostExecute(Boolean result) {
+            FeelTripApplication.loadFromElasticSearch();
+            FeelTripApplication.getMoodAdapter(context).notifyDataSetChanged();
+        }
+
+        @Override
+        protected Boolean doInBackground(Mood ... moods ) {
             if(android.os.Debug.isDebuggerConnected())
                 android.os.Debug.waitForDebugger();
             verifySettings();
@@ -43,7 +56,7 @@ public class ElasticSearchController {
             for (Mood mood : moods) {
                 mood.setMade(new Date()); // document around the instant the mood is actually built and posted onto elasticsearch
                 if(mood.getMade() != null) {
-                    Index index = new Index.Builder(mood).index(groupIndex).type(typeMood).build();
+                    Index index = new Index.Builder(mood).index(groupIndex).type(typeMood).refresh(true).build();
 
                     try {
                         // where is the client?
@@ -64,20 +77,33 @@ public class ElasticSearchController {
                     }
                 }
             }
-            return null;
+            return true;
         }
     }
 
-    public static class EditMoodTask extends AsyncTask<Mood, Void, Void>{ // TODO: Fix edit when removing a field
+    public static class EditMoodTask extends AsyncTask<Mood, Void, Boolean>{ // TODO: Fix edit when removing a field
+
+        private Context context;
+
+        public EditMoodTask(Context context) {
+            this.context = context;
+        }
 
         @Override
-        protected Void doInBackground(Mood ... moods ) {
+        protected void onPostExecute(Boolean result) {
+            FeelTripApplication.loadFromElasticSearch();
+            FeelTripApplication.getMoodAdapter(context).notifyDataSetChanged();
+        }
+
+        @Override
+        protected Boolean doInBackground(Mood ... moods ) {
             if(android.os.Debug.isDebuggerConnected())
                 android.os.Debug.waitForDebugger();
             verifySettings();
 
             for (Mood mood : moods) {
                 if (!mood.isChanged()){
+                    Log.d("query", "No changes to the mood were found");
                     return null;
                 }
                 String moodId = mood.getId();
@@ -128,17 +154,27 @@ public class ElasticSearchController {
                                 }
                                 break;
                             case 5:
-                                query += ("\"image\" : \"" + mood.getImage() + "\"");
+                                if(mood.getImage() == null) {
+                                    query += ("\"image\" : " + mood.getImage());
+                                }
+                                else {
+                                    query += ("\"image\" : \"" + mood.getImage() + "\"");
+                                }
                                 if (notDone != 0) {
                                     query += (",");
                                 }
                                 break;
                             case 6:
-                                query += ("\"location\" : \"" + mood.getLocation() + "\"");
+                                if(mood.getLocation() == null) {
+                                    query += ("\"location\" : " + mood.getLocation());
+                                }
+                                else {
+                                    query += ("\"location\" : \"" + mood.getLocation() + "\"");
+                                }
                                 if (notDone != 0) {
                                     query += (",");
                                 }
-                                break;
+                                break; //TODO: allow for the emoji field to be updated, can only do after finishing the UI
                             default:
                                 break;
                         }
@@ -147,7 +183,7 @@ public class ElasticSearchController {
                     query += "}}";
 
                     try{
-                        Update update = new Update.Builder(query).index(groupIndex).type(typeMood).id(moodId).build();
+                        Update update = new Update.Builder(query).index(groupIndex).type(typeMood).id(moodId).refresh(true).build();
                         client.execute(update);
 
                     }catch (Exception e){
@@ -157,7 +193,7 @@ public class ElasticSearchController {
                     mood.resetState();
                     Log.d("update query: ", query);
                 }
-                return null;
+            return true;
         }
     }
 

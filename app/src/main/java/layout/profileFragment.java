@@ -15,11 +15,13 @@ import android.widget.ArrayAdapter;
 import android.widget.FrameLayout;
 import android.widget.ListView;
 
+import com.example.henzoshimada.feeltrip.EditMoodActivity;
 import com.example.henzoshimada.feeltrip.ElasticSearchController;
 import com.example.henzoshimada.feeltrip.FeelTripApplication;
 import com.example.henzoshimada.feeltrip.Mood;
 import com.example.henzoshimada.feeltrip.MoodAdapter;
 import com.example.henzoshimada.feeltrip.R;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -63,18 +65,19 @@ public class profileFragment extends Fragment {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                         Log.d("listTag","on click");
-                        Mood mood = moodArrayList.get(position);
+                        Mood mood = FeelTripApplication.getMoodArrayList().get(position);
                         //if (mood.getImage() == null){
                         //    Log.d("myTag","selected have no image ");
                         // }else{
                         //    Log.d("myTag","image:"+mood.getImage());
                         //}
 
-//                        Intent intent = new Intent(view.getContext(), EditMoodActivity.class);
-                        //                      Mood selected = moodArrayList.get(position);
-                        //                    Bundle bundle = selected.toBundle();
-                        //                  intent.putExtras(bundle);
-//                        startActivity(intent);
+                        Intent intent = new Intent(view.getContext(), EditMoodActivity.class);
+                        Mood selected = FeelTripApplication.getMoodArrayList().get(position);
+                        Bundle bundle = new Bundle();
+                        bundle.putString("editmood", new Gson().toJson(selected));
+                        intent.putExtras(bundle);
+                        startActivity(intent);
 
                     }
                 });
@@ -217,6 +220,12 @@ public class profileFragment extends Fragment {
         //adapter = new ArrayAdapter<Mood>(getActivity(), R.layout.list_item, moodArrayList); //view,dataArray
         oldMoodListView.setAdapter(adapter);
         Log.d("listTag","done loading3");
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        FeelTripApplication.getMoodAdapter(getActivity()).notifyDataSetChanged();
     }
 
 /*

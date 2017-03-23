@@ -77,7 +77,7 @@ public class FeelTripApplication extends Application {
     private static ArrayList<Mood> moodArrayList = new ArrayList<Mood>();
     public static MoodAdapter getMoodAdapter(Context context) {
         if (moodAdapter == null) {
-            moodAdapter = new MoodAdapter(moodArrayList, context);
+            moodAdapter = new MoodAdapter(moodArrayList, context.getApplicationContext());
         }
         return moodAdapter;
     }

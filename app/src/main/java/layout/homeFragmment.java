@@ -68,7 +68,7 @@ public class homeFragmment extends Fragment{
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                         Log.d("listTag","on click");
-                        Mood mood = moodArrayList.get(position);
+                        Mood mood = FeelTripApplication.getMoodArrayList().get(position);
                         Log.d("listTag","on click2");
                         if (mood.getImage() == null){
                             Log.d("myTag","selected have no image ");

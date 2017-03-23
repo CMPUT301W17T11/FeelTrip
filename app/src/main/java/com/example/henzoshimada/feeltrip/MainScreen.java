@@ -150,6 +150,13 @@ public class MainScreen extends AppCompatActivity {
 
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        FeelTripApplication.loadFromElasticSearch();
+        FeelTripApplication.getMoodAdapter(getBaseContext()).notifyDataSetChanged();
+    }
+
     public String getEmojiByUnicode(int unicode){
         if (unicode == 0) {
             return "";
