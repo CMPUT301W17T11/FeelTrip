@@ -33,12 +33,22 @@ public class loginActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         if(!participants.isEmpty()) {
+            ElasticSearchController.GetRequestTask grt = new ElasticSearchController.GetRequestTask();
+            ArrayList<FollowRequest> followRequests = new ArrayList<>();
+            try {
+                followRequests.addAll(grt.get());
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            }
+            grt.execute(participants.get(0).getUserName());
+
             Participant participant = FeelTripApplication.getParticipant();
             participant.setUserName(participants.get(0).getUserName());
             participant.setPassword(participants.get(0).getPassword());
             participant.addAllFollowing(participants.get(0).getFollowing());
-            participant.addAllFollowRequest(participants.get(0).getFollowRequest());
-
+            participant.addAllFollowRequest(followRequests);
 
             Intent intent = new Intent(this, MainScreen.class);
             startActivity(intent);

@@ -1,6 +1,8 @@
 package com.example.henzoshimada.feeltrip;
 
 
+import android.os.AsyncTask;
+
 /**
  * Created by Esus2 on 2017-03-09.
  */
@@ -31,7 +33,7 @@ public class UpdateQueueController {
      * @return the mood
      */
     public Mood popMood(){
-        if (updateQueue.isEmpty()){
+        if (this.isEmpty()){
             return null;
         }
         else{
@@ -50,5 +52,11 @@ public class UpdateQueueController {
 
     public boolean isEmpty(){
         return updateQueue.isEmpty();
+    }
+
+
+
+    public void runUpdate(){
+
     }
 }
