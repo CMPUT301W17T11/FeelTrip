@@ -187,7 +187,8 @@ public class Mood {
             if (description.length() > 20 || count > 2) {
                 throw new DescriptionTooLongException();
             } else {
-                this.description = TextUtils.htmlEncode(description);
+                String descriptionout = description.replace("\\","\\\\");
+                this.description = TextUtils.htmlEncode(descriptionout);
                 this.append = append;
             }
             setStateByIndex(1);
