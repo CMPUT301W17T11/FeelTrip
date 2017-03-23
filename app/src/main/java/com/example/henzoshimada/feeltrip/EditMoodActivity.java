@@ -277,7 +277,7 @@ public class EditMoodActivity extends AppCompatActivity {
             }
             mood.setEmotionalState(emotionalState);
             mood.setSocialSit(socialSit);
-            mood.setDescription(inputMoodDescription.getText().toString(), " -Feeling "); //TODO: append the emotionalState upon fetching from Elasticsearch
+            mood.setDescription(String.valueOf(inputMoodDescription.getText())); //TODO: append the emotionalState upon fetching from Elasticsearch
             mood.setDate(dateTime.getTime());
 
             if(encodedPhoto != null) {
@@ -309,7 +309,7 @@ public class EditMoodActivity extends AppCompatActivity {
             }
             mood.setEmotionalState(emotionalState);
             mood.setSocialSit(socialSit);
-            mood.setDescription(inputMoodDescription.getText().toString(), " -Feeling "); //TODO: append the emotionalState upon fetching from Elasticsearch
+            mood.setDescription(String.valueOf(inputMoodDescription.getText())); //TODO: append the emotionalState upon fetching from Elasticsearch
             mood.setDate(dateTime.getTime());
 
             if(encodedPhoto != null) {

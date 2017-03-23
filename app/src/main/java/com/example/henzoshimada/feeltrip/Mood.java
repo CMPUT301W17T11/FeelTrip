@@ -41,7 +41,6 @@ public class Mood {
     //TODO: Test deleting a mood from ES after popping from local queue
 
     private int emoji;
-    private String append;
 
     @JestId
     private String id;
@@ -66,7 +65,7 @@ public class Mood {
     private static boolean[] stateVector;
 
 
-    public Mood(){
+    public Mood() {
         username = null;
         emotionalState = "";
         description = "";
@@ -79,12 +78,11 @@ public class Mood {
         stateVector = new boolean[size];
         delState = false;
         made = null;
-        append = null;
         emoji = 0;
     }
 
 
-    public Mood(String user){
+    public Mood(String user) {
         this.username = user;
         emotionalState = "";
         description = "";
@@ -98,38 +96,38 @@ public class Mood {
         stateVector = new boolean[size];
         delState = false;
         made = null;
-        append = null;
         emoji = 0;
     }
 
     public String getId() {
-        if (id == null){ //mood does not yet exist within the Elasticsearch database
+        if (id == null) { //mood does not yet exist within the Elasticsearch database
             return "-1";
-        }
-        else {//return ID that the mood is stored under in the Elasticsearch database
+        } else {//return ID that the mood is stored under in the Elasticsearch database
             return id;
         }
     }
 
     public void setId(String id) {
-        if(this.id != id) {
+        if (this.id != id) {
             this.id = id;
         }
     }
 
     // Evaluate stateVector and check if this mood event is changed.
-    public boolean isChanged(){
-        for (boolean value: stateVector){
-            if(value){return true;}
+    public boolean isChanged() {
+        for (boolean value : stateVector) {
+            if (value) {
+                return true;
+            }
         }
         return false;
     }
 
-    public boolean[] getAllState(){
+    public boolean[] getAllState() {
         return stateVector;
     }
 
-    public void resetState(){
+    public void resetState() {
         Arrays.fill(stateVector, false);
     }
 
@@ -137,19 +135,19 @@ public class Mood {
         return stateVector[index];
     }
 
-    public void setStateByIndex(int index){
-        if(stateVector[index] != true) {
+    public void setStateByIndex(int index) {
+        if (stateVector[index] != true) {
             stateVector[index] = true;
         }
     }
 
 
-    public String getUsername(){
+    public String getUsername() {
         return username;
     }
 
     public String getImage() {
-        if(image != null) {
+        if (image != null) {
             return Html.fromHtml(image).toString();
         }
         return image;
@@ -160,18 +158,17 @@ public class Mood {
     }
 
     public void setEmotionalState(String emotionalState) {
-        if(!getEmotionalState().equals(emotionalState)) {
+        if (!getEmotionalState().equals(emotionalState)) {
             this.emotionalState = emotionalState;
             setStateByIndex(0);
         }
     }
 
     public void setImage(String image) {
-        if(getImage() == null) {
+        if (getImage() == null) {
             this.image = TextUtils.htmlEncode(image);
             setStateByIndex(5);
-        }
-        else if(!getImage().equals(image)) {
+        } else if (!getImage().equals(image)) {
             this.image = TextUtils.htmlEncode(image);
             setStateByIndex(5);
         }
@@ -181,8 +178,8 @@ public class Mood {
         return Html.fromHtml(description).toString();
     }
 
-    public void setDescription(String descriptionin, String append) throws DescriptionTooLongException {
-        if(!getDescription().equals(descriptionin)) {
+    public void setDescription(String descriptionin) throws DescriptionTooLongException {
+        if (!getDescription().equals(descriptionin)) {
             int count = 0;
             String description = descriptionin.trim();
             for (int i = 0; i < description.length(); i++) {
@@ -194,7 +191,6 @@ public class Mood {
                 throw new DescriptionTooLongException();
             } else {
                 this.description = TextUtils.htmlEncode(description);
-                this.append = append;
             }
             setStateByIndex(1);
         }
@@ -205,20 +201,19 @@ public class Mood {
     }
 
     public void setSocialSit(String socialSit) {
-        if(!getSocialSit().equals(socialSit)) {
+        if (!getSocialSit().equals(socialSit)) {
             this.socialSit = socialSit;
             setStateByIndex(3);
         }
     }
 
-    public void setMapPosition(Double latitude, Double longitude){
-        if(this.location == null) {
+    public void setMapPosition(Double latitude, Double longitude) {
+        if (this.location == null) {
             this.latitude = latitude;
             this.longitude = longitude;
             this.location = latitude + ", " + longitude;
             setStateByIndex(6);
-        }
-        else if(!getLocation().equals(latitude + ", " + longitude)) {
+        } else if (!getLocation().equals(latitude + ", " + longitude)) {
             this.latitude = latitude;
             this.longitude = longitude;
             this.location = latitude + ", " + longitude;
@@ -226,7 +221,7 @@ public class Mood {
         }
     }
 
-    public Double[] getMapPosition(){
+    public Double[] getMapPosition() {
         Double[] loc = new Double[2];
         loc[0] = this.latitude;
         loc[1] = this.longitude;
@@ -238,14 +233,14 @@ public class Mood {
     }
 
     public void setPrivate() {
-        if(!this.isPrivate) {
+        if (!this.isPrivate) {
             isPrivate = true;
             setStateByIndex(4);
         }
     }
 
     public void setPublic() {
-        if(this.isPrivate) {
+        if (this.isPrivate) {
             isPrivate = false;
             setStateByIndex(4);
         }
@@ -256,7 +251,7 @@ public class Mood {
     }
 
     public void setMoodOption(String emotionalState) {
-        if(!getEmotionalState().equals(emotionalState)) {
+        if (!getEmotionalState().equals(emotionalState)) {
             this.emotionalState = emotionalState;
             setStateByIndex(0);
         }
@@ -268,7 +263,7 @@ public class Mood {
     }
 
     public void setDate(Date date) {
-        if(this.date != date.getTime()) {
+        if (this.date != date.getTime()) {
             this.date = date.getTime();
             this.trueDate = date;
             setStateByIndex(2);
@@ -293,7 +288,7 @@ public class Mood {
     }
 
     public void setLatitude(Double latitude) {
-        if(getLatitude() != latitude) {
+        if (getLatitude() != latitude) {
             this.latitude = latitude;
             this.location = latitude + ", " + longitude;
             setStateByIndex(6);
@@ -306,7 +301,7 @@ public class Mood {
     }
 
     public void setLongitude(Double longitude) {
-        if(getLongitude() != longitude) {
+        if (getLongitude() != longitude) {
             this.longitude = longitude;
             this.location = latitude + ", " + longitude;
             setStateByIndex(6);
@@ -326,20 +321,16 @@ public class Mood {
     }
 
     public void setNullImage() {
-        if(this.image != null) {
+        if (this.image != null) {
             this.image = null;
             setStateByIndex(5);
         }
     }
 
     public void setNullLocation() {
-        if(this.location != null) {
+        if (this.location != null) {
             this.location = null;
             setStateByIndex(6);
         }
-    }
-
-    public String getAppend() {
-        return append;
     }
 }

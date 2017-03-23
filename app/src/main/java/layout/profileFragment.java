@@ -77,7 +77,13 @@ public class profileFragment extends Fragment {
                         Bundle bundle = new Bundle();
                         bundle.putString("editmood", new Gson().toJson(selected));
                         intent.putExtras(bundle);
-                        startActivity(intent);
+                        try {
+                            startActivity(intent);
+                        }
+                        catch(Exception e) {
+                            Log.d("tag", "Fail while loading edit mood");
+                        }
+
 
                     }
                 });
