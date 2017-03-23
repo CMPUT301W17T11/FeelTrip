@@ -127,7 +127,7 @@ public class EditMoodActivity extends AppCompatActivity {
                 Log.d("tag", "No date found in editmood");
             }
             try {
-                encodedPhoto = editmood.getImage();
+                encodedPhoto = Html.fromHtml(editmood.getImage()).toString(); //TODO: Depreciated method
                 if (encodedPhoto != null) {
                     byte[] decodedString = Base64.decode(encodedPhoto, Base64.DEFAULT);
                     Bitmap decodedPhoto = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
@@ -150,7 +150,7 @@ public class EditMoodActivity extends AppCompatActivity {
                 Log.d("tag", "No longitude found in editmood");
             }
             try {
-                inputMoodDescription.setText(Html.fromHtml(editmood.getDescription())); //TODO: Possibly fix depreciated method.
+                inputMoodDescription.setText(editmood.getDescription());
             }
             catch (Exception e) {
                 Log.d("tag", "No description found in editmood");
@@ -277,7 +277,7 @@ public class EditMoodActivity extends AppCompatActivity {
             }
             mood.setEmotionalState(emotionalState);
             mood.setSocialSit(socialSit);
-            mood.setDescription(String.valueOf(inputMoodDescription.getText()), " -Feeling "); //TODO: append the emotionalState upon fetching from Elasticsearch
+            mood.setDescription(inputMoodDescription.getText().toString(), " -Feeling "); //TODO: append the emotionalState upon fetching from Elasticsearch
             mood.setDate(dateTime.getTime());
 
             if(encodedPhoto != null) {
@@ -304,11 +304,20 @@ public class EditMoodActivity extends AppCompatActivity {
                 mood.setMapPosition(latitude, longitude);
                 // this is the setter for latitude and longitude
             }
+            else {
+                mood.setNullLocation();
+            }
             mood.setEmotionalState(emotionalState);
             mood.setSocialSit(socialSit);
-            mood.setDescription(inputMoodDescription.getText().toString().replace("\\","\\\\"), " -Feeling "); //TODO: append the emotionalState upon fetching from Elasticsearch
+            mood.setDescription(inputMoodDescription.getText().toString(), " -Feeling "); //TODO: append the emotionalState upon fetching from Elasticsearch
             mood.setDate(dateTime.getTime());
-            mood.setImage(encodedPhoto);
+
+            if(encodedPhoto != null) {
+                mood.setImage(encodedPhoto);
+            }
+            else {
+                mood.setNullImage();
+            }
 
             addMoodTask.execute(mood);
             Log.d("tag", "Adding mood");

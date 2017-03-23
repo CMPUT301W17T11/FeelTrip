@@ -130,7 +130,8 @@ public class ElasticSearchController {
                                 }
                                 break;
                             case 1:
-                                query += ("\"description\" : \"" + mood.getDescription() + "\"");
+                                String desc = mood.getDescription().replace("\\","\\\\");
+                                query += ("\"description\" : \"" + desc.replace("\"","\\\"") + "\""); // adds support for us to have \ and " chars while editing description.
                                 if (notDone != 0) {
                                     query += (",");
                                 }

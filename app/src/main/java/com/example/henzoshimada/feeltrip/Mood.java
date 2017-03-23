@@ -1,7 +1,10 @@
 package com.example.henzoshimada.feeltrip;
 
 // Removed unused imports
+import android.text.Html;
 import android.text.TextUtils;
+
+import org.w3c.dom.Text;
 
 import java.util.Arrays;
 import java.util.Date;
@@ -146,6 +149,9 @@ public class Mood {
     }
 
     public String getImage() {
+        if(image != null) {
+            return Html.fromHtml(image).toString();
+        }
         return image;
     }
 
@@ -162,17 +168,17 @@ public class Mood {
 
     public void setImage(String image) {
         if(getImage() == null) {
-            this.image = image;
+            this.image = TextUtils.htmlEncode(image);
             setStateByIndex(5);
         }
         else if(!getImage().equals(image)) {
-            this.image = image;
+            this.image = TextUtils.htmlEncode(image);
             setStateByIndex(5);
         }
     }
 
     public String getDescription() {
-        return description;
+        return Html.fromHtml(description).toString();
     }
 
     public void setDescription(String descriptionin, String append) throws DescriptionTooLongException {
@@ -187,8 +193,7 @@ public class Mood {
             if (description.length() > 20 || count > 2) {
                 throw new DescriptionTooLongException();
             } else {
-                String descriptionout = description.replace("\\","\\\\");
-                this.description = TextUtils.htmlEncode(descriptionout);
+                this.description = TextUtils.htmlEncode(description);
                 this.append = append;
             }
             setStateByIndex(1);
