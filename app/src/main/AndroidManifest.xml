@@ -25,9 +25,15 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar">
-        <activity android:name=".EditMoodActivity" />
+        <activity android:name=".EditMoodActivity"
+            android:screenOrientation="portrait"/>
         <activity android:name=".loginActivity"
+<<<<<<< HEAD
+            android:label="loginActivity"
+            android:screenOrientation="portrait">
+=======
             android:label="FeelTrip">
+>>>>>>> f6a7300d3cdff300672c9550176782ffb2a4b66f
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -45,10 +51,8 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
 
-        <activity
-            android:name=".MapActivity"
-            android:label="@string/title_activity_map" />
-        <activity android:name=".MainScreen"/>
+        <activity android:name=".MainScreen"
+            android:screenOrientation="portrait"/>
     </application>
 
 </manifest>

@@ -53,7 +53,7 @@ public class FeelTripTests extends ActivityInstrumentationTestCase2 {
     }
 
     public void testAddMoodTask(){
-        ElasticSearchController.AddMoodTask addMoodTask = new ElasticSearchController.AddMoodTask();
+        ElasticSearchController.AddMoodTask addMoodTask = new ElasticSearchController.AddMoodTask(getActivity());
         Mood mood = new Mood("user1");
         try {
             mood.setDescription("description1", " -Feeling sleepy");
@@ -81,7 +81,7 @@ public class FeelTripTests extends ActivityInstrumentationTestCase2 {
     public void testEditTask() throws DescriptionTooLongException {
         ArrayList<Mood> moods = new ArrayList<Mood>();
         ElasticSearchController.GetMoodTask getMoodTask = new ElasticSearchController.GetMoodTask();
-        ElasticSearchController.EditMoodTask editMoodTask = new ElasticSearchController.EditMoodTask();
+        ElasticSearchController.EditMoodTask editMoodTask = new ElasticSearchController.EditMoodTask(getActivity());
         getMoodTask.execute();
         try {
             moods.addAll(getMoodTask.get());

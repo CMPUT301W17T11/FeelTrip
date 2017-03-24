@@ -3,6 +3,7 @@ package com.example.henzoshimada.feeltrip;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.text.Html;
 import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -26,6 +27,8 @@ public class MoodAdapter extends ArrayAdapter<Mood> {
         TextView userName;
         TextView date;
         TextView description;
+        TextView append;
+        ImageView emoji;
         TextView socialSituation;
         ImageView image;
     }
@@ -57,6 +60,8 @@ public class MoodAdapter extends ArrayAdapter<Mood> {
             viewHolder.userName = (TextView) convertView.findViewById(R.id.userName);
             viewHolder.date = (TextView) convertView.findViewById(R.id.date);
             viewHolder.description = (TextView) convertView.findViewById(R.id.description);
+            viewHolder.append = (TextView) convertView.findViewById(R.id.append);
+            viewHolder.emoji = (ImageView) convertView.findViewById(R.id.emoji);
             viewHolder.socialSituation = (TextView) convertView.findViewById(R.id.socialSituation);
             viewHolder.image = (ImageView) convertView.findViewById(R.id.image);
 
@@ -75,7 +80,9 @@ public class MoodAdapter extends ArrayAdapter<Mood> {
         Log.d("imageTag","new array list");
         viewHolder.userName.setText(mood.getUsername());
         viewHolder.date.setText(mood.getDate().toString());
-        viewHolder.description.setText(mood.getDescription());
+        viewHolder.description.setText(Html.fromHtml(mood.getDescription())); //TODO: This is depreciated, maybe replace?
+        viewHolder.append.setText(" -Feeling " + mood.getEmotionalState());
+        viewHolder.emoji.setImageBitmap(null); //TODO: pass the emoji into here
         viewHolder.socialSituation.setText(mood.getSocialSit());
 
         String encodedImageString = mood.getImage();
