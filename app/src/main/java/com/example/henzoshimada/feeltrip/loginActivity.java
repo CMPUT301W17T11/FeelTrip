@@ -53,12 +53,6 @@ public class loginActivity extends AppCompatActivity {
             participant.addAllFollowRequest(followRequests);
 
 
-            ElasticSearchController.EditParticipantTask ept = new ElasticSearchController.EditParticipantTask();
-            participant.unFollow("bb");
-            ept.execute(participant);
-
-
-
             Intent intent = new Intent(this, MainScreen.class);
             startActivity(intent);
         }
