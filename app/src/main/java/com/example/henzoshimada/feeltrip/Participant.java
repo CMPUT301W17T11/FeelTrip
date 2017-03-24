@@ -60,8 +60,10 @@ public class Participant {
 
     }
 
-    public void addFollowing(String nameWantToFollow){
-        this.following.add(nameWantToFollow);
+    public void unFollow(String nameUnfollowing){
+        if (this.following.contains(nameUnfollowing)) {
+            this.following.remove(nameUnfollowing);
+        }
     }
 
 

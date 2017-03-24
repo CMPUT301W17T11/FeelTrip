@@ -3,6 +3,7 @@ package com.example.henzoshimada.feeltrip;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -35,6 +36,8 @@ public class loginActivity extends AppCompatActivity {
         if(!participants.isEmpty()) {
             ElasticSearchController.GetRequestTask grt = new ElasticSearchController.GetRequestTask();
             ArrayList<FollowRequest> followRequests = new ArrayList<>();
+            grt.execute(participants.get(0).getUserName());
+
             try {
                 followRequests.addAll(grt.get());
             } catch (InterruptedException e) {
@@ -42,13 +45,19 @@ public class loginActivity extends AppCompatActivity {
             } catch (ExecutionException e) {
                 e.printStackTrace();
             }
-            grt.execute(participants.get(0).getUserName());
-
             Participant participant = FeelTripApplication.getParticipant();
             participant.setUserName(participants.get(0).getUserName());
             participant.setPassword(participants.get(0).getPassword());
+            participant.setId(participants.get(0).getId());
             participant.addAllFollowing(participants.get(0).getFollowing());
             participant.addAllFollowRequest(followRequests);
+
+
+            ElasticSearchController.EditParticipantTask ept = new ElasticSearchController.EditParticipantTask();
+            participant.unFollow("bb");
+            ept.execute(participant);
+
+
 
             Intent intent = new Intent(this, MainScreen.class);
             startActivity(intent);

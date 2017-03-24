@@ -4,6 +4,7 @@ import android.os.AsyncTask;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.google.gson.Gson;
 import com.searchly.jestdroid.DroidClientConfig;
 import com.searchly.jestdroid.JestClientFactory;
 import com.searchly.jestdroid.JestDroidClient;
@@ -354,10 +355,15 @@ public class ElasticSearchController {
             verifySettings();
 
             for (Participant participant : participants){
+
+                String following = new Gson().toJson(participant.getFollowing());
                 String query = "{\"doc\" : {"+
-                        "\"following\" : \"" + participant.getFollowing().toString() + "\" ," +
-                        "\"followRequest\" : \"" + participant.getFollowRequest().toString() + "\"" +
+                        "\"following\" : " + following +
                         "}}";
+
+
+                Log.d("query is :", query);
+
                 Update update = new Update
                         .Builder(query)
                         .index(groupIndex)
@@ -393,7 +399,6 @@ public class ElasticSearchController {
                             .build();
 
                     try {
-                        // where is the client?
                         DocumentResult result = client.execute(index);
                         if (result.isSucceeded()) {
                             followRequest.setId(result.getId());
