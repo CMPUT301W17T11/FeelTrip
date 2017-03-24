@@ -183,8 +183,6 @@ public class EditMoodActivity extends AppCompatActivity {
         emotionString.setText("Happy");
         emotionString.setTextColor(getResources().getColor(R.color.green));
         emotionalState = "Happy";
-
-
     }
     public void addAngryEmoji(View v){
         TextView emotionString = (TextView)findViewById(R.id.emotionString);
