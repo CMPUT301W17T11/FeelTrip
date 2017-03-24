@@ -51,6 +51,12 @@ public class Participant {
         this.following.addAll(following);
     }
 
+    public void addFollowing(String userName){
+        if (!this.following.contains(userName)) {
+            this.following.add(userName);
+        }
+    }
+
     public void addAllFollowRequest(ArrayList<FollowRequest> followRequest){
         for (FollowRequest request: followRequest){
             if (!this.followRequest.contains(request)){

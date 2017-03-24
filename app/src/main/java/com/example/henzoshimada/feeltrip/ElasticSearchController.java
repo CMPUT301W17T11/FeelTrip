@@ -19,6 +19,7 @@ import java.util.concurrent.ExecutionException;
 
 import io.searchbox.core.Delete;
 import io.searchbox.core.DocumentResult;
+import io.searchbox.core.Get;
 import io.searchbox.core.Index;
 import io.searchbox.core.Search;
 import io.searchbox.core.SearchResult;
@@ -416,19 +417,35 @@ public class ElasticSearchController {
     }
 
     public static class GetRequestTask extends AsyncTask<String, Void, ArrayList<FollowRequest>>{
+        private boolean checkAccept;
+
+        public GetRequestTask(boolean checkAccept){
+            this.checkAccept = checkAccept;
+        }
+
         @Override
-        protected ArrayList<FollowRequest> doInBackground(String... receiverName){
+        protected ArrayList<FollowRequest> doInBackground(String... username){
             if(android.os.Debug.isDebuggerConnected())
                 android.os.Debug.waitForDebugger();
             verifySettings();
 
             ArrayList<FollowRequest> followRequests = new ArrayList<>();
             String query;
-            query = "{" +
-                    "\"query\" : {" +
-                    "\"match\" : {" +
-                    "\"receiver\" :\"" + receiverName[0] + "\"}" +
-                    " }}";
+            if (checkAccept){
+                query = "{" +
+                        "\"query\" : {" +
+                        "\"match\" : {" +
+                        "\"sender\" :\"" + username[0] + "\" , " +
+                        "\"accepted\" : \"true\" }" +
+                        " }}";
+            }
+            else {
+                query = "{" +
+                        "\"query\" : {" +
+                        "\"match\" : {" +
+                        "\"receiver\" :\"" + username[0] + "\"}" +
+                        " }}";
+            }
 
             Search search = new Search.Builder(query)
                     .addIndex(groupIndex)

@@ -69,6 +69,7 @@ public class Mood {
         stateVector = new boolean[size];
         delState = false;
         made = null;
+        id = null;
     }
 
 
@@ -86,6 +87,7 @@ public class Mood {
         stateVector = new boolean[size];
         delState = false;
         made = null;
+        id = null;
     }
 
     public String getId() {
@@ -121,7 +123,7 @@ public class Mood {
         return stateVector[index];
     }
 
-    public void setStateByIndex(int index){
+    private void setStateByIndex(int index){
         stateVector[index] = true;
     }
 

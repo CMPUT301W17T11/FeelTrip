@@ -9,12 +9,14 @@ import io.searchbox.annotations.JestId;
 public class FollowRequest {
     private String sender;
     private String receiver;
+    private boolean accepted;
     @JestId
     private String id;
 
     public FollowRequest(String sender, String receiver){
         this.sender = sender;
         this.receiver = receiver;
+        accepted = false;
     }
 
     public String getSender() {
@@ -39,6 +41,14 @@ public class FollowRequest {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public boolean isAccepted() {
+        return accepted;
+    }
+
+    public void setAccepted(boolean accepted) {
+        this.accepted = accepted;
     }
 
     @Override
