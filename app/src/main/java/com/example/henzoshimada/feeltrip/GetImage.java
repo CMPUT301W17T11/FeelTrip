@@ -26,6 +26,7 @@ public class GetImage extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.add_edit_page);
 
+        /*
         verifyStoragePermissions(this);
 
         //Taken from: http://viralpatel.net/blogs/pick-image-from-galary-android-app/
@@ -42,7 +43,7 @@ public class GetImage extends AppCompatActivity{
 
                 startActivityForResult(i, RESULT_LOAD_IMAGE);
             }
-        });
+        });*/
 
         //TODO: Should ENCODE and STORE the image into the mood event here
     }

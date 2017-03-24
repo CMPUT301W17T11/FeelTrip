@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/location_toggle"
+        android:icon="@mipmap/locationimage"
+        android:title="GPS Toggle" />
+
+    <item
+        android:id="@+id/private_toggle"
+        android:icon="@mipmap/privateimage"
+        android:title="Private toggle" />
+
+    <item
+        android:id="@+id/check_bottom_button"
+        android:icon="@mipmap/doneimage"
+        android:title="Submit" />
+
+    <item
+        android:id="@+id/date_bottom_button"
+        android:icon="@mipmap/dateimage"
+        android:title="Date" />
+    <item
+        android:id="@+id/photo_bottom_button"
+        android:icon="@mipmap/cameraimage"
+        android:title="Photo" />
+
+</menu>

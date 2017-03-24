@@ -27,7 +27,7 @@
         android:theme="@style/AppTheme.NoActionBar">
         <activity android:name=".EditMoodActivity" />
         <activity android:name=".loginActivity"
-            android:label="loginActivity">
+            android:label="FeelTrip">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
