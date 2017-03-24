@@ -38,7 +38,8 @@ public class loginActivity extends AppCompatActivity {
             participant.setPassword(participants.get(0).getPassword());
             participant.addAllFollowing(participants.get(0).getFollowing());
             participant.addAllFollowRequest(participants.get(0).getFollowRequest());
-
+            FilterController filterController = FeelTripApplication.getFilterController();
+            filterController.resetAllFilters();
 
             Intent intent = new Intent(this, MainScreen.class);
             startActivity(intent);

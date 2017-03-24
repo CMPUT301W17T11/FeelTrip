@@ -1,6 +1,12 @@
 package com.example.henzoshimada.feeltrip;
 
 import android.app.Application;
+import android.app.Fragment;
+import android.content.Context;
+import android.util.Log;
+
+import java.util.ArrayList;
+import java.util.concurrent.ExecutionException;
 
 /**
  * Created by Esus2 on 2017-03-09.
@@ -57,6 +63,71 @@ public class FeelTripApplication extends Application {
             participant = new Participant();
         }
         return participant;
+    }
+
+    private static FilterController filterController = null;
+    public static FilterController getFilterController(){
+        if (filterController == null){
+            filterController = new FilterController();
+        }
+        return filterController;
+    }
+
+    private static  MoodAdapter moodAdapter = null;
+    private static ArrayList<Mood> moodArrayList = new ArrayList<Mood>();
+    public static MoodAdapter getMoodAdapter(Context context) {
+        if (moodAdapter == null) {
+            moodAdapter = new MoodAdapter(moodArrayList, context.getApplicationContext());
+        }
+        return moodAdapter;
+    }
+
+    public static ArrayList<Mood> getMoodArrayList() {
+        if(moodArrayList == null) {
+            moodArrayList = new ArrayList<Mood>();
+        }
+        return moodArrayList;
+    }
+
+    public static void setMoodArrayList(ArrayList<Mood> moodArrayList) {
+        FeelTripApplication.moodArrayList = moodArrayList;
+    }
+
+    public static String getFrag() {
+        return frag;
+    }
+
+    private static String frag = "main"; // main by default
+    public static void setFrag(String fragstr) {
+        if(fragstr.equals("main") || fragstr.equals("profile") || fragstr.equals("map")) {
+            frag = fragstr;
+        }
+        else {
+            Log.i("Error", "The given search mode is invalid.");
+            return;
+        }
+    }
+
+    public static void loadFromElasticSearch(){
+        Log.d("listTag", "load from ES");
+        moodArrayList.clear();
+        ElasticSearchController.GetFilteredMoodsTask getMoodTask;
+        if(frag.equals("main") || frag.equals("profile") || frag.equals("map")) {
+            getMoodTask = new ElasticSearchController.GetFilteredMoodsTask(frag);
+        }
+        else {
+            Log.i("Error", "The given search mode is invalid.");
+            return;
+        }
+        getMoodTask.execute();
+        try {
+            moodArrayList.addAll(getMoodTask.get());
+            Log.d("mood array", "moodArrayList");
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
     }
 
 }
