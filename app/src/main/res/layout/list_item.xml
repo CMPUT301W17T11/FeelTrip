@@ -46,6 +46,23 @@
             android:textStyle="bold" />
 
         <TextView
+            android:id="@+id/append"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="23"
+            android:textAppearance="?android:attr/textAppearanceButton"
+            android:textColor="@android:color/black"
+            android:textStyle="bold|italic" />
+
+        <ImageView
+            android:id="@+id/emoji"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true" />
+
+        <TextView
             android:id="@+id/socialSituation"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
