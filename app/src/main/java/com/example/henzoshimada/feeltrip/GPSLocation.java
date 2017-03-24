@@ -184,7 +184,7 @@ public class GPSLocation extends Service implements LocationListener {
         });
 
         // Showing Alert Message
-        alertDialog.show();
+        //alertDialog.show();
     }
 
 
