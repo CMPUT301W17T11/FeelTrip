@@ -1,6 +1,8 @@
 package com.example.henzoshimada.feeltrip;
 
 // Removed unused imports
+import android.graphics.Bitmap;
+
 import java.util.Arrays;
 import java.util.Date;
 
@@ -15,6 +17,8 @@ public class Mood {
 
     private String emotionalState;
     private String description;
+    private String emojiString;
+    private String emojiImage;
     private long date; //for actually storing value in Elasticsearch, since it doesn't have a Date type
     private static Date trueDate; //the real date as a Date object
 
@@ -51,6 +55,7 @@ public class Mood {
     4 ----> isPrivateChanged;
     5 ----> imageChanged;
     6 ----> locationChanged;
+    7 ----> emoji image
     */
 
     private static boolean[] stateVector;

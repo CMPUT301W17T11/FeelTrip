@@ -51,13 +51,15 @@ public class ElasticSearchController {
                         if (result.isSucceeded()) {
                             mood.setId(result.getId());
                         } else {
+                            Log.i("Error",mood.getDescription());
+                            Log.i("Error",mood.getId());
                             Log.i("Error", "Elasticsearch was not able to add the mood");
                             mood.setAdd();
                             UpdateQueueController updateQueueController = FeelTripApplication.getUpdateQueueController();
                             updateQueueController.addMood(mood);
                         }
                     } catch (Exception e) {
-                        Log.i("Error", "The application failed to build and send the moods");
+                        Log.i("Error", ""+e);
                         mood.setAdd();
                         UpdateQueueController updateQueueController = FeelTripApplication.getUpdateQueueController();
                         updateQueueController.addMood(mood);
