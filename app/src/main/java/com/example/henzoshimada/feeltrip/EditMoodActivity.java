@@ -66,7 +66,6 @@ public class EditMoodActivity extends AppCompatActivity {
     private double latitude;
     private double longitude;
     private boolean showPublicOn;
-    private Spinner emotionalStateSpinner;
     private Spinner socialSituationSpinner;
 
     private boolean permissionDenied = false;
@@ -87,10 +86,7 @@ public class EditMoodActivity extends AppCompatActivity {
 
     DateFormat formatDateTime = DateFormat.getDateInstance();
     private Calendar dateTime = Calendar.getInstance();
-
-    private String emotionalState;
     private String socialSit;
-
     // The following are constants for emotion based emoji
     public static final int angry = 0x1F624;
     public static final int confused = 0x1F635;
@@ -110,6 +106,9 @@ public class EditMoodActivity extends AppCompatActivity {
     private static final int TAKE_PHOTO = 2;
     Activity activity;
     private static Context context;
+    private String emotionalState;
+    private Participant participant = FeelTripApplication.getParticipant();
+    private Mood mood = new Mood(participant.getUserName());
 
     // Used for edit functionality
     private Mood editmood;
@@ -153,10 +152,12 @@ public class EditMoodActivity extends AppCompatActivity {
         setContentView(R.layout.add_edit_page);
         EditMoodActivity.context = getApplicationContext();
         inputMoodDescription = (EditText) findViewById(R.id.moodEventDescription);
+
         activity = this;
         context = this;
         showPublicOn = false;
         locationOn = false;
+
         verifyLocationPermissions(this);
         editmood = null;
         encodedPhoto = null;
@@ -229,6 +230,7 @@ public class EditMoodActivity extends AppCompatActivity {
         BottomNavigationView options_bar = (BottomNavigationView) findViewById(R.id.options_post);
         options_bar.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
+
     } //end of on create
 
 
@@ -257,6 +259,62 @@ public class EditMoodActivity extends AppCompatActivity {
         }
     }
 
+    //#################################################################################
+    //Start of handling emojis
+
+    public void addHappyEmoji(View v) {
+        TextView emotionString = (TextView)findViewById(R.id.emotionString);
+        emotionString.setText("Happy");
+        emotionString.setTextColor(getResources().getColor(R.color.green));
+        emotionalState = "Happy";
+    }
+    public void addAngryEmoji(View v){
+        TextView emotionString = (TextView)findViewById(R.id.emotionString);
+        emotionString.setText("Angry");
+        emotionString.setTextColor(getResources().getColor(R.color.green));
+        emotionalState = "Angry";
+    }
+    public void addConfusedEmoji(View v){
+        TextView emotionString = (TextView)findViewById(R.id.emotionString);
+        emotionString.setText("Confused");
+        emotionString.setTextColor(getResources().getColor(R.color.green));
+        emotionalState = "Confused";
+    }
+    public void addDisEmoji(View v){
+        TextView emotionString = (TextView)findViewById(R.id.emotionString);
+        emotionString.setText("Disgust");
+        emotionString.setTextColor(getResources().getColor(R.color.green));
+        emotionalState = "Disgust";
+    }
+    public void addFearEmoji(View v){
+        TextView emotionString = (TextView)findViewById(R.id.emotionString);
+        emotionString.setText("Fear");
+        emotionString.setTextColor(getResources().getColor(R.color.green));
+        emotionalState = "Fear";
+    }
+    public void addSadEmoji(View v){
+        TextView emotionString = (TextView)findViewById(R.id.emotionString);
+        emotionString.setText("Sad");
+        emotionString.setTextColor(getResources().getColor(R.color.green));
+        emotionalState = "Sad";
+    }
+    public void addShamEmoji(View v){
+        TextView emotionString = (TextView)findViewById(R.id.emotionString);
+        emotionString.setText("Shameful");
+        emotionString.setTextColor(getResources().getColor(R.color.green));
+        emotionalState = "Shameful";
+    }
+    public void addCoolEmoji(View v){
+        TextView emotionString = (TextView)findViewById(R.id.emotionString);
+        emotionString.setText("Cool");
+        emotionString.setTextColor(getResources().getColor(R.color.green));
+        emotionalState = "Cool";
+    }
+
+
+
+
+    //#################################################################################
     public void datePick() {
         //selectDate();
         Log.d("Mytag","Went into date");
@@ -264,8 +322,9 @@ public class EditMoodActivity extends AppCompatActivity {
                 dateTime.get(Calendar.MONTH), dateTime.get(Calendar.DAY_OF_MONTH)).show();
     }
 
-
+/*
     private void submitMood() throws DescriptionTooLongException {
+<<<<<<< HEAD
         if(editflag) {
             Mood mood = editmood;
             ElasticSearchController.EditMoodTask editMoodTask = new ElasticSearchController.EditMoodTask(this);
@@ -296,6 +355,12 @@ public class EditMoodActivity extends AppCompatActivity {
             editMoodTask.execute(mood);
 
             Log.d("tag", "Editing mood");
+=======
+        ElasticSearchController.AddMoodTask addMoodTask = new ElasticSearchController.AddMoodTask();
+
+        if(showPublicOn){
+            mood.setPublic();
+>>>>>>> a1b732e279e48e4e7f2766874ed37fa6cd3ac079
         }
         else {
             ElasticSearchController.AddMoodTask addMoodTask = new ElasticSearchController.AddMoodTask(this);
@@ -328,9 +393,18 @@ public class EditMoodActivity extends AppCompatActivity {
             addMoodTask.execute(mood);
             Log.d("tag", "Adding mood");
         }
+<<<<<<< HEAD
+=======
+        mood.setSocialSit(socialSit);
+        mood.setDescription(String.valueOf(inputMoodDescription.getText()), " -Feeling "  + emotionalState); //TODO: We might not need to send this append part to Elasticsearch, but rather add it to our displayed description after we fetch from Elasticsearch
+        mood.setDate(dateTime.getTime());
+        mood.setImage(encodedPhoto);
+        mood.setEmotionalState(emotionalState);
+        addMoodTask.execute(mood);
+>>>>>>> a1b732e279e48e4e7f2766874ed37fa6cd3ac079
     }
 
-
+*/
     public static Context getAppContext() {
         return EditMoodActivity.context;
     }
@@ -452,7 +526,6 @@ public class EditMoodActivity extends AppCompatActivity {
     // get the selected dropdown list value
     public void addListenerOnSubmitButton() {
 
-        //emotionalStateSpinner = (Spinner) findViewById(R.id.emotional_state_spinner);
         socialSituationSpinner = (Spinner) findViewById(R.id.social_event_spinner);
         //ooemotionalState = String.valueOf(emotionalStateSpinner.getSelectedItem());
         socialSit = String.valueOf(socialSituationSpinner.getSelectedItem());
@@ -531,6 +604,8 @@ public class EditMoodActivity extends AppCompatActivity {
             permissionDenied = false;
         }
     }
+
+    private void submitMood()throws  DescriptionTooLongException{}
 
     /*
     // get the selected dropdown list value

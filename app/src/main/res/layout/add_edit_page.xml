@@ -18,8 +18,28 @@
 
     <ImageView
         android:layout_width="match_parent"
-        android:layout_height="295dp"
+        android:layout_height="275dp"
         android:id="@+id/imgView"/>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Feeling: "
+            android:textSize="25sp"
+            android:layout_marginStart="10dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/default_photo_off"
+            android:textColor="@color/red"
+            android:textSize="25sp"
+            android:id="@+id/emotionString"/>
+
+        </LinearLayout>
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -84,7 +104,8 @@
                     android:id="@+id/happyEmoji"
                     app:srcCompat="@drawable/happy"
                     android:padding="0dp"
-                    android:background="@color/white" />
+                    android:background="@color/white"
+                    android:onClick="addHappyEmoji"/>
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -104,7 +125,8 @@
                 android:id="@+id/angryEmoji"
                 app:srcCompat="@drawable/angry"
                 android:padding="0dp"
-                android:background="@color/white"/>
+                android:background="@color/white"
+                android:onClick="addAngryEmoji"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -124,6 +146,7 @@
                 android:id="@+id/confEmoji"
                 app:srcCompat="@drawable/confused"
                 android:padding="0dp"
+                android:onClick="addConfusedEmoji"
                 android:background="@color/white"/>
             <TextView
                 android:layout_width="wrap_content"
@@ -144,6 +167,7 @@
                 android:id="@+id/disgustEmoji"
                 app:srcCompat="@drawable/disgusted"
                 android:padding="0dp"
+                android:onClick="addDisEmoji"
                 android:background="@color/white"/>
             <TextView
                 android:layout_width="wrap_content"
@@ -164,6 +188,7 @@
                 android:id="@+id/fearEmoji"
                 app:srcCompat="@drawable/fearful"
                 android:padding="0dp"
+                android:onClick="addFearEmoji"
                 android:background="@color/white"/>
             <TextView
                 android:layout_width="wrap_content"
@@ -184,6 +209,7 @@
                 android:id="@+id/sadEmoji"
                 app:srcCompat="@drawable/sad"
                 android:padding="0dp"
+                android:onClick="addSadEmoji"
                 android:background="@color/white"/>
             <TextView
                 android:layout_width="wrap_content"
@@ -204,6 +230,7 @@
                 android:id="@+id/shamEmoji"
                 app:srcCompat="@drawable/shameful"
                 android:padding="0dp"
+                android:onClick="addShamEmoji"
                 android:background="@color/white"/>
             <TextView
                 android:layout_width="wrap_content"
@@ -224,6 +251,7 @@
                 android:id="@+id/coolEmoji"
                 app:srcCompat="@drawable/cool"
                 android:padding="0dp"
+                android:onClick="addCoolEmoji"
                 android:background="@color/white"/>
             <TextView
                 android:layout_width="wrap_content"

@@ -30,7 +30,9 @@ public class MoodAdapter extends ArrayAdapter<Mood> {
         TextView append;
         ImageView emoji;
         TextView socialSituation;
+        ImageView emojiImage;
         ImageView image;
+
     }
 
     public MoodAdapter(ArrayList<Mood> moodArrayList, Context context) {
@@ -59,6 +61,7 @@ public class MoodAdapter extends ArrayAdapter<Mood> {
 
             viewHolder.userName = (TextView) convertView.findViewById(R.id.userName);
             viewHolder.date = (TextView) convertView.findViewById(R.id.date);
+            viewHolder.emojiImage = (ImageView) convertView.findViewById(R.id.emojiImage);
             viewHolder.description = (TextView) convertView.findViewById(R.id.description);
             viewHolder.append = (TextView) convertView.findViewById(R.id.append);
             viewHolder.emoji = (ImageView) convertView.findViewById(R.id.emoji);
@@ -85,6 +88,35 @@ public class MoodAdapter extends ArrayAdapter<Mood> {
         viewHolder.emoji.setImageBitmap(null); //TODO: pass the emoji into here
         viewHolder.socialSituation.setText(mood.getSocialSit());
 
+        //#######################################################
+        Log.i("Mytag","Emoooooo: "+mood.getEmotionalState());
+        if (mood.getEmotionalState() != null) {
+            if (mood.getEmotionalState().equals("Happy")) {
+                viewHolder.emojiImage.setImageResource(R.drawable.happy);
+            }
+            if (mood.getEmotionalState().equals("Angry")) {
+                viewHolder.emojiImage.setImageResource(R.drawable.angry);
+            }
+            if (mood.getEmotionalState().equals("Confused")) {
+                viewHolder.emojiImage.setImageResource(R.drawable.confused);
+            }
+            if (mood.getEmotionalState().equals("Disgust")) {
+                viewHolder.emojiImage.setImageResource(R.drawable.disgusted);
+            }
+            if (mood.getEmotionalState().equals("Fearful")) {
+                viewHolder.emojiImage.setImageResource(R.drawable.fearful);
+            }
+            if (mood.getEmotionalState().equals("Sad")) {
+                viewHolder.emojiImage.setImageResource(R.drawable.sad);
+            }
+            if (mood.getEmotionalState().equals("Shameful")) {
+                viewHolder.emojiImage.setImageResource(R.drawable.shameful);
+            }
+            if (mood.getEmotionalState().equals("Cool")) {
+                viewHolder.emojiImage.setImageResource(R.drawable.cool);
+            }
+        }
+        //######################################################
         String encodedImageString = mood.getImage();
         if(encodedImageString != null) {
             byte[] decodedString = Base64.decode(encodedImageString, Base64.DEFAULT);
