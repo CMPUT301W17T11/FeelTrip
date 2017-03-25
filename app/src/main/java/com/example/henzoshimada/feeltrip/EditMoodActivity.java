@@ -171,6 +171,7 @@ public class EditMoodActivity extends AppCompatActivity {
             jsonEditMood = extras.getString("editmood");
         }
         editmood = new Gson().fromJson(jsonEditMood, Mood.class);
+        addItemsOnSocialSituationSpinner(editmood);
         if(editmood != null) {
             try {
                 dateTime.setTime(editmood.getDate());
@@ -185,12 +186,18 @@ public class EditMoodActivity extends AppCompatActivity {
                     Bitmap decodedPhoto = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
                     ImageView imageView = (ImageView) findViewById(R.id.imgView);
                     imageView.setImageBitmap(decodedPhoto);
+                    TextView modeLPhotoText = (TextView) findViewById(R.id.modePhoto);
+                    modeLPhotoText.setText("On");
+                    modeLPhotoText.setTextColor(getResources().getColor(R.color.green));
                 }
             } catch (Exception e) {
                 Log.d("tag", "No image found in editmood");
             }
             try {
                 latitude = editmood.getLatitude();
+                TextView modeLocationText = (TextView) findViewById(R.id.modeLocation);
+                modeLocationText.setText("On");
+                modeLocationText.setTextColor(getResources().getColor(R.color.green));
             }
             catch (Exception e) {
                 Log.d("tag", "No latitude found in editmood");
@@ -215,24 +222,43 @@ public class EditMoodActivity extends AppCompatActivity {
             }
             try {
                 emotionalState = editmood.getEmotionalState();
+                TextView emotionString = (TextView)findViewById(R.id.emotionString);
+                emotionString.setText(emotionalState);
+                emotionString.setTextColor(getResources().getColor(R.color.green));
             }
             catch (Exception e) {
                 Log.d("tag", "No emotionalstate found in editmood");
             }
-
+            if(!editmood.getPrivate()){
+                TextView modePostText = (TextView) findViewById(R.id.modePost);
+                modePostText.setText(R.string.mode_public);
+                modePostText.setTextColor(getResources().getColor(R.color.green));
+            }
+            socialSituationSpinner.setSelection(getIndex(socialSituationSpinner, editmood.getSocialSit()));
             editflag = true;
 
         }
         else{
             editflag = false;
         }
-        addItemsOnSocialSituationSpinner(editmood);
         BottomNavigationView options_bar = (BottomNavigationView) findViewById(R.id.options_post);
         options_bar.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
 
     } //end of on create
 
+    private int getIndex(Spinner spinner, String myString)
+    {
+        int index = 0;
+
+        for (int i=0;i<spinner.getCount();i++){
+            if (spinner.getItemAtPosition(i).toString().equalsIgnoreCase(myString)){
+                index = i;
+                break;
+            }
+        }
+        return index;
+    }
 
     public void setPostMode(){
         TextView modeShowPublic = (TextView) findViewById(R.id.modePost);
