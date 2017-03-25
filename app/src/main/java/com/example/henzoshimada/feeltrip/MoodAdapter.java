@@ -64,7 +64,6 @@ public class MoodAdapter extends ArrayAdapter<Mood> {
             viewHolder.emojiImage = (ImageView) convertView.findViewById(R.id.emojiImage);
             viewHolder.description = (TextView) convertView.findViewById(R.id.description);
             viewHolder.append = (TextView) convertView.findViewById(R.id.append);
-            viewHolder.emoji = (ImageView) convertView.findViewById(R.id.emoji);
             viewHolder.socialSituation = (TextView) convertView.findViewById(R.id.socialSituation);
             viewHolder.image = (ImageView) convertView.findViewById(R.id.image);
 
@@ -84,8 +83,7 @@ public class MoodAdapter extends ArrayAdapter<Mood> {
         viewHolder.userName.setText(mood.getUsername());
         viewHolder.date.setText(mood.getDate().toString());
         viewHolder.description.setText(Html.fromHtml(mood.getDescription())); //TODO: This is depreciated, maybe replace?
-        viewHolder.append.setText(" -Feeling " + mood.getEmotionalState());
-        viewHolder.emoji.setImageBitmap(null); //TODO: pass the emoji into here
+        viewHolder.append.setText(" - Feeling " + mood.getEmotionalState());
         viewHolder.socialSituation.setText(mood.getSocialSit());
 
         //#######################################################

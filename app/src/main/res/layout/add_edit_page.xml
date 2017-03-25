@@ -18,7 +18,7 @@
 
     <ImageView
         android:layout_width="match_parent"
-        android:layout_height="275dp"
+        android:layout_height="255dp"
         android:id="@+id/imgView"/>
     <LinearLayout
         android:layout_width="wrap_content"
@@ -43,7 +43,8 @@
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        >
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -72,7 +73,7 @@
             android:text="Photo Attached: "
             android:layout_marginLeft="20dp"/>
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/default_photo_off"
             android:id="@+id/modePhoto"
@@ -80,6 +81,7 @@
 
     </LinearLayout>
     <Spinner
+        android:background="@android:drawable/dialog_holo_light_frame"
         android:id="@+id/social_event_spinner"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
