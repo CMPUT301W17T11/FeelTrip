@@ -118,6 +118,7 @@ public class MoodAdapter extends ArrayAdapter<Mood> {
         String encodedImageString = mood.getImage();
         if(encodedImageString != null) {
             byte[] decodedString = Base64.decode(encodedImageString, Base64.DEFAULT);
+            Log.d("Bitmap","Length: "+decodedString.length);
             Bitmap photo = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
             viewHolder.image.setImageBitmap(photo);
             Log.d("imageTag", "have image");
