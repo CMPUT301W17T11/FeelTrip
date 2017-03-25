@@ -26,8 +26,6 @@ public class Mood {
 
     private String emotionalState;
     private String description;
-    private String emojiString;
-    private String emojiImage;
     private long date; //for actually storing value in Elasticsearch, since it doesn't have a Date type
     private static Date trueDate; //the real date as a Date object
 

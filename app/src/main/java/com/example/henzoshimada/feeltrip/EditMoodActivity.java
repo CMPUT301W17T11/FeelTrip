@@ -322,10 +322,9 @@ public class EditMoodActivity extends AppCompatActivity {
                 dateTime.get(Calendar.MONTH), dateTime.get(Calendar.DAY_OF_MONTH)).show();
     }
 
-/*
+
     private void submitMood() throws DescriptionTooLongException {
-<<<<<<< HEAD
-        if(editflag) {
+        if (editflag) {
             Mood mood = editmood;
             ElasticSearchController.EditMoodTask editMoodTask = new ElasticSearchController.EditMoodTask(this);
             if (showPublicOn) {
@@ -336,8 +335,7 @@ public class EditMoodActivity extends AppCompatActivity {
             if (locationOn) {
                 mood.setMapPosition(latitude, longitude);
                 // this is the setter for latitude and longitude
-            }
-            else {
+            } else {
                 mood.setNullLocation();
             }
             mood.setEmotionalState(emotionalState);
@@ -345,27 +343,17 @@ public class EditMoodActivity extends AppCompatActivity {
             mood.setDescription(String.valueOf(inputMoodDescription.getText())); //TODO: append the emotionalState upon fetching from Elasticsearch
             mood.setDate(dateTime.getTime());
 
-            if(encodedPhoto != null) {
+            if (encodedPhoto != null) {
                 mood.setImage(encodedPhoto);
-            }
-            else {
+            } else {
                 mood.setNullImage();
             }
-
             editMoodTask.execute(mood);
-
             Log.d("tag", "Editing mood");
-=======
-        ElasticSearchController.AddMoodTask addMoodTask = new ElasticSearchController.AddMoodTask();
-
-        if(showPublicOn){
-            mood.setPublic();
->>>>>>> a1b732e279e48e4e7f2766874ed37fa6cd3ac079
         }
-        else {
+        else{
             ElasticSearchController.AddMoodTask addMoodTask = new ElasticSearchController.AddMoodTask(this);
             Participant participant = FeelTripApplication.getParticipant();
-            Mood mood = new Mood(participant.getUserName());
             if (showPublicOn) {
                 mood.setPublic();
             } else {
@@ -374,8 +362,7 @@ public class EditMoodActivity extends AppCompatActivity {
             if (locationOn) {
                 mood.setMapPosition(latitude, longitude);
                 // this is the setter for latitude and longitude
-            }
-            else {
+            } else {
                 mood.setNullLocation();
             }
             mood.setEmotionalState(emotionalState);
@@ -383,28 +370,17 @@ public class EditMoodActivity extends AppCompatActivity {
             mood.setDescription(String.valueOf(inputMoodDescription.getText())); //TODO: append the emotionalState upon fetching from Elasticsearch
             mood.setDate(dateTime.getTime());
 
-            if(encodedPhoto != null) {
+            if (encodedPhoto != null) {
                 mood.setImage(encodedPhoto);
-            }
-            else {
+            } else {
                 mood.setNullImage();
             }
 
             addMoodTask.execute(mood);
-            Log.d("tag", "Adding mood");
+            Log.d("PostMood", "Adding mood");
         }
-<<<<<<< HEAD
-=======
-        mood.setSocialSit(socialSit);
-        mood.setDescription(String.valueOf(inputMoodDescription.getText()), " -Feeling "  + emotionalState); //TODO: We might not need to send this append part to Elasticsearch, but rather add it to our displayed description after we fetch from Elasticsearch
-        mood.setDate(dateTime.getTime());
-        mood.setImage(encodedPhoto);
-        mood.setEmotionalState(emotionalState);
-        addMoodTask.execute(mood);
->>>>>>> a1b732e279e48e4e7f2766874ed37fa6cd3ac079
     }
 
-*/
     public static Context getAppContext() {
         return EditMoodActivity.context;
     }
@@ -604,10 +580,10 @@ public class EditMoodActivity extends AppCompatActivity {
             permissionDenied = false;
         }
     }
-
+/*
     private void submitMood()throws  DescriptionTooLongException{}
 
-    /*
+
     // get the selected dropdown list value
     public void addListenerOnSubmitButton() {
 
@@ -641,3 +617,11 @@ public class EditMoodActivity extends AppCompatActivity {
     }
 */
 }
+
+
+
+
+
+
+
+
