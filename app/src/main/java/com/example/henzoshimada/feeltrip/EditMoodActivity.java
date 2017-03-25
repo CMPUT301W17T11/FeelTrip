@@ -324,60 +324,89 @@ public class EditMoodActivity extends AppCompatActivity {
 
 
     private void submitMood() throws DescriptionTooLongException {
-        if (editflag) {
-            Mood mood = editmood;
-            ElasticSearchController.EditMoodTask editMoodTask = new ElasticSearchController.EditMoodTask(this);
-            if (showPublicOn) {
-                mood.setPublic();
-            } else {
-                mood.setPrivate();
-            }
-            if (locationOn) {
-                mood.setMapPosition(latitude, longitude);
-                // this is the setter for latitude and longitude
-            } else {
-                mood.setNullLocation();
-            }
-            mood.setEmotionalState(emotionalState);
-            mood.setSocialSit(socialSit);
-            mood.setDescription(String.valueOf(inputMoodDescription.getText())); //TODO: append the emotionalState upon fetching from Elasticsearch
-            mood.setDate(dateTime.getTime());
+        try {
+            if (editflag) {
+                Mood mood = editmood;
+                ElasticSearchController.EditMoodTask editMoodTask = new ElasticSearchController.EditMoodTask(this);
+                if (showPublicOn) {
+                    mood.setPublic();
+                } else {
+                    mood.setPrivate();
+                }
+                if (locationOn) {
+                    mood.setMapPosition(latitude, longitude);
+                    // this is the setter for latitude and longitude
+                } else {
+                    mood.setNullLocation();
+                }
+                if(emotionalState.equals("")){
+                    throw new RuntimeException();
+                }
+                else{
+                    mood.setEmotionalState(emotionalState);
+                }
+                mood.setSocialSit(socialSit);
+                if (inputMoodDescription.getText().toString().equals("")) {
+                    throw new NullPointerException();
+                } else {
+                    mood.setDescription(String.valueOf(inputMoodDescription.getText())); //TODO: append the emotionalState upon fetching from Elasticsearch
+                }
 
-            if (encodedPhoto != null) {
-                mood.setImage(encodedPhoto);
+                mood.setDate(dateTime.getTime());
+
+                if (encodedPhoto != null) {
+                    mood.setImage(encodedPhoto);
+                } else {
+                    mood.setNullImage();
+                }
+                editMoodTask.execute(mood);
+                Log.d("tag", "Editing mood");
+                finish();
             } else {
-                mood.setNullImage();
+                ElasticSearchController.AddMoodTask addMoodTask = new ElasticSearchController.AddMoodTask(this);
+                Participant participant = FeelTripApplication.getParticipant();
+                if (showPublicOn) {
+                    mood.setPublic();
+                } else {
+                    mood.setPrivate();
+                }
+                if (locationOn) {
+                    mood.setMapPosition(latitude, longitude);
+                    // this is the setter for latitude and longitude
+                } else {
+                    mood.setNullLocation();
+                }
+                if(emotionalState.equals("")){
+                    throw new RuntimeException();
+                }
+                else{
+                    mood.setEmotionalState(emotionalState);
+                }
+                mood.setSocialSit(socialSit);
+
+                if (inputMoodDescription.getText().toString().equals("")) {
+                    throw new NullPointerException();
+                } else {
+                    mood.setDescription(String.valueOf(inputMoodDescription.getText())); //TODO: append the emotionalState upon fetching from Elasticsearch
+                }
+                mood.setDate(dateTime.getTime());
+
+                if (encodedPhoto != null) {
+                    mood.setImage(encodedPhoto);
+                } else {
+                    mood.setNullImage();
+                }
+
+                addMoodTask.execute(mood);
+                Toast.makeText(getApplicationContext(), "Successfully posted!", Toast.LENGTH_SHORT).show();
+                finish();
             }
-            editMoodTask.execute(mood);
-            Log.d("tag", "Editing mood");
         }
-        else{
-            ElasticSearchController.AddMoodTask addMoodTask = new ElasticSearchController.AddMoodTask(this);
-            Participant participant = FeelTripApplication.getParticipant();
-            if (showPublicOn) {
-                mood.setPublic();
-            } else {
-                mood.setPrivate();
-            }
-            if (locationOn) {
-                mood.setMapPosition(latitude, longitude);
-                // this is the setter for latitude and longitude
-            } else {
-                mood.setNullLocation();
-            }
-            mood.setEmotionalState(emotionalState);
-            mood.setSocialSit(socialSit);
-            mood.setDescription(String.valueOf(inputMoodDescription.getText())); //TODO: append the emotionalState upon fetching from Elasticsearch
-            mood.setDate(dateTime.getTime());
-
-            if (encodedPhoto != null) {
-                mood.setImage(encodedPhoto);
-            } else {
-                mood.setNullImage();
-            }
-
-            addMoodTask.execute(mood);
-            Log.d("PostMood", "Adding mood");
+        catch (NullPointerException e){
+            Toast.makeText(getApplicationContext(), "Description Required "+e, Toast.LENGTH_SHORT).show();
+        }
+        catch (RuntimeException e){
+            Toast.makeText(getApplicationContext(), "Emoji choice required "+e, Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -508,8 +537,6 @@ public class EditMoodActivity extends AppCompatActivity {
 
         try {
             submitMood();
-            Toast.makeText(getApplicationContext(), "Successfully posted!", Toast.LENGTH_SHORT).show();
-            finish();
         } catch (DescriptionTooLongException e) {
             Toast.makeText(getApplicationContext(), "Your description is too long.", Toast.LENGTH_SHORT).show();
         }
