@@ -29,9 +29,7 @@
             android:screenOrientation="portrait"/>
         <activity android:name=".loginActivity"
 
-            android:label="FeelTrip">
-
-
+            android:label="FeelTrip"
             android:screenOrientation="portrait">
 
             <intent-filter>

@@ -9,8 +9,8 @@ class FilterController {
     private boolean mostrecentfilter;
     private boolean friendsonlyfilter;
 
-    private String emotionfilter;
-    private String keywordfilter;
+    private static String emotionfilter;
+    private static String keywordfilter;
 
     public FilterController() {
         pastweekfilter = false;
@@ -54,16 +54,16 @@ class FilterController {
         return emotionfilter;
     }
 
-    public void setEmotionfilter(String emotionfilter) {
-        this.emotionfilter = emotionfilter;
+    public static void setEmotionfilter(String emotion) {
+        emotionfilter = emotion;
     }
 
     public String getKeywordfilter() {
         return keywordfilter;
     }
 
-    public void setKeywordfilter(String keywordfilter) {
-        this.keywordfilter = keywordfilter;
+    public static void setKeywordfilter(String keyword) {
+        keywordfilter = keyword;
     }
 
 }

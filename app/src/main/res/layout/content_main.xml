@@ -69,7 +69,7 @@
                     android:layout_marginStart="12dp"/>
 
                 <ToggleButton
-                    android:id="@+id/toggleFriends"
+                    android:id="@+id/toggleMostRecent"
                     android:layout_width="40dp"
                     android:layout_height="25dp"
                     android:background="@drawable/toggle_selector"
@@ -80,7 +80,7 @@
                     android:layout_marginStart="50dp" />
 
                 <ToggleButton
-                    android:id="@+id/toggleMostRecent"
+                    android:id="@+id/toggleFriends"
                     android:layout_width="40dp"
                     android:layout_height="25dp"
                     android:background="@drawable/toggle_selector"
@@ -113,7 +113,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="20dp"
-                    android:text="Filter by: friends"
+                    android:text="Filter by: Most recent"
                     android:textSize="10dp"/>
 
                 <TextView
@@ -121,7 +121,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="20dp"
-                    android:text="Filter by: Most recent"
+                    android:text="Filter by: friends"
                     android:textSize="10dp"/>
 
                 <TextView

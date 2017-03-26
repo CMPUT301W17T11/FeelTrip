@@ -74,13 +74,15 @@ public class ElasticSearchController {
                         if (result.isSucceeded()) {
                             mood.setId(result.getId());
                         } else {
+                            Log.i("Error",mood.getDescription());
+                            Log.i("Error",mood.getId());
                             Log.i("Error", "Elasticsearch was not able to add the mood");
                             mood.setAdd();
                             UpdateQueueController updateQueueController = FeelTripApplication.getUpdateQueueController();
                             updateQueueController.addMood(mood);
                         }
                     } catch (Exception e) {
-                        Log.i("Error", "The application failed to build and send the moods");
+                        Log.i("Error", ""+e);
                         mood.setAdd();
                         UpdateQueueController updateQueueController = FeelTripApplication.getUpdateQueueController();
                         updateQueueController.addMood(mood);
@@ -185,7 +187,13 @@ public class ElasticSearchController {
                                 if (notDone != 0) {
                                     query += (",");
                                 }
-                                break; //TODO: allow for the emoji field to be updated, can only do after finishing the UI
+                                break;
+                            case 7:
+                                query += ("\"emoji\" : \"" + mood.getEmoji() + "\"");
+                                if (notDone != 0) {
+                                    query += (",");
+                                }
+                                break;
                             default:
                                 break;
                         }
@@ -367,8 +375,8 @@ public class ElasticSearchController {
                     "\"query\" : {" +
                     "\"bool\" : {" +
                     "\"must\" : [" +
-                    "{ \"match\": { \"userName\": \"" + username + "\" }}," +
-                    "{ \"match\": { \"password\": \"" + password + "\" }}" +
+                    "{ \"term\": { \"userName\": \"" + username + "\" }}," +
+                    "{ \"term\": { \"password\": \"" + password + "\" }}" +
                     "]}}}";
 
             Log.d("query", query);
@@ -458,6 +466,7 @@ public class ElasticSearchController {
         private boolean keywordfilter;
 
         private String emotion; // stores the passed emotion we're filtering by
+        private String keyword; // stores the passed keyword we're filtering by
         private String following = "[\"\"]"; // stores the string containing all the users the participant follows, initialize it to "blank" array by default
         private String participant; // stores the participant's username
         private Double currentlat = 53.5141543;
@@ -500,6 +509,10 @@ public class ElasticSearchController {
             if(FeelTripApplication.getFilterController().isFriendsonlyfilter()) {
                 friendsonlyfilter = true;
             }
+            if(!FeelTripApplication.getFilterController().getKeywordfilter().isEmpty()) {
+                keywordfilter = true;
+                this.keyword =  FeelTripApplication.getFilterController().getKeywordfilter();
+            }
         }
 
         @Override
@@ -508,9 +521,6 @@ public class ElasticSearchController {
                 android.os.Debug.waitForDebugger();
             verifySettings();
 
-            if(search_parameters.length != 0) {
-                keywordfilter = true;
-            }
             ArrayList<Mood> moods = new ArrayList<>();
             String query; // things are going to get complicated very fast now, booleans are here to understand whether a filter is being applied or not
             query = "{" +
@@ -527,11 +537,11 @@ public class ElasticSearchController {
             }
 
             if(emotionfilter) {
-                query += "\"must\" : { \"term\" : { \"emotionalState\" : \"" + emotion + "\" }},";
+                query += "\"must\" : { \"match\" : { \"emotionalState\" : \"" + emotion + "\" }},";
             }
 
             if(keywordfilter) {
-                query += "\"must\" : { \"term\" : { \"description\" : \"" + search_parameters[0] + "\" }},";
+                query += "\"must\" : { \"match\" : { \"description\" : \"" + keyword + "\" }},";
             }
 
             if(mainmode) {

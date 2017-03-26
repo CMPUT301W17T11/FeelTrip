@@ -1,35 +1,46 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:padding="10dp">
+    android:padding="10dp"
+    android:background="@android:drawable/dialog_holo_light_frame">
 
-    <TextView
-        android:id="@+id/userName"
+
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:text="Marshmallow"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:textColor="@android:color/black" />
+        android:orientation="horizontal">
+        <TextView
+            android:id="@+id/userName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Name"
+            android:textSize="20sp"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textColor="@android:color/black" />
+        <TextView
+            android:id="@+id/socialSituation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Alone"
+            android:textAppearance="?android:attr/textAppearanceButton"
+            android:textColor="@android:color/black"
+            android:layout_marginStart="10sp"
+            android:textSize="10sp"
+            android:textStyle="bold" />
 
+
+    </LinearLayout>
 
     <TextView
         android:id="@+id/date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/userName"
-        android:layout_marginTop="5dp"
-        android:text="Android 6.0"
-        android:textColor="@android:color/black" />
-
-    <ImageView
-        android:id="@+id/image"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_centerVertical="true" />
+        android:textStyle="italic"
+        android:layout_marginTop="25dp"
+        android:text="Fri Mar 24 22:26:55 MDT 2017"
+        android:textColor="@color/gray" />
 
 
     <LinearLayout
@@ -41,36 +52,33 @@
             android:id="@+id/description"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="API: "
-            android:textColor="@android:color/black"
-            android:textStyle="bold" />
+            android:text="My dog and I had a good walk today"
+            android:textColor="@android:color/black" />
 
         <TextView
             android:id="@+id/append"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="23"
+            android:text="-Feeling Happy"
             android:textAppearance="?android:attr/textAppearanceButton"
             android:textColor="@android:color/black"
             android:textStyle="bold|italic" />
-
         <ImageView
-            android:id="@+id/emoji"
+            android:id="@+id/emojiImage"
+            android:adjustViewBounds="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true" />
-
-        <TextView
-            android:id="@+id/socialSituation"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="23"
-            android:textAppearance="?android:attr/textAppearanceButton"
-            android:textColor="@android:color/black"
-            android:textStyle="bold" />
+            android:maxWidth="30dp"
+            android:maxHeight="30dp"
+            android:layout_marginStart="15sp"
+            android:scaleType="fitCenter"
+            />
 
     </LinearLayout>
-
-</RelativeLayout>
+    <ImageView
+        android:id="@+id/image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:adjustViewBounds="true"
+        android:scaleType="fitCenter"/>
+</LinearLayout>

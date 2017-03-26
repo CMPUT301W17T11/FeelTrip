@@ -1,10 +1,14 @@
 package com.example.henzoshimada.feeltrip;
 
 // Removed unused imports
+
 import android.text.Html;
 import android.text.TextUtils;
 
 import org.w3c.dom.Text;
+
+import android.graphics.Bitmap;
+
 
 import java.util.Arrays;
 import java.util.Date;
@@ -60,6 +64,7 @@ public class Mood {
     4 ----> isPrivateChanged;
     5 ----> imageChanged;
     6 ----> locationChanged;
+    7 ----> emoji image
     */
 
     private static boolean[] stateVector;
@@ -333,4 +338,16 @@ public class Mood {
             setStateByIndex(6);
         }
     }
+
+    public int getEmoji() {
+        return emoji;
+    }
+
+    public void setEmoji(int emoji) {
+        if(this.emoji != emoji) {
+            this.emoji = emoji;
+            setStateByIndex(7);
+        }
+    }
+
 }
