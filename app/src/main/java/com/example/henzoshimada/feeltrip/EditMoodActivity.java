@@ -591,6 +591,9 @@ public class EditMoodActivity extends AppCompatActivity {
             emojiLayout.setTag(i); // This is crucial for grabbing the "index" of the clicked emoji later
 
             emojiButton = new ImageButton(getApplicationContext());
+            emojiButton.setAdjustViewBounds(true);
+            emojiButton.setMaxHeight(150);
+            emojiButton.setMaxWidth(150);
             emojiButton.setBackgroundResource(R.color.white);
             emojiButton.setImageResource(getApplicationContext().getResources().getIdentifier("emoji" + i, "drawable", getApplicationContext().getPackageName()));
             emojiButton.setPadding(0,0,0,0);
