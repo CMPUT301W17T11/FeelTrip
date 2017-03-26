@@ -2,6 +2,7 @@ package com.example.henzoshimada.feeltrip;
 
 
 import android.os.AsyncTask;
+import android.util.Log;
 
 /**
  * Created by Esus2 on 2017-03-09.
@@ -58,5 +59,38 @@ public class UpdateQueueController {
 
     public void runUpdate(){
 
+        if (updateQueue.isEmpty()){
+            return;
+        }
+        int i;
+        Mood mood;
+        Log.d("debug size is", ""+getSize());
+        for (i = 0; i < getSize(); i++){
+            Log.d("debug i is", ""+i);
+            mood = popMood();
+
+
+            // this is a new mood
+            if (mood.getId().equals("-1")){
+                Log.d("debug", "entered1");
+                ElasticSearchController.AddMoodTask addMoodTask = new ElasticSearchController.AddMoodTask();
+                addMoodTask.execute(mood);
+            }
+            else{
+                // this mood needs to be deleted
+                if (mood.getDelState()){
+                    Log.d("debug", "entered2");
+                    ElasticSearchController.DeleteMoodTask deleteMoodTask = new ElasticSearchController.DeleteMoodTask();
+                    deleteMoodTask.execute(mood);
+                }
+
+                // this mood needs to be edited
+                else{
+                    Log.d("debug", "entered3");
+                    ElasticSearchController.EditMoodTask editMoodTask = new ElasticSearchController.EditMoodTask();
+                    editMoodTask.execute(mood);
+                }
+            }
+        }
     }
 }

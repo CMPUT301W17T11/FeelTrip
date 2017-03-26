@@ -158,6 +158,7 @@ public class ElasticSearchController {
                         Log.i("Error", "The application failed to build and send the moods");
                         UpdateQueueController updateQueueController = FeelTripApplication.getUpdateQueueController();
                         updateQueueController.addMood(mood);
+                        return null;
                     }
 
                     mood.resetState();

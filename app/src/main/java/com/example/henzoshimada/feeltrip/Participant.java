@@ -14,6 +14,8 @@ public class Participant {
     private ArrayList<FollowRequest> followRequest;
     private ArrayList<String> following;
 
+
+    // store most recent location
     private double longitude;
     private double latitude;
 

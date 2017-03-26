@@ -1,6 +1,8 @@
 package com.example.henzoshimada.feeltrip;
 
+import android.content.BroadcastReceiver;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -18,6 +20,15 @@ public class loginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        // set up a NetworkStateListener
+        // This listener remains valid during the lifetime of this activity
+        NetworkStateListener networkStateListener = new NetworkStateListener();
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction("android.net.conn.CONNECTIVITY_CHANGE");
+        intentFilter.addAction("android.net.wifi.WIFI_STATE_CHANGED");
+
+        registerReceiver(networkStateListener, intentFilter);
     }
     public void checkUser(View v){
         EditText userField = (EditText) this.findViewById(R.id.user_text);
