@@ -50,10 +50,10 @@ public class mapFragment extends Fragment implements
         OnMapReadyCallback,
         GoogleMap.OnMarkerClickListener,
         GoogleMap.OnMapClickListener{
-       // ActivityCompat.OnRequestPermissionsResultCallback{
+    // ActivityCompat.OnRequestPermissionsResultCallback{
 
     MapView mMapView;
-    //private GoogleMap googleMap;
+
 
     /**
      * Request code for location permission request.
@@ -73,6 +73,7 @@ public class mapFragment extends Fragment implements
 
     private GoogleMap mMap;
 
+
     private GoogleApiClient mGoogleApiClient;
     private Location mLastKnownLocation;
 
@@ -90,13 +91,9 @@ public class mapFragment extends Fragment implements
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_map, container, false);
 
-        if(!FeelTripApplication.getFrag().equals(frag)) {
-            FeelTripApplication.setFrag(frag); //TODO: Put this wherever we initialize the fragment, I think here works fine.
-        }
-
         mMapView = (MapView) rootView.findViewById(R.id.mapView);
         mMapView.onCreate(savedInstanceState);
-        verifyLocationPermissions(getActivity());
+        //verifyLocationPermissions(getActivity());
         View locationButton = ((View) mMapView.findViewById(1).getParent()).findViewById(2);
 
         // and next place it, for exemple, on bottom right (as Google Maps app)
@@ -127,6 +124,13 @@ public class mapFragment extends Fragment implements
         //setContentView(R.layout.fragment_map);
 
         //testing get array of moods
+
+        if(!FeelTripApplication.getFrag().equals(frag)) {
+            FeelTripApplication.setFrag(frag); //TODO: Put this wherever we initialize the fragment, I think here works fine.
+        }
+        testCreateMoodArray();
+
+        /*
         try {
             Log.d("mapTag", "before");
             testCreateMoodArray();
@@ -136,7 +140,7 @@ public class mapFragment extends Fragment implements
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-
+*/
         // Build the Play services client for use by the Fused Location Provider and the Places API.
         // Use the addApi() method to request the Google Places API and the Fused Location Provider.
         mGoogleApiClient = new GoogleApiClient.Builder(getActivity())
@@ -145,16 +149,13 @@ public class mapFragment extends Fragment implements
                 .addApi(Places.PLACE_DETECTION_API)
                 .build();
         mGoogleApiClient.connect();
-/*
-        SupportMapFragment mapFragment =
-                (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.fragent_frame);
-        mapFragment.getMapAsync(this);
-        */
+
     }
 
     //called when map is ready
     @Override
     public void onMapReady(GoogleMap map) {
+        Log.d("markerTag","on map ready");
         mMap = map;
 
         // Set listener for marker click event.  See the bottom of this class for its behavior.
@@ -190,15 +191,17 @@ public class mapFragment extends Fragment implements
         setMoodMarker();
     }
 
-    private void setMoodMarker(){
+    public void setMoodMarker(){
         //fpr single testing
+        /*
         if (mMap != null) {
             //Log.d("mapTag","set marker");
             Marker marker = mMap.addMarker(new MarkerOptions()
                     .position(new LatLng(53.528033, -113.525355))
                     .title("This is a title")
                     .snippet("0"));
-        }
+        }else{Log.d("markerTag","mmap null");}
+        */
 
         Log.d("mapTag","set marker");
         if (mMap != null) {
@@ -211,11 +214,13 @@ public class mapFragment extends Fragment implements
                 //get longitude
                 //get latitude
                 marker = mMap.addMarker(new MarkerOptions()
-                        .position(new LatLng(53.528033+i, -113.525355+i))
+                        //.position(new LatLng(53.528033+i, -113.525355+i))
+                        .position(new LatLng(mood.getLatitude(),mood.getLongitude()))
                         .snippet(String.valueOf(i)));
                 //Log.d("mapTag", "i= "+String.valueOf(i));
             }
         }
+
     }
 
     //https://developers.google.com/android/reference/com/google/android/gms/maps/GoogleMap.OnMyLocationButtonClickListener
@@ -293,11 +298,15 @@ public class mapFragment extends Fragment implements
         Log.d("mapTag","on resume fragments");
     }
 */
-    private void testCreateMoodArray() throws ExecutionException, InterruptedException {
-        ElasticSearchController.GetMoodTask getMoodTask = new ElasticSearchController.GetMoodTask();
-        getMoodTask.execute("user");
-        moodArrayList.addAll(getMoodTask.get());
+//ElasticSearchController.GetMoodTask getMoodTask = new ElasticSearchController.GetMoodTask();
+//getMoodTask.execute("user");
+//moodArrayList.addAll(getMoodTask.get());
 
+
+    private void testCreateMoodArray() {
+        FeelTripApplication.loadFromElasticSearch();
+        moodArrayList = FeelTripApplication.getMoodArrayList();
+        Log.d("mapTag","test size: "+moodArrayList.size());
     }
 
     @Override
@@ -346,5 +355,7 @@ public class mapFragment extends Fragment implements
             }
         }
     }
+
+
 
 }
