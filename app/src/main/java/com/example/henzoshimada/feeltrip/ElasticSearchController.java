@@ -471,6 +471,41 @@ public class ElasticSearchController {
         }
     }
 
+    public static class EditRequestTask extends AsyncTask<FollowRequest, Void, Void>{
+
+        @Override
+        protected Void doInBackground(FollowRequest...followRequests){
+            if(android.os.Debug.isDebuggerConnected())
+                android.os.Debug.waitForDebugger();
+            verifySettings();
+
+            for (FollowRequest followRequest : followRequests){
+
+                String query = "{\"doc\" : {"+
+                        "\"accepted\" : \"true\"" +
+                        "}}";
+
+
+                Log.d("query is :", query);
+
+                Update update = new Update
+                        .Builder(query)
+                        .index(groupIndex)
+                        .type(typeRequest)
+                        .id(followRequest.getId())
+                        .build();
+                try {
+                    client.execute(update);
+                } catch (IOException e) {
+                    Log.i("Error", "The application failed to build and send request");
+                }
+            }
+
+
+            return null;
+        }
+    }
+
 
     public static class DeleteRequestTask extends AsyncTask<FollowRequest, Void, Void> {
 
