@@ -214,6 +214,11 @@ public class EditMoodActivity extends AppCompatActivity {
             } catch (Exception e) {
                 Log.d("tag", "No emotionalstate found in editmood");
             }
+            try {
+                emojiID = editmood.getEmoji();
+            } catch (Exception e) {
+                Log.d("tag", "No emoji found in editmood");
+            }
             if (!editmood.getPrivate()) {
                 TextView modePostText = (TextView) findViewById(R.id.modePost);
                 modePostText.setText(R.string.mode_public);
