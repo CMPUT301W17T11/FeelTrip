@@ -11,7 +11,9 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -150,6 +152,27 @@ public class MainScreen extends AppCompatActivity {
             }
         });
 
+        ToggleButton toggleMostRecent = (ToggleButton) findViewById(R.id.toggleMostRecent);
+        toggleMostRecent.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+
+            @Override
+            public void onCheckedChanged(CompoundButton arg0, boolean isChecked) {
+                //Toast.makeText(getApplicationContext(),"Toggled filter for friends!",Toast.LENGTH_SHORT).show();
+                FeelTripApplication.getFilterController().setMostrecentfilter(isChecked);
+                FeelTripApplication.loadFromElasticSearch();
+                FeelTripApplication.getMoodAdapter(getBaseContext()).notifyDataSetChanged();
+            }
+        });
+
+        ImageButton searchButton = (ImageButton) findViewById(R.id.imageButton);
+        searchButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                searchKeyword(v);
+            }
+        });
+
+
     }
 
     @Override
@@ -168,12 +191,9 @@ public class MainScreen extends AppCompatActivity {
 
     public void searchKeyword(View v){
         EditText string_keyword = (EditText) findViewById(R.id.keyword);
-        try {
-            Toast.makeText(getApplicationContext(), string_keyword.getText().toString(), Toast.LENGTH_SHORT).show();
-        }
-        catch(Exception e){
-            Toast.makeText(getApplicationContext(), "No string entered into search!", Toast.LENGTH_SHORT).show();
-        }
+        FilterController.setKeywordfilter(string_keyword.getText().toString());
+        FeelTripApplication.loadFromElasticSearch();
+        FeelTripApplication.getMoodAdapter(getBaseContext()).notifyDataSetChanged();
     }
 
 
@@ -182,7 +202,7 @@ public class MainScreen extends AppCompatActivity {
         emotionalStateSpinner = (Spinner) findViewById(R.id.filterMood);
         List<String> emotionalStateList = new ArrayList<>();
         emotionalStateList.add("None");
-        emotionalStateList.add("Angry " + getEmojiByUnicode(emojiUnicode("Angry")));
+        emotionalStateList.add("Angry " + getEmojiByUnicode(emojiUnicode("Angry"))); // TODO: Replace these unicode emojis with image ones.
         emotionalStateList.add("Confused " + getEmojiByUnicode(emojiUnicode("Confused")));
         emotionalStateList.add("Disgusted " + getEmojiByUnicode(emojiUnicode("Disgusted")));
         emotionalStateList.add("Fearful " + getEmojiByUnicode(emojiUnicode("Fearful")));
@@ -197,6 +217,68 @@ public class MainScreen extends AppCompatActivity {
                 android.R.layout.simple_spinner_item, emotionalStateList);
         emotionalStateAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         emotionalStateSpinner.setAdapter(emotionalStateAdapter);
+        emotionalStateSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
+        {
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
+            {
+                String selectedItem = parent.getItemAtPosition(position).toString();
+                switch(position) {
+                    case 0:
+                        FilterController.setEmotionfilter("");
+                        FeelTripApplication.loadFromElasticSearch();
+                        FeelTripApplication.getMoodAdapter(getBaseContext()).notifyDataSetChanged();
+                        break;
+                    case 1:
+                        FilterController.setEmotionfilter("Angry");
+                        FeelTripApplication.loadFromElasticSearch();
+                        FeelTripApplication.getMoodAdapter(getBaseContext()).notifyDataSetChanged();
+                        break;
+                    case 2:
+                        FilterController.setEmotionfilter("Confused");
+                        FeelTripApplication.loadFromElasticSearch();
+                        FeelTripApplication.getMoodAdapter(getBaseContext()).notifyDataSetChanged();
+                        break;
+                    case 3:
+                        FilterController.setEmotionfilter("Disgusted");
+                        FeelTripApplication.loadFromElasticSearch();
+                        FeelTripApplication.getMoodAdapter(getBaseContext()).notifyDataSetChanged();
+                        break;
+                    case 4:
+                        FilterController.setEmotionfilter("Fearful");
+                        FeelTripApplication.loadFromElasticSearch();
+                        FeelTripApplication.getMoodAdapter(getBaseContext()).notifyDataSetChanged();
+                        break;
+                    case 5:
+                        FilterController.setEmotionfilter("Happy");
+                        FeelTripApplication.loadFromElasticSearch();
+                        FeelTripApplication.getMoodAdapter(getBaseContext()).notifyDataSetChanged();
+                        break;
+                    case 6:
+                        FilterController.setEmotionfilter("Sad");
+                        FeelTripApplication.loadFromElasticSearch();
+                        FeelTripApplication.getMoodAdapter(getBaseContext()).notifyDataSetChanged();
+                        break;
+                    case 7:
+                        FilterController.setEmotionfilter("Shameful");
+                        FeelTripApplication.loadFromElasticSearch();
+                        FeelTripApplication.getMoodAdapter(getBaseContext()).notifyDataSetChanged();
+                        break;
+                    case 8:
+                        FilterController.setEmotionfilter("Cool");
+                        FeelTripApplication.loadFromElasticSearch();
+                        FeelTripApplication.getMoodAdapter(getBaseContext()).notifyDataSetChanged();
+                        break;
+                    default:
+                        FilterController.setEmotionfilter("");
+                        FeelTripApplication.loadFromElasticSearch();
+                        FeelTripApplication.getMoodAdapter(getBaseContext()).notifyDataSetChanged();
+                        break;
+                }
+            } // to close the onItemSelected
+            public void onNothingSelected(AdapterView<?> parent)
+            {
+            }
+        });
     }
 
         /*

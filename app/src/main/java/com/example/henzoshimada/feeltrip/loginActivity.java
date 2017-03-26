@@ -18,7 +18,7 @@ public class loginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
     }
-    public void checkUser(View v){
+    public void checkUser(View v){ // TODO: Check and fix cases where pass or username contains special chars.
         EditText userField = (EditText) this.findViewById(R.id.user_text);
         EditText passField = (EditText) this.findViewById(R.id.pass_text);
         ArrayList<Participant> participants = new ArrayList<>();
