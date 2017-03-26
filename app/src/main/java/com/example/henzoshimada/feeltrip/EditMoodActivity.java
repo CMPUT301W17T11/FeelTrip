@@ -185,14 +185,15 @@ public class EditMoodActivity extends AppCompatActivity {
             }
             try {
                 latitude = editmood.getLatitude();
-                TextView modeLocationText = (TextView) findViewById(R.id.modeLocation);
-                modeLocationText.setText("On");
-                modeLocationText.setTextColor(getResources().getColor(R.color.green));
             } catch (Exception e) {
                 Log.d("tag", "No latitude found in editmood");
             }
             try {
                 longitude = editmood.getLongitude();
+                TextView modeLocationText = (TextView) findViewById(R.id.modeLocation);
+                modeLocationText.setText("On");
+                modeLocationText.setTextColor(getResources().getColor(R.color.green));
+                locationOn = true;
             } catch (Exception e) {
                 Log.d("tag", "No longitude found in editmood");
             }
@@ -223,6 +224,7 @@ public class EditMoodActivity extends AppCompatActivity {
                 TextView modePostText = (TextView) findViewById(R.id.modePost);
                 modePostText.setText(R.string.mode_public);
                 modePostText.setTextColor(getResources().getColor(R.color.green));
+                showPublicOn = true;
             }
             socialSituationSpinner.setSelection(getIndex(socialSituationSpinner, editmood.getSocialSit()));
             editflag = true;
@@ -429,6 +431,9 @@ public class EditMoodActivity extends AppCompatActivity {
 
                 Bitmap photo = (Bitmap) intent.getExtras().get("data");
 
+                // Clear the old photoStream
+                photoStream.reset();
+
                 // Compress the photo if needed
                 byte[] compressedPhoto = compress(photo);
 
@@ -443,9 +448,10 @@ public class EditMoodActivity extends AppCompatActivity {
 
                 // Set the image here
                 ImageView imageView = (ImageView) findViewById(R.id.imgView);
-                imageView.setImageBitmap(photo);
+                imageView.setImageBitmap(decodedPhoto);
                 modePicture.setText(R.string.default_photo_on);
                 modePicture.setTextColor(getResources().getColor(R.color.green));
+
             } else if (resultCode == RESULT_CANCELED)
                 Toast.makeText(getApplicationContext(), "Photo Cancelled", Toast.LENGTH_SHORT).show();
             else
@@ -455,7 +461,7 @@ public class EditMoodActivity extends AppCompatActivity {
 
 
     //https://www.youtube.com/watch?v=8mFW6dA5xDE
-    DatePickerDialog.OnDateSetListener datePickerDialogListener = new DatePickerDialog.OnDateSetListener() {
+    DatePickerDialog.OnDateSetListener datePickerDialogListener = new DatePickerDialog.OnDateSetListener() { //TODO: Fix the Date picker
         @Override
         public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
             if (!editflag) {
@@ -641,7 +647,6 @@ public class EditMoodActivity extends AppCompatActivity {
     }
 
     private void selectEmotion(int position) {
-        Toast.makeText(getApplicationContext(),"Clicked " + position + "!",Toast.LENGTH_SHORT).show();
         emojiID = position;
         switch(position % NUM_EMOTIONS) {
             case 1:
