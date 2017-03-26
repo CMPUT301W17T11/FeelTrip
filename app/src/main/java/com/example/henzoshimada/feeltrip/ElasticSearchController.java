@@ -187,7 +187,13 @@ public class ElasticSearchController {
                                 if (notDone != 0) {
                                     query += (",");
                                 }
-                                break; //TODO: allow for the emoji field to be updated, can only do after finishing the UI
+                                break;
+                            case 7:
+                                query += ("\"emoji\" : \"" + mood.getEmoji() + "\"");
+                                if (notDone != 0) {
+                                    query += (",");
+                                }
+                                break;
                             default:
                                 break;
                         }

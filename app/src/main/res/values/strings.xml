@@ -47,6 +47,15 @@
     <string name="default_photo_on">Yes</string>
     <string name="mode_private">Private</string>
     <string name="mode_public">Public</string>
+    <string name="emotion_angry">Angry</string>
+    <string name="emotion_confused">Confused</string>
+    <string name="emotion_disgusted">Disgusted</string>
+    <string name="emotion_fearful">Fearful</string>
+    <string name="emotion_happy">Happy</string>
+    <string name="emotion_sad">Sad</string>
+    <string name="emotion_shameful">Shameful</string>
+    <string name="emotion_cool">Cool</string>
+
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

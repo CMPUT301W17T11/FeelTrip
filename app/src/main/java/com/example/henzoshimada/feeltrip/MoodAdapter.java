@@ -1,8 +1,11 @@
 package com.example.henzoshimada.feeltrip;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
 import android.text.Html;
 import android.util.Base64;
 import android.util.Log;
@@ -80,6 +83,7 @@ public class MoodAdapter extends ArrayAdapter<Mood> {
         lastPosition = position;
 */
         Log.d("imageTag","new array list");
+        assert mood != null;
         viewHolder.userName.setText(mood.getUsername());
         viewHolder.date.setText(mood.getDate().toString());
         viewHolder.description.setText(Html.fromHtml(mood.getDescription())); //TODO: This is depreciated, maybe replace?
@@ -88,31 +92,12 @@ public class MoodAdapter extends ArrayAdapter<Mood> {
 
         //#######################################################
         Log.i("Mytag","Emoooooo: "+mood.getEmotionalState());
-        if (mood.getEmotionalState() != null) {
-            if (mood.getEmotionalState().equals("Happy")) {
-                viewHolder.emojiImage.setImageResource(R.drawable.happy);
-            }
-            if (mood.getEmotionalState().equals("Angry")) {
-                viewHolder.emojiImage.setImageResource(R.drawable.angry);
-            }
-            if (mood.getEmotionalState().equals("Confused")) {
-                viewHolder.emojiImage.setImageResource(R.drawable.confused);
-            }
-            if (mood.getEmotionalState().equals("Disgust")) {
-                viewHolder.emojiImage.setImageResource(R.drawable.disgusted);
-            }
-            if (mood.getEmotionalState().equals("Fearful")) {
-                viewHolder.emojiImage.setImageResource(R.drawable.fearful);
-            }
-            if (mood.getEmotionalState().equals("Sad")) {
-                viewHolder.emojiImage.setImageResource(R.drawable.sad);
-            }
-            if (mood.getEmotionalState().equals("Shameful")) {
-                viewHolder.emojiImage.setImageResource(R.drawable.shameful);
-            }
-            if (mood.getEmotionalState().equals("Cool")) {
-                viewHolder.emojiImage.setImageResource(R.drawable.cool);
-            }
+        int emojiID = getContext().getApplicationContext().getResources().getIdentifier("emoji" + String.valueOf(mood.getEmoji()),"drawable",getContext().getApplicationContext().getPackageName());
+        if(emojiID != 0) {
+            viewHolder.emojiImage.setImageResource(emojiID);
+        }
+        else { // This field can only be accessed if something goes wrong, or if someone alters the main database. It's mainly a fallback safety.
+            viewHolder.emojiImage.setImageResource(getContext().getApplicationContext().getResources().getIdentifier("cog","drawable",getContext().getApplicationContext().getPackageName())); //TODO: Replace cog with the proper file
         }
         //######################################################
         String encodedImageString = mood.getImage();

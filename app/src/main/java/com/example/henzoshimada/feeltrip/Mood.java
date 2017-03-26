@@ -338,4 +338,16 @@ public class Mood {
             setStateByIndex(6);
         }
     }
+
+    public int getEmoji() {
+        return emoji;
+    }
+
+    public void setEmoji(int emoji) {
+        if(this.emoji != emoji) {
+            this.emoji = emoji;
+            setStateByIndex(7);
+        }
+    }
+
 }
