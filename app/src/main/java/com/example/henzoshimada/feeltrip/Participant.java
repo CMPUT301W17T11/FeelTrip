@@ -14,6 +14,9 @@ public class Participant {
     private ArrayList<FollowRequest> followRequest;
     private ArrayList<String> following;
 
+    private double longitude;
+    private double latitude;
+
     @JestId
     private String id;
 
@@ -92,6 +95,22 @@ public class Participant {
 
     public ArrayList<String> getFollowing() {
         return following;
+    }
+
+    public double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
+    }
+
+    public double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
     }
 
     public String getId() {
