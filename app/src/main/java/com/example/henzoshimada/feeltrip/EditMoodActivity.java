@@ -278,7 +278,7 @@ public class EditMoodActivity extends AppCompatActivity {
     public void datePick(Context context) {
         //selectDate();
         Log.d("Mytag", "Went into date");
-        new DatePickerDialog(context,0,datePickerDialogListener, dateTime.get(Calendar.YEAR),
+        new DatePickerDialog(context,AlertDialog.THEME_DEVICE_DEFAULT_LIGHT,datePickerDialogListener, dateTime.get(Calendar.YEAR),
                 dateTime.get(Calendar.MONTH), dateTime.get(Calendar.DAY_OF_MONTH)).show();
     }
 
