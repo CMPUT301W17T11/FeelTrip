@@ -118,7 +118,7 @@ public class MainScreen extends AppCompatActivity {
 //            i.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
 //            finish();
 //            startActivity(i);
-            onPause(); // Refreshes the current activity without calling onCreate
+            //onPause(); // Refreshes the current activity without calling onCreate
             onResume();
             return true;
         }
