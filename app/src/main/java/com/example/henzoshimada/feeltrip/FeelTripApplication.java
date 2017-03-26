@@ -6,6 +6,8 @@ import android.content.Context;
 import android.util.Log;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 /**
@@ -18,6 +20,26 @@ import java.util.concurrent.ExecutionException;
     to the queue.
      */
 public class FeelTripApplication extends Application {
+
+    private static final List<String> allEmotions = Arrays.asList( // MODIFY THIS IF YOU WISH TO ADD/DELETE EMOTIONS
+            "Zero", // THIS IS HERE SO WE CAN REFERENCE THE EMOTIONS WITHOUT WORRYING ABOUT ZERO INDEXING
+            "Angry",
+            "Confused",
+            "Disgusted",
+            "Fearful",
+            "Happy",
+            "Sad",
+            "Shameful",
+            "Cool");
+
+    public static int getNumEmotions() {
+        return allEmotions.size() - 1; // MINUS ONE TO COMPENSATE FOR THE ZERO INDEX ELEMENT
+    }
+
+    public static String getEmotionalState(int index){
+        return allEmotions.get(index);
+    }
+
     // Singleton
     private static UpdateQueue updateQueue = null;
 

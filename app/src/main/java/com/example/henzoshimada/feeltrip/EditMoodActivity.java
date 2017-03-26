@@ -51,7 +51,7 @@ import java.util.List;
 public class EditMoodActivity extends AppCompatActivity {
 
     public static final int MAX_PHOTO_SIZE = 65536;
-    private static final int NUM_EMOTIONS = 8;
+    private static int NUM_EMOTIONS = FeelTripApplication.getNumEmotions();
     private EditText inputMoodDescription;
     private LinearLayout emojiList;
     private ImageButton emojiButton;
@@ -605,35 +605,11 @@ public class EditMoodActivity extends AppCompatActivity {
 
             int emotionID = i % NUM_EMOTIONS;
             emojiTextview = new TextView(getApplicationContext());
-            switch (emotionID) {
-                case 1:
-                    emojiTextview.setText(R.string.emotion_angry);
-                    break;
-                case 2:
-                    emojiTextview.setText(R.string.emotion_confused);
-                    break;
-                case 3:
-                    emojiTextview.setText(R.string.emotion_disgusted);
-                    break;
-                case 4:
-                    emojiTextview.setText(R.string.emotion_fearful);
-                    break;
-                case 5:
-                    emojiTextview.setText(R.string.emotion_happy);
-                    break;
-                case 6:
-                    emojiTextview.setText(R.string.emotion_sad);
-                    break;
-                case 7:
-                    emojiTextview.setText(R.string.emotion_shameful);
-                    break;
-                case 0:
-                    emojiTextview.setText(R.string.emotion_cool);
-                    break;
-                default:
-                    break;
+            if(emotionID == 0) {
+                emotionID = NUM_EMOTIONS;
             }
-            // TODO: Format textview accordingly
+            emojiTextview.setText(FeelTripApplication.getEmotionalState(emotionID));
+
             emojiTextview.setTextSize(15);
             emojiTextview.setTextColor(Color.GRAY);
             emojiTextview.setGravity(Gravity.CENTER);
@@ -648,34 +624,11 @@ public class EditMoodActivity extends AppCompatActivity {
 
     private void selectEmotion(int position) {
         emojiID = position;
-        switch(position % NUM_EMOTIONS) {
-            case 1:
-                emotionalState = "Angry";
-                break;
-            case 2:
-                emotionalState = "Confused";
-                break;
-            case 3:
-                emotionalState = "Disgusted";
-                break;
-            case 4:
-                emotionalState = "Fearful";
-                break;
-            case 5:
-                emotionalState = "Happy";
-                break;
-            case 6:
-                emotionalState = "Sad";
-                break;
-            case 7:
-                emotionalState = "Shameful";
-                break;
-            case 0:
-                emotionalState = "Cool";
-                break;
-            default:
-                break;
+        int emotionposition = position % NUM_EMOTIONS;
+        if(emotionposition == 0) {
+            emotionposition = NUM_EMOTIONS;
         }
+        emotionalState = FeelTripApplication.getEmotionalState(emotionposition);
         TextView emotionString = (TextView)findViewById(R.id.emotionString);
         emotionString.setText(emotionalState);
         emotionString.setTextColor(getResources().getColor(R.color.green));

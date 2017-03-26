@@ -21,6 +21,7 @@ import android.widget.Spinner;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
@@ -141,6 +142,11 @@ public class MainScreen extends AppCompatActivity {
         });
 
         ToggleButton toggleFriends = (ToggleButton) findViewById(R.id.toggleFriends);
+        if(FeelTripApplication.getFrag() == "profile") {
+            toggleFriends.setVisibility(View.GONE);
+            TextView textView = (TextView) findViewById(R.id.textView5);
+            textView.setVisibility(View.GONE);
+        }
         toggleFriends.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 
             @Override
@@ -198,7 +204,7 @@ public class MainScreen extends AppCompatActivity {
 
 
 
-    private void addItemsOnEmotionalStateSpinner(){
+    private void addItemsOnEmotionalStateSpinner(){ //TODO: Redo the way this is called so the feelings can be dynamically loaded
         emotionalStateSpinner = (Spinner) findViewById(R.id.filterMood);
         List<String> emotionalStateList = new ArrayList<>();
         emotionalStateList.add("None");
@@ -222,58 +228,15 @@ public class MainScreen extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
             {
                 String selectedItem = parent.getItemAtPosition(position).toString();
-                switch(position) {
-                    case 0:
-                        FilterController.setEmotionfilter("");
-                        FeelTripApplication.loadFromElasticSearch();
-                        FeelTripApplication.getMoodAdapter(getBaseContext()).notifyDataSetChanged();
-                        break;
-                    case 1:
-                        FilterController.setEmotionfilter("Angry");
-                        FeelTripApplication.loadFromElasticSearch();
-                        FeelTripApplication.getMoodAdapter(getBaseContext()).notifyDataSetChanged();
-                        break;
-                    case 2:
-                        FilterController.setEmotionfilter("Confused");
-                        FeelTripApplication.loadFromElasticSearch();
-                        FeelTripApplication.getMoodAdapter(getBaseContext()).notifyDataSetChanged();
-                        break;
-                    case 3:
-                        FilterController.setEmotionfilter("Disgusted");
-                        FeelTripApplication.loadFromElasticSearch();
-                        FeelTripApplication.getMoodAdapter(getBaseContext()).notifyDataSetChanged();
-                        break;
-                    case 4:
-                        FilterController.setEmotionfilter("Fearful");
-                        FeelTripApplication.loadFromElasticSearch();
-                        FeelTripApplication.getMoodAdapter(getBaseContext()).notifyDataSetChanged();
-                        break;
-                    case 5:
-                        FilterController.setEmotionfilter("Happy");
-                        FeelTripApplication.loadFromElasticSearch();
-                        FeelTripApplication.getMoodAdapter(getBaseContext()).notifyDataSetChanged();
-                        break;
-                    case 6:
-                        FilterController.setEmotionfilter("Sad");
-                        FeelTripApplication.loadFromElasticSearch();
-                        FeelTripApplication.getMoodAdapter(getBaseContext()).notifyDataSetChanged();
-                        break;
-                    case 7:
-                        FilterController.setEmotionfilter("Shameful");
-                        FeelTripApplication.loadFromElasticSearch();
-                        FeelTripApplication.getMoodAdapter(getBaseContext()).notifyDataSetChanged();
-                        break;
-                    case 8:
-                        FilterController.setEmotionfilter("Cool");
-                        FeelTripApplication.loadFromElasticSearch();
-                        FeelTripApplication.getMoodAdapter(getBaseContext()).notifyDataSetChanged();
-                        break;
-                    default:
-                        FilterController.setEmotionfilter("");
-                        FeelTripApplication.loadFromElasticSearch();
-                        FeelTripApplication.getMoodAdapter(getBaseContext()).notifyDataSetChanged();
-                        break;
+                if(position != 0) {
+                    FilterController.setEmotionfilter(FeelTripApplication.getEmotionalState(position));
                 }
+                else {
+                    FilterController.setEmotionfilter("");
+                }
+                FeelTripApplication.loadFromElasticSearch();
+                FeelTripApplication.getMoodAdapter(getBaseContext()).notifyDataSetChanged();
+
             } // to close the onItemSelected
             public void onNothingSelected(AdapterView<?> parent)
             {
