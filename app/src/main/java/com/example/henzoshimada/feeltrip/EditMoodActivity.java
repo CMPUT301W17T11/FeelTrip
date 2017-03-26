@@ -3,6 +3,7 @@ package com.example.henzoshimada.feeltrip;
 
 import android.*;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -119,7 +120,7 @@ public class EditMoodActivity extends AppCompatActivity {
                     return true;
                 case R.id.date_bottom_button:
                     Log.d("Mytag", "Tapped on date");
-                    datePick();
+                    datePick(findViewById(R.id.date_bottom_button).getContext());
                     return true;
                 case R.id.photo_bottom_button:
                     Log.d("Mytag", "Tapped on photo");
@@ -274,10 +275,10 @@ public class EditMoodActivity extends AppCompatActivity {
         }
     }
 
-    public void datePick() {
+    public void datePick(Context context) {
         //selectDate();
         Log.d("Mytag", "Went into date");
-        new DatePickerDialog(getAppContext(), datePickerDialogListener, dateTime.get(Calendar.YEAR),
+        new DatePickerDialog(context,0,datePickerDialogListener, dateTime.get(Calendar.YEAR),
                 dateTime.get(Calendar.MONTH), dateTime.get(Calendar.DAY_OF_MONTH)).show();
     }
 
