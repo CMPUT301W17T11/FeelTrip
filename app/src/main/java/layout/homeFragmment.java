@@ -101,7 +101,7 @@ public class homeFragmment extends Fragment{
         if(!FeelTripApplication.getFrag().equals(frag)) {
             FeelTripApplication.setFrag(frag);
         }
-        FeelTripApplication.loadFromElasticSearch();
+//        FeelTripApplication.loadFromElasticSearch();
         adapter = FeelTripApplication.getMoodAdapter(getActivity());
 
         //adapter = new ArrayAdapter<Mood>(getActivity(), R.layout.list_item, moodArrayList); //view,dataArray

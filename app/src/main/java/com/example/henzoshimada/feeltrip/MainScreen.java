@@ -85,32 +85,42 @@ public class MainScreen extends AppCompatActivity {
             switch (item.getItemId()) {
                 case R.id.navigation_home:
                     Log.d("Mytag","Tapped on home");
+                    FeelTripApplication.setFrag("main");
                     fragment = new homeFragmment();
                     ft.replace(R.id.fragent_frame,fragment);
                     //ft.addToBackStack(null);
                     ft.commit();
-                    return true;
+                    break;
                 case R.id.navigation_profile:
                     Log.d("Mytag","Tapped on profile");
+                    FeelTripApplication.setFrag("profile");
                     fragment = new profileFragment();
                     ft.replace(R.id.fragent_frame,fragment);
                     //ft.addToBackStack(null);
                     ft.commit();
-                    return true;
+                    break;
                 case R.id.navigation_map:
                     Log.d("Mytag","Tapped on map");
+                    FeelTripApplication.setFrag("map");
                     fragment = new mapFragment();
                     ft.replace(R.id.fragent_frame,fragment);
                     //ft.addToBackStack(null);
                     ft.commit();
-                    return true;
+                    break;
                 default:
                     fragment = new homeFragmment();
                     ft.replace(R.id.fragent_frame,fragment);
                     ft.addToBackStack(null);
                     ft.commit();
-                    return true;
+                    break;
             }
+//            Intent i = getIntent();
+//            i.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+//            finish();
+//            startActivity(i);
+            onPause(); // Refreshes the current activity without calling onCreate
+            onResume();
+            return true;
         }
 
     };
@@ -142,11 +152,6 @@ public class MainScreen extends AppCompatActivity {
         });
 
         ToggleButton toggleFriends = (ToggleButton) findViewById(R.id.toggleFriends);
-        if(FeelTripApplication.getFrag() == "profile") {
-            toggleFriends.setVisibility(View.GONE);
-            TextView textView = (TextView) findViewById(R.id.textView5);
-            textView.setVisibility(View.GONE);
-        }
         toggleFriends.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 
             @Override
@@ -182,8 +187,19 @@ public class MainScreen extends AppCompatActivity {
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
+    protected void onResume() {
+        super.onResume();
+
+        ToggleButton toggleFriends = (ToggleButton) findViewById(R.id.toggleFriends);
+        TextView textView = (TextView) findViewById(R.id.textView5);
+        if(FeelTripApplication.getFrag().equals("profile")) {
+            toggleFriends.setVisibility(View.GONE);
+            textView.setVisibility(View.GONE);
+        } else {
+            toggleFriends.setVisibility(View.VISIBLE);
+            textView.setVisibility(View.VISIBLE);
+        }
+
         FeelTripApplication.loadFromElasticSearch();
         FeelTripApplication.getMoodAdapter(getBaseContext()).notifyDataSetChanged();
     }

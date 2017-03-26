@@ -304,7 +304,7 @@ public class mapFragment extends Fragment implements
 
 
     private void testCreateMoodArray() {
-        FeelTripApplication.loadFromElasticSearch();
+        //FeelTripApplication.loadFromElasticSearch(); THIS LINE ISN'T NEEDED DUE TO THE WAY WE CALL mapFragment
         moodArrayList = FeelTripApplication.getMoodArrayList();
         Log.d("mapTag","test size: "+moodArrayList.size());
     }

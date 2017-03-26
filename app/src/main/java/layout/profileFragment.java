@@ -222,7 +222,7 @@ public class profileFragment extends Fragment {
         if(!FeelTripApplication.getFrag().equals(frag)) {
             FeelTripApplication.setFrag(frag);
         }
-        FeelTripApplication.loadFromElasticSearch();
+//        FeelTripApplication.loadFromElasticSearch();
         adapter = FeelTripApplication.getMoodAdapter(getActivity());
 
 
