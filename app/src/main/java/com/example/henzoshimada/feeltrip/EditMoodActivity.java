@@ -89,6 +89,7 @@ public class EditMoodActivity extends AppCompatActivity {
     private String imagePathAndFileName;
     Uri imageFileUri;
     private static final int TAKE_PHOTO = 2;
+    private static final int GET_LOC = 3;
     Activity activity;
     private static Context context;
     private String emotionalState;
@@ -457,6 +458,14 @@ public class EditMoodActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), "Photo Cancelled", Toast.LENGTH_SHORT).show();
             else
                 Toast.makeText(getApplicationContext(), "Something went wrong", Toast.LENGTH_SHORT).show();
+        }else if (requestCode == GET_LOC){
+            if(resultCode == Activity.RESULT_OK){
+                //String result= intent.getStringExtra("result");
+                locationOn = true;
+            }
+            if (resultCode == Activity.RESULT_CANCELED) {
+                //Write your code if there's no result
+            }
         }
     }
 
@@ -527,7 +536,14 @@ public class EditMoodActivity extends AppCompatActivity {
         }
     }
 
+    private void toggleLocation() {
+        Intent intent = new Intent(this, MapsActivity.class);
+        startActivityForResult(intent, GET_LOC);
+    }
 
+
+
+/*
     private void toggleLocation() {
         TextView modeLocation = (TextView) findViewById(R.id.modeLocation);
         // The toggle is enabled
@@ -556,7 +572,7 @@ public class EditMoodActivity extends AppCompatActivity {
         // The toggle is disabled
         Log.d("myTag", "location on is: " + String.valueOf(locationOn));
     }
-
+*/
     public void verifyLocationPermissions(Activity activity) {
         // Check if we have location permission
         int permission = ActivityCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_FINE_LOCATION);
