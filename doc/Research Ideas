@@ -26,7 +26,8 @@ https://github.com/osmdroid/osmdroid/wiki/How-to-use-the-osmdroid-library
 how to make custom info window:
 https://developers.google.com/maps/documentation/android-api/infowindows
 
-Theme:
+side menu:
+https://github.com/jfeinstein10/SlidingMenu/
 
 Swipe element on listview to delete:
 http://stackoverflow.com/questions/14398733/remove-item-listview-with-slide-like-gmail
