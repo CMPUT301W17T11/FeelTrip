@@ -1,11 +1,8 @@
 package com.example.henzoshimada.feeltrip;
 
 import android.content.Context;
-import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -13,7 +10,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -22,7 +18,6 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.widget.TextView;
-import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import java.util.ArrayList;
@@ -146,7 +141,7 @@ public class MainScreen extends AppCompatActivity {
             public void onCheckedChanged(CompoundButton arg0, boolean isChecked) {
                 //Toast.makeText(getApplicationContext(),"Toggled filter for recent posts!",Toast.LENGTH_SHORT).show();
                 FeelTripApplication.getFilterController().setPastweekfilter(isChecked);
-                FeelTripApplication.loadFromElasticSearch();
+                ElasticSearchController.loadFromElasticSearch();
                 FeelTripApplication.getMoodAdapter(getBaseContext()).notifyDataSetChanged();
             }
         });
@@ -158,7 +153,7 @@ public class MainScreen extends AppCompatActivity {
             public void onCheckedChanged(CompoundButton arg0, boolean isChecked) {
                 //Toast.makeText(getApplicationContext(),"Toggled filter for friends!",Toast.LENGTH_SHORT).show();
                 FeelTripApplication.getFilterController().setFriendsonlyfilter(isChecked);
-                FeelTripApplication.loadFromElasticSearch();
+                ElasticSearchController.loadFromElasticSearch();
                 FeelTripApplication.getMoodAdapter(getBaseContext()).notifyDataSetChanged();
             }
         });
@@ -170,7 +165,7 @@ public class MainScreen extends AppCompatActivity {
             public void onCheckedChanged(CompoundButton arg0, boolean isChecked) {
                 //Toast.makeText(getApplicationContext(),"Toggled filter for friends!",Toast.LENGTH_SHORT).show();
                 FeelTripApplication.getFilterController().setMostrecentfilter(isChecked);
-                FeelTripApplication.loadFromElasticSearch();
+                ElasticSearchController.loadFromElasticSearch();
                 FeelTripApplication.getMoodAdapter(getBaseContext()).notifyDataSetChanged();
             }
         });
@@ -200,7 +195,7 @@ public class MainScreen extends AppCompatActivity {
             textView.setVisibility(View.VISIBLE);
         }
 
-        FeelTripApplication.loadFromElasticSearch();
+        ElasticSearchController.loadFromElasticSearch();
         FeelTripApplication.getMoodAdapter(getBaseContext()).notifyDataSetChanged();
     }
 
@@ -214,7 +209,7 @@ public class MainScreen extends AppCompatActivity {
     public void searchKeyword(View v){
         EditText string_keyword = (EditText) findViewById(R.id.keyword);
         FilterController.setKeywordfilter(string_keyword.getText().toString());
-        FeelTripApplication.loadFromElasticSearch();
+        ElasticSearchController.loadFromElasticSearch();
         FeelTripApplication.getMoodAdapter(getBaseContext()).notifyDataSetChanged();
     }
 
@@ -250,7 +245,7 @@ public class MainScreen extends AppCompatActivity {
                 else {
                     FilterController.setEmotionfilter("");
                 }
-                FeelTripApplication.loadFromElasticSearch();
+                ElasticSearchController.loadFromElasticSearch();
                 FeelTripApplication.getMoodAdapter(getBaseContext()).notifyDataSetChanged();
 
             } // to close the onItemSelected

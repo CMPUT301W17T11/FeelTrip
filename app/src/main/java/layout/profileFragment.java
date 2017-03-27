@@ -258,7 +258,7 @@ public class profileFragment extends Fragment {
                 // setResult(int, Intent)
                 //final int carId = data.getIntExtra(CarActivity.EXTRA_CAR_ID, -1);
                 Log.d("myTag", "we are back"+moodArrayList.size());
-                FeelTripApplication.loadFromElasticSearch();
+                //FeelTripApplication.loadFromElasticSearch();
 
                 Log.d("myTag", "done load from ES after back"+moodArrayList.size());
                 adapter.notifyDataSetChanged();

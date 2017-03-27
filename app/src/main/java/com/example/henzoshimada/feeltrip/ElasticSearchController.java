@@ -10,7 +10,6 @@ import com.searchly.jestdroid.DroidClientConfig;
 import com.searchly.jestdroid.JestClientFactory;
 import com.searchly.jestdroid.JestDroidClient;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -45,19 +44,30 @@ public class ElasticSearchController {
             ).refresh(true).build();
 
 
+    public static void loadFromElasticSearch(){
+        Log.d("listTag", "load from ES");
+        FeelTripApplication.getMoodArrayList().clear();
+        GetFilteredMoodsTask getMoodTask;
+        if(FeelTripApplication.getFrag().equals("main") || FeelTripApplication.getFrag().equals("profile") || FeelTripApplication.getFrag().equals("map")) {
+            getMoodTask = new GetFilteredMoodsTask(FeelTripApplication.getFrag());
+        }
+        else {
+            Log.i("Error", "The given search mode is invalid.");
+            return;
+        }
+        getMoodTask.execute();
+        try {
+            FeelTripApplication.getMoodArrayList().addAll(getMoodTask.get());
+            Log.d("mood array", "moodArrayList");
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+    }
+
+
     public static class AddMoodTask extends AsyncTask<Mood, Void, Boolean> {
-
-        private Context context;
-
-        public AddMoodTask(Context context) {
-            this.context = context.getApplicationContext();
-        }
-
-        @Override
-        protected void onPostExecute(Boolean result) {
-            FeelTripApplication.loadFromElasticSearch();
-            FeelTripApplication.getMoodAdapter(context).notifyDataSetChanged();
-        }
 
         @Override
         protected Boolean doInBackground(Mood ... moods ) {
@@ -96,19 +106,7 @@ public class ElasticSearchController {
         }
     }
 
-    public static class EditMoodTask extends AsyncTask<Mood, Void, Boolean>{ // TODO: Fix edit when removing a field
-
-        private Context context;
-
-        public EditMoodTask(Context context) {
-            this.context = context;
-        }
-
-        @Override
-        protected void onPostExecute(Boolean result) {
-            FeelTripApplication.loadFromElasticSearch();
-            FeelTripApplication.getMoodAdapter(context).notifyDataSetChanged();
-        }
+    public static class EditMoodTask extends AsyncTask<Mood, Void, Boolean>{
 
         @Override
         protected Boolean doInBackground(Mood ... moods ) {

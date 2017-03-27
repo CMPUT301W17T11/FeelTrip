@@ -130,26 +130,4 @@ public class FeelTripApplication extends Application {
         }
     }
 
-    public static void loadFromElasticSearch(){
-        Log.d("listTag", "load from ES");
-        moodArrayList.clear();
-        ElasticSearchController.GetFilteredMoodsTask getMoodTask;
-        if(frag.equals("main") || frag.equals("profile") || frag.equals("map")) {
-            getMoodTask = new ElasticSearchController.GetFilteredMoodsTask(frag);
-        }
-        else {
-            Log.i("Error", "The given search mode is invalid.");
-            return;
-        }
-        getMoodTask.execute();
-        try {
-            moodArrayList.addAll(getMoodTask.get());
-            Log.d("mood array", "moodArrayList");
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        }
-    }
-
 }
