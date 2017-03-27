@@ -66,18 +66,6 @@ public class ElasticSearchController {
 
     public static class AddMoodTask extends AsyncTask<Mood, Void, Boolean> {
 
-        private Context context;
-
-        public AddMoodTask(Context context) {
-            this.context = context.getApplicationContext();
-        }
-
-        @Override
-        protected void onPostExecute(Boolean result) {
-            loadFromElasticSearch();
-            FeelTripApplication.getMoodAdapter(context).notifyDataSetChanged();
-        }
-
         @Override
         protected Boolean doInBackground(Mood ... moods ) {
             if(android.os.Debug.isDebuggerConnected())
@@ -115,19 +103,7 @@ public class ElasticSearchController {
         }
     }
 
-    public static class EditMoodTask extends AsyncTask<Mood, Void, Boolean>{ // TODO: Fix edit when removing a field
-
-        private Context context;
-
-        public EditMoodTask(Context context) {
-            this.context = context;
-        }
-
-        @Override
-        protected void onPostExecute(Boolean result) {
-            loadFromElasticSearch();
-            FeelTripApplication.getMoodAdapter(context).notifyDataSetChanged();
-        }
+    public static class EditMoodTask extends AsyncTask<Mood, Void, Boolean>{
 
         @Override
         protected Boolean doInBackground(Mood ... moods ) {
