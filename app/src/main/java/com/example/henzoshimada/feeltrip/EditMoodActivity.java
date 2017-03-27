@@ -151,13 +151,13 @@ public class EditMoodActivity extends AppCompatActivity {
 //        emotionalState = null;
 //        dateTime = null;
 
-        String jsonEditMood = "";
+        Integer posEditMood;
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
-            jsonEditMood = extras.getString("editmood");
+            posEditMood = extras.getInt("editmood");
+            editmood = FeelTripApplication.getMoodArrayList().get(posEditMood);
         }
-        editmood = new Gson().fromJson(jsonEditMood, Mood.class);
-        addItemsOnSocialSituationSpinner(editmood);
+        addItemsOnSocialSituationSpinner();
         try {
             addItemsOnEmojiScroller();
         } catch (IllegalAccessException e) {
@@ -475,7 +475,7 @@ public class EditMoodActivity extends AppCompatActivity {
     };
 
 
-    private void addItemsOnSocialSituationSpinner(Mood editmood) {
+    private void addItemsOnSocialSituationSpinner() {
         socialSituationSpinner = (Spinner) findViewById(R.id.social_event_spinner);
         List<String> socialSituationList = new ArrayList<>();
 
