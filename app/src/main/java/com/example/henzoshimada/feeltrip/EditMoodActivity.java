@@ -391,7 +391,7 @@ public class EditMoodActivity extends AppCompatActivity {
         File folder = new File(path);
         if (!folder.exists())
             folder.mkdir();
-        imagePathAndFileName = path + File.separator + String.valueOf(System.currentTimeMillis()) + ".jpg";
+        imagePathAndFileName = path + File.separator + String.valueOf(System.currentTimeMillis()) + ".JPEG";
         File imageFile = new File(imagePathAndFileName);
         imageFileUri = Uri.fromFile(imageFile);
 
@@ -406,7 +406,7 @@ public class EditMoodActivity extends AppCompatActivity {
         int quality = 100;
 
         if (photo.getByteCount() <= MAX_PHOTO_SIZE) {
-            photo.compress(Bitmap.CompressFormat.PNG, quality, photoStream);
+            photo.compress(Bitmap.CompressFormat.JPEG, quality, photoStream);
             return photoStream.toByteArray();
         }
 
