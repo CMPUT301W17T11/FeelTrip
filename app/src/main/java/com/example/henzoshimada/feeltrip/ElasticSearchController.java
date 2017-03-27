@@ -314,7 +314,7 @@ public class ElasticSearchController {
         }
     }
 
-    public static class AddParticipantTask extends AsyncTask<Participant, Void, Void> { //TODO: What if username already exists within the database? We need usernames to be UNIQUE for proper sorting.
+    public static class AddParticipantTask extends AsyncTask<Participant, Void, Void> {
 
         @Override
         protected Void doInBackground(Participant ... participants ) {

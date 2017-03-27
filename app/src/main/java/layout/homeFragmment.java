@@ -95,7 +95,6 @@ public class homeFragmment extends Fragment{
     //start when come back from add mood activity
     @Override
     public void onStart() {
-        // TODO Auto-generated method stub
         super.onStart();
 
         if(!FeelTripApplication.getFrag().equals(frag)) {

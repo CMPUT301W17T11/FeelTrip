@@ -216,7 +216,6 @@ public class profileFragment extends Fragment {
     @Override
     public void onStart() {
         Log.d("myTag","onStart");
-        // TODO Auto-generated method stub
         super.onStart();
 
         if(!FeelTripApplication.getFrag().equals(frag)) {

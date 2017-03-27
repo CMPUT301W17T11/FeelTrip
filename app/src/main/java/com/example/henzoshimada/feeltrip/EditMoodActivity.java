@@ -462,7 +462,7 @@ public class EditMoodActivity extends AppCompatActivity {
 
 
     //https://www.youtube.com/watch?v=8mFW6dA5xDE
-    DatePickerDialog.OnDateSetListener datePickerDialogListener = new DatePickerDialog.OnDateSetListener() { //TODO: Fix the Date picker
+    DatePickerDialog.OnDateSetListener datePickerDialogListener = new DatePickerDialog.OnDateSetListener() {
         @Override
         public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
             if (!editflag) {
