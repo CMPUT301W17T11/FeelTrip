@@ -100,6 +100,8 @@ public class EditMoodActivity extends AppCompatActivity {
     private Mood editmood;
     private boolean editflag;
 
+    TextView modeLocationText;
+
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
 
@@ -139,7 +141,7 @@ public class EditMoodActivity extends AppCompatActivity {
         setContentView(R.layout.add_edit_page);
         EditMoodActivity.context = getApplicationContext();
         inputMoodDescription = (EditText) findViewById(R.id.moodEventDescription);
-
+        modeLocationText = (TextView) findViewById(R.id.modeLocation);
         activity = this;
         context = this;
         showPublicOn = false;
@@ -192,7 +194,7 @@ public class EditMoodActivity extends AppCompatActivity {
             }
             try {
                 longitude = editmood.getLongitude();
-                TextView modeLocationText = (TextView) findViewById(R.id.modeLocation);
+
                 modeLocationText.setText("On");
                 modeLocationText.setTextColor(getResources().getColor(R.color.green));
                 locationOn = true;
@@ -459,12 +461,40 @@ public class EditMoodActivity extends AppCompatActivity {
             else
                 Toast.makeText(getApplicationContext(), "Something went wrong", Toast.LENGTH_SHORT).show();
         }else if (requestCode == GET_LOC){
+            Log.d("locTag", "request code = get loc");
             if(resultCode == Activity.RESULT_OK){
-                //String result= intent.getStringExtra("result");
-                locationOn = true;
+                Log.d("locTag", "result ok");
+
+                try {
+                    //String temp = intent.getStringExtra("resultLat");
+                    //latitude = Double.parseDouble(temp);
+                    //temp = intent.getStringExtra("resultLong");
+                    //latitude = Double.parseDouble(temp);
+                    //longitude = Double.parseDouble(intent.getStringExtra("resultLong"));
+                    latitude = intent.getDoubleExtra("resultLat",0);
+                    longitude = intent.getDoubleExtra("resultLong",0);
+
+                    if ((latitude == 0.0) && (longitude == 0.0)) {
+                        Log.d("locTag", "0 0 true");
+                        return; //return to previous state
+                    }
+                    locationOn = true;
+                    modeLocationText.setText("On");
+                    modeLocationText.setTextColor(getResources().getColor(R.color.green));
+                    Log.d("locTag", "result ok done");
+                }catch (NullPointerException e){
+                    locationOn = false;
+                    Log.d("locTag", "bad");
+                }
+
+
             }
             if (resultCode == Activity.RESULT_CANCELED) {
+                Log.d("locTag", "result cancel");
                 //Write your code if there's no result
+                //locationOn = true;
+                //modeLocationText.setText("On");
+                //modeLocationText.setTextColor(getResources().getColor(R.color.green));
             }
         }
     }
@@ -537,8 +567,14 @@ public class EditMoodActivity extends AppCompatActivity {
     }
 
     private void toggleLocation() {
-        Intent intent = new Intent(this, MapsActivity.class);
-        startActivityForResult(intent, GET_LOC);
+        if (locationOn) {
+            locationOn = false;
+            modeLocationText.setText("Off");
+            modeLocationText.setTextColor(getResources().getColor(R.color.red));
+        }else{
+            Intent intent = new Intent(this, MapsActivity.class);
+            startActivityForResult(intent, GET_LOC);
+        }
     }
 
 

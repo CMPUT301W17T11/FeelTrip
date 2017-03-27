@@ -469,9 +469,8 @@ public class ElasticSearchController {
         private String keyword; // stores the passed keyword we're filtering by
         private String following = "[\"\"]"; // stores the string containing all the users the participant follows, initialize it to "blank" array by default
         private String participant; // stores the participant's username
-        private Double currentlat = 53.5141543;
-        private Double currentlon = -113.6701809; // TODO: actually pass in the user's current lat and lon to these variables
-
+        private Double currentlat = null;
+        private Double currentlon = null;
         public GetFilteredMoodsTask(String searchmode){ // must pass this specific set of Strings in this order while constructing
             switch(searchmode) {
                 case "main":
@@ -487,6 +486,8 @@ public class ElasticSearchController {
                     break;
                 case "map":
                     participant = FeelTripApplication.getParticipant().getUserName();
+                    currentlat = FeelTripApplication.getLatitude();
+                    currentlon = FeelTripApplication.getLongitude();
                     if(!FeelTripApplication.getParticipant().getFollowing().isEmpty()) {
                         following = "[\"" + TextUtils.join("\",\"", FeelTripApplication.getParticipant().getFollowing()) + "\"]"; // sets up the following array of the participant as a String with proper delimiters for elasticsearch terms query
                     }

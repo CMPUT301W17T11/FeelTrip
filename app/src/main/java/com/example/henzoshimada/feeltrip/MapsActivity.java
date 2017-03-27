@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
@@ -30,7 +31,8 @@ import com.google.android.gms.maps.model.MarkerOptions;
 public class MapsActivity extends FragmentActivity implements
         GoogleMap.OnMyLocationButtonClickListener,
         OnMapReadyCallback,
-        GoogleMap.OnMarkerDragListener {
+        GoogleMap.OnMarkerDragListener,
+        GoogleMap.OnMapLongClickListener {
 
     /**
      * Request code for location permission request.
@@ -89,6 +91,23 @@ public class MapsActivity extends FragmentActivity implements
 
         participant = FeelTripApplication.getParticipant();
 
+        FloatingActionButton submit = (FloatingActionButton)  findViewById(R.id.submit_loc);
+        submit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                storeLocation();
+            }
+        });
+
+        FloatingActionButton cancel = (FloatingActionButton)  findViewById(R.id.cancel_loc);
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                setResult(Activity.RESULT_CANCELED,intent);
+                finish();
+            }
+        });
     }
 
 
@@ -108,18 +127,20 @@ public class MapsActivity extends FragmentActivity implements
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED) {
             if (mMap != null) {
-                // Access to the location has been granted to the app.
                 mMap.setMyLocationEnabled(true);
                 mMap.setOnMyLocationButtonClickListener(this);
-                mMap.setOnMarkerDragListener(this);
                 View locationButton = ((View) mMapView.findViewById(1).getParent()).findViewById(2);
                 RelativeLayout.LayoutParams rlp = (RelativeLayout.LayoutParams) locationButton.getLayoutParams();
                 // position on right bottom
                 rlp.addRule(RelativeLayout.ALIGN_PARENT_TOP, 0);
                 rlp.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, RelativeLayout.TRUE);
                 rlp.setMargins(0, 0, 80, 200); // left, top, right, bottom
-
             }
+        }
+        if (mMap != null) {
+            // Access to the location has been granted to the app.
+            mMap.setOnMarkerDragListener(this);
+            mMap.setOnMapLongClickListener(this);
         }
 
         // Add a marker in Sydney and move the camera
@@ -154,14 +175,13 @@ public class MapsActivity extends FragmentActivity implements
 
         if (mLastKnownLocation != null) {
             Log.d("mapATag", "Lat= " + String.valueOf(mLastKnownLocation.getLatitude()) + " and Long= " + String.valueOf(mLastKnownLocation.getLongitude()));
+            longitude = mLastKnownLocation.getLongitude();
+            latitude = mLastKnownLocation.getLatitude();
             if (marker != null){
                 marker.remove();
             }
             marker = mMap.addMarker(new MarkerOptions()
-                    //.position(new LatLng(53.528033+i, -113.525355+i))
                     .position(new LatLng(mLastKnownLocation.getLatitude(),mLastKnownLocation.getLongitude()))
-                    .snippet("Stuff")
-                    .title("Title")
                     .draggable(true)
                     );
         } else {
@@ -196,10 +216,26 @@ public class MapsActivity extends FragmentActivity implements
     }
 
     private void storeLocation(){
+        Log.d("locTag","store location");
         Intent intent = new Intent();
+        Log.d("locTag","store loc long = "+String.valueOf(longitude));
+        Log.d("locTag","store loc lat = "+String.valueOf(latitude));
         intent.putExtra("resultLong",longitude);
         intent.putExtra("resultLat",latitude);
         setResult(Activity.RESULT_OK,intent);
         finish();
+    }
+
+    @Override
+    public void onMapLongClick(LatLng latLng) {
+        if (marker != null){
+            marker.remove();
+        }
+        marker = mMap.addMarker(new MarkerOptions()
+                .position(latLng)
+                .draggable(true)
+        );
+        longitude = latLng.longitude;
+        latitude = latLng.latitude;
     }
 }

@@ -1,7 +1,6 @@
 package com.example.henzoshimada.feeltrip;
 
 import android.app.Application;
-import android.app.Fragment;
 import android.content.Context;
 import android.util.Log;
 
@@ -20,6 +19,8 @@ import java.util.concurrent.ExecutionException;
     to the queue.
      */
 public class FeelTripApplication extends Application {
+
+
 
     private static final List<String> allEmotions = Arrays.asList( // MODIFY THIS IF YOU WISH TO ADD/DELETE EMOTIONS
             "Zero", // THIS IS HERE SO WE CAN REFERENCE THE EMOTIONS WITHOUT WORRYING ABOUT ZERO INDEXING
@@ -130,6 +131,29 @@ public class FeelTripApplication extends Application {
         }
     }
 
+
+
+    //lat var, setter,gett
+    //lon
+    private static double longitude;
+    private static double latitude;
+
+    public static double getLongitude() {
+        return longitude;
+    }
+
+    public static void setLongitude(double longi) {
+        longitude = longi;
+    }
+
+    public static double getLatitude() {
+        return latitude;
+    }
+
+    public static void setLatitude(double lati) {
+        latitude = lati;
+    }
+
     public static void loadFromElasticSearch(){
         Log.d("listTag", "load from ES");
         moodArrayList.clear();
@@ -151,5 +175,6 @@ public class FeelTripApplication extends Application {
             e.printStackTrace();
         }
     }
+
 
 }
