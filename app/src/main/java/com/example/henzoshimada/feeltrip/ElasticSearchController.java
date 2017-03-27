@@ -9,7 +9,6 @@ import com.searchly.jestdroid.DroidClientConfig;
 import com.searchly.jestdroid.JestClientFactory;
 import com.searchly.jestdroid.JestDroidClient;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -42,6 +41,29 @@ public class ElasticSearchController {
             ).refresh(true).build();
 
 
+    public static void loadFromElasticSearch(){
+        Log.d("listTag", "load from ES");
+        FeelTripApplication.getMoodArrayList().clear();
+        GetFilteredMoodsTask getMoodTask;
+        if(FeelTripApplication.getFrag().equals("main") || FeelTripApplication.getFrag().equals("profile") || FeelTripApplication.getFrag().equals("map")) {
+            getMoodTask = new GetFilteredMoodsTask(FeelTripApplication.getFrag());
+        }
+        else {
+            Log.i("Error", "The given search mode is invalid.");
+            return;
+        }
+        getMoodTask.execute();
+        try {
+            FeelTripApplication.getMoodArrayList().addAll(getMoodTask.get());
+            Log.d("mood array", "moodArrayList");
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+    }
+
+
     public static class AddMoodTask extends AsyncTask<Mood, Void, Boolean> {
 
         private Context context;
@@ -52,7 +74,7 @@ public class ElasticSearchController {
 
         @Override
         protected void onPostExecute(Boolean result) {
-            FeelTripApplication.loadFromElasticSearch();
+            loadFromElasticSearch();
             FeelTripApplication.getMoodAdapter(context).notifyDataSetChanged();
         }
 
@@ -103,7 +125,7 @@ public class ElasticSearchController {
 
         @Override
         protected void onPostExecute(Boolean result) {
-            FeelTripApplication.loadFromElasticSearch();
+            loadFromElasticSearch();
             FeelTripApplication.getMoodAdapter(context).notifyDataSetChanged();
         }
 
