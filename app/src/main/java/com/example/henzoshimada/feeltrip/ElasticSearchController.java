@@ -121,6 +121,7 @@ public class ElasticSearchController {
                     Log.i("Error", "This mood does not exist within the Elasticsearch database");
                     return null;
                 }
+                mood.setMade(new Date()); // document around the instant the mood is edited and update accordingly
                 String query = "{\"doc\" : {"; // calls the doc function in _update query, automatically upserts if field doesn't exist yet
                 // find out what fields have been changed and build query accordingly
                 int notDone = 0;
@@ -187,7 +188,7 @@ public class ElasticSearchController {
                                 }
                                 break;
                             case 7:
-                                query += ("\"emoji\" : \"" + mood.getEmoji() + "\"");
+                                query += ("\"emoji\" : " + mood.getEmoji());
                                 if (notDone != 0) {
                                     query += (",");
                                 }
@@ -197,7 +198,7 @@ public class ElasticSearchController {
                         }
                     }
                 }
-                    query += "}}";
+                    query += ",\"made\" : " + mood.getMade() + "}}";
 
                     try{
                         
@@ -529,9 +530,10 @@ public class ElasticSearchController {
 
             if(pastweekfilter) {
                 Calendar cal = new GregorianCalendar(); // for the purposes of grabbing exact time one week prior (this takes DST into account)
+                long thisweek = cal.getTimeInMillis();
                 cal.add(Calendar.DAY_OF_MONTH, -7);
                 long lastweek = cal.getTimeInMillis();
-                query += "\"must\" : { \"range\" : { \"made\" : { \"gte\" : " + lastweek + "}}},";
+                query += "\"must\" : { \"range\" : { \"date\" : { \"gte\" : " + lastweek + ", \"lte\" : " + thisweek + "}}},";
             }
 
             if(emotionfilter) {

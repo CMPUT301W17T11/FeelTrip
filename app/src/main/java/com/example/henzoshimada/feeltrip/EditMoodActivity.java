@@ -287,7 +287,7 @@ public class EditMoodActivity extends AppCompatActivity {
         try {
             if (editflag) {
                 Mood mood = editmood;
-                ElasticSearchController.EditMoodTask editMoodTask = new ElasticSearchController.EditMoodTask(this);
+                ElasticSearchController.EditMoodTask editMoodTask = new ElasticSearchController.EditMoodTask();
                 if (showPublicOn) {
                     mood.setPublic();
                 } else {
@@ -326,7 +326,7 @@ public class EditMoodActivity extends AppCompatActivity {
                 Log.d("tag", "Editing mood");
                 finish();
             } else {
-                ElasticSearchController.AddMoodTask addMoodTask = new ElasticSearchController.AddMoodTask(this);
+                ElasticSearchController.AddMoodTask addMoodTask = new ElasticSearchController.AddMoodTask();
                 Participant participant = FeelTripApplication.getParticipant();
                 if (showPublicOn) {
                     mood.setPublic();
