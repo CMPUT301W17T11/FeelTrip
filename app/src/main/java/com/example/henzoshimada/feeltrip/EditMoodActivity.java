@@ -595,7 +595,11 @@ public class EditMoodActivity extends AppCompatActivity {
             emojiButton.setMaxHeight(150);
             emojiButton.setMaxWidth(150);
             emojiButton.setBackgroundResource(R.color.white);
-            emojiButton.setImageResource(getApplicationContext().getResources().getIdentifier("emoji" + i, "drawable", getApplicationContext().getPackageName()));
+            if(getApplicationContext().getResources().getIdentifier("emoji" + i, "drawable", getApplicationContext().getPackageName()) != 0) { // Check if desired emoji exists
+                emojiButton.setImageResource(getApplicationContext().getResources().getIdentifier("emoji" + i, "drawable", getApplicationContext().getPackageName()));
+            } else {
+                emojiButton.setImageResource(getApplicationContext().getResources().getIdentifier("err", "drawable", getApplicationContext().getPackageName()));
+            }
             emojiButton.setPadding(0,0,0,0);
             emojiLayout.addView(emojiButton);
             emojiButton.setOnClickListener(new View.OnClickListener() {
