@@ -24,6 +24,7 @@ import io.searchbox.core.Index;
 import io.searchbox.core.Search;
 import io.searchbox.core.SearchResult;
 import io.searchbox.core.Update;
+import io.searchbox.indices.CreateIndex;
 import io.searchbox.indices.mapping.PutMapping;
 
 /**
@@ -36,7 +37,20 @@ public class ElasticSearchController {
     private static final String typeMood = "mood";
     private static final String typeUser = "user";
 
-    static PutMapping putMapping = new PutMapping.Builder(
+
+    static PutMapping usernameMapping = new PutMapping.Builder(
+            groupIndex,
+            typeUser,
+            "{ \"user\" : { \"properties\" : { \"userName\" : {\"type\" : \"string\", \"index\" : \"not_analyzed\"} } } }"
+            ).refresh(true).build();
+
+    static PutMapping passwordMapping = new PutMapping.Builder(
+            groupIndex,
+            typeUser,
+            "{ \"user\" : { \"properties\" : { \"password\" : {\"type\" : \"string\", \"index\" : \"not_analyzed\"} } } }"
+    ).refresh(true).build();
+
+    static PutMapping moodMapping = new PutMapping.Builder(
             groupIndex,
             typeMood,
             "{ \"mood\" : { \"properties\" : { \"location\" : {\"type\" : \"geo_point\"} } } }"
@@ -81,7 +95,7 @@ public class ElasticSearchController {
 
                     try {
                         // where is the client?
-                        client.execute(putMapping); // Sets type of location to be "geo_point" on elasticsearch
+                        client.execute(moodMapping); // Sets type of location to be "geo_point" on elasticsearch
                         DocumentResult result = client.execute(index);
                         if (result.isSucceeded()) {
                             mood.setId(result.getId());
@@ -313,7 +327,9 @@ public class ElasticSearchController {
 
                 try {
                     // where is the client?
-                    
+                    client.execute(new CreateIndex.Builder(groupIndex).build());
+                    client.execute(usernameMapping); // Sets the index of important exact value strings to "non_analyzed" within elasticsearch
+                    client.execute(passwordMapping);
                     DocumentResult result = client.execute(index);
                     if (result.isSucceeded()){
                         participant.setId(result.getId());
@@ -423,7 +439,7 @@ public class ElasticSearchController {
             String query; // elasticsearch bool queries are amazing in every way
             query = "{" +
                     "\"query\" : {" +
-                    "\"match\" : {" +
+                    "\"term\" : {" +
                     "\"userName\""+ ": \"" + username + "\"}" +
                     " }}";
 
