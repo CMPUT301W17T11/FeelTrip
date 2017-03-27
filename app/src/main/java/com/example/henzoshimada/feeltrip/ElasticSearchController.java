@@ -1,10 +1,10 @@
 package com.example.henzoshimada.feeltrip;
 
-import android.content.Context;
 import android.os.AsyncTask;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.google.common.collect.Lists;
 import com.searchly.jestdroid.DroidClientConfig;
 import com.searchly.jestdroid.JestClientFactory;
 import com.searchly.jestdroid.JestDroidClient;
@@ -13,7 +13,9 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 import io.searchbox.core.Delete;
@@ -595,6 +597,15 @@ public class ElasticSearchController {
                 if (result.isSucceeded()){
                     List<Mood> foundMoods = result.getSourceAsObjectList(Mood.class);
                     moods.addAll(foundMoods);
+                    if(!profilemode) { // take into account that we only want the most recent post of each user - so we'll use a LinkedHashMap to de-duplicate by username
+                        List<Mood> revmoods = Lists.reverse(moods); // Reverse the order of the moods list since the LinkedHashMap will squash the duplicates in a "Last Man Standing" format
+                        Map<String, Mood> map = new LinkedHashMap<>();
+                        for (Mood mood : revmoods) {
+                            map.put(mood.getUsername(), mood);
+                        }
+                        moods.clear();
+                        moods.addAll(map.values());
+                    }
                 }
                 else {
                     Log.i("Error", "the search query failed to find any moods that matched");
