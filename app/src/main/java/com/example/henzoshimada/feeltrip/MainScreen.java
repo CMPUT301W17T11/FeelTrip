@@ -32,10 +32,6 @@ import layout.profileFragment;
 
 // This is the main screen: This is what the Participant first sees
 public class MainScreen extends AppCompatActivity {
-    private Context context;
-    private Spinner filterSpinner;
-    private String emotionalState;
-    private String socialSit;
     private Spinner emotionalStateSpinner;
 
     // The following are constants for emotion based emoji
@@ -216,6 +212,8 @@ public class MainScreen extends AppCompatActivity {
             textView.setVisibility(View.VISIBLE);
         }
 
+        EditText string_keyword = (EditText) findViewById(R.id.keyword);
+        FilterController.setKeywordfilter(string_keyword.getText().toString()); // Always take into account what's written in the "Keyword search" field. This eliminates confusion when words are typed but "Search" isn't explicitly tapped
         ElasticSearchController.loadFromElasticSearch();
         FeelTripApplication.getMoodAdapter(getBaseContext()).notifyDataSetChanged();
     }
@@ -275,22 +273,4 @@ public class MainScreen extends AppCompatActivity {
             }
         });
     }
-
-        /*
-    // Taken from: https://www.mkyong.com/android/android-spinner-drop-down-list-example/
-    // On: March 5, 2017 17:03
-    public void addItemsOnFilterSpinner() {
-        filterSpinner = (Spinner) findViewById(R.id.filter_spinner);
-        List<String> filterList = new ArrayList<>();
-
-        filterList.add("filter1");
-        filterList.add("filter2");
-        filterList.add("filter3");
-
-        ArrayAdapter<String> filterListAdapter = new ArrayAdapter<>(this,
-                android.R.layout.simple_spinner_item, filterList);
-        filterListAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        filterSpinner.setAdapter(filterListAdapter);
-    }*/
-
 }

@@ -119,7 +119,7 @@ public class ElasticSearchController {
         }
     }
 
-    public static class EditMoodTask extends AsyncTask<Mood, Void, Boolean>{
+    public static class EditMoodTask extends AsyncTask<Mood, Void, Boolean>{ //TODO: Take concurrency into account
 
         @Override
         protected Boolean doInBackground(Mood ... moods ) {

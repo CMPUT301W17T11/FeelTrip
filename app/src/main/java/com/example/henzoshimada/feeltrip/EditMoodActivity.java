@@ -1,5 +1,4 @@
 package com.example.henzoshimada.feeltrip;
-// removed unused imports, may slow down build
 
 import android.*;
 import android.app.Activity;
@@ -27,7 +26,6 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewParent;
 import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -39,7 +37,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.gson.Gson;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -147,9 +144,6 @@ public class EditMoodActivity extends AppCompatActivity {
         verifyLocationPermissions(this);
         editmood = null;
         encodedPhoto = null;
-//        socialSit = null;
-//        emotionalState = null;
-//        dateTime = null;
 
         Integer posEditMood;
         Bundle extras = getIntent().getExtras();
@@ -276,7 +270,6 @@ public class EditMoodActivity extends AppCompatActivity {
     }
 
     public void datePick(Context context) {
-        //selectDate();
         Log.d("Mytag", "Went into date");
         new DatePickerDialog(context,AlertDialog.THEME_DEVICE_DEFAULT_LIGHT,datePickerDialogListener, dateTime.get(Calendar.YEAR),
                 dateTime.get(Calendar.MONTH), dateTime.get(Calendar.DAY_OF_MONTH)).show();
@@ -376,15 +369,6 @@ public class EditMoodActivity extends AppCompatActivity {
     public static Context getAppContext() {
         return EditMoodActivity.context;
     }
-/*
-    private Mood submitMood(){
-    //create mood obj
-    //create elastic search.addmoodtask
-    //addmoodtask.execute(mood)
-    //handle queue if offline
-
-    }
-*/
 
     private void takeAPhoto() {
         String path = Environment.getExternalStorageDirectory().getAbsolutePath() + "/Camera";
@@ -410,7 +394,6 @@ public class EditMoodActivity extends AppCompatActivity {
             return photoStream.toByteArray();
         }
 
-        //
         while (true) {
             photo.compress(Bitmap.CompressFormat.JPEG, quality, photoStream);
             byte[] compressedPhoto = photoStream.toByteArray();
@@ -605,7 +588,7 @@ public class EditMoodActivity extends AppCompatActivity {
             emojiButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    View layout = ((LinearLayout)v.getParent()); // Cast to a View from  ViewParent, since ViewParents don't allow us to use getTag()
+                    View layout = ((LinearLayout)v.getParent()); // Cast to a View from a ViewParent, since ViewParents don't allow us to use getTag()
                     int selected = (int) layout.getTag();
                     selectEmotion(selected);
                 }
