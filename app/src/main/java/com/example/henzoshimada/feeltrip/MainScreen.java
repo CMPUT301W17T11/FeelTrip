@@ -11,7 +11,9 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -19,6 +21,7 @@ import android.widget.Spinner;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
@@ -82,32 +85,42 @@ public class MainScreen extends AppCompatActivity {
             switch (item.getItemId()) {
                 case R.id.navigation_home:
                     Log.d("Mytag","Tapped on home");
+                    FeelTripApplication.setFrag("main");
                     fragment = new homeFragmment();
                     ft.replace(R.id.fragent_frame,fragment);
-                    ft.addToBackStack(null);
+                    //ft.addToBackStack(null);
                     ft.commit();
-                    return true;
+                    break;
                 case R.id.navigation_profile:
                     Log.d("Mytag","Tapped on profile");
+                    FeelTripApplication.setFrag("profile");
                     fragment = new profileFragment();
                     ft.replace(R.id.fragent_frame,fragment);
-                    ft.addToBackStack(null);
+                    //ft.addToBackStack(null);
                     ft.commit();
-                    return true;
+                    break;
                 case R.id.navigation_map:
                     Log.d("Mytag","Tapped on map");
+                    FeelTripApplication.setFrag("map");
                     fragment = new mapFragment();
                     ft.replace(R.id.fragent_frame,fragment);
-                    ft.addToBackStack(null);
+                    //ft.addToBackStack(null);
                     ft.commit();
-                    return true;
+                    break;
                 default:
                     fragment = new homeFragmment();
                     ft.replace(R.id.fragent_frame,fragment);
                     ft.addToBackStack(null);
                     ft.commit();
-                    return true;
+                    break;
             }
+//            Intent i = getIntent();
+//            i.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+//            finish();
+//            startActivity(i);
+            //onPause(); // Refreshes the current activity without calling onCreate
+            onResume();
+            return true;
         }
 
     };
@@ -131,7 +144,10 @@ public class MainScreen extends AppCompatActivity {
 
             @Override
             public void onCheckedChanged(CompoundButton arg0, boolean isChecked) {
-                Toast.makeText(getApplicationContext(),"Toggled filter for recent posts!",Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getApplicationContext(),"Toggled filter for recent posts!",Toast.LENGTH_SHORT).show();
+                FeelTripApplication.getFilterController().setPastweekfilter(isChecked);
+                FeelTripApplication.loadFromElasticSearch();
+                FeelTripApplication.getMoodAdapter(getBaseContext()).notifyDataSetChanged();
             }
         });
 
@@ -140,10 +156,52 @@ public class MainScreen extends AppCompatActivity {
 
             @Override
             public void onCheckedChanged(CompoundButton arg0, boolean isChecked) {
-                Toast.makeText(getApplicationContext(),"Toggled filter for friends!",Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getApplicationContext(),"Toggled filter for friends!",Toast.LENGTH_SHORT).show();
+                FeelTripApplication.getFilterController().setFriendsonlyfilter(isChecked);
+                FeelTripApplication.loadFromElasticSearch();
+                FeelTripApplication.getMoodAdapter(getBaseContext()).notifyDataSetChanged();
             }
         });
 
+        ToggleButton toggleMostRecent = (ToggleButton) findViewById(R.id.toggleMostRecent);
+        toggleMostRecent.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+
+            @Override
+            public void onCheckedChanged(CompoundButton arg0, boolean isChecked) {
+                //Toast.makeText(getApplicationContext(),"Toggled filter for friends!",Toast.LENGTH_SHORT).show();
+                FeelTripApplication.getFilterController().setMostrecentfilter(isChecked);
+                FeelTripApplication.loadFromElasticSearch();
+                FeelTripApplication.getMoodAdapter(getBaseContext()).notifyDataSetChanged();
+            }
+        });
+
+        ImageButton searchButton = (ImageButton) findViewById(R.id.imageButton);
+        searchButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                searchKeyword(v);
+            }
+        });
+
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        ToggleButton toggleFriends = (ToggleButton) findViewById(R.id.toggleFriends);
+        TextView textView = (TextView) findViewById(R.id.textView5);
+        if(FeelTripApplication.getFrag().equals("profile")) {
+            toggleFriends.setVisibility(View.GONE);
+            textView.setVisibility(View.GONE);
+        } else {
+            toggleFriends.setVisibility(View.VISIBLE);
+            textView.setVisibility(View.VISIBLE);
+        }
+
+        FeelTripApplication.loadFromElasticSearch();
+        FeelTripApplication.getMoodAdapter(getBaseContext()).notifyDataSetChanged();
     }
 
     public String getEmojiByUnicode(int unicode){
@@ -155,21 +213,18 @@ public class MainScreen extends AppCompatActivity {
 
     public void searchKeyword(View v){
         EditText string_keyword = (EditText) findViewById(R.id.keyword);
-        try {
-            Toast.makeText(getApplicationContext(), string_keyword.getText().toString(), Toast.LENGTH_SHORT).show();
-        }
-        catch(Exception e){
-            Toast.makeText(getApplicationContext(), "No string entered into search!", Toast.LENGTH_SHORT).show();
-        }
+        FilterController.setKeywordfilter(string_keyword.getText().toString());
+        FeelTripApplication.loadFromElasticSearch();
+        FeelTripApplication.getMoodAdapter(getBaseContext()).notifyDataSetChanged();
     }
 
 
 
-    private void addItemsOnEmotionalStateSpinner(){
+    private void addItemsOnEmotionalStateSpinner(){ //TODO: Redo the way this is called so the feelings can be dynamically loaded
         emotionalStateSpinner = (Spinner) findViewById(R.id.filterMood);
         List<String> emotionalStateList = new ArrayList<>();
         emotionalStateList.add("None");
-        emotionalStateList.add("Angry " + getEmojiByUnicode(emojiUnicode("Angry")));
+        emotionalStateList.add("Angry " + getEmojiByUnicode(emojiUnicode("Angry"))); // TODO: Replace these unicode emojis with image ones.
         emotionalStateList.add("Confused " + getEmojiByUnicode(emojiUnicode("Confused")));
         emotionalStateList.add("Disgusted " + getEmojiByUnicode(emojiUnicode("Disgusted")));
         emotionalStateList.add("Fearful " + getEmojiByUnicode(emojiUnicode("Fearful")));
@@ -184,6 +239,25 @@ public class MainScreen extends AppCompatActivity {
                 android.R.layout.simple_spinner_item, emotionalStateList);
         emotionalStateAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         emotionalStateSpinner.setAdapter(emotionalStateAdapter);
+        emotionalStateSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
+        {
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
+            {
+                String selectedItem = parent.getItemAtPosition(position).toString();
+                if(position != 0) {
+                    FilterController.setEmotionfilter(FeelTripApplication.getEmotionalState(position));
+                }
+                else {
+                    FilterController.setEmotionfilter("");
+                }
+                FeelTripApplication.loadFromElasticSearch();
+                FeelTripApplication.getMoodAdapter(getBaseContext()).notifyDataSetChanged();
+
+            } // to close the onItemSelected
+            public void onNothingSelected(AdapterView<?> parent)
+            {
+            }
+        });
     }
 
         /*

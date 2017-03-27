@@ -53,10 +53,10 @@ public class FeelTripTests extends ActivityInstrumentationTestCase2 {
     }
 
     public void testAddMoodTask(){
-        ElasticSearchController.AddMoodTask addMoodTask = new ElasticSearchController.AddMoodTask();
+        ElasticSearchController.AddMoodTask addMoodTask = new ElasticSearchController.AddMoodTask(getActivity());
         Mood mood = new Mood("user1");
         try {
-            mood.setDescription("description1", " -Feeling sleepy");
+            mood.setDescription("description1"+" -Feeling sleepy");
             mood.setPrivate();
         } catch (DescriptionTooLongException e) {
             e.printStackTrace();
@@ -81,7 +81,7 @@ public class FeelTripTests extends ActivityInstrumentationTestCase2 {
     public void testEditTask() throws DescriptionTooLongException {
         ArrayList<Mood> moods = new ArrayList<Mood>();
         ElasticSearchController.GetMoodTask getMoodTask = new ElasticSearchController.GetMoodTask();
-        ElasticSearchController.EditMoodTask editMoodTask = new ElasticSearchController.EditMoodTask();
+        ElasticSearchController.EditMoodTask editMoodTask = new ElasticSearchController.EditMoodTask(getActivity());
         getMoodTask.execute();
         try {
             moods.addAll(getMoodTask.get());
@@ -93,7 +93,7 @@ public class FeelTripTests extends ActivityInstrumentationTestCase2 {
 
         Date date = new Date();
         Mood mood = moods.get(0);
-        mood.setDescription("test edit", " -Feeling tested");
+        mood.setDescription("test edit"+" -Feeling tested");
         mood.setEmotionalState("happy");
         mood.setMapPosition(12320.23143, 901273.000);
         mood.setPrivate();

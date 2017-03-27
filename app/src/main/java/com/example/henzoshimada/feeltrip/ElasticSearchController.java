@@ -1,5 +1,6 @@
 package com.example.henzoshimada.feeltrip;
 
+import android.content.Context;
 import android.os.AsyncTask;
 import android.text.TextUtils;
 import android.util.Log;
@@ -24,6 +25,7 @@ import io.searchbox.core.Index;
 import io.searchbox.core.Search;
 import io.searchbox.core.SearchResult;
 import io.searchbox.core.Update;
+import io.searchbox.indices.mapping.PutMapping;
 
 /**
  * Created by Esus2 on 2017-03-11.
@@ -36,10 +38,29 @@ public class ElasticSearchController {
     private static final String typeUser = "user";
     private static final String typeRequest = "request";
 
-    public static class AddMoodTask extends AsyncTask<Mood, Void, Void> {
+    static PutMapping putMapping = new PutMapping.Builder(
+            groupIndex,
+            typeMood,
+            "{ \"mood\" : { \"properties\" : { \"location\" : {\"type\" : \"geo_point\"} } } }"
+            ).refresh(true).build();
+
+
+    public static class AddMoodTask extends AsyncTask<Mood, Void, Boolean> {
+
+        private Context context;
+
+        public AddMoodTask(Context context) {
+            this.context = context.getApplicationContext();
+        }
 
         @Override
-        protected Void doInBackground(Mood ... moods ) {
+        protected void onPostExecute(Boolean result) {
+            FeelTripApplication.loadFromElasticSearch();
+            FeelTripApplication.getMoodAdapter(context).notifyDataSetChanged();
+        }
+
+        @Override
+        protected Boolean doInBackground(Mood ... moods ) {
             if(android.os.Debug.isDebuggerConnected())
                 android.os.Debug.waitForDebugger();
             verifySettings();
@@ -47,41 +68,57 @@ public class ElasticSearchController {
             for (Mood mood : moods) {
                 mood.setMade(new Date()); // document around the instant the mood is actually built and posted onto elasticsearch
                 if(mood.getMade() != null) {
-                    Index index = new Index.Builder(mood).index(groupIndex).type(typeMood).build();
+                    Index index = new Index.Builder(mood).index(groupIndex).type(typeMood).refresh(true).build();
 
                     try {
                         // where is the client?
+                        client.execute(putMapping); // Sets type of location to be "geo_point" on elasticsearch
                         DocumentResult result = client.execute(index);
                         if (result.isSucceeded()) {
                             mood.setId(result.getId());
                         } else {
+                            Log.i("Error",mood.getDescription());
+                            Log.i("Error",mood.getId());
                             Log.i("Error", "Elasticsearch was not able to add the mood");
                             mood.setAdd();
                             UpdateQueueController updateQueueController = FeelTripApplication.getUpdateQueueController();
                             updateQueueController.addMood(mood);
                         }
                     } catch (Exception e) {
-                        Log.i("Error", "The application failed to build and send the moods");
+                        Log.i("Error", ""+e);
                         mood.setAdd();
                         UpdateQueueController updateQueueController = FeelTripApplication.getUpdateQueueController();
                         updateQueueController.addMood(mood);
                     }
                 }
             }
-            return null;
+            return true;
         }
     }
 
-    public static class EditMoodTask extends AsyncTask<Mood, Void, Void>{ // TODO: Fix edit when removing a field
+    public static class EditMoodTask extends AsyncTask<Mood, Void, Boolean>{ // TODO: Fix edit when removing a field
+
+        private Context context;
+
+        public EditMoodTask(Context context) {
+            this.context = context;
+        }
 
         @Override
-        protected Void doInBackground(Mood ... moods ) {
+        protected void onPostExecute(Boolean result) {
+            FeelTripApplication.loadFromElasticSearch();
+            FeelTripApplication.getMoodAdapter(context).notifyDataSetChanged();
+        }
+
+        @Override
+        protected Boolean doInBackground(Mood ... moods ) {
             if(android.os.Debug.isDebuggerConnected())
                 android.os.Debug.waitForDebugger();
             verifySettings();
 
             for (Mood mood : moods) {
                 if (!mood.isChanged()){
+                    Log.d("query", "No changes to the mood were found");
                     return null;
                 }
                 String moodId = mood.getId();
@@ -108,7 +145,8 @@ public class ElasticSearchController {
                                 }
                                 break;
                             case 1:
-                                query += ("\"description\" : \"" + mood.getDescription() + "\"");
+                                String desc = mood.getDescription().replace("\\","\\\\");
+                                query += ("\"description\" : \"" + desc.replace("\"","\\\"") + "\""); // adds support for us to have \ and " chars while editing description.
                                 if (notDone != 0) {
                                     query += (",");
                                 }
@@ -132,13 +170,29 @@ public class ElasticSearchController {
                                 }
                                 break;
                             case 5:
-                                query += ("\"image\" : \"" + mood.getImage() + "\"");
+                                if(mood.getImage() == null) {
+                                    query += ("\"image\" : " + mood.getImage());
+                                }
+                                else {
+                                    query += ("\"image\" : \"" + mood.getImage() + "\"");
+                                }
                                 if (notDone != 0) {
                                     query += (",");
                                 }
                                 break;
                             case 6:
-                                query += ("\"location\" : \"" + mood.getLocation() + "\"");
+                                if(mood.getLocation() == null) {
+                                    query += ("\"location\" : " + mood.getLocation());
+                                }
+                                else {
+                                    query += ("\"location\" : \"" + mood.getLocation() + "\"");
+                                }
+                                if (notDone != 0) {
+                                    query += (",");
+                                }
+                                break;
+                            case 7:
+                                query += ("\"emoji\" : \"" + mood.getEmoji() + "\"");
                                 if (notDone != 0) {
                                     query += (",");
                                 }
@@ -151,7 +205,8 @@ public class ElasticSearchController {
                     query += "}}";
 
                     try{
-                        Update update = new Update.Builder(query).index(groupIndex).type(typeMood).id(moodId).build();
+                        
+                        Update update = new Update.Builder(query).index(groupIndex).type(typeMood).id(moodId).refresh(true).build();
                         client.execute(update);
 
                     }catch (Exception e){
@@ -164,7 +219,7 @@ public class ElasticSearchController {
                     mood.resetState();
                     Log.d("update query: ", query);
                 }
-                return null;
+            return true;
         }
     }
 
@@ -179,9 +234,10 @@ public class ElasticSearchController {
 
             for (Mood mood : moods) {
                 String moodId = mood.getId();
-                Delete delete = new Delete.Builder(moodId).index(groupIndex).type(typeMood).build();
+                Delete delete = new Delete.Builder(moodId).index(groupIndex).type(typeMood).refresh(true).build();
 
                 try {
+                    
                     client.execute(delete);
                 }
                 catch (Exception e) {
@@ -231,6 +287,7 @@ public class ElasticSearchController {
 
 
             try {
+                
                 SearchResult result = client.execute(search);
                 if (result.isSucceeded()){
                     List<Mood> foundMoods = result.getSourceAsObjectList(Mood.class);
@@ -257,10 +314,11 @@ public class ElasticSearchController {
             verifySettings();
 
             for (Participant participant : participants) {
-                Index index = new Index.Builder(participant).index(groupIndex).type(typeUser).build();
+                Index index = new Index.Builder(participant).index(groupIndex).type(typeUser).refresh(true).build();
 
                 try {
                     // where is the client?
+                    
                     DocumentResult result = client.execute(index);
                     if (result.isSucceeded()){
                         participant.setId(result.getId());
@@ -287,9 +345,10 @@ public class ElasticSearchController {
 
             for (Participant participant : participants) {
                 String userId = participant.getId();
-                Delete delete = new Delete.Builder(userId).index(groupIndex).type(typeUser).build();
+                Delete delete = new Delete.Builder(userId).index(groupIndex).type(typeUser).refresh(true).build();
 
                 try {
+                    
                     client.execute(delete);
                 }
                 catch (Exception e) {
@@ -322,8 +381,8 @@ public class ElasticSearchController {
                     "\"query\" : {" +
                     "\"bool\" : {" +
                     "\"must\" : [" +
-                    "{ \"match\": { \"userName\": \"" + username + "\" }}," +
-                    "{ \"match\": { \"password\": \"" + password + "\" }}" +
+                    "{ \"term\": { \"userName\": \"" + username + "\" }}," +
+                    "{ \"term\": { \"password\": \"" + password + "\" }}" +
                     "]}}}";
 
             Log.d("query", query);
@@ -335,6 +394,7 @@ public class ElasticSearchController {
 
 
             try {
+                
                 SearchResult result = client.execute(search);
                 if (result.isSucceeded()) {
                     List<Participant> foundParticipants = result.getSourceAsObjectList(Participant.class);
@@ -567,6 +627,7 @@ public class ElasticSearchController {
 
 
             try {
+                
                 SearchResult result = client.execute(search);
                 if (result.isSucceeded()){
                     List<Participant> foundParticipants = result.getSourceAsObjectList(Participant.class);
@@ -597,12 +658,13 @@ public class ElasticSearchController {
         private boolean keywordfilter;
 
         private String emotion; // stores the passed emotion we're filtering by
+        private String keyword; // stores the passed keyword we're filtering by
         private String following = "[\"\"]"; // stores the string containing all the users the participant follows, initialize it to "blank" array by default
         private String participant; // stores the participant's username
-        private Double currentlat;
-        private Double currentlon; // TODO: actually pass in the user's current lat and lon to these variables
+        private Double currentlat = 53.5141543;
+        private Double currentlon = -113.6701809; // TODO: actually pass in the user's current lat and lon to these variables
 
-        public GetFilteredMoodsTask(String searchmode, String pastweek, String mostrecent, String emotion, String friendsonly){ // must pass this specific set of Strings in this order while constructing
+        public GetFilteredMoodsTask(String searchmode){ // must pass this specific set of Strings in this order while constructing
             switch(searchmode) {
                 case "main":
                     participant = FeelTripApplication.getParticipant().getUserName();
@@ -626,18 +688,22 @@ public class ElasticSearchController {
                     Log.i("Error", "The given search mode is invalid.");
                     return;
             }
-            if(!pastweek.isEmpty()) {
+            if(FeelTripApplication.getFilterController().isPastweekfilter()) {
                 pastweekfilter = true;
             }
-            if(!mostrecent.isEmpty()) {
+            if(FeelTripApplication.getFilterController().isMostrecentfilter()) {
                 mostrecentfilter = true;
             }
-            if(!emotion.isEmpty()) {
+            if(!FeelTripApplication.getFilterController().getEmotionfilter().isEmpty()) {
                 emotionfilter = true;
-                this.emotion = emotion;
+                this.emotion = FeelTripApplication.getFilterController().getEmotionfilter();
             }
-            if(!friendsonly.isEmpty()) {
+            if(FeelTripApplication.getFilterController().isFriendsonlyfilter()) {
                 friendsonlyfilter = true;
+            }
+            if(!FeelTripApplication.getFilterController().getKeywordfilter().isEmpty()) {
+                keywordfilter = true;
+                this.keyword =  FeelTripApplication.getFilterController().getKeywordfilter();
             }
         }
 
@@ -647,12 +713,11 @@ public class ElasticSearchController {
                 android.os.Debug.waitForDebugger();
             verifySettings();
 
-            if(search_parameters.length != 0) {
-                keywordfilter = true;
-            }
             ArrayList<Mood> moods = new ArrayList<>();
             String query; // things are going to get complicated very fast now, booleans are here to understand whether a filter is being applied or not
             query = "{" +
+                    "\"query\" : {" +
+                    "\"filtered\" : {" +
                     "\"query\" : {" +
                     "\"bool\" : {";
 
@@ -664,11 +729,11 @@ public class ElasticSearchController {
             }
 
             if(emotionfilter) {
-                query += "\"must\" : { \"term\" : { \"emotionalState\" : \"" + emotion + "\" }},";
+                query += "\"must\" : { \"match\" : { \"emotionalState\" : \"" + emotion + "\" }},";
             }
 
             if(keywordfilter) {
-                query += "\"must\" : { \"term\" : { \"description\" : \"" + search_parameters[0] + "\" }},";
+                query += "\"must\" : { \"match\" : { \"description\" : \"" + keyword + "\" }},";
             }
 
             if(mainmode) {
@@ -678,25 +743,28 @@ public class ElasticSearchController {
                 }
                 query += "\"should\" : { \"terms\" : { \"username\" : " + following + " }}" +
                          "}}," +
-                         "\"must_not\" : { \"term\" : { \"username\" : \"" + participant + "\" }}";
+                         "\"must_not\" : { \"term\" : { \"username\" : \"" + participant + "\" }}" +
+                         "}}";
             }
 
             else if (profilemode) {
-                query += "\"must\" : { \"term\" : { \"username\" : \"" + participant + "\" }}";
+                query += "\"must\" : { \"term\" : { \"username\" : \"" + participant + "\" }}" +
+                         "}}";
             }
 
             else if (mapmode) {
-                query += "\"must\" : { \"geo_distance\" : { \"distance\" : \"5km\", \"location\" : { \"lat\" : " + currentlat + ", \"lon\" : " + currentlon + "}}},";
                 query += "\"must\" : { \"bool\" : {";
-                if(!friendsonlyfilter) { // note this line says if NOT friendsonly filter... aka we add public as well
+                if (!friendsonlyfilter) { // note this line says if NOT friendsonly filter... aka we add public as well
                     query += "\"should\" : { \"term\" : { \"isPrivate\" : false }},";
                 }
                 query += "\"should\" : { \"terms\" : { \"username\" : " + following + " }}" +
-                        "}}," +
-                        "\"must_not\" : { \"term\" : { \"username\" : \"" + participant + "\" }}";
+                         "}}," +
+                         "\"must_not\" : { \"term\" : { \"username\" : \"" + participant + "\" }}" +
+                         "}}," +
+                         "\"filter\" : { \"geo_distance\" : { \"distance\" : \"5km\", \"location\" : { \"lat\" : " + currentlat + ", \"lon\" : " + currentlon + "}}}";
             }
 
-            query +="}},";
+            query += "}},";
 
             if (mostrecentfilter) {
                 query += "\"size\" : 1,";
@@ -710,59 +778,11 @@ public class ElasticSearchController {
             Search search = new Search.Builder(query)
                     .addIndex(groupIndex)
                     .addType(typeMood)
-                    .build();
+                    .refresh(true).build();
 
 
             try {
-                SearchResult result = client.execute(search);
-                if (result.isSucceeded()){
-                    List<Mood> foundMoods = result.getSourceAsObjectList(Mood.class);
-                    moods.addAll(foundMoods);
-                }
-                else {
-                    Log.i("Error", "the search query failed to find any moods that matched");
-                }
-            }
-            catch (Exception e) {
-                Log.i("Error", "Something went wrong when we tried to communicate with the elasticsearch server!");
-            }
-
-            return moods;
-        }
-    }
-
-        public static class GetMyMoodsTask extends AsyncTask<String, Void, ArrayList<Mood>> { // fetch user's moods, sorted by newest to oldest.
-        private String username;
-        public GetMyMoodsTask(String filterBy){ // must pass username through on creation of controller
-            this.username = filterBy;
-        }
-
-        @Override
-        protected ArrayList<Mood> doInBackground(String... search_parameters) {
-            if(android.os.Debug.isDebuggerConnected())
-                android.os.Debug.waitForDebugger();
-            verifySettings();
-
-            ArrayList<Mood> moods = new ArrayList<>();
-            String query;
-            // bool queries are absolutely positively amazing
-            query = "{" +
-                    "\"query\" : {" +
-                    "\"bool\" : {" +
-                    "\"must\" : { \"term\" : { \"user\" : \"" + username + "\" }}" +
-                    "}}," +
-                    "\"sort\": { \"made\": { \"order\": \"desc\" }}" +
-                    "}";
-
-            Log.d("query", query);
-
-            Search search = new Search.Builder(query)
-                    .addIndex(groupIndex)
-                    .addType(typeMood)
-                    .build();
-
-
-            try {
+                
                 SearchResult result = client.execute(search);
                 if (result.isSucceeded()){
                     List<Mood> foundMoods = result.getSourceAsObjectList(Mood.class);

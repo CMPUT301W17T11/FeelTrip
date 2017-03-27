@@ -1,8 +1,12 @@
 package com.example.henzoshimada.feeltrip;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
+import android.text.Html;
 import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -26,8 +30,12 @@ public class MoodAdapter extends ArrayAdapter<Mood> {
         TextView userName;
         TextView date;
         TextView description;
+        TextView append;
+        ImageView emoji;
         TextView socialSituation;
+        ImageView emojiImage;
         ImageView image;
+
     }
 
     public MoodAdapter(ArrayList<Mood> moodArrayList, Context context) {
@@ -56,7 +64,9 @@ public class MoodAdapter extends ArrayAdapter<Mood> {
 
             viewHolder.userName = (TextView) convertView.findViewById(R.id.userName);
             viewHolder.date = (TextView) convertView.findViewById(R.id.date);
+            viewHolder.emojiImage = (ImageView) convertView.findViewById(R.id.emojiImage);
             viewHolder.description = (TextView) convertView.findViewById(R.id.description);
+            viewHolder.append = (TextView) convertView.findViewById(R.id.append);
             viewHolder.socialSituation = (TextView) convertView.findViewById(R.id.socialSituation);
             viewHolder.image = (ImageView) convertView.findViewById(R.id.image);
 
@@ -73,14 +83,27 @@ public class MoodAdapter extends ArrayAdapter<Mood> {
         lastPosition = position;
 */
         Log.d("imageTag","new array list");
+        assert mood != null;
         viewHolder.userName.setText(mood.getUsername());
         viewHolder.date.setText(mood.getDate().toString());
-        viewHolder.description.setText(mood.getDescription());
+        viewHolder.description.setText(Html.fromHtml(mood.getDescription())); //TODO: This is depreciated, maybe replace?
+        viewHolder.append.setText(" - Feeling " + mood.getEmotionalState());
         viewHolder.socialSituation.setText(mood.getSocialSit());
 
+        //#######################################################
+        Log.i("Mytag","Emoooooo: "+mood.getEmotionalState());
+        int emojiID = getContext().getApplicationContext().getResources().getIdentifier("emoji" + String.valueOf(mood.getEmoji()),"drawable",getContext().getApplicationContext().getPackageName());
+        if(emojiID != 0) {
+            viewHolder.emojiImage.setImageResource(emojiID);
+        }
+        else { // This field can only be accessed if something goes wrong, or if someone alters the main database. It's mainly a fallback safety.
+            viewHolder.emojiImage.setImageResource(getContext().getApplicationContext().getResources().getIdentifier("err","drawable",getContext().getApplicationContext().getPackageName())); //TODO: Replace cog with the proper file
+        }
+        //######################################################
         String encodedImageString = mood.getImage();
         if(encodedImageString != null) {
             byte[] decodedString = Base64.decode(encodedImageString, Base64.DEFAULT);
+            Log.d("Bitmap","Length: "+decodedString.length);
             Bitmap photo = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
             viewHolder.image.setImageBitmap(photo);
             Log.d("imageTag", "have image");

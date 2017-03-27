@@ -17,9 +17,11 @@ import android.widget.TextView;
 
 import com.example.henzoshimada.feeltrip.EditMoodActivity;
 import com.example.henzoshimada.feeltrip.ElasticSearchController;
+import com.example.henzoshimada.feeltrip.FeelTripApplication;
 import com.example.henzoshimada.feeltrip.Mood;
 import com.example.henzoshimada.feeltrip.MoodAdapter;
 import com.example.henzoshimada.feeltrip.R;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
@@ -38,6 +40,8 @@ public class homeFragmment extends Fragment{
     private ArrayList<Mood> moodArrayList;
 
     private ArrayAdapter<Mood> adapter;
+
+    private static final String frag = "main";
 
     @Override
     public View onCreateView(LayoutInflater inflater, final ViewGroup container,
@@ -65,21 +69,13 @@ public class homeFragmment extends Fragment{
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                         Log.d("listTag","on click");
-                        Mood mood = moodArrayList.get(position);
+                        Mood mood = FeelTripApplication.getMoodArrayList().get(position);
                         Log.d("listTag","on click2");
                         if (mood.getImage() == null){
                             Log.d("myTag","selected have no image ");
                         }else{
                             Log.d("myTag","image:"+mood.getImage());
                         }
-                        /*
-                        Intent intent = new Intent(view.getContext(), EditMoodActivity.class);
-                        Mood selected = moodArrayList.get(position);
-                        Bundle bundle = selected.toBundle();
-
-                        intent.putExtras(bundle);
-                        startActivity(intent);
-*/
                     }
                 });
 
@@ -101,10 +97,12 @@ public class homeFragmment extends Fragment{
     public void onStart() {
         // TODO Auto-generated method stub
         super.onStart();
-        moodArrayList = new ArrayList<Mood>();
-        loadFromElasticSearch();
 
-        adapter= new MoodAdapter(moodArrayList,getActivity());
+        if(!FeelTripApplication.getFrag().equals(frag)) {
+            FeelTripApplication.setFrag(frag);
+        }
+//        FeelTripApplication.loadFromElasticSearch();
+        adapter = FeelTripApplication.getMoodAdapter(getActivity());
 
         //adapter = new ArrayAdapter<Mood>(getActivity(), R.layout.list_item, moodArrayList); //view,dataArray
         oldMoodListView.setAdapter(adapter);
@@ -120,18 +118,5 @@ public class homeFragmment extends Fragment{
         adapter.notifyDataSetChanged();
     }
 */
-
-    private void loadFromElasticSearch(){
-        Log.d("listTag", "load from ES");
-        ElasticSearchController.GetFilteredMoodsTask getMoodTask = new ElasticSearchController.GetFilteredMoodsTask("main","","","","");
-        getMoodTask.execute();
-        try {
-            moodArrayList.addAll(getMoodTask.get());
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        }
-    }
 
 }

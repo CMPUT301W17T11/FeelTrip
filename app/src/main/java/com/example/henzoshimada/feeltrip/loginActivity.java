@@ -30,7 +30,7 @@ public class loginActivity extends AppCompatActivity {
 
         registerReceiver(networkStateListener, intentFilter);
     }
-    public void checkUser(View v){
+    public void checkUser(View v){ // TODO: Check and fix cases where pass or username contains special chars.
         EditText userField = (EditText) this.findViewById(R.id.user_text);
         EditText passField = (EditText) this.findViewById(R.id.pass_text);
         ArrayList<Participant> participants = new ArrayList<>();
@@ -45,7 +45,6 @@ public class loginActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         if(!participants.isEmpty()) {
-
             getUserInfo(participants);
 
             Intent intent = new Intent(this, MainScreen.class);

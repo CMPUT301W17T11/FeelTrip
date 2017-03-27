@@ -1,6 +1,14 @@
 package com.example.henzoshimada.feeltrip;
 
 import android.app.Application;
+import android.app.Fragment;
+import android.content.Context;
+import android.util.Log;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 /**
  * Created by Esus2 on 2017-03-09.
@@ -12,6 +20,26 @@ import android.app.Application;
     to the queue.
      */
 public class FeelTripApplication extends Application {
+
+    private static final List<String> allEmotions = Arrays.asList( // MODIFY THIS IF YOU WISH TO ADD/DELETE EMOTIONS
+            "Zero", // THIS IS HERE SO WE CAN REFERENCE THE EMOTIONS WITHOUT WORRYING ABOUT ZERO INDEXING
+            "Angry",
+            "Confused",
+            "Disgusted",
+            "Fearful",
+            "Happy",
+            "Sad",
+            "Shameful",
+            "Cool");
+
+    public static int getNumEmotions() {
+        return allEmotions.size() - 1; // MINUS ONE TO COMPENSATE FOR THE ZERO INDEX ELEMENT
+    }
+
+    public static String getEmotionalState(int index){
+        return allEmotions.get(index);
+    }
+
     // Singleton
     private static UpdateQueue updateQueue = null;
 
@@ -57,6 +85,71 @@ public class FeelTripApplication extends Application {
             participant = new Participant();
         }
         return participant;
+    }
+
+    private static FilterController filterController = null;
+    public static FilterController getFilterController(){
+        if (filterController == null){
+            filterController = new FilterController();
+        }
+        return filterController;
+    }
+
+    private static  MoodAdapter moodAdapter = null;
+    private static ArrayList<Mood> moodArrayList = new ArrayList<Mood>();
+    public static MoodAdapter getMoodAdapter(Context context) {
+        if (moodAdapter == null) {
+            moodAdapter = new MoodAdapter(moodArrayList, context.getApplicationContext());
+        }
+        return moodAdapter;
+    }
+
+    public static ArrayList<Mood> getMoodArrayList() {
+        if(moodArrayList == null) {
+            moodArrayList = new ArrayList<Mood>();
+        }
+        return moodArrayList;
+    }
+
+    public static void setMoodArrayList(ArrayList<Mood> moodArrayList) {
+        FeelTripApplication.moodArrayList = moodArrayList;
+    }
+
+    public static String getFrag() {
+        return frag;
+    }
+
+    private static String frag = "main"; // main by default
+    public static void setFrag(String fragstr) {
+        if(fragstr.equals("main") || fragstr.equals("profile") || fragstr.equals("map")) {
+            frag = fragstr;
+        }
+        else {
+            Log.i("Error", "The given search mode is invalid.");
+            return;
+        }
+    }
+
+    public static void loadFromElasticSearch(){
+        Log.d("listTag", "load from ES");
+        moodArrayList.clear();
+        ElasticSearchController.GetFilteredMoodsTask getMoodTask;
+        if(frag.equals("main") || frag.equals("profile") || frag.equals("map")) {
+            getMoodTask = new ElasticSearchController.GetFilteredMoodsTask(frag);
+        }
+        else {
+            Log.i("Error", "The given search mode is invalid.");
+            return;
+        }
+        getMoodTask.execute();
+        try {
+            moodArrayList.addAll(getMoodTask.get());
+            Log.d("mood array", "moodArrayList");
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
     }
 
 }
