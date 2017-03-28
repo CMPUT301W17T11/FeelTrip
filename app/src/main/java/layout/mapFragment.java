@@ -4,12 +4,16 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.location.Location;
+import android.os.Build;
 import android.os.Bundle;
 import android.app.Fragment;
 //import android.support.v4.app.Fragment;
 import android.support.annotation.NonNull;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
@@ -34,6 +38,7 @@ import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.Circle;
 import com.google.android.gms.maps.model.CircleOptions;
@@ -204,35 +209,50 @@ public class mapFragment extends Fragment implements
         }catch (NullPointerException e){
         }
 
-        setMoodMarker();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            setMoodMarker();
+        }
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     public void setMoodMarker(){
-        //fpr single testing
-        /*
-        if (mMap != null) {
-            //Log.d("mapTag","set marker");
-            Marker marker = mMap.addMarker(new MarkerOptions()
-                    .position(new LatLng(53.528033, -113.525355))
-                    .title("This is a title")
-                    .snippet("0"));
-        }else{Log.d("markerTag","mmap null");}
-        */
+
+        //get array for setting marker, make sure participant location is set
         testCreateMoodArray();
+
         Log.d("mapTag","set marker");
         if (mMap != null) {
+            mMap.clear();
             Log.d("mapTag","inside set marker");
             Mood mood;
             Marker marker;
+
+
             Log.d("mapTag","mood array size: "+moodArrayList.size());
             for(int i = 0; i < moodArrayList.size(); i++){
                 mood = moodArrayList.get(i);
-                //get longitude
-                //get latitude
+
+                int emojiID; //R.drawable.emoji1
+
+                int emojierr = getContext().getApplicationContext().getResources().getIdentifier("emoji" + String.valueOf(mood.getEmoji()),"drawable",getContext().getApplicationContext().getPackageName());
+                if(emojierr != 0) {
+                    emojiID = emojierr;
+                }
+                else { // This field can only be accessed if something goes wrong, or if someone alters the main database. It's mainly a fallback safety.
+                    emojiID = getContext().getApplicationContext().getResources().getIdentifier("err","drawable",getContext().getApplicationContext().getPackageName());
+                }
+
+                Bitmap emojiBitmap = BitmapFactory.decodeResource(getResources(), emojiID);
+                Bitmap resizedBitmap = Bitmap.createScaledBitmap(emojiBitmap, 50, 50, false);
+
                 marker = mMap.addMarker(new MarkerOptions()
                         //.position(new LatLng(53.528033+i, -113.525355+i))
                         .position(new LatLng(mood.getLatitude(),mood.getLongitude()))
-                        .snippet(String.valueOf(i)));
+                        .snippet(String.valueOf(i))
+                        //.icon(BitmapDescriptorFactory.fromResource(emojiID))
+                        .icon(BitmapDescriptorFactory.fromBitmap(resizedBitmap))
+                );
+
                 //Log.d("mapTag", "i= "+String.valueOf(i));
             }
         }
@@ -262,64 +282,29 @@ public class mapFragment extends Fragment implements
         mLastKnownLocation = LocationServices.FusedLocationApi
                 .getLastLocation(mGoogleApiClient);
         if (mLastKnownLocation != null) {
+
             Log.d("mapTag", "Lat= " + String.valueOf(mLastKnownLocation.getLatitude()) + " and Long= " + String.valueOf(mLastKnownLocation.getLongitude()));
             participant.setLongitude(mLastKnownLocation.getLongitude());
             participant.setLatitude(mLastKnownLocation.getLatitude());
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                setMoodMarker();
+            }
+
             //5km radius circle for debug
             Circle circle = mMap.addCircle(new CircleOptions()
                     .center(new LatLng(mLastKnownLocation.getLatitude(),
                             mLastKnownLocation.getLongitude()))
                     .radius(5000) //in meters
                     .strokeColor(Color.RED));
+            mMap.animateCamera(CameraUpdateFactory.zoomTo(15), 2000, null);
         } else {
             Toast.makeText(getActivity(), "Please turn on Location Service and retry", Toast.LENGTH_SHORT).show();
         }
         return false;
     }
-/*
-    //handle the result of the permission request
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
-                                           @NonNull int[] grantResults) {
-        Log.d("permTag","on request perm result");
-        if (requestCode != LOCATION_PERMISSION_REQUEST_CODE) {
-            return;
-        }
 
-        Log.d("permTag","on request perm result");
-    }
-*/
-    /*
-    @Override
-    protected void onResumeFragments() {
-        super.onResumeFragments();
-        if (mPermissionDenied) {
-            // Permission was not granted, display error dialog.
-            showMissingPermissionError();
-            mPermissionDenied = false;
-        }
-        Log.d("mapTag","on resume fragments");
-    }
-*/
-
-/*
-    //new stuff
-    @Override
-    public void onResume(){
-        super.onResume();
-        if (mPermissionDenied) {
-            // Permission was not granted, display error dialog.
-            showMissingPermissionError();
-            mPermissionDenied = false;
-        }
-        Log.d("mapTag","on resume fragments");
-    }
-*/
-//ElasticSearchController.GetMoodTask getMoodTask = new ElasticSearchController.GetMoodTask();
-//getMoodTask.execute("user");
-//moodArrayList.addAll(getMoodTask.get());
-
-
+    //must be called after participant location is set
     private void testCreateMoodArray() {
         //FeelTripApplication.loadFromElasticSearch(); THIS LINE ISN'T NEEDED DUE TO THE WAY WE CALL mapFragment
         try {

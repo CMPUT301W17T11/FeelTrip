@@ -5,6 +5,7 @@ import android.*;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -36,6 +37,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -124,6 +126,7 @@ public class EditMoodActivity extends AppCompatActivity {
                 case R.id.date_bottom_button:
                     Log.d("Mytag", "Tapped on date");
                     datePick(findViewById(R.id.date_bottom_button).getContext());
+                    //timePick(findViewById(R.id.date_bottom_button).getContext());
                     return true;
                 case R.id.photo_bottom_button:
                     Log.d("Mytag", "Tapped on photo");
@@ -283,6 +286,13 @@ public class EditMoodActivity extends AppCompatActivity {
         Log.d("Mytag", "Went into date");
         new DatePickerDialog(context,AlertDialog.THEME_DEVICE_DEFAULT_LIGHT,datePickerDialogListener, dateTime.get(Calendar.YEAR),
                 dateTime.get(Calendar.MONTH), dateTime.get(Calendar.DAY_OF_MONTH)).show();
+    }
+
+    public void timePick(Context context) {
+        //selectDate();
+        Log.d("Mytag", "Went into date");
+        new TimePickerDialog(context, AlertDialog.THEME_DEVICE_DEFAULT_LIGHT, onTimeSetListener, dateTime.get(Calendar.HOUR_OF_DAY),
+                dateTime.get(Calendar.MINUTE), true).show();
     }
 
 
@@ -506,12 +516,23 @@ public class EditMoodActivity extends AppCompatActivity {
     DatePickerDialog.OnDateSetListener datePickerDialogListener = new DatePickerDialog.OnDateSetListener() {
         @Override
         public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-            if (!editflag) {
-                dateTime.set(Calendar.YEAR, year);
-                dateTime.set(Calendar.MONTH, month);
-                dateTime.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-            }
+
+            dateTime.set(Calendar.YEAR, year);
+            dateTime.set(Calendar.MONTH, month);
+            dateTime.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+
             Log.d("myTag", "Date: " + formatDateTime.format(dateTime.getTime()));
+        }
+    };
+
+    TimePickerDialog.OnTimeSetListener onTimeSetListener = new TimePickerDialog.OnTimeSetListener() {
+        @Override
+        public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+
+            dateTime.set(Calendar.HOUR_OF_DAY, hourOfDay);
+            dateTime.set(Calendar.MINUTE, minute);
+
+            Log.d("myTag", "time Date: " + formatDateTime.format(dateTime.getTime()));
         }
     };
 

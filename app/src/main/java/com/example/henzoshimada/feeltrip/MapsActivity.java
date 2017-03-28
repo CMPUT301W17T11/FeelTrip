@@ -146,12 +146,15 @@ public class MapsActivity extends FragmentActivity implements
             mMap.setOnMarkerDragListener(this);
             mMap.setOnMapLongClickListener(this);
             try {
+                //set marker to where mood is posted
                 LatLng lastLoc = new LatLng(latitude, longitude);
                 mMap.moveCamera(CameraUpdateFactory.newLatLng(lastLoc));
                 marker = mMap.addMarker(new MarkerOptions()
                         .position(lastLoc)
                         .draggable(true)
                 );
+                mMap.animateCamera(CameraUpdateFactory.zoomTo(15), 2000, null);
+
                 Log.d("camTag","success"+latitude+" "+longitude);
             }catch (NullPointerException e) {
                 Log.d("camTag","fail");
