@@ -5,80 +5,99 @@
     android:padding="10dp"
     android:background="@android:drawable/dialog_holo_light_frame">
 
+    <com.daimajia.swipe.SwipeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"> <!--TEST ONLY-->
+        <!-- Bottom View Start-->
+        <LinearLayout
+            android:id="@+id/bottom_wrapper"
+            android:layout_width="100sp"
+            android:layout_height="match_parent"
+            android:background="#66ddff00"
+            android:orientation="horizontal"
+            android:weightSum="1">
+        <!-- Bottom View End-->
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-        <TextView
-            android:id="@+id/userName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Name"
-            android:textSize="20sp"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:textColor="@android:color/black" />
-        <TextView
-            android:id="@+id/socialSituation"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Alone"
-            android:textAppearance="?android:attr/textAppearanceButton"
-            android:textColor="@android:color/black"
-            android:layout_marginStart="10sp"
-            android:textSize="10sp"
-            android:textStyle="bold" />
+        </LinearLayout>
+        <LinearLayout
+            android:padding="10dp"
+            android:background="#ffffff"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+            <!--What you want to show in SurfaceView-->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
 
+            <TextView
+                android:id="@+id/userName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Name"
+                android:textSize="20sp"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="@android:color/black" />
+            <TextView
+                android:id="@+id/socialSituation"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Alone"
+                android:textAppearance="?android:attr/textAppearanceButton"
+                android:textColor="@android:color/black"
+                android:layout_marginStart="10sp"
+                android:textSize="10sp"
+                android:textStyle="bold" />
+            </LinearLayout>
 
-    </LinearLayout>
+            <TextView
+                android:id="@+id/date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/userName"
+                android:layout_marginTop="25dp"
+                android:text="Fri Mar 24 22:26:55 MDT 2017"
+                android:textColor="@color/gray"
+                android:textStyle="italic" />
 
-    <TextView
-        android:id="@+id/date"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/userName"
-        android:textStyle="italic"
-        android:layout_marginTop="25dp"
-        android:text="Fri Mar 24 22:26:55 MDT 2017"
-        android:textColor="@color/gray" />
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true">
 
+                <TextView
+                    android:id="@+id/description"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="My dog and I had a good walk today"
+                    android:textColor="@android:color/black" />
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true">
-
-        <TextView
-            android:id="@+id/description"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="My dog and I had a good walk today"
-            android:textColor="@android:color/black" />
-
-        <TextView
-            android:id="@+id/append"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="-Feeling Happy"
-            android:textAppearance="?android:attr/textAppearanceButton"
-            android:textColor="@android:color/black"
-            android:textStyle="bold|italic" />
-        <ImageView
-            android:id="@+id/emojiImage"
-            android:adjustViewBounds="true"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:maxWidth="30dp"
-            android:maxHeight="30dp"
-            android:layout_marginStart="15sp"
-            android:scaleType="fitCenter"
-            />
-
-    </LinearLayout>
-    <ImageView
-        android:id="@+id/image"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:adjustViewBounds="true"
-        android:scaleType="fitCenter"/>
+                <TextView
+                    android:id="@+id/append"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="-Feeling Happy"
+                    android:textAppearance="?android:attr/textAppearanceButton"
+                    android:textColor="@android:color/black"
+                    android:textStyle="bold|italic" />
+                <ImageView
+                    android:id="@+id/emojiImage"
+                    android:adjustViewBounds="true"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:maxWidth="30dp"
+                    android:maxHeight="30dp"
+                    android:layout_marginStart="15sp"
+                    android:scaleType="fitCenter" />
+            </LinearLayout>
+            <ImageView
+                android:id="@+id/image"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:adjustViewBounds="true"
+                android:scaleType="fitCenter"/>
+        </LinearLayout>
+    <!-- Surface View End -->
+    </com.daimajia.swipe.SwipeLayout>
 </LinearLayout>
