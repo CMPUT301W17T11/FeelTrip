@@ -11,8 +11,13 @@ import io.searchbox.annotations.JestId;
 public class Participant {
     private String userName;
     private String password;
-    private ArrayList<String> followRequest;
+    private ArrayList<FollowRequest> followRequest;
     private ArrayList<String> following;
+
+
+    // store most recent location
+    private double longitude;
+    private double latitude;
 
     @JestId
     private String id;
@@ -51,30 +56,63 @@ public class Participant {
         this.following.addAll(following);
     }
 
-    public void addAllFollowRequest(ArrayList<String> followRequest){
-        this.followRequest.addAll(followRequest);
+    public void addFollowing(String userName){
+        if (!this.following.contains(userName)) {
+            this.following.add(userName);
+        }
     }
 
-    public void addFollowing(String nameWantToFollow){
-        this.following.add(nameWantToFollow);
+    public void addAllFollowRequest(ArrayList<FollowRequest> followRequest){
+        for (FollowRequest request: followRequest){
+            if (!this.followRequest.contains(request)){
+                this.followRequest.add(request);
+            }
+        }
+
     }
 
+    public void unFollow(String nameUnfollowing){
+        if (this.following.contains(nameUnfollowing)) {
+            this.following.remove(nameUnfollowing);
+        }
+    }
+
+
+    /*
     public void addFollowRequest(String followerName){
         followRequest.add(followerName);
     }
+
 
     public void deleteFollowRequest(String nameWantToDelete){
         if (followRequest.contains(nameWantToDelete)){
             followRequest.remove(nameWantToDelete);
         }
     }
+    */
 
-    public ArrayList<String> getFollowRequest() {
+    public ArrayList<FollowRequest> getFollowRequest() {
         return followRequest;
     }
 
     public ArrayList<String> getFollowing() {
         return following;
+    }
+
+    public double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
+    }
+
+    public double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
     }
 
     public String getId() {

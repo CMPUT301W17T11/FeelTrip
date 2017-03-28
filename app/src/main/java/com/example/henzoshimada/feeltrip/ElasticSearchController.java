@@ -4,11 +4,13 @@ import android.os.AsyncTask;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.google.gson.Gson;
 import com.google.common.collect.Lists;
 import com.searchly.jestdroid.DroidClientConfig;
 import com.searchly.jestdroid.JestClientFactory;
 import com.searchly.jestdroid.JestDroidClient;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -20,6 +22,7 @@ import java.util.concurrent.ExecutionException;
 
 import io.searchbox.core.Delete;
 import io.searchbox.core.DocumentResult;
+import io.searchbox.core.Get;
 import io.searchbox.core.Index;
 import io.searchbox.core.Search;
 import io.searchbox.core.SearchResult;
@@ -36,6 +39,7 @@ public class ElasticSearchController {
     private static final String groupIndex = "cmput301w17t11";
     private static final String typeMood = "mood";
     private static final String typeUser = "user";
+    private static final String typeRequest = "request";
 
 
     static PutMapping usernameMapping = new PutMapping.Builder(
@@ -223,6 +227,9 @@ public class ElasticSearchController {
 
                     }catch (Exception e){
                         Log.i("Error", "The application failed to build and send the moods");
+                        UpdateQueueController updateQueueController = FeelTripApplication.getUpdateQueueController();
+                        updateQueueController.addMood(mood);
+                        return null;
                     }
 
                     mood.resetState();
@@ -420,6 +427,192 @@ public class ElasticSearchController {
             return participants;
         }
     }
+
+    public static class EditParticipantTask extends AsyncTask<Participant, Void, Void>{
+
+        @Override
+        protected Void doInBackground(Participant...participants){
+            if(android.os.Debug.isDebuggerConnected())
+                android.os.Debug.waitForDebugger();
+            verifySettings();
+
+            for (Participant participant : participants){
+
+                String following = new Gson().toJson(participant.getFollowing());
+                String query = "{\"doc\" : {"+
+                        "\"following\" : " + following +
+                        "}}";
+
+
+                Log.d("query is :", query);
+
+                Update update = new Update
+                        .Builder(query)
+                        .index(groupIndex)
+                        .type(typeUser)
+                        .id(participant.getId())
+                        .build();
+                try {
+                    client.execute(update);
+                } catch (IOException e) {
+                    Log.i("Error", "The application failed to build and send request");
+                }
+            }
+
+
+            return null;
+        }
+    }
+
+
+    public static class AddRequestTask extends AsyncTask<FollowRequest, Void, Void> {
+
+        @Override
+        protected Void doInBackground(FollowRequest ... followRequests ) {
+            if(android.os.Debug.isDebuggerConnected())
+                android.os.Debug.waitForDebugger();
+            verifySettings();
+
+            for (FollowRequest followRequest : followRequests) {
+                    Index index = new Index
+                            .Builder(followRequest)
+                            .index(groupIndex)
+                            .type(typeRequest)
+                            .build();
+
+                    try {
+                        DocumentResult result = client.execute(index);
+                        if (result.isSucceeded()) {
+                            followRequest.setId(result.getId());
+                        } else {
+                            Log.i("Error", "Elasticsearch was not able to add the request");
+                        }
+                    } catch (Exception e) {
+                        Log.i("Error", "The application failed to build and send the requests");
+                    }
+            }
+            return null;
+        }
+    }
+
+    public static class GetRequestTask extends AsyncTask<String, Void, ArrayList<FollowRequest>>{
+        private boolean checkAccept;
+
+        public GetRequestTask(boolean checkAccept){
+            this.checkAccept = checkAccept;
+        }
+
+        @Override
+        protected ArrayList<FollowRequest> doInBackground(String... username){
+            if(android.os.Debug.isDebuggerConnected())
+                android.os.Debug.waitForDebugger();
+            verifySettings();
+
+            ArrayList<FollowRequest> followRequests = new ArrayList<>();
+            String query;
+            if (checkAccept){
+                query = "{" +
+                        "\"query\" : {" +
+                        "\"match\" : {" +
+                        "\"sender\" :\"" + username[0] + "\" , " +
+                        "\"accepted\" : \"true\" }" +
+                        " }}";
+            }
+            else {
+                query = "{" +
+                        "\"query\" : {" +
+                        "\"match\" : {" +
+                        "\"receiver\" :\"" + username[0] + "\"}" +
+                        " }}";
+            }
+
+            Search search = new Search.Builder(query)
+                    .addIndex(groupIndex)
+                    .addType(typeRequest)
+                    .build();
+
+
+            try {
+                SearchResult result = client.execute(search);
+                if (result.isSucceeded()){
+                    List<FollowRequest> foundRequests = result.getSourceAsObjectList(FollowRequest.class);
+                    followRequests.addAll(foundRequests);
+                }
+                else {
+                    Log.i("Error", "the search query failed to find any moods that matched");
+                }
+            }
+            catch (Exception e) {
+                Log.i("Error", "Something went wrong when we tried to communicate with the elasticsearch server!");
+            }
+
+            return followRequests;
+        }
+    }
+
+    public static class EditRequestTask extends AsyncTask<FollowRequest, Void, Void>{
+
+        @Override
+        protected Void doInBackground(FollowRequest...followRequests){
+            if(android.os.Debug.isDebuggerConnected())
+                android.os.Debug.waitForDebugger();
+            verifySettings();
+
+            for (FollowRequest followRequest : followRequests){
+
+                String query = "{\"doc\" : {"+
+                        "\"accepted\" : \"true\"" +
+                        "}}";
+
+
+                Log.d("query is :", query);
+
+                Update update = new Update
+                        .Builder(query)
+                        .index(groupIndex)
+                        .type(typeRequest)
+                        .id(followRequest.getId())
+                        .build();
+                try {
+                    client.execute(update);
+                } catch (IOException e) {
+                    Log.i("Error", "The application failed to build and send request");
+                }
+            }
+
+
+            return null;
+        }
+    }
+
+
+    public static class DeleteRequestTask extends AsyncTask<FollowRequest, Void, Void> {
+
+        @Override
+        protected Void doInBackground(FollowRequest ... followRequests ) {
+            if(android.os.Debug.isDebuggerConnected())
+                android.os.Debug.waitForDebugger();
+            verifySettings();
+
+            for (FollowRequest followRequest : followRequests) {
+                String id = followRequest.getId();
+                Delete delete = new Delete
+                        .Builder(id)
+                        .index(groupIndex)
+                        .type(typeRequest)
+                        .build();
+
+                try {
+                    client.execute(delete);
+                }
+                catch (Exception e) {
+                    Log.i("Error", "The application failed to delete the request");
+                }
+            }
+            return null;
+        }
+    }
+
 
     public static class GetUsernameTask extends AsyncTask<String, Void, ArrayList<Participant>> {
 
