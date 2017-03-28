@@ -1,11 +1,11 @@
 package com.example.henzoshimada.feeltrip;
 
-import android.content.Context;
 import android.os.AsyncTask;
 import android.text.TextUtils;
 import android.util.Log;
 
 import com.google.gson.Gson;
+import com.google.common.collect.Lists;
 import com.searchly.jestdroid.DroidClientConfig;
 import com.searchly.jestdroid.JestClientFactory;
 import com.searchly.jestdroid.JestDroidClient;
@@ -15,7 +15,9 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 import io.searchbox.core.Delete;
@@ -25,6 +27,7 @@ import io.searchbox.core.Index;
 import io.searchbox.core.Search;
 import io.searchbox.core.SearchResult;
 import io.searchbox.core.Update;
+import io.searchbox.indices.CreateIndex;
 import io.searchbox.indices.mapping.PutMapping;
 
 /**
@@ -38,7 +41,20 @@ public class ElasticSearchController {
     private static final String typeUser = "user";
     private static final String typeRequest = "request";
 
-    static PutMapping putMapping = new PutMapping.Builder(
+
+    static PutMapping usernameMapping = new PutMapping.Builder(
+            groupIndex,
+            typeUser,
+            "{ \"user\" : { \"properties\" : { \"userName\" : {\"type\" : \"string\", \"index\" : \"not_analyzed\"} } } }"
+            ).refresh(true).build();
+
+    static PutMapping passwordMapping = new PutMapping.Builder(
+            groupIndex,
+            typeUser,
+            "{ \"user\" : { \"properties\" : { \"password\" : {\"type\" : \"string\", \"index\" : \"not_analyzed\"} } } }"
+    ).refresh(true).build();
+
+    static PutMapping moodMapping = new PutMapping.Builder(
             groupIndex,
             typeMood,
             "{ \"mood\" : { \"properties\" : { \"location\" : {\"type\" : \"geo_point\"} } } }"
@@ -83,7 +99,7 @@ public class ElasticSearchController {
 
                     try {
                         // where is the client?
-                        client.execute(putMapping); // Sets type of location to be "geo_point" on elasticsearch
+                        client.execute(moodMapping); // Sets type of location to be "geo_point" on elasticsearch
                         DocumentResult result = client.execute(index);
                         if (result.isSucceeded()) {
                             mood.setId(result.getId());
@@ -125,6 +141,7 @@ public class ElasticSearchController {
                     Log.i("Error", "This mood does not exist within the Elasticsearch database");
                     return null;
                 }
+                mood.setMade(new Date()); // document around the instant the mood is edited and update accordingly
                 String query = "{\"doc\" : {"; // calls the doc function in _update query, automatically upserts if field doesn't exist yet
                 // find out what fields have been changed and build query accordingly
                 int notDone = 0;
@@ -191,7 +208,7 @@ public class ElasticSearchController {
                                 }
                                 break;
                             case 7:
-                                query += ("\"emoji\" : \"" + mood.getEmoji() + "\"");
+                                query += ("\"emoji\" : " + mood.getEmoji());
                                 if (notDone != 0) {
                                     query += (",");
                                 }
@@ -201,7 +218,7 @@ public class ElasticSearchController {
                         }
                     }
                 }
-                    query += "}}";
+                    query += ",\"made\" : " + mood.getMade() + "}}";
 
                     try{
                         
@@ -304,7 +321,7 @@ public class ElasticSearchController {
         }
     }
 
-    public static class AddParticipantTask extends AsyncTask<Participant, Void, Void> { //TODO: What if username already exists within the database? We need usernames to be UNIQUE for proper sorting.
+    public static class AddParticipantTask extends AsyncTask<Participant, Void, Void> {
 
         @Override
         protected Void doInBackground(Participant ... participants ) {
@@ -317,7 +334,9 @@ public class ElasticSearchController {
 
                 try {
                     // where is the client?
-                    
+                    client.execute(new CreateIndex.Builder(groupIndex).build());
+                    client.execute(usernameMapping); // Sets the index of important exact value strings to "non_analyzed" within elasticsearch
+                    client.execute(passwordMapping);
                     DocumentResult result = client.execute(index);
                     if (result.isSucceeded()){
                         participant.setId(result.getId());
@@ -613,7 +632,7 @@ public class ElasticSearchController {
             String query; // elasticsearch bool queries are amazing in every way
             query = "{" +
                     "\"query\" : {" +
-                    "\"match\" : {" +
+                    "\"term\" : {" +
                     "\"userName\""+ ": \"" + username + "\"}" +
                     " }}";
 
@@ -722,9 +741,10 @@ public class ElasticSearchController {
 
             if(pastweekfilter) {
                 Calendar cal = new GregorianCalendar(); // for the purposes of grabbing exact time one week prior (this takes DST into account)
+                long thisweek = cal.getTimeInMillis();
                 cal.add(Calendar.DAY_OF_MONTH, -7);
                 long lastweek = cal.getTimeInMillis();
-                query += "\"must\" : { \"range\" : { \"made\" : { \"gte\" : " + lastweek + "}}},";
+                query += "\"must\" : { \"range\" : { \"date\" : { \"gte\" : " + lastweek + ", \"lte\" : " + thisweek + "}}},";
             }
 
             if(emotionfilter) {
@@ -786,6 +806,15 @@ public class ElasticSearchController {
                 if (result.isSucceeded()){
                     List<Mood> foundMoods = result.getSourceAsObjectList(Mood.class);
                     moods.addAll(foundMoods);
+                    if(!profilemode) { // take into account that we only want the most recent post of each user - so we'll use a LinkedHashMap to de-duplicate by username
+                        List<Mood> revmoods = Lists.reverse(moods); // Reverse the order of the moods list since the LinkedHashMap will squash the duplicates in a "Last Man Standing" format
+                        Map<String, Mood> map = new LinkedHashMap<>();
+                        for (Mood mood : revmoods) {
+                            map.put(mood.getUsername(), mood);
+                        }
+                        moods.clear();
+                        moods.addAll(map.values());
+                    }
                 }
                 else {
                     Log.i("Error", "the search query failed to find any moods that matched");

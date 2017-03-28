@@ -151,13 +151,13 @@ public class EditMoodActivity extends AppCompatActivity {
 //        emotionalState = null;
 //        dateTime = null;
 
-        String jsonEditMood = "";
+        Integer posEditMood;
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
-            jsonEditMood = extras.getString("editmood");
+            posEditMood = extras.getInt("editmood");
+            editmood = FeelTripApplication.getMoodArrayList().get(posEditMood);
         }
-        editmood = new Gson().fromJson(jsonEditMood, Mood.class);
-        addItemsOnSocialSituationSpinner(editmood);
+        addItemsOnSocialSituationSpinner();
         try {
             addItemsOnEmojiScroller();
         } catch (IllegalAccessException e) {
@@ -391,7 +391,7 @@ public class EditMoodActivity extends AppCompatActivity {
         File folder = new File(path);
         if (!folder.exists())
             folder.mkdir();
-        imagePathAndFileName = path + File.separator + String.valueOf(System.currentTimeMillis()) + ".jpg";
+        imagePathAndFileName = path + File.separator + String.valueOf(System.currentTimeMillis()) + ".JPEG";
         File imageFile = new File(imagePathAndFileName);
         imageFileUri = Uri.fromFile(imageFile);
 
@@ -406,7 +406,7 @@ public class EditMoodActivity extends AppCompatActivity {
         int quality = 100;
 
         if (photo.getByteCount() <= MAX_PHOTO_SIZE) {
-            photo.compress(Bitmap.CompressFormat.PNG, quality, photoStream);
+            photo.compress(Bitmap.CompressFormat.JPEG, quality, photoStream);
             return photoStream.toByteArray();
         }
 
@@ -462,7 +462,7 @@ public class EditMoodActivity extends AppCompatActivity {
 
 
     //https://www.youtube.com/watch?v=8mFW6dA5xDE
-    DatePickerDialog.OnDateSetListener datePickerDialogListener = new DatePickerDialog.OnDateSetListener() { //TODO: Fix the Date picker
+    DatePickerDialog.OnDateSetListener datePickerDialogListener = new DatePickerDialog.OnDateSetListener() {
         @Override
         public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
             if (!editflag) {
@@ -475,7 +475,7 @@ public class EditMoodActivity extends AppCompatActivity {
     };
 
 
-    private void addItemsOnSocialSituationSpinner(Mood editmood) {
+    private void addItemsOnSocialSituationSpinner() {
         socialSituationSpinner = (Spinner) findViewById(R.id.social_event_spinner);
         List<String> socialSituationList = new ArrayList<>();
 
@@ -595,7 +595,11 @@ public class EditMoodActivity extends AppCompatActivity {
             emojiButton.setMaxHeight(150);
             emojiButton.setMaxWidth(150);
             emojiButton.setBackgroundResource(R.color.white);
-            emojiButton.setImageResource(getApplicationContext().getResources().getIdentifier("emoji" + i, "drawable", getApplicationContext().getPackageName()));
+            if(getApplicationContext().getResources().getIdentifier("emoji" + i, "drawable", getApplicationContext().getPackageName()) != 0) { // Check if desired emoji exists
+                emojiButton.setImageResource(getApplicationContext().getResources().getIdentifier("emoji" + i, "drawable", getApplicationContext().getPackageName()));
+            } else {
+                emojiButton.setImageResource(getApplicationContext().getResources().getIdentifier("err", "drawable", getApplicationContext().getPackageName()));
+            }
             emojiButton.setPadding(0,0,0,0);
             emojiLayout.addView(emojiButton);
             emojiButton.setOnClickListener(new View.OnClickListener() {

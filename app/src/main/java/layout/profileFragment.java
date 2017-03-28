@@ -65,7 +65,7 @@ public class profileFragment extends Fragment {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                         Log.d("listTag","on click");
-                        Mood mood = FeelTripApplication.getMoodArrayList().get(position);
+//                        Mood mood = FeelTripApplication.getMoodArrayList().get(position);
                         //if (mood.getImage() == null){
                         //    Log.d("myTag","selected have no image ");
                         // }else{
@@ -73,9 +73,9 @@ public class profileFragment extends Fragment {
                         //}
 
                         Intent intent = new Intent(view.getContext(), EditMoodActivity.class);
-                        Mood selected = FeelTripApplication.getMoodArrayList().get(position);
+//                        Mood selected = FeelTripApplication.getMoodArrayList().get(position);
                         Bundle bundle = new Bundle();
-                        bundle.putString("editmood", new Gson().toJson(selected));
+                        bundle.putInt("editmood", position);
                         intent.putExtras(bundle);
                         try {
                             startActivity(intent);
@@ -216,7 +216,6 @@ public class profileFragment extends Fragment {
     @Override
     public void onStart() {
         Log.d("myTag","onStart");
-        // TODO Auto-generated method stub
         super.onStart();
 
         if(!FeelTripApplication.getFrag().equals(frag)) {
