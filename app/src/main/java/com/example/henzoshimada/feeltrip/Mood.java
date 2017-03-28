@@ -83,6 +83,7 @@ public class Mood {
         stateVector = new boolean[size];
         delState = false;
         made = null;
+        id = null;
         emoji = 0;
     }
 
@@ -101,6 +102,7 @@ public class Mood {
         stateVector = new boolean[size];
         delState = false;
         made = null;
+        id = null;
         emoji = 0;
     }
 
@@ -141,7 +143,7 @@ public class Mood {
     }
 
     public void setStateByIndex(int index) {
-        if (stateVector[index] != true) {
+        if (!stateVector[index]) {
             stateVector[index] = true;
         }
     }

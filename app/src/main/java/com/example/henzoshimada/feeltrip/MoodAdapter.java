@@ -97,7 +97,7 @@ public class MoodAdapter extends ArrayAdapter<Mood> {
             viewHolder.emojiImage.setImageResource(emojiID);
         }
         else { // This field can only be accessed if something goes wrong, or if someone alters the main database. It's mainly a fallback safety.
-            viewHolder.emojiImage.setImageResource(getContext().getApplicationContext().getResources().getIdentifier("err","drawable",getContext().getApplicationContext().getPackageName())); //TODO: Replace cog with the proper file
+            viewHolder.emojiImage.setImageResource(getContext().getApplicationContext().getResources().getIdentifier("err","drawable",getContext().getApplicationContext().getPackageName()));
         }
         //######################################################
         String encodedImageString = mood.getImage();
