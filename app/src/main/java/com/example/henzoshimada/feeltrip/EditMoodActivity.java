@@ -297,9 +297,11 @@ public class EditMoodActivity extends AppCompatActivity {
                     mood.setPrivate();
                 }
                 if (locationOn) {
+                    Log.d("camTag","in edit: "+latitude+" "+longitude);
                     mood.setMapPosition(latitude, longitude);
                     // this is the setter for latitude and longitude
                 } else {
+                    Log.d("camTag","in edit: null");
                     mood.setNullLocation();
                 }
                 if (emotionalState.equals("")) {
@@ -573,6 +575,9 @@ public class EditMoodActivity extends AppCompatActivity {
             modeLocationText.setTextColor(getResources().getColor(R.color.red));
         }else{
             Intent intent = new Intent(this, MapsActivity.class);
+            Log.d("camTag","before pass: "+latitude+" "+longitude);
+            intent.putExtra("currentLong",longitude);
+            intent.putExtra("currentLat",latitude);
             startActivityForResult(intent, GET_LOC);
         }
     }

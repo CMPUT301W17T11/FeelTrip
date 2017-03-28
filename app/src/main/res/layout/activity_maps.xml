@@ -25,8 +25,8 @@
         android:layout_marginEnd="250dp"
         android:layout_marginLeft="@dimen/fab_margin"
         android:layout_marginRight="@dimen/fab_margin"
-        app:backgroundTint="@color/colorPrimary"
-        app:srcCompat="@mipmap/addpost_button" />
+        app:backgroundTint="@color/red"
+        app:srcCompat="@android:drawable/ic_menu_close_clear_cancel" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/submit_loc"
@@ -39,7 +39,7 @@
         android:layout_marginEnd="100dp"
         android:layout_marginLeft="@dimen/fab_margin"
         android:layout_marginRight="@dimen/fab_margin"
-        app:backgroundTint="@color/colorPrimary"
-        app:srcCompat="@mipmap/addpost_button" />
+        app:backgroundTint="@color/green"
+        app:srcCompat="@mipmap/doneimage" />
 
 </FrameLayout>

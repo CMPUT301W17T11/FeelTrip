@@ -23,6 +23,7 @@ import android.widget.Toast;
 import com.example.henzoshimada.feeltrip.ElasticSearchController;
 import com.example.henzoshimada.feeltrip.FeelTripApplication;
 import com.example.henzoshimada.feeltrip.Mood;
+import com.example.henzoshimada.feeltrip.Participant;
 import com.example.henzoshimada.feeltrip.R;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
@@ -86,6 +87,7 @@ public class mapFragment extends Fragment implements
     private ArrayList<Mood> moodArrayList = new ArrayList<Mood>();
 
     private Marker mSelectedMarker;
+    private Participant participant;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -128,7 +130,10 @@ public class mapFragment extends Fragment implements
         if(!FeelTripApplication.getFrag().equals(frag)) {
             FeelTripApplication.setFrag(frag); //TODO: Put this wherever we initialize the fragment, I think here works fine.
         }
-        testCreateMoodArray();
+
+
+        participant = FeelTripApplication.getParticipant();
+
 
         /*
         try {
@@ -175,18 +180,29 @@ public class mapFragment extends Fragment implements
                 View view = getActivity().getLayoutInflater().inflate(R.layout.info_window_layout, null);
                 view.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT)); //width, height
                 int index = Integer.parseInt(marker.getSnippet());
-                //Mood mood = moodArrayList.get(index);
+                Mood mood = moodArrayList.get(index);
                 TextView usernameView = (TextView) view.findViewById(R.id.person);
+                TextView descriptionView = (TextView) view.findViewById(R.id.info_window_description);
                 TextView social_situationView = (TextView) view.findViewById(R.id.social_situation);
-                //usernameView.setText(mood.getUser());
+                usernameView.setText(mood.getUsername());
                 //social_situationView.setText(mood.getSocialSit());
-                usernameView.setText("User test 1");
+                descriptionView.setText(mood.getDescription());
                 social_situationView.setText("some social sit test");
                 return view;
             }
         });
 
         verifyLocationPermissions(getActivity());
+        try{
+            //Log.d("mapFragCamTag","long lat: "+participant.getLatitude()+" "+participant.getLongitude());
+            if ((participant.getLatitude() != 0.0) && (participant.getLongitude() != 0.0)){
+                //Log.d("mapFragCamTag","move");
+                mMap.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(participant.getLatitude(), participant.getLongitude())));
+                mMap.animateCamera(CameraUpdateFactory.zoomTo(15), 2000, null);
+            }//else{Log.d("mapFragCamTag","no move");}
+
+        }catch (NullPointerException e){
+        }
 
         setMoodMarker();
     }
@@ -202,7 +218,7 @@ public class mapFragment extends Fragment implements
                     .snippet("0"));
         }else{Log.d("markerTag","mmap null");}
         */
-
+        testCreateMoodArray();
         Log.d("mapTag","set marker");
         if (mMap != null) {
             Log.d("mapTag","inside set marker");
@@ -247,7 +263,8 @@ public class mapFragment extends Fragment implements
                 .getLastLocation(mGoogleApiClient);
         if (mLastKnownLocation != null) {
             Log.d("mapTag", "Lat= " + String.valueOf(mLastKnownLocation.getLatitude()) + " and Long= " + String.valueOf(mLastKnownLocation.getLongitude()));
-
+            participant.setLongitude(mLastKnownLocation.getLongitude());
+            participant.setLatitude(mLastKnownLocation.getLatitude());
             //5km radius circle for debug
             Circle circle = mMap.addCircle(new CircleOptions()
                     .center(new LatLng(mLastKnownLocation.getLatitude(),
@@ -305,8 +322,13 @@ public class mapFragment extends Fragment implements
 
     private void testCreateMoodArray() {
         //FeelTripApplication.loadFromElasticSearch(); THIS LINE ISN'T NEEDED DUE TO THE WAY WE CALL mapFragment
-        //FeelTripApplication.setLatitude(); //// TODO: 27-Mar-17
-        //FeelTripApplication.setLongitude(); //// TODO: 27-Mar-17
+        try {
+            FeelTripApplication.setLatitude(participant.getLatitude());
+            FeelTripApplication.setLongitude(participant.getLongitude());
+        }catch (NullPointerException e){
+
+        }
+
         FeelTripApplication.loadFromElasticSearch();
         moodArrayList = FeelTripApplication.getMoodArrayList();
         Log.d("mapTag","test size: "+moodArrayList.size());
