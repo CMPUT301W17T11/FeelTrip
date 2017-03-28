@@ -1,10 +1,11 @@
 package com.example.henzoshimada.feeltrip;
 
-import android.content.Context;
 import android.os.AsyncTask;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.google.gson.Gson;
+import com.google.common.collect.Lists;
 import com.searchly.jestdroid.DroidClientConfig;
 import com.searchly.jestdroid.JestClientFactory;
 import com.searchly.jestdroid.JestDroidClient;
@@ -14,15 +15,19 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 import io.searchbox.core.Delete;
 import io.searchbox.core.DocumentResult;
+import io.searchbox.core.Get;
 import io.searchbox.core.Index;
 import io.searchbox.core.Search;
 import io.searchbox.core.SearchResult;
 import io.searchbox.core.Update;
+import io.searchbox.indices.CreateIndex;
 import io.searchbox.indices.mapping.PutMapping;
 
 /**
@@ -34,27 +39,52 @@ public class ElasticSearchController {
     private static final String groupIndex = "cmput301w17t11";
     private static final String typeMood = "mood";
     private static final String typeUser = "user";
+    private static final String typeRequest = "request";
 
-    static PutMapping putMapping = new PutMapping.Builder(
+
+    static PutMapping usernameMapping = new PutMapping.Builder(
+            groupIndex,
+            typeUser,
+            "{ \"user\" : { \"properties\" : { \"userName\" : {\"type\" : \"string\", \"index\" : \"not_analyzed\"} } } }"
+            ).refresh(true).build();
+
+    static PutMapping passwordMapping = new PutMapping.Builder(
+            groupIndex,
+            typeUser,
+            "{ \"user\" : { \"properties\" : { \"password\" : {\"type\" : \"string\", \"index\" : \"not_analyzed\"} } } }"
+    ).refresh(true).build();
+
+    static PutMapping moodMapping = new PutMapping.Builder(
             groupIndex,
             typeMood,
             "{ \"mood\" : { \"properties\" : { \"location\" : {\"type\" : \"geo_point\"} } } }"
             ).refresh(true).build();
 
 
+    public static void loadFromElasticSearch(){
+        Log.d("listTag", "load from ES");
+        FeelTripApplication.getMoodArrayList().clear();
+        GetFilteredMoodsTask getMoodTask;
+        if(FeelTripApplication.getFrag().equals("main") || FeelTripApplication.getFrag().equals("profile") || FeelTripApplication.getFrag().equals("map")) {
+            getMoodTask = new GetFilteredMoodsTask(FeelTripApplication.getFrag());
+        }
+        else {
+            Log.i("Error", "The given search mode is invalid.");
+            return;
+        }
+        getMoodTask.execute();
+        try {
+            FeelTripApplication.getMoodArrayList().addAll(getMoodTask.get());
+            Log.d("mood array", "moodArrayList");
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+    }
+
+
     public static class AddMoodTask extends AsyncTask<Mood, Void, Boolean> {
-
-        private Context context;
-
-        public AddMoodTask(Context context) {
-            this.context = context.getApplicationContext();
-        }
-
-        @Override
-        protected void onPostExecute(Boolean result) {
-            FeelTripApplication.loadFromElasticSearch();
-            FeelTripApplication.getMoodAdapter(context).notifyDataSetChanged();
-        }
 
         @Override
         protected Boolean doInBackground(Mood ... moods ) {
@@ -69,7 +99,7 @@ public class ElasticSearchController {
 
                     try {
                         // where is the client?
-                        client.execute(putMapping); // Sets type of location to be "geo_point" on elasticsearch
+                        client.execute(moodMapping); // Sets type of location to be "geo_point" on elasticsearch
                         DocumentResult result = client.execute(index);
                         if (result.isSucceeded()) {
                             mood.setId(result.getId());
@@ -93,19 +123,7 @@ public class ElasticSearchController {
         }
     }
 
-    public static class EditMoodTask extends AsyncTask<Mood, Void, Boolean>{ // TODO: Fix edit when removing a field
-
-        private Context context;
-
-        public EditMoodTask(Context context) {
-            this.context = context;
-        }
-
-        @Override
-        protected void onPostExecute(Boolean result) {
-            FeelTripApplication.loadFromElasticSearch();
-            FeelTripApplication.getMoodAdapter(context).notifyDataSetChanged();
-        }
+    public static class EditMoodTask extends AsyncTask<Mood, Void, Boolean>{
 
         @Override
         protected Boolean doInBackground(Mood ... moods ) {
@@ -123,6 +141,7 @@ public class ElasticSearchController {
                     Log.i("Error", "This mood does not exist within the Elasticsearch database");
                     return null;
                 }
+                mood.setMade(new Date()); // document around the instant the mood is edited and update accordingly
                 String query = "{\"doc\" : {"; // calls the doc function in _update query, automatically upserts if field doesn't exist yet
                 // find out what fields have been changed and build query accordingly
                 int notDone = 0;
@@ -189,7 +208,7 @@ public class ElasticSearchController {
                                 }
                                 break;
                             case 7:
-                                query += ("\"emoji\" : \"" + mood.getEmoji() + "\"");
+                                query += ("\"emoji\" : " + mood.getEmoji());
                                 if (notDone != 0) {
                                     query += (",");
                                 }
@@ -199,7 +218,7 @@ public class ElasticSearchController {
                         }
                     }
                 }
-                    query += "}}";
+                    query += ",\"made\" : " + mood.getMade() + "}}";
 
                     try{
                         
@@ -208,6 +227,9 @@ public class ElasticSearchController {
 
                     }catch (Exception e){
                         Log.i("Error", "The application failed to build and send the moods");
+                        UpdateQueueController updateQueueController = FeelTripApplication.getUpdateQueueController();
+                        updateQueueController.addMood(mood);
+                        return null;
                     }
 
                     mood.resetState();
@@ -299,7 +321,7 @@ public class ElasticSearchController {
         }
     }
 
-    public static class AddParticipantTask extends AsyncTask<Participant, Void, Void> { //TODO: What if username already exists within the database? We need usernames to be UNIQUE for proper sorting.
+    public static class AddParticipantTask extends AsyncTask<Participant, Void, Void> {
 
         @Override
         protected Void doInBackground(Participant ... participants ) {
@@ -312,7 +334,9 @@ public class ElasticSearchController {
 
                 try {
                     // where is the client?
-                    
+                    client.execute(new CreateIndex.Builder(groupIndex).build());
+                    client.execute(usernameMapping); // Sets the index of important exact value strings to "non_analyzed" within elasticsearch
+                    client.execute(passwordMapping);
                     DocumentResult result = client.execute(index);
                     if (result.isSucceeded()){
                         participant.setId(result.getId());
@@ -404,6 +428,192 @@ public class ElasticSearchController {
         }
     }
 
+    public static class EditParticipantTask extends AsyncTask<Participant, Void, Void>{
+
+        @Override
+        protected Void doInBackground(Participant...participants){
+            if(android.os.Debug.isDebuggerConnected())
+                android.os.Debug.waitForDebugger();
+            verifySettings();
+
+            for (Participant participant : participants){
+
+                String following = new Gson().toJson(participant.getFollowing());
+                String query = "{\"doc\" : {"+
+                        "\"following\" : " + following +
+                        "}}";
+
+
+                Log.d("query is :", query);
+
+                Update update = new Update
+                        .Builder(query)
+                        .index(groupIndex)
+                        .type(typeUser)
+                        .id(participant.getId())
+                        .build();
+                try {
+                    client.execute(update);
+                } catch (IOException e) {
+                    Log.i("Error", "The application failed to build and send request");
+                }
+            }
+
+
+            return null;
+        }
+    }
+
+
+    public static class AddRequestTask extends AsyncTask<FollowRequest, Void, Void> {
+
+        @Override
+        protected Void doInBackground(FollowRequest ... followRequests ) {
+            if(android.os.Debug.isDebuggerConnected())
+                android.os.Debug.waitForDebugger();
+            verifySettings();
+
+            for (FollowRequest followRequest : followRequests) {
+                    Index index = new Index
+                            .Builder(followRequest)
+                            .index(groupIndex)
+                            .type(typeRequest)
+                            .build();
+
+                    try {
+                        DocumentResult result = client.execute(index);
+                        if (result.isSucceeded()) {
+                            followRequest.setId(result.getId());
+                        } else {
+                            Log.i("Error", "Elasticsearch was not able to add the request");
+                        }
+                    } catch (Exception e) {
+                        Log.i("Error", "The application failed to build and send the requests");
+                    }
+            }
+            return null;
+        }
+    }
+
+    public static class GetRequestTask extends AsyncTask<String, Void, ArrayList<FollowRequest>>{
+        private boolean checkAccept;
+
+        public GetRequestTask(boolean checkAccept){
+            this.checkAccept = checkAccept;
+        }
+
+        @Override
+        protected ArrayList<FollowRequest> doInBackground(String... username){
+            if(android.os.Debug.isDebuggerConnected())
+                android.os.Debug.waitForDebugger();
+            verifySettings();
+
+            ArrayList<FollowRequest> followRequests = new ArrayList<>();
+            String query;
+            if (checkAccept){
+                query = "{" +
+                        "\"query\" : {" +
+                        "\"match\" : {" +
+                        "\"sender\" :\"" + username[0] + "\" , " +
+                        "\"accepted\" : \"true\" }" +
+                        " }}";
+            }
+            else {
+                query = "{" +
+                        "\"query\" : {" +
+                        "\"match\" : {" +
+                        "\"receiver\" :\"" + username[0] + "\"}" +
+                        " }}";
+            }
+
+            Search search = new Search.Builder(query)
+                    .addIndex(groupIndex)
+                    .addType(typeRequest)
+                    .build();
+
+
+            try {
+                SearchResult result = client.execute(search);
+                if (result.isSucceeded()){
+                    List<FollowRequest> foundRequests = result.getSourceAsObjectList(FollowRequest.class);
+                    followRequests.addAll(foundRequests);
+                }
+                else {
+                    Log.i("Error", "the search query failed to find any moods that matched");
+                }
+            }
+            catch (Exception e) {
+                Log.i("Error", "Something went wrong when we tried to communicate with the elasticsearch server!");
+            }
+
+            return followRequests;
+        }
+    }
+
+    public static class EditRequestTask extends AsyncTask<FollowRequest, Void, Void>{
+
+        @Override
+        protected Void doInBackground(FollowRequest...followRequests){
+            if(android.os.Debug.isDebuggerConnected())
+                android.os.Debug.waitForDebugger();
+            verifySettings();
+
+            for (FollowRequest followRequest : followRequests){
+
+                String query = "{\"doc\" : {"+
+                        "\"accepted\" : \"true\"" +
+                        "}}";
+
+
+                Log.d("query is :", query);
+
+                Update update = new Update
+                        .Builder(query)
+                        .index(groupIndex)
+                        .type(typeRequest)
+                        .id(followRequest.getId())
+                        .build();
+                try {
+                    client.execute(update);
+                } catch (IOException e) {
+                    Log.i("Error", "The application failed to build and send request");
+                }
+            }
+
+
+            return null;
+        }
+    }
+
+
+    public static class DeleteRequestTask extends AsyncTask<FollowRequest, Void, Void> {
+
+        @Override
+        protected Void doInBackground(FollowRequest ... followRequests ) {
+            if(android.os.Debug.isDebuggerConnected())
+                android.os.Debug.waitForDebugger();
+            verifySettings();
+
+            for (FollowRequest followRequest : followRequests) {
+                String id = followRequest.getId();
+                Delete delete = new Delete
+                        .Builder(id)
+                        .index(groupIndex)
+                        .type(typeRequest)
+                        .build();
+
+                try {
+                    client.execute(delete);
+                }
+                catch (Exception e) {
+                    Log.i("Error", "The application failed to delete the request");
+                }
+            }
+            return null;
+        }
+    }
+
+
     public static class GetUsernameTask extends AsyncTask<String, Void, ArrayList<Participant>> {
 
         private String username;
@@ -422,7 +632,7 @@ public class ElasticSearchController {
             String query; // elasticsearch bool queries are amazing in every way
             query = "{" +
                     "\"query\" : {" +
-                    "\"match\" : {" +
+                    "\"term\" : {" +
                     "\"userName\""+ ": \"" + username + "\"}" +
                     " }}";
 
@@ -469,9 +679,8 @@ public class ElasticSearchController {
         private String keyword; // stores the passed keyword we're filtering by
         private String following = "[\"\"]"; // stores the string containing all the users the participant follows, initialize it to "blank" array by default
         private String participant; // stores the participant's username
-        private Double currentlat = 53.5141543;
-        private Double currentlon = -113.6701809; // TODO: actually pass in the user's current lat and lon to these variables
-
+        private Double currentlat = null;
+        private Double currentlon = null;
         public GetFilteredMoodsTask(String searchmode){ // must pass this specific set of Strings in this order while constructing
             switch(searchmode) {
                 case "main":
@@ -487,6 +696,8 @@ public class ElasticSearchController {
                     break;
                 case "map":
                     participant = FeelTripApplication.getParticipant().getUserName();
+                    currentlat = FeelTripApplication.getLatitude();
+                    currentlon = FeelTripApplication.getLongitude();
                     if(!FeelTripApplication.getParticipant().getFollowing().isEmpty()) {
                         following = "[\"" + TextUtils.join("\",\"", FeelTripApplication.getParticipant().getFollowing()) + "\"]"; // sets up the following array of the participant as a String with proper delimiters for elasticsearch terms query
                     }
@@ -531,9 +742,10 @@ public class ElasticSearchController {
 
             if(pastweekfilter) {
                 Calendar cal = new GregorianCalendar(); // for the purposes of grabbing exact time one week prior (this takes DST into account)
+                long thisweek = cal.getTimeInMillis();
                 cal.add(Calendar.DAY_OF_MONTH, -7);
                 long lastweek = cal.getTimeInMillis();
-                query += "\"must\" : { \"range\" : { \"made\" : { \"gte\" : " + lastweek + "}}},";
+                query += "\"must\" : { \"range\" : { \"date\" : { \"gte\" : " + lastweek + ", \"lte\" : " + thisweek + "}}},";
             }
 
             if(emotionfilter) {
@@ -595,6 +807,15 @@ public class ElasticSearchController {
                 if (result.isSucceeded()){
                     List<Mood> foundMoods = result.getSourceAsObjectList(Mood.class);
                     moods.addAll(foundMoods);
+                    if(!profilemode) { // take into account that we only want the most recent post of each user - so we'll use a LinkedHashMap to de-duplicate by username
+                        List<Mood> revmoods = Lists.reverse(moods); // Reverse the order of the moods list since the LinkedHashMap will squash the duplicates in a "Last Man Standing" format
+                        Map<String, Mood> map = new LinkedHashMap<>();
+                        for (Mood mood : revmoods) {
+                            map.put(mood.getUsername(), mood);
+                        }
+                        moods.clear();
+                        moods.addAll(map.values());
+                    }
                 }
                 else {
                     Log.i("Error", "the search query failed to find any moods that matched");
