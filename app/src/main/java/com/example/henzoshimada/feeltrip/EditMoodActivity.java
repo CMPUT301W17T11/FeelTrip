@@ -4,6 +4,7 @@ import android.*;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -34,6 +35,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -86,6 +88,7 @@ public class EditMoodActivity extends AppCompatActivity {
     private String imagePathAndFileName;
     Uri imageFileUri;
     private static final int TAKE_PHOTO = 2;
+    private static final int GET_LOC = 3;
     Activity activity;
     private static Context context;
     private String emotionalState;
@@ -95,6 +98,8 @@ public class EditMoodActivity extends AppCompatActivity {
     // Used for edit functionality
     private Mood editmood;
     private boolean editflag;
+
+    TextView modeLocationText;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -118,6 +123,7 @@ public class EditMoodActivity extends AppCompatActivity {
                 case R.id.date_bottom_button:
                     Log.d("Mytag", "Tapped on date");
                     datePick(findViewById(R.id.date_bottom_button).getContext());
+                    //timePick(findViewById(R.id.date_bottom_button).getContext());
                     return true;
                 case R.id.photo_bottom_button:
                     Log.d("Mytag", "Tapped on photo");
@@ -141,7 +147,7 @@ public class EditMoodActivity extends AppCompatActivity {
 
 
         inputMoodDescription = (EditText) findViewById(R.id.moodEventDescription);
-
+        modeLocationText = (TextView) findViewById(R.id.modeLocation);
         activity = this;
         context = this;
         showPublicOn = false;
@@ -191,7 +197,7 @@ public class EditMoodActivity extends AppCompatActivity {
             }
             try {
                 longitude = editmood.getLongitude();
-                TextView modeLocationText = (TextView) findViewById(R.id.modeLocation);
+
                 modeLocationText.setText("On");
                 modeLocationText.setTextColor(getResources().getColor(R.color.green));
                 locationOn = true;
@@ -281,6 +287,13 @@ public class EditMoodActivity extends AppCompatActivity {
                 dateTime.get(Calendar.MONTH), dateTime.get(Calendar.DAY_OF_MONTH)).show();
     }
 
+    public void timePick(Context context) {
+        //selectDate();
+        Log.d("Mytag", "Went into date");
+        new TimePickerDialog(context, AlertDialog.THEME_DEVICE_DEFAULT_LIGHT, onTimeSetListener, dateTime.get(Calendar.HOUR_OF_DAY),
+                dateTime.get(Calendar.MINUTE), true).show();
+    }
+
 
     private void submitMood() throws DescriptionTooLongException {
         try {
@@ -293,9 +306,11 @@ public class EditMoodActivity extends AppCompatActivity {
                     mood.setPrivate();
                 }
                 if (locationOn) {
+                    Log.d("camTag","in edit: "+latitude+" "+longitude);
                     mood.setMapPosition(latitude, longitude);
                     // this is the setter for latitude and longitude
                 } else {
+                    Log.d("camTag","in edit: null");
                     mood.setNullLocation();
                 }
                 if (emotionalState.equals("")) {
@@ -446,6 +461,42 @@ public class EditMoodActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), "Photo Cancelled", Toast.LENGTH_SHORT).show();
             else
                 Toast.makeText(getApplicationContext(), "Something went wrong", Toast.LENGTH_SHORT).show();
+        }else if (requestCode == GET_LOC){
+            Log.d("locTag", "request code = get loc");
+            if(resultCode == Activity.RESULT_OK){
+                Log.d("locTag", "result ok");
+
+                try {
+                    //String temp = intent.getStringExtra("resultLat");
+                    //latitude = Double.parseDouble(temp);
+                    //temp = intent.getStringExtra("resultLong");
+                    //latitude = Double.parseDouble(temp);
+                    //longitude = Double.parseDouble(intent.getStringExtra("resultLong"));
+                    latitude = intent.getDoubleExtra("resultLat",0);
+                    longitude = intent.getDoubleExtra("resultLong",0);
+
+                    if ((latitude == 0.0) && (longitude == 0.0)) {
+                        Log.d("locTag", "0 0 true");
+                        return; //return to previous state
+                    }
+                    locationOn = true;
+                    modeLocationText.setText("On");
+                    modeLocationText.setTextColor(getResources().getColor(R.color.green));
+                    Log.d("locTag", "result ok done");
+                }catch (NullPointerException e){
+                    locationOn = false;
+                    Log.d("locTag", "bad");
+                }
+
+
+            }
+            if (resultCode == Activity.RESULT_CANCELED) {
+                Log.d("locTag", "result cancel");
+                //Write your code if there's no result
+                //locationOn = true;
+                //modeLocationText.setText("On");
+                //modeLocationText.setTextColor(getResources().getColor(R.color.green));
+            }
         }
     }
 
@@ -454,12 +505,23 @@ public class EditMoodActivity extends AppCompatActivity {
     DatePickerDialog.OnDateSetListener datePickerDialogListener = new DatePickerDialog.OnDateSetListener() {
         @Override
         public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-            if (!editflag) {
-                dateTime.set(Calendar.YEAR, year);
-                dateTime.set(Calendar.MONTH, month);
-                dateTime.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-            }
+
+            dateTime.set(Calendar.YEAR, year);
+            dateTime.set(Calendar.MONTH, month);
+            dateTime.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+
             Log.d("myTag", "Date: " + formatDateTime.format(dateTime.getTime()));
+        }
+    };
+
+    TimePickerDialog.OnTimeSetListener onTimeSetListener = new TimePickerDialog.OnTimeSetListener() {
+        @Override
+        public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+
+            dateTime.set(Calendar.HOUR_OF_DAY, hourOfDay);
+            dateTime.set(Calendar.MINUTE, minute);
+
+            Log.d("myTag", "time Date: " + formatDateTime.format(dateTime.getTime()));
         }
     };
 
@@ -516,7 +578,23 @@ public class EditMoodActivity extends AppCompatActivity {
         }
     }
 
+    private void toggleLocation() {
+        if (locationOn) {
+            locationOn = false;
+            modeLocationText.setText("Off");
+            modeLocationText.setTextColor(getResources().getColor(R.color.red));
+        }else{
+            Intent intent = new Intent(this, MapsActivity.class);
+            Log.d("camTag","before pass: "+latitude+" "+longitude);
+            intent.putExtra("currentLong",longitude);
+            intent.putExtra("currentLat",latitude);
+            startActivityForResult(intent, GET_LOC);
+        }
+    }
 
+
+
+/*
     private void toggleLocation() {
         TextView modeLocation = (TextView) findViewById(R.id.modeLocation);
         // The toggle is enabled
@@ -545,7 +623,7 @@ public class EditMoodActivity extends AppCompatActivity {
         // The toggle is disabled
         Log.d("myTag", "location on is: " + String.valueOf(locationOn));
     }
-
+*/
     public void verifyLocationPermissions(Activity activity) {
         // Check if we have location permission
         int permission = ActivityCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_FINE_LOCATION);
