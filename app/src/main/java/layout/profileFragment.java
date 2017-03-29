@@ -22,6 +22,7 @@ import com.daimajia.swipe.SwipeLayout;
 import com.example.henzoshimada.feeltrip.EditMoodActivity;
 import com.example.henzoshimada.feeltrip.ElasticSearchController;
 import com.example.henzoshimada.feeltrip.FeelTripApplication;
+import com.example.henzoshimada.feeltrip.ListViewAdapter;
 import com.example.henzoshimada.feeltrip.Mood;
 import com.example.henzoshimada.feeltrip.MoodAdapter;
 import com.example.henzoshimada.feeltrip.R;
@@ -36,8 +37,11 @@ public class profileFragment extends Fragment {
 
     private ListView oldMoodListView;
     private ArrayList<Mood> moodArrayList;
-
     private ArrayAdapter<Mood> adapter;
+
+    private ListView mListView;
+    private ListViewAdapter mAdapter;
+    private Context mContext = getActivity();
 
     private static final String frag = "profile";
 
@@ -52,8 +56,7 @@ public class profileFragment extends Fragment {
     HashMap<Long, Integer> mItemIdTopMap = new HashMap<Long, Integer>();
 
     @Override
-    public View onCreateView(LayoutInflater inflater, final ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
         Log.d("myTag","onCreateView");
         // Inflate the layout for this fragment
         LinearLayout view = (LinearLayout) inflater.inflate(R.layout.fragment_profile,
@@ -69,13 +72,6 @@ public class profileFragment extends Fragment {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                         Log.d("listTag","on click");
-//                        Mood mood = FeelTripApplication.getMoodArrayList().get(position);
-                        //if (mood.getImage() == null){
-                        //    Log.d("myTag","selected have no image ");
-                        // }else{
-                        //    Log.d("myTag","image:"+mood.getImage());
-                        //}
-
                         Intent intent = new Intent(view.getContext(), EditMoodActivity.class);
 //                        Mood selected = FeelTripApplication.getMoodArrayList().get(position);
                         Bundle bundle = new Bundle();
@@ -87,120 +83,8 @@ public class profileFragment extends Fragment {
                         catch(Exception e) {
                             Log.d("tag", "Fail while loading edit mood");
                         }
-
-
                     }
                 });
-
-/*
-        // 20 march 2017 https://github.com/KevCron/AndroidTutorials
-        oldMoodListView.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(final View v, MotionEvent event) {
-                if (mSwipeSlop < 0)
-                {
-                    mSwipeSlop = ViewConfiguration.get(getActivity()).getScaledTouchSlop();
-                }
-                switch (event.getAction()) {
-                    case MotionEvent.ACTION_DOWN:
-                        if (mItemPressed)
-                        {
-                            // Doesn't allow swiping two items at same time
-                            return false;
-                        }
-                        mItemPressed = true;
-                        mDownX = event.getX();
-                        swiped = false;
-                        break;
-                    case MotionEvent.ACTION_CANCEL:
-                        v.setTranslationX(0);
-                        mItemPressed = false;
-                        break;
-                    case MotionEvent.ACTION_MOVE:
-                    {
-                        float x = event.getX() + v.getTranslationX();
-                        float deltaX = x - mDownX;
-                        float deltaXAbs = Math.abs(deltaX);
-
-                        if (!mSwiping)
-                        {
-                            if (deltaXAbs > mSwipeSlop) // tells if user is actually swiping or just touching in sloppy manner
-                            {
-                                mSwiping = true;
-                                oldMoodListView.requestDisallowInterceptTouchEvent(true);
-                            }
-                        }
-                        if (mSwiping && !swiped) // Need to make sure the user is both swiping and has not already completed a swipe action (hence mSwiping and swiped)
-                        {
-                            //v.setTranslationX((x - mDownX)); // moves the view as long as the user is swiping and has not already swiped
-
-                            if (deltaX < -1 * (v.getWidth() / 3)) // swipe to left
-                            {
-
-                                v.setEnabled(false); // need to disable the view for the animation to run
-
-                                // stacked the animations to have the pause before the views flings off screen
-                                v.animate().setDuration(300).translationX(-v.getWidth()/3).withEndAction(new Runnable() {
-                                    @Override
-                                    public void run()
-                                    {
-                                        v.animate().setDuration(300).alpha(0).translationX(-v.getWidth()).withEndAction(new Runnable()
-                                        {
-                                            @Override
-                                            public void run()
-                                            {
-                                                mSwiping = false;
-                                                mItemPressed = false;
-                                                //animateRemoval(oldMoodListView, v);
-                                                Log.d("swipeTag","animate removal");
-                                            }
-                                        });
-                                    }
-                                });
-                                mDownX = x;
-                                swiped = true;
-                                return true;
-                            }
-                        }
-
-                    }
-                    break;
-                    case MotionEvent.ACTION_UP:
-                    {
-                        if (mSwiping) // if the user was swiping, don't go to the and just animate the view back into position
-                        {
-                            Log.d("swipeTag", "not full swipe");
-                            v.animate().setDuration(300).translationX(0).withEndAction(new Runnable()
-                            {
-                                @Override
-                                public void run()
-                                {
-                                    mSwiping = false;
-                                    mItemPressed = false;
-                                    oldMoodListView.setEnabled(true);
-                                }
-                            });
-                        }
-                        else // user was not swiping; registers as a click
-                        {
-                            mItemPressed = false;
-                            oldMoodListView.setEnabled(true);
-
-                            int i = oldMoodListView.getPositionForView(v);
-
-                                //Toast.makeText(MainActivity.this, array.get(i).toString(), Toast.LENGTH_LONG).show();
-                            Log.d("swipeTag","register as click on index: "+ i);
-                            return false;
-                        }
-                    }
-                    default:
-                        return false;
-                }
-                return true;
-            }
-        });
-        */
-
         return view;
     }
 

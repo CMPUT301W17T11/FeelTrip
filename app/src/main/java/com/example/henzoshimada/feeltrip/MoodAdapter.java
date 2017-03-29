@@ -31,7 +31,6 @@ public class MoodAdapter extends ArrayAdapter<Mood> {
         TextView date;
         TextView description;
         TextView append;
-        ImageView emoji;
         TextView socialSituation;
         ImageView emojiImage;
         ImageView image;
@@ -43,7 +42,6 @@ public class MoodAdapter extends ArrayAdapter<Mood> {
         //this.dataSet = moodArrayList;
         //this.mContext=context;
     }
-
 
     //private int lastPosition = -1;
 
