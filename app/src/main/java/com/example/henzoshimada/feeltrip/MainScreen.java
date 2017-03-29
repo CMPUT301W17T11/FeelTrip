@@ -19,6 +19,7 @@ import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.app.Fragment;
 import android.app.FragmentManager;
@@ -151,6 +152,7 @@ public class MainScreen extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         setTheme(R.style.NaughtyPenguins); //TODO - theme
+
 
         setContentView(R.layout.activity_main);
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);

@@ -141,16 +141,14 @@
 
     <android.support.design.widget.BottomNavigationView
         android:id="@+id/navigation"
-        android:layout_width="match_parent"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
         android:background="?android:attr/windowBackground"
         app:itemIconTint="@drawable/bottom_nav_color"
         app:itemTextColor="@drawable/bottom_nav_color"
         app:menu="@menu/navigation"
-        android:layout_marginBottom="1dp"
-        android:layout_alignParentBottom="true"
-        android:layout_marginEnd="1dp" />
+        android:layout_alignParentBottom="true"/>
 
 
 
