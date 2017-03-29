@@ -7,9 +7,19 @@ import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.BottomNavigationView;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.view.MenuItemCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.SearchView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
@@ -19,7 +29,7 @@ import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.Spinner;
 import android.app.Fragment;
 import android.app.FragmentManager;
@@ -35,7 +45,9 @@ import layout.mapFragment;
 import layout.profileFragment;
 
 // This is the main screen: This is what the Participant first sees
+
 public class MainScreen extends AppCompatActivity {
+
     private Spinner emotionalStateSpinner;
 
     // The following are constants for emotion based emoji
@@ -48,6 +60,15 @@ public class MainScreen extends AppCompatActivity {
     public static final int shameful = 0x1F61E;
     public static final int cool = 0x1F60E;
     public static final int somethingwentwrong = 0x1F31A;
+    private ListView userFoundView;  //who participant searched
+    private ListView followingView; //who participant is following
+    private ListView requestView;   //who participant wants to follow
+
+    private ArrayList<String> usersFoundArray = new ArrayList<String>(); //todo need custom adabter
+    private ArrayList<String> followingArray = new ArrayList<String>(); //todo use default adapter
+    private ArrayList<String> requestsArray = new ArrayList<String>(); //todo need custom adabter
+
+    private Participant participant = FeelTripApplication.getParticipant();
 
     public int emojiUnicode(String emotion) {
         switch(emotion) {
@@ -213,6 +234,20 @@ public class MainScreen extends AppCompatActivity {
             }
         });
 
+        ImageButton searchUserButton = (ImageButton) findViewById(R.id.user_search_button);
+        searchUserButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                searchUser(v);
+            }
+        });
+
+        userFoundView = (ListView) findViewById(R.id.found_user);
+        followingView = (ListView) findViewById(R.id.follow_list);
+        requestView = (ListView) findViewById(R.id.request_list);
+    }
+
+    private void searchUser(View view){
 
     }
 
@@ -234,6 +269,24 @@ public class MainScreen extends AppCompatActivity {
         FilterController.setKeywordfilter(string_keyword.getText().toString()); // Always take into account what's written in the "Keyword search" field. This eliminates confusion when words are typed but "Search" isn't explicitly tapped
         ElasticSearchController.loadFromElasticSearch();
         FeelTripApplication.getMoodAdapter(getBaseContext()).notifyDataSetChanged();
+
+        //todo load req,folow arrays
+        loadRequestsArray();
+        loadFollowingsArray();
+    }
+
+    //todo or michael already finished: update the follow request list
+    private void loadRequestsArray(){//sender
+        ArrayList<FollowRequest> followRequests = participant.getFollowRequest();
+        String username;
+        for (int i = 0; i < followRequests.size(); i++){
+            username = followRequests.get(i).getSender();
+            requestsArray.set(i, username);
+        }
+    }
+
+    private void loadFollowingsArray(){//receiver
+        followingArray.addAll(participant.getFollowing());
     }
 
     public String getEmojiByUnicode(int unicode){
