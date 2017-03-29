@@ -13,8 +13,12 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.FrameLayout;
+import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.Toast;
 
+import com.daimajia.swipe.SwipeLayout;
 import com.example.henzoshimada.feeltrip.EditMoodActivity;
 import com.example.henzoshimada.feeltrip.ElasticSearchController;
 import com.example.henzoshimada.feeltrip.FeelTripApplication;
@@ -52,7 +56,7 @@ public class profileFragment extends Fragment {
                              Bundle savedInstanceState) {
         Log.d("myTag","onCreateView");
         // Inflate the layout for this fragment
-        FrameLayout view = (FrameLayout) inflater.inflate(R.layout.fragment_profile,
+        LinearLayout view = (LinearLayout) inflater.inflate(R.layout.fragment_profile,
                 container, false);
 
         oldMoodListView = (ListView) view.findViewById(R.id.profileList);
@@ -184,7 +188,7 @@ public class profileFragment extends Fragment {
 
                             int i = oldMoodListView.getPositionForView(v);
 
-                            //Toast.makeText(MainActivity.this, array.get(i).toString(), Toast.LENGTH_LONG).show();
+                                //Toast.makeText(MainActivity.this, array.get(i).toString(), Toast.LENGTH_LONG).show();
                             Log.d("swipeTag","register as click on index: "+ i);
                             return false;
                         }

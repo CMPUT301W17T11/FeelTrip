@@ -90,6 +90,8 @@ public class MainScreen extends AppCompatActivity {
         return super.dispatchTouchEvent( event );
     }
 
+
+
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
 

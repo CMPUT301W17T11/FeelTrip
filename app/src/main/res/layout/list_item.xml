@@ -7,15 +7,25 @@
 
     <com.daimajia.swipe.SwipeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"> <!--TEST ONLY-->
+        android:layout_height="wrap_content"
+        android:id = "@+id/swipe"> <!--TEST ONLY-->
         <!-- Bottom View Start-->
         <LinearLayout
             android:id="@+id/bottom_wrapper"
             android:layout_width="100sp"
             android:layout_height="match_parent"
-            android:background="#66ddff00"
+            android:background="@color/red"
             android:orientation="horizontal"
             android:weightSum="1">
+
+            <ImageButton
+                android:layout_gravity="center"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:src="@mipmap/cross_swipe"
+                android:adjustViewBounds="true"
+                android:id ="@+id/swipeDelete"
+                android:background="@null"/>
         <!-- Bottom View End-->
 
         </LinearLayout>
