@@ -234,24 +234,27 @@ public class mapFragment extends Fragment implements
 
                 int emojiID; //R.drawable.emoji1
 
-                int emojierr = getContext().getApplicationContext().getResources().getIdentifier("emoji" + String.valueOf(mood.getEmoji()),"drawable",getContext().getApplicationContext().getPackageName());
-                if(emojierr != 0) {
-                    emojiID = emojierr;
-                }
-                else { // This field can only be accessed if something goes wrong, or if someone alters the main database. It's mainly a fallback safety.
-                    emojiID = getContext().getApplicationContext().getResources().getIdentifier("err","drawable",getContext().getApplicationContext().getPackageName());
-                }
+                try {
+                    int emojierr = getContext().getApplicationContext().getResources().getIdentifier("emoji" + String.valueOf(mood.getEmoji()), "drawable", getContext().getApplicationContext().getPackageName());
+                    if (emojierr != 0) {
+                        emojiID = emojierr;
+                    } else { // This field can only be accessed if something goes wrong, or if someone alters the main database. It's mainly a fallback safety.
+                        emojiID = getContext().getApplicationContext().getResources().getIdentifier("err", "drawable", getContext().getApplicationContext().getPackageName());
+                    }
 
                 Bitmap emojiBitmap = BitmapFactory.decodeResource(getResources(), emojiID);
                 Bitmap resizedBitmap = Bitmap.createScaledBitmap(emojiBitmap, 50, 50, false);
 
-                marker = mMap.addMarker(new MarkerOptions()
-                        //.position(new LatLng(53.528033+i, -113.525355+i))
-                        .position(new LatLng(mood.getLatitude(),mood.getLongitude()))
-                        .snippet(String.valueOf(i))
-                        //.icon(BitmapDescriptorFactory.fromResource(emojiID))
-                        .icon(BitmapDescriptorFactory.fromBitmap(resizedBitmap))
-                );
+                    marker = mMap.addMarker(new MarkerOptions()
+                            //.position(new LatLng(53.528033+i, -113.525355+i))
+                            .position(new LatLng(mood.getLatitude(), mood.getLongitude()))
+                            .snippet(String.valueOf(i))
+                            //.icon(BitmapDescriptorFactory.fromResource(emojiID))
+                            .icon(BitmapDescriptorFactory.fromBitmap(resizedBitmap))
+                    );
+                } catch (NullPointerException e) {
+                    Log.d("permTag", "NULLPOINTER"); //TODO: Handle
+                }
 
                 //Log.d("mapTag", "i= "+String.valueOf(i));
             }
@@ -351,18 +354,22 @@ public class mapFragment extends Fragment implements
     public void verifyLocationPermissions(Activity activity) {
         Log.d("permTag","in verify perm");
         // Check if we have location permission
-        int permission = ActivityCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_FINE_LOCATION);
-        if (permission != PackageManager.PERMISSION_GRANTED) {
-            permissionDenied = true;
-            Log.d("permTag","verify: permissionDenied");
-            // We don't have permission so prompt the user
-            ActivityCompat.requestPermissions(activity, PERMISSIONS_LOCATION, LOCATION_PERMISSION_REQUEST_CODE);
-        }else{
-            permissionDenied = false;
-            if (mMap != null) {
-                // Access to the location has been granted to the app.
-                mMap.setMyLocationEnabled(true);
+        try {
+            int permission = ActivityCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_FINE_LOCATION);
+            if (permission != PackageManager.PERMISSION_GRANTED) {
+                permissionDenied = true;
+                Log.d("permTag", "verify: permissionDenied");
+                // We don't have permission so prompt the user
+                ActivityCompat.requestPermissions(activity, PERMISSIONS_LOCATION, LOCATION_PERMISSION_REQUEST_CODE);
+            } else {
+                permissionDenied = false;
+                if (mMap != null) {
+                    // Access to the location has been granted to the app.
+                    mMap.setMyLocationEnabled(true);
+                }
             }
+        } catch (NullPointerException e) {
+            Log.d("permTag", "verify: NULLPOINTER"); //TODO: Handle
         }
     }
 
