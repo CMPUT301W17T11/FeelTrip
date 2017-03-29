@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.app.Fragment;
 import android.support.design.widget.FloatingActionButton;
 import android.util.Log;
+import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -47,6 +48,7 @@ public class homeFragmment extends Fragment{
     public View onCreateView(LayoutInflater inflater, final ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+
         FrameLayout view = (FrameLayout) inflater.inflate(R.layout.home_fragmment,
                 container, false);
         FloatingActionButton addEntry = (FloatingActionButton)  view.findViewById(R.id.add_mood);

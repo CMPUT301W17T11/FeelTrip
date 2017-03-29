@@ -47,7 +47,7 @@
                         android:id="@+id/imageButton"
                         android:layout_width="40dp"
                         android:layout_height="40dp"
-                        android:background="@color/colorPrimary"
+                        android:background="@android:color/transparent"
                         android:onClick="searchKeyword"
                         app:srcCompat="@android:drawable/ic_menu_search" />
 
@@ -145,6 +145,8 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
         android:background="?android:attr/windowBackground"
+        app:itemIconTint="@drawable/bottom_nav_color"
+        app:itemTextColor="@drawable/bottom_nav_color"
         app:menu="@menu/navigation"
         android:layout_marginBottom="1dp"
         android:layout_alignParentBottom="true"

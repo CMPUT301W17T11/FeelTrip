@@ -132,8 +132,14 @@ public class EditMoodActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
+        setTheme(R.style.NaughtyPenguins); //TODO - theme
+
         setContentView(R.layout.add_edit_page);
         EditMoodActivity.context = getApplicationContext();
+
+
         inputMoodDescription = (EditText) findViewById(R.id.moodEventDescription);
 
         activity = this;
@@ -271,7 +277,7 @@ public class EditMoodActivity extends AppCompatActivity {
 
     public void datePick(Context context) {
         Log.d("Mytag", "Went into date");
-        new DatePickerDialog(context,AlertDialog.THEME_DEVICE_DEFAULT_LIGHT,datePickerDialogListener, dateTime.get(Calendar.YEAR),
+        new DatePickerDialog(context,datePickerDialogListener, dateTime.get(Calendar.YEAR),
                 dateTime.get(Calendar.MONTH), dateTime.get(Calendar.DAY_OF_MONTH)).show();
     }
 
@@ -602,7 +608,6 @@ public class EditMoodActivity extends AppCompatActivity {
             emojiTextview.setText(FeelTripApplication.getEmotionalState(emotionID));
 
             emojiTextview.setTextSize(15);
-            emojiTextview.setTextColor(Color.GRAY);
             emojiTextview.setGravity(Gravity.CENTER);
             emojiTextview.setTypeface(emojiTextview.getTypeface(), Typeface.BOLD);
             emojiLayout.addView(emojiTextview);

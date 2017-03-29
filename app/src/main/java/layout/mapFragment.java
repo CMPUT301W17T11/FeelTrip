@@ -339,21 +339,26 @@ public class mapFragment extends Fragment implements
     }
 
     public void verifyLocationPermissions(Activity activity) {
-        Log.d("permTag","in verify perm");
+        Log.d("permTag", "in verify perm");
         // Check if we have location permission
-        int permission = ActivityCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_FINE_LOCATION);
-        if (permission != PackageManager.PERMISSION_GRANTED) {
-            permissionDenied = true;
-            Log.d("permTag","verify: permissionDenied");
-            // We don't have permission so prompt the user
-            ActivityCompat.requestPermissions(activity, PERMISSIONS_LOCATION, LOCATION_PERMISSION_REQUEST_CODE);
-        }else{
-            permissionDenied = false;
-            if (mMap != null) {
-                // Access to the location has been granted to the app.
-                mMap.setMyLocationEnabled(true);
+        try {
+            int permission = ActivityCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_FINE_LOCATION);
+
+            if (permission != PackageManager.PERMISSION_GRANTED) {
+                permissionDenied = true;
+                Log.d("permTag", "verify: permissionDenied");
+                // We don't have permission so prompt the user
+                ActivityCompat.requestPermissions(activity, PERMISSIONS_LOCATION, LOCATION_PERMISSION_REQUEST_CODE);
+            } else {
+                permissionDenied = false;
+                if (mMap != null) {
+                    // Access to the location has been granted to the app.
+                    mMap.setMyLocationEnabled(true);
+                }
             }
+        } catch (NullPointerException e) { // TODO: Handle
         }
+
     }
 
 

@@ -2,7 +2,10 @@ package com.example.henzoshimada.feeltrip;
 
 import android.content.Context;
 import android.graphics.Rect;
+import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.support.annotation.NonNull;
+import android.support.annotation.RequiresApi;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -142,9 +145,13 @@ public class MainScreen extends AppCompatActivity {
         navigation.getMenu().getItem(1).setChecked(true);
         navigation.getMenu().performIdentifierAction(R.id.navigation_home, 0);
     }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        setTheme(R.style.NaughtyPenguins); //TODO - theme
+
         setContentView(R.layout.activity_main);
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);

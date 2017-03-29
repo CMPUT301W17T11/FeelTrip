@@ -16,6 +16,7 @@ public class loginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setTheme(R.style.NaughtyPenguins);
         setContentView(R.layout.activity_login);
     }
     public void checkUser(View v){ // TODO: Check and fix cases where pass or username contains special chars.
