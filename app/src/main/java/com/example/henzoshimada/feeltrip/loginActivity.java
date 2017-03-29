@@ -19,7 +19,12 @@ public class loginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setTheme(R.style.NaughtyPenguins);
+
+
+//        setTheme(R.style.NaughtyPenguins); //TODO - theme
+        setTheme(R.style.DefaultTheme);
+
+
         setContentView(R.layout.activity_login);
 
         // set up a NetworkStateListener

@@ -65,7 +65,7 @@ public class homeFragmment extends Fragment{
         oldMoodListView = (ListView) view.findViewById(R.id.homeList);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) { // TODO: Custom color theme
-            oldMoodListView.setBackground(getResources().getDrawable(R.drawable.music_bg,getContext().getTheme()));
+//            oldMoodListView.setBackground(getResources().getDrawable(R.drawable.music_bg,getContext().getTheme()));
         }
 
         //http://stackoverflow.com/questions/20922036/android-cant-call-setonitemclicklistener-from-a-listview

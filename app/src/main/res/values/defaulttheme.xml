@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="DefaultTheme" parent="AppTheme.NoActionBar">
+        <item name="android:textColorSecondary">@color/dark_gray</item>
+        <item name="android:textColorTertiary">@color/gray</item>
+    </style>
+
+
+
+</resources>

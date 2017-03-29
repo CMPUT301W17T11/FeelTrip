@@ -24,6 +24,7 @@ import android.os.Bundle;
 import android.text.Html;
 import android.util.Base64;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
@@ -140,7 +141,8 @@ public class EditMoodActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
 
-        setTheme(R.style.NaughtyPenguins); //TODO - theme
+//        setTheme(R.style.NaughtyPenguins); //TODO - theme
+        setTheme(R.style.DefaultTheme);
 
         setContentView(R.layout.add_edit_page);
         EditMoodActivity.context = getApplicationContext();
@@ -687,6 +689,9 @@ public class EditMoodActivity extends AppCompatActivity {
 
             emojiTextview.setTextSize(15);
             emojiTextview.setGravity(Gravity.CENTER);
+            TypedValue tv = new TypedValue();
+            getTheme().resolveAttribute(android.R.attr.textColorSecondary, tv, true);
+            emojiTextview.setTextColor(getResources().getColor(tv.resourceId)); //TODO: Depreciated. Next call up is API 23
             emojiTextview.setTypeface(emojiTextview.getTypeface(), Typeface.BOLD);
             emojiLayout.addView(emojiTextview);
 

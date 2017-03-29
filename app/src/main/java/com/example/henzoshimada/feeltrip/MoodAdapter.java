@@ -54,7 +54,8 @@ public class MoodAdapter extends ArrayAdapter<Mood> {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
-        getContext().setTheme(R.style.NaughtyPenguins); //TODO - theme
+//        getContext().setTheme(R.style.NaughtyPenguins); //TODO - theme
+        getContext().setTheme(R.style.DefaultTheme);
 
         // Get the data item for this position
         Mood mood = getItem(position);

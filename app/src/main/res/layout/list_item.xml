@@ -16,6 +16,7 @@
             android:layout_height="wrap_content"
             android:text="Name"
             android:textSize="20sp"
+            android:textColor="?android:attr/textColorPrimary"
             android:textAppearance="?android:attr/textAppearanceSmall"/>
         <TextView
             android:id="@+id/socialSituation"
@@ -37,6 +38,7 @@
         android:layout_below="@+id/userName"
         android:textStyle="italic"
         android:layout_marginTop="25dp"
+        android:textColor="?android:attr/textColorTertiary"
         android:text="Fri Mar 24 22:26:55 MDT 2017"/>
 
 
@@ -49,6 +51,7 @@
             android:id="@+id/description"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textColor="?android:attr/textColorPrimary"
             android:text="My dog and I had a good walk today"/>
 
         <TextView

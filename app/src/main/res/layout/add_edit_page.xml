@@ -26,6 +26,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textColor="?android:attr/textColorSecondary"
             android:text="Feeling: "
             android:textSize="25sp"
             android:layout_marginStart="10dp"/>
@@ -47,6 +48,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textColor="?android:attr/textColorSecondary"
             android:text="Location: "
             android:layout_marginLeft="10dp"/>
         <TextView
@@ -58,6 +60,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textColor="?android:attr/textColorSecondary"
             android:text="Mode: "
             android:layout_marginLeft="20dp"/>
         <TextView
@@ -69,6 +72,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textColor="?android:attr/textColorSecondary"
             android:text="Photo Attached: "
             android:layout_marginLeft="20dp"/>
         <TextView
@@ -96,13 +100,6 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:id="@+id/emojiList">
-            <!--<LinearLayout-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:orientation="vertical"-->
-                <!--android:layout_marginStart="10dp"-->
-                <!--android:id="@+id/emojiLayout" >-->
-            <!--</LinearLayout>-->
         </LinearLayout>
 
     </HorizontalScrollView>
