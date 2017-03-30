@@ -18,6 +18,7 @@
             android:src="@mipmap/cross_swipe"
             android:adjustViewBounds="true"
             android:id ="@+id/swipeDelete"
+            android:onClick="refreshList"
             android:background="@null"/>
     <!-- Bottom View End-->
 
@@ -25,8 +26,8 @@
     <LinearLayout
         android:padding="10dp"
         android:background="#ffffff"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:orientation="vertical">
         <!--What you want to show in SurfaceView-->
         <LinearLayout
@@ -38,7 +39,6 @@
             android:id="@+id/userName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Name"
             android:textSize="20sp"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:textColor="@android:color/black" />
@@ -46,11 +46,9 @@
             android:id="@+id/socialSituation"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Alone"
             android:textAppearance="?android:attr/textAppearanceButton"
             android:textColor="@android:color/black"
             android:layout_marginStart="10sp"
-            android:textSize="10sp"
             android:textStyle="bold" />
         </LinearLayout>
 
@@ -60,7 +58,6 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/userName"
             android:layout_marginTop="25dp"
-            android:text="Fri Mar 24 22:26:55 MDT 2017"
             android:textColor="@color/gray"
             android:textStyle="italic" />
 
@@ -73,20 +70,16 @@
                 android:id="@+id/description"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="My dog and I had a good walk today"
                 android:textColor="@android:color/black" />
 
             <TextView
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/position"
-                android:textSize="0sp"/>
+                android:layout_height="wrap_content" />
 
             <TextView
                 android:id="@+id/append"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="-Feeling Happy"
                 android:textAppearance="?android:attr/textAppearanceButton"
                 android:textColor="@android:color/black"
                 android:textStyle="bold|italic" />
@@ -102,10 +95,12 @@
         </LinearLayout>
         <ImageView
             android:id="@+id/image"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:adjustViewBounds="true"
-            android:scaleType="fitCenter"/>
+            android:scaleType="fitCenter"
+            android:layout_gravity="center"
+            />
     </LinearLayout>
 <!-- Surface View End -->
 </com.daimajia.swipe.SwipeLayout>

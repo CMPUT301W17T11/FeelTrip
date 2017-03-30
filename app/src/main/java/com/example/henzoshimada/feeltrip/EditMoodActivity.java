@@ -370,9 +370,9 @@ public class EditMoodActivity extends AppCompatActivity {
                 finish();
             }
         } catch (NullPointerException e) {
-            Toast.makeText(getApplicationContext(), "Description Required " + e, Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), "Description Required ", Toast.LENGTH_SHORT).show();
         } catch (RuntimeException e) {
-            Toast.makeText(getApplicationContext(), "Emoji choice required " + e, Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), "Emoji choice required ", Toast.LENGTH_SHORT).show();
         }
     }
 

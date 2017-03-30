@@ -30,6 +30,7 @@ import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 
@@ -37,7 +38,9 @@ public class profileFragment extends Fragment {
 
     private ListView oldMoodListView;
     private ArrayList<Mood> moodArrayList;
-    private ArrayAdapter<Mood> adapter;
+    //private ArrayAdapter<Mood> adapter;
+    private ListViewAdapter adapter;
+
 
     private ListView mListView;
     private ListViewAdapter mAdapter;
@@ -56,14 +59,14 @@ public class profileFragment extends Fragment {
     HashMap<Long, Integer> mItemIdTopMap = new HashMap<Long, Integer>();
 
     @Override
-    public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, final ViewGroup container,
+                             Bundle savedInstanceState) {
         Log.d("myTag","onCreateView");
         // Inflate the layout for this fragment
         LinearLayout view = (LinearLayout) inflater.inflate(R.layout.fragment_profile,
                 container, false);
 
         oldMoodListView = (ListView) view.findViewById(R.id.profileList);
-
         //http://stackoverflow.com/questions/20922036/android-cant-call-setonitemclicklistener-from-a-listview
         //2017-02-02
         //when click an item in list
@@ -72,6 +75,7 @@ public class profileFragment extends Fragment {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                         Log.d("listTag","on click");
+
                         Intent intent = new Intent(view.getContext(), EditMoodActivity.class);
 //                        Mood selected = FeelTripApplication.getMoodArrayList().get(position);
                         Bundle bundle = new Bundle();
@@ -110,9 +114,8 @@ public class profileFragment extends Fragment {
             FeelTripApplication.setFrag(frag);
         }
 //        FeelTripApplication.loadFromElasticSearch();
-        adapter = FeelTripApplication.getMoodAdapter(getActivity());
-
-
+        //adapter = FeelTripApplication.getMoodAdapter(getActivity());
+        adapter = FeelTripApplication.getListViewAdapter(getContext());
 
         //adapter = new ArrayAdapter<Mood>(getActivity(), R.layout.list_item, moodArrayList); //view,dataArray
         oldMoodListView.setAdapter(adapter);
@@ -122,7 +125,7 @@ public class profileFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        FeelTripApplication.getMoodAdapter(getActivity()).notifyDataSetChanged();
+        //FeelTripApplication.getMoodAdapter(getActivity()).notifyDataSetChanged();
     }
 
 /*
@@ -158,6 +161,4 @@ public class profileFragment extends Fragment {
             super.onActivityResult(requestCode, resultCode, data);
         }
     }
-
-
 }
