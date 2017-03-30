@@ -21,6 +21,12 @@ public class loginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        // load local queue into updateQueue
+        UpdateQueueController updateQueueController = FeelTripApplication.getUpdateQueueController();
+        updateQueueController.setContext(this);
+        updateQueueController.loadFromFile();
+
+
         // set up a NetworkStateListener
         // This listener remains valid during the lifetime of this activity
         NetworkStateListener networkStateListener = new NetworkStateListener();
