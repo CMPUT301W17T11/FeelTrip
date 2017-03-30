@@ -147,14 +147,28 @@ public class MapsActivity extends FragmentActivity implements
             mMap.setOnMapLongClickListener(this);
             try {
                 //set marker to where mood is posted
-                LatLng lastLoc = new LatLng(latitude, longitude);
-                mMap.moveCamera(CameraUpdateFactory.newLatLng(lastLoc));
-                marker = mMap.addMarker(new MarkerOptions()
-                        .position(lastLoc)
-                        .draggable(true)
-                );
-                mMap.animateCamera(CameraUpdateFactory.zoomTo(15), 2000, null);
-
+                if ((longitude != 0.0) && (latitude != 0.0)) {
+                    Log.d("markerTag", "first time lat, long: " + latitude + " " + longitude);
+                    LatLng lastLoc = new LatLng(latitude, longitude);
+                    mMap.moveCamera(CameraUpdateFactory.newLatLng(lastLoc));
+                    marker = mMap.addMarker(new MarkerOptions()
+                            .position(lastLoc)
+                            .draggable(true)
+                    );
+                    mMap.animateCamera(CameraUpdateFactory.zoomTo(15), 2000, null);
+                } else{
+                    if ((participant.getLongitude() != 0.0) && (participant.getLatitude() != 0.0)) {
+                        latitude = participant.getLatitude();
+                        longitude = participant.getLongitude();
+                        LatLng lastLoc = new LatLng(latitude, longitude);
+                        mMap.moveCamera(CameraUpdateFactory.newLatLng(lastLoc));
+                        marker = mMap.addMarker(new MarkerOptions()
+                                .position(lastLoc)
+                                .draggable(true)
+                        );
+                        mMap.animateCamera(CameraUpdateFactory.zoomTo(15), 2000, null);
+                    }
+                }
                 Log.d("camTag","success"+latitude+" "+longitude);
             }catch (NullPointerException e) {
                 Log.d("camTag","fail");
@@ -200,9 +214,10 @@ public class MapsActivity extends FragmentActivity implements
             //update participant last known location
             participant.setLatitude(latitude);
             participant.setLongitude(longitude);
+            /* todo put this back after merge with michael
             ElasticSearchController.EditParticipantTask editParticipantTask = new ElasticSearchController.EditParticipantTask("geoLocation");
             editParticipantTask.execute(participant);
-
+*/
             if (marker != null){
                 marker.remove();
             }

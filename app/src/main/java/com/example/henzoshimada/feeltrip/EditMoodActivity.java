@@ -119,15 +119,24 @@ public class EditMoodActivity extends AppCompatActivity {
                     Log.d("Mytag", "Tapped on private");
                     setPostMode();
                     return true;
+                /*
                 case R.id.check_bottom_button:
                     Log.d("Mytag", "Tapped on submit");
                     addListenerOnSubmitButton();
                     return true;
+                    */
                 case R.id.date_bottom_button:
                     Log.d("Mytag", "Tapped on date");
-                    datePick(findViewById(R.id.date_bottom_button).getContext());
-                    //timePick(findViewById(R.id.date_bottom_button).getContext());
+                    timePick(findViewById(R.id.date_bottom_button).getContext());
+                    //datePick(findViewById(R.id.date_bottom_button).getContext());
+
                     return true;
+
+                case R.id.time_bottom_button:
+                    Log.d("Mytag", "Tapped on Time");
+                    timePick(findViewById(R.id.date_bottom_button).getContext());
+                    return true;
+
                 case R.id.photo_bottom_button:
                     Log.d("Mytag", "Tapped on photo");
                     cameraPerm();
@@ -242,6 +251,13 @@ public class EditMoodActivity extends AppCompatActivity {
         BottomNavigationView options_bar = (BottomNavigationView) findViewById(R.id.options_post);
         options_bar.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
+        ImageButton submitButton = (ImageButton) findViewById(R.id.check_bottom_button);
+        submitButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                addListenerOnSubmitButton();
+            }
+        });
 
     } //end of on create
 
