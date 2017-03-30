@@ -70,6 +70,9 @@ public class MainScreen extends AppCompatActivity{
 
     private Participant participant = FeelTripApplication.getParticipant();
 
+    private DrawerLayout mDrawerLayout;
+    private ActionBarDrawerToggle mDrawerToggle;
+
     public int emojiUnicode(String emotion) {
         switch(emotion) {
             case "Angry":
@@ -163,6 +166,7 @@ public class MainScreen extends AppCompatActivity{
 
     };
 
+
     private void setFirstItemNavigationView() {
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.getMenu().getItem(1).setChecked(true);
@@ -250,8 +254,30 @@ public class MainScreen extends AppCompatActivity{
         ElasticSearchController.EditParticipantTask editParticipantTask = new ElasticSearchController.EditParticipantTask();
         editParticipantTask.execute(participant);
 */
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.drawer_open, R.string.drawer_close) {
+            @Override
+            public void onDrawerOpened(View drawerView) {
+                super.onDrawerOpened(drawerView);
+                //load stuff here
 
+                Log.d("followTag", "onDrawerOpen; " + getTitle());
+                loadRequestsArray();
+                loadFollowingsArray();
+                Log.d("followTag", "done load");
+                invalidateOptionsMenu();
+            }
 
+            @Override
+            public void onDrawerClosed(View drawerView) {
+                super.onDrawerClosed(drawerView);
+                Log.d("drawerTag", "onDrawerClosed: " + getTitle());
+
+                invalidateOptionsMenu();
+            }
+        };
+
+        mDrawerLayout.addDrawerListener(mDrawerToggle);
 
         //requestAdapter = new RequestAdapter(requestsArray, this); //view,dataArray
         requestAdapter = FeelTripApplication.getRequestAdapter(this);
@@ -263,8 +289,8 @@ public class MainScreen extends AppCompatActivity{
         userFoundAdapter = FeelTripApplication.getUserFoundAdapter(this);
         userFoundView.setAdapter(userFoundAdapter);
 
-        loadRequestsArray();
-        loadFollowingsArray();
+        //loadRequestsArray();
+        //loadFollowingsArray();
     }
 
     private void searchUser(View view){
@@ -293,23 +319,21 @@ public class MainScreen extends AppCompatActivity{
 
     }
 
-    //todo or michael already finished: update the follow request list
+
     private void loadRequestsArray(){//sender
         ArrayList<FollowRequest> followRequests = participant.getFollowRequest();
-        /*String username;
-        for (int i = 0; i < followRequests.size(); i++){
-            username = followRequests.get(i).getSender();
-            requestsArray.set(i, username);
-        }
-        */
         requestsArray = FeelTripApplication.getRequestsArray();
+        requestsArray.clear();
         requestsArray.addAll(followRequests);
         Log.d("followTag","request size: "+requestsArray.size());
+        requestAdapter.notifyDataSetChanged();
     }
 
     private void loadFollowingsArray(){//receiver
+        followingArray.clear();
         followingArray.addAll(participant.getFollowing());
         Log.d("followTag","following size: "+followingArray.size());
+        follwingAdapter.notifyDataSetChanged();
     }
 
     public String getEmojiByUnicode(int unicode){
@@ -384,5 +408,9 @@ public class MainScreen extends AppCompatActivity{
         filterListAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         filterSpinner.setAdapter(filterListAdapter);
     }*/
+
+
+
+
 
 }
