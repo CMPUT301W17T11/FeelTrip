@@ -2,6 +2,7 @@ package com.example.henzoshimada.feeltrip;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.SystemClock;
 import android.text.Html;
 import android.util.Base64;
 import android.util.Log;
@@ -47,7 +48,7 @@ public class ListViewAdapter extends BaseSwipeAdapter {
     @Override
     public void fillValues(final int position, View convertView) {
 
-        SwipeLayout swipeLayout = (SwipeLayout)convertView.findViewById(getSwipeLayoutResourceId(position));
+        final SwipeLayout swipeLayout = (SwipeLayout)convertView.findViewById(getSwipeLayoutResourceId(position));
         swipeLayout.addSwipeListener(new SimpleSwipeListener() {
             @Override
             public void onOpen(SwipeLayout layout) {
@@ -65,10 +66,11 @@ public class ListViewAdapter extends BaseSwipeAdapter {
             @Override
             public void onClick(View v) {
                 Mood moodItem = mood.get(position);
+                FeelTripApplication.getListViewAdapter(mContext).notifyDataSetChanged();
                 mood.remove(position);
                 ElasticSearchController.DeleteMoodTask delTask = new ElasticSearchController.DeleteMoodTask();
                 delTask.execute(moodItem);
-                FeelTripApplication.getListViewAdapter(mContext).notifyDataSetChanged();
+                swipeLayout.close(true);
             }
         });
 
