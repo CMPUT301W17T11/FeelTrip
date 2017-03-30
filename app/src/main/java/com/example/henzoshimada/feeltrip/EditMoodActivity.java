@@ -303,7 +303,7 @@ public class EditMoodActivity extends AppCompatActivity {
                     mood.setNullLocation();
                 }
                 if (emotionalState.equals("")) {
-                    throw new RuntimeException();
+
                 } else {
                     mood.setEmotionalState(emotionalState);
                 }
@@ -370,9 +370,7 @@ public class EditMoodActivity extends AppCompatActivity {
                 finish();
             }
         } catch (NullPointerException e) {
-            Toast.makeText(getApplicationContext(), "Description Required ", Toast.LENGTH_SHORT).show();
-        } catch (RuntimeException e) {
-            Toast.makeText(getApplicationContext(), "Emoji choice required ", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), "Missing required fields ", Toast.LENGTH_SHORT).show();
         }
     }
 

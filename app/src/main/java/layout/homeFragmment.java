@@ -18,6 +18,7 @@ import android.widget.TextView;
 import com.example.henzoshimada.feeltrip.EditMoodActivity;
 import com.example.henzoshimada.feeltrip.ElasticSearchController;
 import com.example.henzoshimada.feeltrip.FeelTripApplication;
+import com.example.henzoshimada.feeltrip.ListViewAdapter;
 import com.example.henzoshimada.feeltrip.Mood;
 import com.example.henzoshimada.feeltrip.MoodAdapter;
 import com.example.henzoshimada.feeltrip.R;
@@ -38,9 +39,7 @@ public class homeFragmment extends Fragment{
 
     private ListView oldMoodListView;
     private ArrayList<Mood> moodArrayList;
-
-    private ArrayAdapter<Mood> adapter;
-
+    private ListViewAdapter adapter;
     private static final String frag = "main";
 
     @Override
@@ -101,7 +100,7 @@ public class homeFragmment extends Fragment{
             FeelTripApplication.setFrag(frag);
         }
 //        FeelTripApplication.loadFromElasticSearch();
-        adapter = FeelTripApplication.getMoodAdapter(getActivity());
+        adapter = FeelTripApplication.getListViewAdapter(getContext());
 
         //adapter = new ArrayAdapter<Mood>(getActivity(), R.layout.list_item, moodArrayList); //view,dataArray
         oldMoodListView.setAdapter(adapter);

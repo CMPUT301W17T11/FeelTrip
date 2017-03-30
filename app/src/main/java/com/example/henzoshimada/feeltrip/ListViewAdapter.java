@@ -1,4 +1,7 @@
 package com.example.henzoshimada.feeltrip;
+import android.app.Fragment;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -47,8 +50,10 @@ public class ListViewAdapter extends BaseSwipeAdapter {
 
     @Override
     public void fillValues(final int position, View convertView) {
-
         final SwipeLayout swipeLayout = (SwipeLayout)convertView.findViewById(getSwipeLayoutResourceId(position));
+        if(!mood.get(position).getPrivate()){
+            swipeLayout.setSwipeEnabled(false);
+        }
         swipeLayout.addSwipeListener(new SimpleSwipeListener() {
             @Override
             public void onOpen(SwipeLayout layout) {
