@@ -1,6 +1,7 @@
 package layout;
 
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.os.Build;
 import android.os.Bundle;
 import android.app.Fragment;
@@ -26,6 +27,7 @@ import com.example.henzoshimada.feeltrip.R;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 /*
@@ -68,9 +70,21 @@ public class homeFragmment extends Fragment{
 //            oldMoodListView.setBackground(getResources().getDrawable(R.drawable.music_bg,getContext().getTheme()));
         }
 
-        if(FeelTripApplication.getThemeID() == R.style.CustomTheme_Light) {
+        if(FeelTripApplication.getThemeID() == R.style.CustomTheme_Light || FeelTripApplication.getThemeID() == R.style.CustomTheme_Dark) {
             android.support.design.widget.FloatingActionButton floatingActionButton = (android.support.design.widget.FloatingActionButton) view.findViewById(R.id.add_mood);
-            floatingActionButton.setBackgroundColor(FeelTripApplication.getCOLORPRIMARY());
+            int[][] tintstates = new int[][] {
+                    new int[] { android.R.attr.state_pressed},  // pressed
+                    new int[] {-android.R.attr.state_pressed}  // unpressed
+            };
+
+            int[] tintcolors = new int[] {
+                    FeelTripApplication.getCOLORPRIMARY(),
+                    FeelTripApplication.getCOLORPRIMARY()
+            };
+            ColorStateList tintList = new ColorStateList(tintstates, tintcolors);
+            floatingActionButton.setBackgroundTintList(tintList);
+
+            oldMoodListView.setBackgroundColor(FeelTripApplication.getBACKGROUNDCOLOR());
         }
 
         //http://stackoverflow.com/questions/20922036/android-cant-call-setonitemclicklistener-from-a-listview

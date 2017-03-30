@@ -79,7 +79,7 @@ public class MoodAdapter extends ArrayAdapter<Mood> {
             viewHolder.socialSituation = (TextView) convertView.findViewById(R.id.socialSituation);
             viewHolder.image = (ImageView) convertView.findViewById(R.id.image);
 
-            if(FeelTripApplication.getThemeID() == R.style.CustomTheme_Light) {
+            if(FeelTripApplication.getThemeID() == R.style.CustomTheme_Light || FeelTripApplication.getThemeID() == R.style.CustomTheme_Dark) {
                 viewHolder.userName.setTextColor(FeelTripApplication.getTEXTCOLORPRIMARY());
                 viewHolder.date.setTextColor(FeelTripApplication.getTEXTCOLORTERTIARY());
                 viewHolder.description.setTextColor(FeelTripApplication.getTEXTCOLORPRIMARY());

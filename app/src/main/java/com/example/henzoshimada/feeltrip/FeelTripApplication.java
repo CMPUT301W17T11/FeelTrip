@@ -87,13 +87,19 @@ public class FeelTripApplication extends Application {
 
     private static int TEXTCOLORPRIMARY = 0xFF3F51B5;
 
-    private static int TEXTCOLORSECONDARY = 0xFF3F51B5;;
+    private static int TEXTCOLORSECONDARY = 0xFF3F51B5;
 
-    private static int TEXTCOLORTERTIARY = 0xFF3F51B5;;
+    private static int TEXTCOLORTERTIARY = 0xFF3F51B5;
 
+    private static int BACKGROUNDCOLOR = 0xFF3F51B5;
 
+    public static int getBACKGROUNDCOLOR() {
+        return BACKGROUNDCOLOR;
+    }
 
-
+    public static void setBACKGROUNDCOLOR(int BACKGROUNDCOLOR) {
+        FeelTripApplication.BACKGROUNDCOLOR = BACKGROUNDCOLOR;
+    }
 
     // Singleton
     private static UpdateQueue updateQueue = null;

@@ -1,14 +1,19 @@
 package com.example.henzoshimada.feeltrip;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
+import android.graphics.Rect;
 import android.support.design.widget.BottomSheetBehavior;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
@@ -30,6 +35,7 @@ public class loginActivity extends AppCompatActivity implements ColorPicker.OnCo
     private SVBar svBar;
     private Button button;
     private TextView text;
+    android.support.v4.widget.NestedScrollView bottomSheet;
     private BottomSheetBehavior mBottomSheetBehavior;
     private SeekBar themeSeekBar;
 
@@ -43,7 +49,7 @@ public class loginActivity extends AppCompatActivity implements ColorPicker.OnCo
 
         setContentView(R.layout.activity_login);
 
-        android.support.v4.widget.NestedScrollView bottomSheet = (android.support.v4.widget.NestedScrollView) findViewById( R.id.bottom_sheet );
+        bottomSheet = (android.support.v4.widget.NestedScrollView) findViewById( R.id.bottom_sheet );
 
         mBottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
         mBottomSheetBehavior.setPeekHeight(100);
@@ -125,11 +131,12 @@ public class loginActivity extends AppCompatActivity implements ColorPicker.OnCo
         int textcolorprimary;
         int textcolorsecondary;
         int textcolortertiary;
+        int backgroundcolor;
 
-        colorprimary = color;
         textcolorprimary = color;
         textcolorsecondary = lighter(textcolorprimary, 0.6f);
-        textcolortertiary = lighter(textcolorsecondary, 0.4f);
+        textcolortertiary = lighter(textcolorprimary, 0.4f);
+        colorprimary = lighter(textcolorprimary, 0.2f);
 
         FeelTripApplication.setCOLORPRIMARY(colorprimary);
         FeelTripApplication.setTEXTCOLORPRIMARY(textcolorprimary);
@@ -139,7 +146,9 @@ public class loginActivity extends AppCompatActivity implements ColorPicker.OnCo
 
         RelativeLayout loginBackground = (RelativeLayout) findViewById(R.id.login_background);
         int alpha = 169;
-        loginBackground.setBackgroundColor(Color.argb(alpha, Color.red(FeelTripApplication.getTEXTCOLORPRIMARY()), Color.green(FeelTripApplication.getTEXTCOLORPRIMARY()), Color.blue(FeelTripApplication.getTEXTCOLORPRIMARY())));
+        backgroundcolor = Color.argb(alpha, Color.red(FeelTripApplication.getTEXTCOLORPRIMARY()), Color.green(FeelTripApplication.getTEXTCOLORPRIMARY()), Color.blue(FeelTripApplication.getTEXTCOLORPRIMARY()));
+        FeelTripApplication.setBACKGROUNDCOLOR(backgroundcolor);
+        loginBackground.setBackgroundColor(FeelTripApplication.getBACKGROUNDCOLOR());
         EditText editUser = (EditText) findViewById(R.id.user_text);
         editUser.getBackground().setColorFilter(FeelTripApplication.getTEXTCOLORSECONDARY(), PorterDuff.Mode.SRC_IN);
         EditText editPass = (EditText) findViewById(R.id.pass_text);
@@ -189,6 +198,31 @@ public class loginActivity extends AppCompatActivity implements ColorPicker.OnCo
         }
     }
 
+
+    @Override
+    public void onBackPressed() {
+        if (mBottomSheetBehavior.getState()==BottomSheetBehavior.STATE_EXPANDED) {
+            mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+        } else {
+            super.onBackPressed();
+        }
+    }
+
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent event){
+        if (event.getAction() == MotionEvent.ACTION_DOWN) {
+            if (mBottomSheetBehavior.getState()==BottomSheetBehavior.STATE_EXPANDED) {
+
+                Rect outRect = new Rect();
+                bottomSheet.getGlobalVisibleRect(outRect);
+
+                if(!outRect.contains((int)event.getRawX(), (int)event.getRawY()))
+                    mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+            }
+        }
+
+        return super.dispatchTouchEvent(event);
+    }
 
     public void checkUser(View v){ // TODO: Check and fix cases where pass or username contains special chars.
         EditText userField = (EditText) this.findViewById(R.id.user_text);

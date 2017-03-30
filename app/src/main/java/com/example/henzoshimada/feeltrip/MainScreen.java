@@ -151,7 +151,7 @@ public class MainScreen extends AppCompatActivity {
                 default:
                     fragment = new homeFragmment();
                     ft.replace(R.id.fragent_frame,fragment);
-                    ft.addToBackStack(null);
+//                    ft.addToBackStack(null);
                     ft.commit();
                     break;
             }
@@ -252,7 +252,7 @@ public class MainScreen extends AppCompatActivity {
         followingView = (ListView) findViewById(R.id.follow_list);
         requestView = (ListView) findViewById(R.id.request_list);
 
-        if(FeelTripApplication.getThemeID() == R.style.CustomTheme_Light) {
+        if(FeelTripApplication.getThemeID() == R.style.CustomTheme_Light || FeelTripApplication.getThemeID() == R.style.CustomTheme_Dark) {
             android.support.design.widget.AppBarLayout appBarLayout = (android.support.design.widget.AppBarLayout) findViewById(R.id.appBarLayout);
             appBarLayout.setBackgroundColor(FeelTripApplication.getCOLORPRIMARY());
 

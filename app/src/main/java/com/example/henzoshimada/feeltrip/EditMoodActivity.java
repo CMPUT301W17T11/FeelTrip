@@ -154,7 +154,7 @@ public class EditMoodActivity extends AppCompatActivity {
         modeLocationText = (TextView) findViewById(R.id.modeLocation);
 
 
-        if(FeelTripApplication.getThemeID() == R.style.CustomTheme_Light) {
+        if(FeelTripApplication.getThemeID() == R.style.CustomTheme_Light || FeelTripApplication.getThemeID() == R.style.CustomTheme_Dark) {
             inputMoodDescription.setHintTextColor(FeelTripApplication.getTEXTCOLORTERTIARY());
 
             TextView feelingTextView = (TextView) findViewById(R.id.feelingTextView);
@@ -722,7 +722,7 @@ public class EditMoodActivity extends AppCompatActivity {
 
             emojiTextview.setTextSize(15);
             emojiTextview.setGravity(Gravity.CENTER);
-            if(FeelTripApplication.getThemeID() == R.style.CustomTheme_Light) {
+            if(FeelTripApplication.getThemeID() == R.style.CustomTheme_Light || FeelTripApplication.getThemeID() == R.style.CustomTheme_Dark) {
                 emojiTextview.setTextColor(FeelTripApplication.getTEXTCOLORSECONDARY());
             } else {
                 TypedValue tv = new TypedValue();
