@@ -189,7 +189,7 @@ public class loginActivity extends AppCompatActivity implements ColorPicker.OnCo
     @Override
     public void onStopTrackingTouch(SeekBar seekBar) {
         int mProgress = seekBar.getProgress();
-        if(mProgress > 0 & mProgress < 50) {
+        if(mProgress < 50) {
             seekBar.setProgress(0);
             swapToCustomThemeLight();
         } else {
