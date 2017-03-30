@@ -187,5 +187,13 @@ public class FeelTripApplication extends Application {
 
     private static ListViewAdapter listViewAdapter = null;
 
+    public static String username;
+    public static String getUserName(){
+        return username;
+    }
+
+    public static void setUsername(String name){
+        username = name;
+    }
 
 }

@@ -51,7 +51,8 @@ public class ListViewAdapter extends BaseSwipeAdapter {
     @Override
     public void fillValues(final int position, View convertView) {
         final SwipeLayout swipeLayout = (SwipeLayout)convertView.findViewById(getSwipeLayoutResourceId(position));
-        if(!mood.get(position).getPrivate()){
+        Log.d("swipe","Name Global: "+FeelTripApplication.getUserName());
+        if(!(FeelTripApplication.getUserName().equals((mood.get(position).getUsername())))){
             swipeLayout.setSwipeEnabled(false);
         }
         swipeLayout.addSwipeListener(new SimpleSwipeListener() {
@@ -81,8 +82,8 @@ public class ListViewAdapter extends BaseSwipeAdapter {
 
         try {
             Mood moodItem = mood.get(position);
-            Log.d("swipe","Mood Length: "+mood.size());
-            Log.d("swipe","Pos Length: "+position);
+            //Log.d("swipe","Mood Length: "+mood.size());
+            //Log.d("swipe","Pos Length: "+position);
             TextView userName = (TextView) convertView.findViewById(R.id.userName);
             TextView date = (TextView) convertView.findViewById(R.id.date);
             ImageView emojiImage = (ImageView) convertView.findViewById(R.id.emojiImage);
