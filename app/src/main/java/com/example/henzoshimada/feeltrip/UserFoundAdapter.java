@@ -87,6 +87,7 @@ public class UserFoundAdapter extends ArrayAdapter<String> {
                 FollowRequest followRequest = new FollowRequest(sender, receiver);
                 ElasticSearchController.AddRequestTask addRequestTask = new ElasticSearchController.AddRequestTask();
                 addRequestTask.execute(followRequest);
+
             }
         });
 

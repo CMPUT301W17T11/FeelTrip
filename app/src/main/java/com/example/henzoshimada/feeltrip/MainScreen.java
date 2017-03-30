@@ -261,7 +261,6 @@ public class MainScreen extends AppCompatActivity{
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
                 //load stuff here
-
                 Log.d("followTag", "onDrawerOpen; " + getTitle());
                 loadRequestsArray();
                 loadFollowingsArray();
@@ -273,6 +272,7 @@ public class MainScreen extends AppCompatActivity{
             public void onDrawerClosed(View drawerView) {
                 super.onDrawerClosed(drawerView);
                 Log.d("drawerTag", "onDrawerClosed: " + getTitle());
+                inputTextView.setText("");
 
                 invalidateOptionsMenu();
             }
