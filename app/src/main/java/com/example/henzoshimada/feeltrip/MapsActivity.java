@@ -71,6 +71,10 @@ public class MapsActivity extends FragmentActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
 
+        Intent intent = getIntent();
+        longitude = intent.getDoubleExtra("currentLong", 0);
+        latitude = intent.getDoubleExtra("currentLat", 0);
+
         // Build the Play services client for use by the Fused Location Provider and the Places API.
         // Use the addApi() method to request the Google Places API and the Fused Location Provider.
         mGoogleApiClient = new GoogleApiClient.Builder(this)
@@ -141,12 +145,27 @@ public class MapsActivity extends FragmentActivity implements
             // Access to the location has been granted to the app.
             mMap.setOnMarkerDragListener(this);
             mMap.setOnMapLongClickListener(this);
+            try {
+                //set marker to where mood is posted
+                LatLng lastLoc = new LatLng(latitude, longitude);
+                mMap.moveCamera(CameraUpdateFactory.newLatLng(lastLoc));
+                marker = mMap.addMarker(new MarkerOptions()
+                        .position(lastLoc)
+                        .draggable(true)
+                );
+                mMap.animateCamera(CameraUpdateFactory.zoomTo(15), 2000, null);
+
+                Log.d("camTag","success"+latitude+" "+longitude);
+            }catch (NullPointerException e) {
+                Log.d("camTag","fail");
+            }
         }
 
         // Add a marker in Sydney and move the camera
         //LatLng sydney = new LatLng(-34, 151);
         //mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
         //mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+
 
     }
 
@@ -177,6 +196,13 @@ public class MapsActivity extends FragmentActivity implements
             Log.d("mapATag", "Lat= " + String.valueOf(mLastKnownLocation.getLatitude()) + " and Long= " + String.valueOf(mLastKnownLocation.getLongitude()));
             longitude = mLastKnownLocation.getLongitude();
             latitude = mLastKnownLocation.getLatitude();
+
+            //update participant last known location
+            participant.setLatitude(latitude);
+            participant.setLongitude(longitude);
+            ElasticSearchController.EditParticipantTask editParticipantTask = new ElasticSearchController.EditParticipantTask("geoLocation");
+            editParticipantTask.execute(participant);
+
             if (marker != null){
                 marker.remove();
             }

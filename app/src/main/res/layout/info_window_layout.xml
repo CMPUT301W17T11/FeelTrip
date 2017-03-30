@@ -9,6 +9,14 @@
         android:textSize="12dp"
         android:textStyle="bold"
         android:text="some username"/>
+
+    <TextView
+        android:id="@+id/info_window_description"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="10dp"
+        android:text="some description"/>
+
     <TextView
         android:id="@+id/social_situation"
         android:layout_width="wrap_content"
@@ -18,13 +26,13 @@
 
     <TextView
         android:id="@+id/emotional_state"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Some emotional state" />
 
     <TextView
         android:id="@+id/date"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Some date" />
 </LinearLayout>
