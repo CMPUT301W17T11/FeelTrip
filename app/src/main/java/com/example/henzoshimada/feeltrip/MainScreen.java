@@ -168,6 +168,9 @@ public class MainScreen extends AppCompatActivity {
                 FeelTripApplication.getFilterController().setPastweekfilter(isChecked);
                 ElasticSearchController.loadFromElasticSearch();
                 FeelTripApplication.getMoodAdapter(getBaseContext()).notifyDataSetChanged();
+                if (FeelTripApplication.getFrag().equals("map")) {
+                    updateMap();
+                }
             }
         });
 
@@ -180,6 +183,9 @@ public class MainScreen extends AppCompatActivity {
                 FeelTripApplication.getFilterController().setFriendsonlyfilter(isChecked);
                 ElasticSearchController.loadFromElasticSearch();
                 FeelTripApplication.getMoodAdapter(getBaseContext()).notifyDataSetChanged();
+                if (FeelTripApplication.getFrag().equals("map")) {
+                    updateMap();
+                }
             }
         });
 
@@ -192,6 +198,9 @@ public class MainScreen extends AppCompatActivity {
                 FeelTripApplication.getFilterController().setMostrecentfilter(isChecked);
                 ElasticSearchController.loadFromElasticSearch();
                 FeelTripApplication.getMoodAdapter(getBaseContext()).notifyDataSetChanged();
+                if (FeelTripApplication.getFrag().equals("map")) {
+                    updateMap();
+                }
             }
         });
 
@@ -296,5 +305,12 @@ public class MainScreen extends AppCompatActivity {
         filterListAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         filterSpinner.setAdapter(filterListAdapter);
     }*/
-
+    private void updateMap(){
+        FeelTripApplication.setFrag("map");
+        Fragment fragment = new mapFragment();
+        FragmentManager fragmentManager = getFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.fragent_frame,fragment);
+        fragmentTransaction.commit();
+    }
 }
