@@ -405,7 +405,7 @@ public class ElasticSearchController {
             if (searchParticipant){
                 query = "{" +
                         "\"query\" : {" +
-                        "\"term\" : {" +
+                        "\"match\" : {" +
                         "\"userName\" : \"" + username + "\"" +
                         "}}}";
             }
@@ -560,7 +560,8 @@ public class ElasticSearchController {
                 query = "{" +
                         "\"query\" : {" +
                         "\"match\" : {" +
-                        "\"receiver\" :\"" + username[0] + "\"}" +
+                        "\"receiver\" :\"" + username[0] + "\" , " +
+                        "\"accepted\" : \"false\" }" +
                         " }}";
             }
 

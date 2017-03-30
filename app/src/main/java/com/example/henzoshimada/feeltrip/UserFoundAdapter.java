@@ -46,7 +46,7 @@ public class UserFoundAdapter extends ArrayAdapter<String> {
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
         // Get the data item for this position
-        String userName = getItem(position);
+        final String userName = getItem(position);
         // Check if an existing view is being reused, otherwise inflate the view
         ViewHolder viewHolder; // view lookup cache stored in tag
 
@@ -75,8 +75,18 @@ public class UserFoundAdapter extends ArrayAdapter<String> {
             @Override
             public void onClick(View v) {
                 Log.d("requestTag","accept follow request");
+                String receiver = FeelTripApplication.getUsersFoundArray().get(position);
+                String sender = FeelTripApplication.getParticipant().getUserName();
+
                 FeelTripApplication.getUsersFoundArray().remove(position);
                 FeelTripApplication.getUserFoundAdapter(getContext()).notifyDataSetChanged();
+
+                // TODO: sqecial cases
+
+                // add request to server
+                FollowRequest followRequest = new FollowRequest(sender, receiver);
+                ElasticSearchController.AddRequestTask addRequestTask = new ElasticSearchController.AddRequestTask();
+                addRequestTask.execute(followRequest);
             }
         });
 

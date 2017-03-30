@@ -123,8 +123,13 @@ public class loginActivity extends AppCompatActivity {
 
         // extra work need to be done when other user accepted participant's request
         ElasticSearchController.DeleteRequestTask deleteRequestTask = new ElasticSearchController.DeleteRequestTask();
+        ElasticSearchController.EditParticipantTask editParticipantTask = new ElasticSearchController.EditParticipantTask("following");
         for (FollowRequest request : acceptedRequests){
+            // add to following list
             participant.addFollowing(request.getReceiver());
+            // update following list change to server
+            editParticipantTask.execute(participant);
+            // then delete this request
             deleteRequestTask.execute(request);
         }
     }

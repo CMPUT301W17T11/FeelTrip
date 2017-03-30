@@ -76,8 +76,15 @@ public class RequestAdapter extends ArrayAdapter<FollowRequest> {
             @Override
             public void onClick(View v) {
                 Log.d("requestTag","accept follow request");
+                FollowRequest request = FeelTripApplication.getRequestsArray().get(position);
+
                 FeelTripApplication.getRequestsArray().remove(position);
                 FeelTripApplication.getRequestAdapter(getContext()).notifyDataSetChanged();
+
+                // change the request acceptedStatus to true
+                ElasticSearchController.EditRequestTask editRequestTask = new ElasticSearchController.EditRequestTask();
+                editRequestTask.execute(request);
+
             }
         });
 
@@ -85,8 +92,14 @@ public class RequestAdapter extends ArrayAdapter<FollowRequest> {
             @Override
             public void onClick(View v) {
                 Log.d("requestTag","cancel follow request");
+                FollowRequest request = FeelTripApplication.getRequestsArray().get(position);
+
                 FeelTripApplication.getRequestsArray().remove(position);
                 FeelTripApplication.getRequestAdapter(getContext()).notifyDataSetChanged();
+
+                // delete this request from server
+                ElasticSearchController.DeleteRequestTask deleteRequestTask = new ElasticSearchController.DeleteRequestTask();
+                deleteRequestTask.execute(request);
             }
         });
 

@@ -36,6 +36,7 @@ import android.widget.ToggleButton;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 import layout.homeFragmment;
 import layout.mapFragment;
@@ -270,7 +271,28 @@ public class MainScreen extends AppCompatActivity{
     private void searchUser(View view){
         String inputText = inputTextView.getText().toString();
         usersFoundArray = FeelTripApplication.getUsersFoundArray();
-        usersFoundArray.add(0,"some dude");
+        usersFoundArray.clear();
+
+        // search for participants that matches keyword
+        ElasticSearchController.GetParticipantTask getParticipantTask = new ElasticSearchController.GetParticipantTask(true, inputText);
+        getParticipantTask.execute();
+
+
+        // add usernames to userFoundArray
+        try {
+            ArrayList<Participant> participants = new ArrayList<>();
+            participants.addAll(getParticipantTask.get());
+
+            for (Participant participant : participants){
+                usersFoundArray.add(participant.getUserName());
+            }
+        } catch (InterruptedException e) {
+            return;
+        } catch (ExecutionException e) {
+            return;
+        }
+        userFoundAdapter.notifyDataSetChanged();
+
         Log.d("searchUser","search user click");
     }
 
