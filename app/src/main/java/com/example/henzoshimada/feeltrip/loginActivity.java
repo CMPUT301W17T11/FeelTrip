@@ -1,31 +1,102 @@
 package com.example.henzoshimada.feeltrip;
 
-import android.content.BroadcastReceiver;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.support.design.widget.BottomSheetBehavior;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RelativeLayout;
+import android.widget.SeekBar;
+import android.widget.TableLayout;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import com.larswerkman.holocolorpicker.ColorPicker;
+import com.larswerkman.holocolorpicker.OpacityBar;
+import com.larswerkman.holocolorpicker.SVBar;
 
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
-public class loginActivity extends AppCompatActivity {
+public class loginActivity extends AppCompatActivity implements ColorPicker.OnColorChangedListener, SeekBar.OnSeekBarChangeListener {
 
+    private ColorPicker picker;
+    private SVBar svBar;
+    private Button button;
+    private TextView text;
+    private BottomSheetBehavior mBottomSheetBehavior;
+    private SeekBar themeSeekBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-
 //        setTheme(R.style.NaughtyPenguins); //TODO - theme
-        setTheme(R.style.DefaultTheme);
-
+//        setTheme(R.style.DefaultTheme);
+        setTheme(FeelTripApplication.getThemeID());
 
         setContentView(R.layout.activity_login);
+
+        android.support.v4.widget.NestedScrollView bottomSheet = (android.support.v4.widget.NestedScrollView) findViewById( R.id.bottom_sheet );
+
+        mBottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
+        mBottomSheetBehavior.setPeekHeight(100);
+        mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+        String custom = null;
+        ColorPicker colorpicker = (ColorPicker) findViewById(R.id.picker);
+        SVBar sv = (SVBar) findViewById(R.id.svbar);
+        TableLayout themeSeekbarTable = (TableLayout) findViewById(R.id.theme_seekBar_table);
+        SeekBar themeSeekbar = (SeekBar) findViewById(R.id.theme_seekBar);
+        try {
+            Bundle extras = getIntent().getExtras();
+            if (extras != null) {
+                custom = extras.getString("custom");
+                switch (custom) {
+                    case "LIGHT":
+                        colorpicker.setVisibility(View.VISIBLE);
+                        sv.setVisibility(View.VISIBLE);
+                        themeSeekbarTable.setVisibility(View.VISIBLE);
+                        themeSeekbar.setProgress(0);
+                        mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+                        break;
+                    case "DARK":
+                        colorpicker.setVisibility(View.VISIBLE);
+                        sv.setVisibility(View.VISIBLE);
+                        themeSeekbarTable.setVisibility(View.VISIBLE);
+                        themeSeekbar.setProgress(100);
+                        mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+                        break;
+                    case "NONE":
+                        mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+                        break;
+                    default:
+                        break;
+                }
+                EditText userField = (EditText) this.findViewById(R.id.user_text);
+                EditText passField = (EditText) this.findViewById(R.id.pass_text);
+                userField.setText(extras.getString("user"));
+                passField.setText(extras.getString("pass"));
+            }
+        } catch(Exception e) {
+            Log.d("myTag", "Loading new intent, no data found");
+        }
+
+        if(FeelTripApplication.getThemeID() == R.style.CustomTheme_Light || FeelTripApplication.getThemeID() == R.style.CustomTheme_Dark) {
+            EditText editUser = (EditText) findViewById(R.id.user_text);
+            editUser.getBackground().setColorFilter(FeelTripApplication.getTEXTCOLORSECONDARY(), PorterDuff.Mode.SRC_IN);
+            EditText editPass = (EditText) findViewById(R.id.pass_text);
+            editPass.getBackground().setColorFilter(FeelTripApplication.getTEXTCOLORSECONDARY(), PorterDuff.Mode.SRC_IN);
+            Button loginButton = (Button) findViewById(R.id.login_button);
+            loginButton.setTextColor(FeelTripApplication.getTEXTCOLORPRIMARY());
+            Button regButton = (Button) findViewById(R.id.reg_button);
+            regButton.setTextColor(FeelTripApplication.getTEXTCOLORPRIMARY());
+        }
 
         // set up a NetworkStateListener
         // This listener remains valid during the lifetime of this activity
@@ -35,7 +106,90 @@ public class loginActivity extends AppCompatActivity {
         intentFilter.addAction("android.net.wifi.WIFI_STATE_CHANGED");
 
         registerReceiver(networkStateListener, intentFilter);
+
+        picker = (ColorPicker) findViewById(R.id.picker);
+        picker.setShowOldCenterColor(false);
+        svBar = (SVBar) findViewById(R.id.svbar);
+
+        picker.addSVBar(svBar);
+        picker.setOnColorChangedListener(this);
+
+        themeSeekBar = (SeekBar)findViewById(R.id.theme_seekBar);
+        themeSeekBar.setOnSeekBarChangeListener(this);
+
+    } //end of onCreate
+
+    @Override
+    public void onColorChanged(int color) {
+        int colorprimary;
+        int textcolorprimary;
+        int textcolorsecondary;
+        int textcolortertiary;
+
+        colorprimary = color;
+        textcolorprimary = color;
+        textcolorsecondary = lighter(textcolorprimary, 0.6f);
+        textcolortertiary = lighter(textcolorsecondary, 0.4f);
+
+        FeelTripApplication.setCOLORPRIMARY(colorprimary);
+        FeelTripApplication.setTEXTCOLORPRIMARY(textcolorprimary);
+        FeelTripApplication.setTEXTCOLORSECONDARY(textcolorsecondary);
+        FeelTripApplication.setTEXTCOLORTERTIARY(textcolortertiary);
+
+
+        RelativeLayout loginBackground = (RelativeLayout) findViewById(R.id.login_background);
+        int alpha = 169;
+        loginBackground.setBackgroundColor(Color.argb(alpha, Color.red(FeelTripApplication.getTEXTCOLORPRIMARY()), Color.green(FeelTripApplication.getTEXTCOLORPRIMARY()), Color.blue(FeelTripApplication.getTEXTCOLORPRIMARY())));
+        EditText editUser = (EditText) findViewById(R.id.user_text);
+        editUser.getBackground().setColorFilter(FeelTripApplication.getTEXTCOLORSECONDARY(), PorterDuff.Mode.SRC_IN);
+        EditText editPass = (EditText) findViewById(R.id.pass_text);
+        editPass.getBackground().setColorFilter(FeelTripApplication.getTEXTCOLORSECONDARY(), PorterDuff.Mode.SRC_IN);
+        Button loginButton = (Button) findViewById(R.id.login_button);
+        loginButton.setTextColor(FeelTripApplication.getTEXTCOLORPRIMARY());
+        Button regButton = (Button) findViewById(R.id.reg_button);
+        regButton.setTextColor(FeelTripApplication.getTEXTCOLORPRIMARY());
+
     }
+
+    /**
+     * Lightens a color by a given factor.
+     *
+     * @param color
+     *            The color to lighten
+     * @param factor
+     *            The factor to lighten the color. 0 will make the color unchanged. 1 will make the
+     *            color white.
+     * @return lighter version of the specified color.
+     */
+    public static int lighter(int color, float factor) {
+        int red = (int) ((Color.red(color) * (1 - factor) / 255 + factor) * 255);
+        int green = (int) ((Color.green(color) * (1 - factor) / 255 + factor) * 255);
+        int blue = (int) ((Color.blue(color) * (1 - factor) / 255 + factor) * 255);
+        return Color.argb(Color.alpha(color), red, green, blue);
+    }
+
+    @Override
+    public void onProgressChanged(SeekBar seekBar, int progress,
+                                  boolean fromUser) {
+    }
+
+    @Override
+    public void onStartTrackingTouch(SeekBar seekBar) {
+    }
+
+    @Override
+    public void onStopTrackingTouch(SeekBar seekBar) {
+        int mProgress = seekBar.getProgress();
+        if(mProgress > 0 & mProgress < 50) {
+            seekBar.setProgress(0);
+            swapToCustomThemeLight();
+        } else {
+            seekBar.setProgress(100);
+            swapToCustomThemeDark();
+        }
+    }
+
+
     public void checkUser(View v){ // TODO: Check and fix cases where pass or username contains special chars.
         EditText userField = (EditText) this.findViewById(R.id.user_text);
         EditText passField = (EditText) this.findViewById(R.id.pass_text);
@@ -127,5 +281,89 @@ public class loginActivity extends AppCompatActivity {
             participant.addFollowing(request.getReceiver());
             deleteRequestTask.execute(request);
         }
+    }
+
+    public void swapToCustomTheme(View v) {
+        ColorPicker colorpicker = (ColorPicker) findViewById(R.id.picker);
+        SVBar sv = (SVBar) findViewById(R.id.svbar);
+        TableLayout themeSeekbarTable = (TableLayout) findViewById(R.id.theme_seekBar_table);
+        colorpicker.setVisibility(View.INVISIBLE);
+        sv.setVisibility(View.INVISIBLE);
+        themeSeekbarTable.setVisibility(View.VISIBLE);
+    }
+
+    public void swapToCustomThemeLight() {
+        setTheme(R.style.CustomTheme_Light);
+        FeelTripApplication.setThemeID(R.style.CustomTheme_Light);
+        Intent intent = new Intent(this, loginActivity.class);
+        Bundle bundle = new Bundle();
+        EditText userField = (EditText) this.findViewById(R.id.user_text);
+        EditText passField = (EditText) this.findViewById(R.id.pass_text);
+        bundle.putString("user",userField.getText().toString());
+        bundle.putString("pass",passField.getText().toString());
+        bundle.putString("custom","LIGHT");
+        intent.putExtras(bundle);
+        startActivity(intent);
+        finish();
+    }
+
+    public void swapToCustomThemeDark() {
+        setTheme(R.style.CustomTheme_Dark);
+        FeelTripApplication.setThemeID(R.style.CustomTheme_Dark);
+        Intent intent = new Intent(this, loginActivity.class);
+        Bundle bundle = new Bundle();
+        EditText userField = (EditText) this.findViewById(R.id.user_text);
+        EditText passField = (EditText) this.findViewById(R.id.pass_text);
+        bundle.putString("user",userField.getText().toString());
+        bundle.putString("pass",passField.getText().toString());
+        bundle.putString("custom","DARK");
+        intent.putExtras(bundle);
+        startActivity(intent);
+        finish();
+    }
+
+    public void swapToNaughtyPenguinsTheme(View v) {
+        setTheme(R.style.NaughtyPenguins);
+        FeelTripApplication.setThemeID(R.style.NaughtyPenguins);
+        Intent intent = new Intent(this, loginActivity.class);
+        Bundle bundle = new Bundle();
+        EditText userField = (EditText) this.findViewById(R.id.user_text);
+        EditText passField = (EditText) this.findViewById(R.id.pass_text);
+        bundle.putString("user",userField.getText().toString());
+        bundle.putString("pass",passField.getText().toString());
+        bundle.putString("custom","NONE");
+        intent.putExtras(bundle);
+        startActivity(intent);
+        finish();
+    }
+
+    public void swapToGalaxyTheme(View v) {
+        setTheme(R.style.DefaultTheme);
+        FeelTripApplication.setThemeID(R.style.DefaultTheme);
+        Intent intent = new Intent(this, loginActivity.class);
+        Bundle bundle = new Bundle();
+        EditText userField = (EditText) this.findViewById(R.id.user_text);
+        EditText passField = (EditText) this.findViewById(R.id.pass_text);
+        bundle.putString("user",userField.getText().toString());
+        bundle.putString("pass",passField.getText().toString());
+        bundle.putString("custom","NONE");
+        intent.putExtras(bundle);
+        startActivity(intent);
+        finish();
+    }
+
+    public void swapToOverwatchTheme(View v) {
+        setTheme(R.style.DefaultTheme);
+        FeelTripApplication.setThemeID(R.style.DefaultTheme);
+        Intent intent = new Intent(this, loginActivity.class);
+        Bundle bundle = new Bundle();
+        EditText userField = (EditText) this.findViewById(R.id.user_text);
+        EditText passField = (EditText) this.findViewById(R.id.pass_text);
+        bundle.putString("user",userField.getText().toString());
+        bundle.putString("pass",passField.getText().toString());
+        bundle.putString("custom","NONE");
+        intent.putExtras(bundle);
+        startActivity(intent);
+        finish();
     }
 }

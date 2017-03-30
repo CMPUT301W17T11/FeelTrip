@@ -26,6 +26,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:id="@+id/feelingTextView"
             android:textColor="?android:attr/textColorSecondary"
             android:text="Feeling: "
             android:textSize="25sp"
@@ -48,6 +49,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:id="@+id/locationTextView"
             android:textColor="?android:attr/textColorSecondary"
             android:text="Location: "
             android:layout_marginLeft="10dp"/>
@@ -60,6 +62,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:id="@+id/modeTextView"
             android:textColor="?android:attr/textColorSecondary"
             android:text="Mode: "
             android:layout_marginLeft="20dp"/>
@@ -72,6 +75,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:id="@+id/photoAttachedTextView"
             android:textColor="?android:attr/textColorSecondary"
             android:text="Photo Attached: "
             android:layout_marginLeft="20dp"/>

@@ -68,6 +68,11 @@ public class homeFragmment extends Fragment{
 //            oldMoodListView.setBackground(getResources().getDrawable(R.drawable.music_bg,getContext().getTheme()));
         }
 
+        if(FeelTripApplication.getThemeID() == R.style.CustomTheme_Light) {
+            android.support.design.widget.FloatingActionButton floatingActionButton = (android.support.design.widget.FloatingActionButton) view.findViewById(R.id.add_mood);
+            floatingActionButton.setBackgroundColor(FeelTripApplication.getCOLORPRIMARY());
+        }
+
         //http://stackoverflow.com/questions/20922036/android-cant-call-setonitemclicklistener-from-a-listview
         //2017-02-02
         //when click an item in list

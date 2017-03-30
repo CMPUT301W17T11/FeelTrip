@@ -1,6 +1,9 @@
 package com.example.henzoshimada.feeltrip;
 
 import android.content.Context;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
@@ -30,6 +33,7 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.app.Fragment;
 import android.app.FragmentManager;
@@ -173,7 +177,8 @@ public class MainScreen extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
 //        setTheme(R.style.NaughtyPenguins); //TODO - theme
-        setTheme(R.style.DefaultTheme);
+//        setTheme(R.style.DefaultTheme);
+        setTheme(FeelTripApplication.getThemeID());
 
 
         setContentView(R.layout.activity_main);
@@ -246,6 +251,52 @@ public class MainScreen extends AppCompatActivity {
         userFoundView = (ListView) findViewById(R.id.found_user);
         followingView = (ListView) findViewById(R.id.follow_list);
         requestView = (ListView) findViewById(R.id.request_list);
+
+        if(FeelTripApplication.getThemeID() == R.style.CustomTheme_Light) {
+            android.support.design.widget.AppBarLayout appBarLayout = (android.support.design.widget.AppBarLayout) findViewById(R.id.appBarLayout);
+            appBarLayout.setBackgroundColor(FeelTripApplication.getCOLORPRIMARY());
+
+            EditText searchText = (EditText) findViewById(R.id.keyword);
+            searchText.getBackground().setColorFilter(FeelTripApplication.getTEXTCOLORTERTIARY(), PorterDuff.Mode.SRC_IN);
+            searchText.setHintTextColor(FeelTripApplication.getTEXTCOLORTERTIARY());
+
+            int[][] tintstates = new int[][] {
+                    new int[] { android.R.attr.state_pressed},  // pressed
+                    new int[] {-android.R.attr.state_pressed}  // unpressed
+            };
+
+            int[] tintcolors = new int[] {
+                    FeelTripApplication.getTEXTCOLORTERTIARY(),
+                    FeelTripApplication.getTEXTCOLORTERTIARY()
+            };
+            ColorStateList tintList = new ColorStateList(tintstates, tintcolors);
+            searchButton.setBackgroundTintList(tintList);
+
+            TextView pastWeekView = (TextView) findViewById(R.id.textView2);
+            pastWeekView.setTextColor(FeelTripApplication.getTEXTCOLORTERTIARY());
+            TextView moodsFilterView = (TextView) findViewById(R.id.textView3);
+            moodsFilterView.setTextColor(FeelTripApplication.getTEXTCOLORTERTIARY());
+            TextView mostRecentView = (TextView) findViewById(R.id.textView4);
+            mostRecentView.setTextColor(FeelTripApplication.getTEXTCOLORTERTIARY());
+            TextView friendsOnlyView = (TextView) findViewById(R.id.textView5);
+            friendsOnlyView.setTextColor(FeelTripApplication.getTEXTCOLORTERTIARY());
+
+            int[][] navstates = new int[][] {
+                    new int[] { android.R.attr.state_checked},  // checked
+                    new int[] {-android.R.attr.state_checked}  // unchecked
+            };
+
+            int[] navcolors = new int[] {
+                    FeelTripApplication.getCOLORPRIMARY(),
+                    FeelTripApplication.getTEXTCOLORSECONDARY()
+            };
+            ColorStateList navList = new ColorStateList(navstates, navcolors);
+            android.support.design.widget.BottomNavigationView bottomNavigationView = (android.support.design.widget.BottomNavigationView) findViewById(R.id.navigation);
+            bottomNavigationView.setItemIconTintList(navList);
+            bottomNavigationView.setItemTextColor(navList);
+        }
+
+
     }
 
     private void searchUser(View view){
@@ -278,12 +329,12 @@ public class MainScreen extends AppCompatActivity {
 
     //todo or michael already finished: update the follow request list
     private void loadRequestsArray(){//sender
-        ArrayList<FollowRequest> followRequests = participant.getFollowRequest();
-        String username;
-        for (int i = 0; i < followRequests.size(); i++){
-            username = followRequests.get(i).getSender();
-            requestsArray.set(i, username);
-        }
+//        ArrayList<FollowRequest> followRequests = participant.getFollowRequest();
+//        String username;
+//        for (int i = 0; i < followRequests.size(); i++){
+//            username = followRequests.get(i).getSender();
+//            requestsArray.set(i, username);
+//        }
     }
 
     private void loadFollowingsArray(){//receiver

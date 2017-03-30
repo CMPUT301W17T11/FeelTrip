@@ -8,6 +8,7 @@ import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -142,7 +143,8 @@ public class EditMoodActivity extends AppCompatActivity {
 
 
 //        setTheme(R.style.NaughtyPenguins); //TODO - theme
-        setTheme(R.style.DefaultTheme);
+//        setTheme(R.style.DefaultTheme);
+        setTheme(FeelTripApplication.getThemeID());
 
         setContentView(R.layout.add_edit_page);
         EditMoodActivity.context = getApplicationContext();
@@ -150,6 +152,36 @@ public class EditMoodActivity extends AppCompatActivity {
 
         inputMoodDescription = (EditText) findViewById(R.id.moodEventDescription);
         modeLocationText = (TextView) findViewById(R.id.modeLocation);
+
+
+        if(FeelTripApplication.getThemeID() == R.style.CustomTheme_Light) {
+            inputMoodDescription.setHintTextColor(FeelTripApplication.getTEXTCOLORTERTIARY());
+
+            TextView feelingTextView = (TextView) findViewById(R.id.feelingTextView);
+            feelingTextView.setTextColor(FeelTripApplication.getTEXTCOLORSECONDARY());
+            TextView locationTextView = (TextView) findViewById(R.id.locationTextView);
+            locationTextView.setTextColor(FeelTripApplication.getTEXTCOLORSECONDARY());
+            TextView modeTextView = (TextView) findViewById(R.id.modeTextView);
+            modeTextView.setTextColor(FeelTripApplication.getTEXTCOLORSECONDARY());
+            TextView photoAttachedTextView = (TextView) findViewById(R.id.photoAttachedTextView);
+            photoAttachedTextView.setTextColor(FeelTripApplication.getTEXTCOLORSECONDARY());
+
+            int[][] navstates = new int[][] {
+                    new int[] { android.R.attr.state_checked},  // checked
+                    new int[] {-android.R.attr.state_checked}  // unchecked
+            };
+
+            int[] navcolors = new int[] {
+                    FeelTripApplication.getCOLORPRIMARY(),
+                    FeelTripApplication.getTEXTCOLORSECONDARY()
+            };
+            ColorStateList navList = new ColorStateList(navstates, navcolors);
+            android.support.design.widget.BottomNavigationView bottomNavigationView = (android.support.design.widget.BottomNavigationView) findViewById(R.id.options_post);
+            bottomNavigationView.setItemIconTintList(navList);
+            bottomNavigationView.setItemTextColor(navList);
+        }
+
+
         activity = this;
         context = this;
         showPublicOn = false;
@@ -541,6 +573,7 @@ public class EditMoodActivity extends AppCompatActivity {
         ArrayAdapter<String> socialSituationAdapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_spinner_item, socialSituationList);
         socialSituationAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
         socialSituationSpinner.setAdapter(socialSituationAdapter);
     }
 
@@ -689,9 +722,13 @@ public class EditMoodActivity extends AppCompatActivity {
 
             emojiTextview.setTextSize(15);
             emojiTextview.setGravity(Gravity.CENTER);
-            TypedValue tv = new TypedValue();
-            getTheme().resolveAttribute(android.R.attr.textColorSecondary, tv, true);
-            emojiTextview.setTextColor(getResources().getColor(tv.resourceId)); //TODO: Depreciated. Next call up is API 23
+            if(FeelTripApplication.getThemeID() == R.style.CustomTheme_Light) {
+                emojiTextview.setTextColor(FeelTripApplication.getTEXTCOLORSECONDARY());
+            } else {
+                TypedValue tv = new TypedValue();
+                getTheme().resolveAttribute(android.R.attr.textColorSecondary, tv, true);
+                emojiTextview.setTextColor(getResources().getColor(tv.resourceId)); //TODO: Depreciated. Next call up is API 23
+            }
             emojiTextview.setTypeface(emojiTextview.getTypeface(), Typeface.BOLD);
             emojiLayout.addView(emojiTextview);
 

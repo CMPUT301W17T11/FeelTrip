@@ -55,7 +55,8 @@ public class MoodAdapter extends ArrayAdapter<Mood> {
     public View getView(int position, View convertView, ViewGroup parent) {
 
 //        getContext().setTheme(R.style.NaughtyPenguins); //TODO - theme
-        getContext().setTheme(R.style.DefaultTheme);
+//        getContext().setTheme(R.style.DefaultTheme);
+        getContext().setTheme(FeelTripApplication.getThemeID());
 
         // Get the data item for this position
         Mood mood = getItem(position);
@@ -77,6 +78,15 @@ public class MoodAdapter extends ArrayAdapter<Mood> {
             viewHolder.append = (TextView) convertView.findViewById(R.id.append);
             viewHolder.socialSituation = (TextView) convertView.findViewById(R.id.socialSituation);
             viewHolder.image = (ImageView) convertView.findViewById(R.id.image);
+
+            if(FeelTripApplication.getThemeID() == R.style.CustomTheme_Light) {
+                viewHolder.userName.setTextColor(FeelTripApplication.getTEXTCOLORPRIMARY());
+                viewHolder.date.setTextColor(FeelTripApplication.getTEXTCOLORTERTIARY());
+                viewHolder.description.setTextColor(FeelTripApplication.getTEXTCOLORPRIMARY());
+                viewHolder.append.setTextColor(FeelTripApplication.getTEXTCOLORPRIMARY());
+                viewHolder.socialSituation.setTextColor(FeelTripApplication.getTEXTCOLORPRIMARY());
+            }
+
 
             result=convertView;
 
@@ -118,6 +128,7 @@ public class MoodAdapter extends ArrayAdapter<Mood> {
         }else {
             Log.d("imageTag", "no image");
         }
+
         return convertView;
     }
 }
