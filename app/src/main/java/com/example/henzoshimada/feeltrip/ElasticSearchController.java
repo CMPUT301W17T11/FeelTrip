@@ -22,7 +22,6 @@ import java.util.concurrent.ExecutionException;
 
 import io.searchbox.core.Delete;
 import io.searchbox.core.DocumentResult;
-import io.searchbox.core.Get;
 import io.searchbox.core.Index;
 import io.searchbox.core.Search;
 import io.searchbox.core.SearchResult;
@@ -379,12 +378,19 @@ public class ElasticSearchController {
 
     public static class GetParticipantTask extends AsyncTask<String, Void, ArrayList<Participant>> {
 
-        private String username;
-        private String password;
+        private String username = null;
+        private String password = null;
+
+        private boolean searchParticipant = false;
 
         public GetParticipantTask(String username, String password) { // must specify username and password upon creation of the controller
             this.username = username;
             this.password = password;
+        }
+
+        public GetParticipantTask(boolean searchParticipant, String username){
+            this.searchParticipant = searchParticipant;
+            this.username = username;
         }
 
         @Override
@@ -395,13 +401,26 @@ public class ElasticSearchController {
 
             ArrayList<Participant> participants = new ArrayList<>();
             String query; // elasticsearch bool queries are amazing in every way
-            query = "{" +
-                    "\"query\" : {" +
-                    "\"bool\" : {" +
-                    "\"must\" : [" +
-                    "{ \"term\": { \"userName\": \"" + username + "\" }}," +
-                    "{ \"term\": { \"password\": \"" + password + "\" }}" +
-                    "]}}}";
+
+            if (searchParticipant){
+                query = "{" +
+                        "\"query\" : {" +
+                        "\"term\" : {" +
+                        "\"userName\" : \"" + username + "\"" +
+                        "}}}";
+            }
+            else {
+                if (password == null){
+                    return null;
+                }
+                query = "{" +
+                        "\"query\" : {" +
+                        "\"bool\" : {" +
+                        "\"must\" : [" +
+                        "{ \"term\": { \"userName\": \"" + username + "\" }}," +
+                        "{ \"term\": { \"password\": \"" + password + "\" }}" +
+                        "]}}}";
+            }
 
             Log.d("query", query);
 
@@ -429,6 +448,11 @@ public class ElasticSearchController {
     }
 
     public static class EditParticipantTask extends AsyncTask<Participant, Void, Void>{
+        private String fieldToEdit;
+
+        public EditParticipantTask(String fieldToEdit){
+            this.fieldToEdit = fieldToEdit;
+        }
 
         @Override
         protected Void doInBackground(Participant...participants){
@@ -438,11 +462,25 @@ public class ElasticSearchController {
 
             for (Participant participant : participants){
 
-                String following = new Gson().toJson(participant.getFollowing());
-                String query = "{\"doc\" : {"+
-                        "\"following\" : " + following +
-                        "}}";
+                String query;
 
+                if (fieldToEdit.equals("following")) {
+                    String following = new Gson().toJson(participant.getFollowing());
+                    query = "{\"doc\" : {" +
+                            "\"following\" : " + following +
+                            "}}";
+
+                }
+                else if (fieldToEdit.equals("geoLocation")){
+
+                    query = "{\"doc\" : {" +
+                            "\"longitude\" : \"" + participant.getLongitude() + "\" ," +
+                            "\"latitude\" : \"" + participant.getLatitude() + "\"" +
+                            "}}";
+                }
+                else{
+                    return null;
+                }
 
                 Log.d("query is :", query);
 
