@@ -4,9 +4,19 @@ import android.content.Context;
 import android.graphics.Rect;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.view.MenuItemCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.SearchView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
@@ -16,6 +26,7 @@ import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ListView;
 import android.widget.Spinner;
 import android.app.Fragment;
 import android.app.FragmentManager;
@@ -31,11 +42,7 @@ import layout.mapFragment;
 import layout.profileFragment;
 
 // This is the main screen: This is what the Participant first sees
-public class MainScreen extends AppCompatActivity {
-    private Context context;
-    private Spinner filterSpinner;
-    private String emotionalState;
-    private String socialSit;
+public class MainScreen extends AppCompatActivity{
     private Spinner emotionalStateSpinner;
 
     // The following are constants for emotion based emoji
@@ -48,6 +55,20 @@ public class MainScreen extends AppCompatActivity {
     public static final int shameful = 0x1F61E;
     public static final int cool = 0x1F60E;
     public static final int somethingwentwrong = 0x1F31A;
+    private ListView userFoundView;  //who participant searched
+    private ListView followingView; //who participant is following
+    private ListView requestView;   //who participant wants to follow
+    private EditText inputTextView;
+
+    private ArrayList<String> usersFoundArray; //use custom adabter
+    private ArrayList<String> followingArray = new ArrayList<String>(); //todo use default adapter
+    private ArrayList<FollowRequest> requestsArray; //use custom adabter
+
+    private RequestAdapter requestAdapter;
+    private ArrayAdapter<String> follwingAdapter;
+    private UserFoundAdapter userFoundAdapter;
+
+    private Participant participant = FeelTripApplication.getParticipant();
 
     public int emojiUnicode(String emotion) {
         switch(emotion) {
@@ -135,6 +156,7 @@ public class MainScreen extends AppCompatActivity {
 //            finish();
 //            startActivity(i);
             //onPause(); // Refreshes the current activity without calling onCreate
+
             onResume();
             return true;
         }
@@ -146,6 +168,7 @@ public class MainScreen extends AppCompatActivity {
         navigation.getMenu().getItem(1).setChecked(true);
         navigation.getMenu().performIdentifierAction(R.id.navigation_home, 0);
     }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -199,13 +222,61 @@ public class MainScreen extends AppCompatActivity {
             }
         });
 
+        ImageButton searchUserButton = (ImageButton) findViewById(R.id.user_search_button);
+        searchUserButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                searchUser(v);
+            }
+        });
 
+        inputTextView = (EditText) findViewById(R.id.user_search);
+        userFoundView = (ListView) findViewById(R.id.found_user);
+        followingView = (ListView) findViewById(R.id.follow_list);
+        requestView = (ListView) findViewById(R.id.request_list);
+
+
+/*
+        // bb wants to follow aa
+        FollowRequest followRequest = new FollowRequest("gg", "aa");
+        ElasticSearchController.AddRequestTask addRequestTask = new ElasticSearchController.AddRequestTask();
+        addRequestTask.execute(followRequest);
+
+*/
+        // simulate aa follows bb
+        /*
+        participant.addFollowing("bb");
+        // this method will be changed later
+        ElasticSearchController.EditParticipantTask editParticipantTask = new ElasticSearchController.EditParticipantTask();
+        editParticipantTask.execute(participant);
+*/
+
+
+
+        //requestAdapter = new RequestAdapter(requestsArray, this); //view,dataArray
+        requestAdapter = FeelTripApplication.getRequestAdapter(this);
+        requestView.setAdapter(requestAdapter);
+
+        follwingAdapter = new ArrayAdapter<String>(this, R.layout.username_list_item, followingArray); //view,dataArray
+        followingView.setAdapter(follwingAdapter);
+
+        userFoundAdapter = FeelTripApplication.getUserFoundAdapter(this);
+        userFoundView.setAdapter(userFoundAdapter);
+
+        loadRequestsArray();
+        loadFollowingsArray();
+    }
+
+    private void searchUser(View view){
+        String inputText = inputTextView.getText().toString();
+        usersFoundArray = FeelTripApplication.getUsersFoundArray();
+        usersFoundArray.add(0,"some dude");
+        Log.d("searchUser","search user click");
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-
         ToggleButton toggleFriends = (ToggleButton) findViewById(R.id.toggleFriends);
         TextView textView = (TextView) findViewById(R.id.textView5);
         if(FeelTripApplication.getFrag().equals("profile")) {
@@ -218,6 +289,27 @@ public class MainScreen extends AppCompatActivity {
 
         ElasticSearchController.loadFromElasticSearch();
         FeelTripApplication.getMoodAdapter(getBaseContext()).notifyDataSetChanged();
+
+
+    }
+
+    //todo or michael already finished: update the follow request list
+    private void loadRequestsArray(){//sender
+        ArrayList<FollowRequest> followRequests = participant.getFollowRequest();
+        /*String username;
+        for (int i = 0; i < followRequests.size(); i++){
+            username = followRequests.get(i).getSender();
+            requestsArray.set(i, username);
+        }
+        */
+        requestsArray = FeelTripApplication.getRequestsArray();
+        requestsArray.addAll(followRequests);
+        Log.d("followTag","request size: "+requestsArray.size());
+    }
+
+    private void loadFollowingsArray(){//receiver
+        followingArray.addAll(participant.getFollowing());
+        Log.d("followTag","following size: "+followingArray.size());
     }
 
     public String getEmojiByUnicode(int unicode){
