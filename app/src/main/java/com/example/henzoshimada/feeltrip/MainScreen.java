@@ -304,7 +304,7 @@ public class MainScreen extends AppCompatActivity{
         getParticipantTask.execute();
 
 
-        // add usernames to userFoundArray
+        // add userNames to userFoundArray
         try {
             ArrayList<Participant> participants = new ArrayList<>();
             participants.addAll(getParticipantTask.get());
@@ -343,10 +343,21 @@ public class MainScreen extends AppCompatActivity{
 
 
     private void loadRequestsArray(){//sender
-        ArrayList<FollowRequest> followRequests = participant.getFollowRequest();
         requestsArray = FeelTripApplication.getRequestsArray();
         requestsArray.clear();
-        requestsArray.addAll(followRequests);
+
+        ElasticSearchController.GetRequestTask getRequestTask = new ElasticSearchController.GetRequestTask(false);
+        getRequestTask.execute(FeelTripApplication.getParticipant().getUserName());
+        Log.d("debug", FeelTripApplication.getParticipant().getUserName());
+
+        try {
+            requestsArray.addAll(getRequestTask.get());
+        } catch (InterruptedException e) {
+            return;
+        } catch (ExecutionException e) {
+            return;
+        }
+
         Log.d("followTag","request size: "+requestsArray.size());
         requestAdapter.notifyDataSetChanged();
     }
@@ -354,7 +365,30 @@ public class MainScreen extends AppCompatActivity{
     private void loadFollowingsArray(){//receiver
         followingArray.clear();
         followingArray.addAll(participant.getFollowing());
-        Log.d("followTag","following size: "+followingArray.size());
+
+        // extra work need to be done when other user accepted participant's request
+        ElasticSearchController.GetRequestTask getAcceptedRequest = new ElasticSearchController.GetRequestTask(true);
+        ElasticSearchController.DeleteRequestTask deleteRequestTask = new ElasticSearchController.DeleteRequestTask();
+        ElasticSearchController.EditParticipantTask editParticipantTask = new ElasticSearchController.EditParticipantTask("following");
+
+        getAcceptedRequest.execute(participant.getUserName());
+        ArrayList<FollowRequest> acceptedRequests = new ArrayList<>();
+        try {
+            acceptedRequests.addAll(getAcceptedRequest.get());
+        } catch (InterruptedException e) {
+            return;
+        } catch (ExecutionException e) {
+            return;
+        }
+        for (FollowRequest request : acceptedRequests){
+            // add to following list
+            participant.addFollowing(request.getReceiver());
+            // update following list change to server
+            editParticipantTask.execute(participant);
+            // then delete this request
+            deleteRequestTask.execute(request);
+        }
+
         follwingAdapter.notifyDataSetChanged();
     }
 

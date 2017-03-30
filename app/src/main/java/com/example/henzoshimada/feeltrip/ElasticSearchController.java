@@ -551,20 +551,23 @@ public class ElasticSearchController {
             if (checkAccept){
                 query = "{" +
                         "\"query\" : {" +
-                        "\"match\" : {" +
-                        "\"sender\" :\"" + username[0] + "\" , " +
-                        "\"accepted\" : \"true\" }" +
-                        " }}";
+                        "\"bool\" : {" +
+                        "\"must\" : [" +
+                        "{ \"match\": { \"sender\": \"" + username[0] + "\" }}," +
+                        "{ \"term\": { \"accepted\": \"true\" }}" +
+                        "]}}}";
             }
             else {
                 query = "{" +
                         "\"query\" : {" +
-                        "\"match\" : {" +
-                        "\"receiver\" :\"" + username[0] + "\" , " +
-                        "\"accepted\" : \"false\" }" +
-                        " }}";
+                        "\"bool\" : {" +
+                        "\"must\" : [" +
+                        "{ \"match\": { \"receiver\": \"" + username[0] + "\" }}," +
+                        "{ \"term\": { \"accepted\": \"false\" }}" +
+                        "]}}}";
             }
 
+            Log.d("query", query);
             Search search = new Search.Builder(query)
                     .addIndex(groupIndex)
                     .addType(typeRequest)
@@ -578,7 +581,7 @@ public class ElasticSearchController {
                     followRequests.addAll(foundRequests);
                 }
                 else {
-                    Log.i("Error", "the search query failed to find any moods that matched");
+                    Log.i("Error", "the search query failed to find any request that matched");
                 }
             }
             catch (Exception e) {
