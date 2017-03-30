@@ -287,8 +287,13 @@ public class mapFragment extends Fragment implements
         if (mLastKnownLocation != null) {
 
             Log.d("mapTag", "Lat= " + String.valueOf(mLastKnownLocation.getLatitude()) + " and Long= " + String.valueOf(mLastKnownLocation.getLongitude()));
+
+            //update participant last known location
             participant.setLongitude(mLastKnownLocation.getLongitude());
             participant.setLatitude(mLastKnownLocation.getLatitude());
+
+            ElasticSearchController.EditParticipantTask editParticipantTask = new ElasticSearchController.EditParticipantTask("geoLocation");
+            editParticipantTask.execute(participant);
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 setMoodMarker();

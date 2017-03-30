@@ -196,6 +196,13 @@ public class MapsActivity extends FragmentActivity implements
             Log.d("mapATag", "Lat= " + String.valueOf(mLastKnownLocation.getLatitude()) + " and Long= " + String.valueOf(mLastKnownLocation.getLongitude()));
             longitude = mLastKnownLocation.getLongitude();
             latitude = mLastKnownLocation.getLatitude();
+
+            //update participant last known location
+            participant.setLatitude(latitude);
+            participant.setLongitude(longitude);
+            ElasticSearchController.EditParticipantTask editParticipantTask = new ElasticSearchController.EditParticipantTask("geoLocation");
+            editParticipantTask.execute(participant);
+
             if (marker != null){
                 marker.remove();
             }

@@ -342,7 +342,7 @@ public class EditMoodActivity extends AppCompatActivity {
                 finish();
             } else {
                 ElasticSearchController.AddMoodTask addMoodTask = new ElasticSearchController.AddMoodTask();
-                Participant participant = FeelTripApplication.getParticipant();
+                //Participant participant = FeelTripApplication.getParticipant();
                 if (showPublicOn) {
                     mood.setPublic();
                 } else {
