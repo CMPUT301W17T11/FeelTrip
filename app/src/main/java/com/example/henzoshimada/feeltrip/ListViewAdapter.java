@@ -66,11 +66,11 @@ public class ListViewAdapter extends BaseSwipeAdapter {
             @Override
             public void onClick(View v) {
                 Mood moodItem = mood.get(position);
-                FeelTripApplication.getListViewAdapter(mContext).notifyDataSetChanged();
                 mood.remove(position);
                 ElasticSearchController.DeleteMoodTask delTask = new ElasticSearchController.DeleteMoodTask();
                 delTask.execute(moodItem);
-                swipeLayout.close(true);
+                closeAllItems();
+                FeelTripApplication.getListViewAdapter(mContext).notifyDataSetChanged();
             }
         });
 
