@@ -17,10 +17,12 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.henzoshimada.feeltrip.Mood;
 
 import java.util.ArrayList;
+import java.util.concurrent.ExecutionException;
 
 public class UserFoundAdapter extends ArrayAdapter<String> {
 
@@ -81,12 +83,27 @@ public class UserFoundAdapter extends ArrayAdapter<String> {
                 FeelTripApplication.getUsersFoundArray().remove(position);
                 FeelTripApplication.getUserFoundAdapter(getContext()).notifyDataSetChanged();
 
-                // TODO: sqecial cases
+                ElasticSearchController.GetRequestTask getRequestTask = new ElasticSearchController.GetRequestTask(false);
+                getRequestTask.execute(sender, receiver);
 
-                // add request to server
-                FollowRequest followRequest = new FollowRequest(sender, receiver);
-                ElasticSearchController.AddRequestTask addRequestTask = new ElasticSearchController.AddRequestTask();
-                addRequestTask.execute(followRequest);
+                try {
+                    if (getRequestTask.get().isEmpty()){
+                        // add request to server
+                        FollowRequest followRequest = new FollowRequest(sender, receiver);
+                        ElasticSearchController.AddRequestTask addRequestTask = new ElasticSearchController.AddRequestTask();
+                        addRequestTask.execute(followRequest);
+                    }
+                    else{
+                        // request already exist
+                        Toast.makeText(getContext(), "Follow request is pending",
+                                Toast.LENGTH_SHORT).show();
+                    }
+                } catch (InterruptedException e) {
+                    return;
+                } catch (ExecutionException e) {
+                    return;
+                }
+
 
             }
         });

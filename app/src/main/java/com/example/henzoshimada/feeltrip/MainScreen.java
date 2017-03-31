@@ -60,8 +60,10 @@ public class MainScreen extends AppCompatActivity{
     private ListView followingView; //who participant is following
     private ListView requestView;   //who participant wants to follow
     private EditText inputTextView;
+    private TextView notFoundTextView;
 
-    private ArrayList<String> usersFoundArray; //use custom adabter
+    //use custom adapter
+    private ArrayList<String> usersFoundArray = FeelTripApplication.getUsersFoundArray();
     private ArrayList<String> followingArray = new ArrayList<String>(); //todo use default adapter
     private ArrayList<FollowRequest> requestsArray; //use custom adabter
 
@@ -239,22 +241,9 @@ public class MainScreen extends AppCompatActivity{
         userFoundView = (ListView) findViewById(R.id.found_user);
         followingView = (ListView) findViewById(R.id.follow_list);
         requestView = (ListView) findViewById(R.id.request_list);
+        notFoundTextView = (TextView) findViewById(R.id.not_found_text);
 
 
-/*
-        // bb wants to follow aa
-        FollowRequest followRequest = new FollowRequest("gg", "aa");
-        ElasticSearchController.AddRequestTask addRequestTask = new ElasticSearchController.AddRequestTask();
-        addRequestTask.execute(followRequest);
-
-*/
-        // simulate aa follows bb
-        /*
-        participant.addFollowing("bb");
-        // this method will be changed later
-        ElasticSearchController.EditParticipantTask editParticipantTask = new ElasticSearchController.EditParticipantTask();
-        editParticipantTask.execute(participant);
-*/
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.drawer_open, R.string.drawer_close) {
             @Override
@@ -262,6 +251,7 @@ public class MainScreen extends AppCompatActivity{
                 super.onDrawerOpened(drawerView);
                 //load stuff here
                 Log.d("followTag", "onDrawerOpen; " + getTitle());
+                notFoundTextView.setVisibility(View.GONE);
                 loadRequestsArray();
                 loadFollowingsArray();
                 Log.d("followTag", "done load");
@@ -273,7 +263,9 @@ public class MainScreen extends AppCompatActivity{
                 super.onDrawerClosed(drawerView);
                 Log.d("drawerTag", "onDrawerClosed: " + getTitle());
                 inputTextView.setText("");
-
+                usersFoundArray.clear();
+                userFoundAdapter.notifyDataSetChanged();
+                notFoundTextView.setVisibility(View.GONE);
                 invalidateOptionsMenu();
             }
         };
@@ -284,7 +276,7 @@ public class MainScreen extends AppCompatActivity{
         requestAdapter = FeelTripApplication.getRequestAdapter(this);
         requestView.setAdapter(requestAdapter);
 
-        follwingAdapter = new ArrayAdapter<String>(this, R.layout.username_list_item, followingArray); //view,dataArray
+        follwingAdapter = new ArrayAdapter<>(this, R.layout.username_list_item, followingArray); //view,dataArray
         followingView.setAdapter(follwingAdapter);
 
         userFoundAdapter = FeelTripApplication.getUserFoundAdapter(this);
@@ -296,7 +288,6 @@ public class MainScreen extends AppCompatActivity{
 
     private void searchUser(View view){
         String inputText = inputTextView.getText().toString();
-        usersFoundArray = FeelTripApplication.getUsersFoundArray();
         usersFoundArray.clear();
 
         // search for participants that matches keyword
@@ -309,8 +300,17 @@ public class MainScreen extends AppCompatActivity{
             ArrayList<Participant> participants = new ArrayList<>();
             participants.addAll(getParticipantTask.get());
 
-            for (Participant participant : participants){
-                usersFoundArray.add(participant.getUserName());
+            for (Participant foundUser : participants){
+                // add foundUser to list except:
+                // already followed this user
+                // found user is self
+                if (!participant.getFollowing().contains(foundUser.getUserName()) &&
+                        !foundUser.getUserName().equals(participant.getUserName())){
+                    usersFoundArray.add(foundUser.getUserName());
+                }
+            }
+            if (usersFoundArray.size() == 0){
+                notFoundTextView.setVisibility(View.VISIBLE);
             }
         } catch (InterruptedException e) {
             return;

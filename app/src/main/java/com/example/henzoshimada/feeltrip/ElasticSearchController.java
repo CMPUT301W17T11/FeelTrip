@@ -558,13 +558,25 @@ public class ElasticSearchController {
                         "]}}}";
             }
             else {
-                query = "{" +
-                        "\"query\" : {" +
-                        "\"bool\" : {" +
-                        "\"must\" : [" +
-                        "{ \"match\": { \"receiver\": \"" + username[0] + "\" }}," +
-                        "{ \"term\": { \"accepted\": \"false\" }}" +
-                        "]}}}";
+                if (username.length == 1) {
+                    query = "{" +
+                            "\"query\" : {" +
+                            "\"bool\" : {" +
+                            "\"must\" : [" +
+                            "{ \"match\": { \"receiver\": \"" + username[0] + "\" }}," +
+                            "{ \"term\": { \"accepted\": \"false\" }}" +
+                            "]}}}";
+                }
+                else {
+                    query = "{" +
+                            "\"query\" : {" +
+                            "\"bool\" : {" +
+                            "\"must\" : [" +
+                            "{ \"term\": { \"sender\": \"" + username[0] + "\" }}," +
+                            "{ \"term\": { \"receiver\": \"" + username[1] + "\" }}," +
+                            "{ \"term\": { \"accepted\": \"false\" }}" +
+                            "]}}}";
+                }
             }
 
             Log.d("query", query);

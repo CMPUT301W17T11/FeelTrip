@@ -51,7 +51,15 @@
                 android:background="#FFF"
                 app:srcCompat="@android:drawable/ic_menu_search" />
         </LinearLayout>
-
+        <TextView
+            android:id="@+id/not_found_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="  No matched results"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textColor="@android:color/black"
+            android:background="#FFF"
+            android:visibility="gone"/>
         <ListView
             android:id="@+id/found_user"
             android:layout_width="match_parent"
