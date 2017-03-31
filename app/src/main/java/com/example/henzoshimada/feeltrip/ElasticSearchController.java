@@ -311,7 +311,7 @@ public class ElasticSearchController {
 
 
             try {
-                
+
                 SearchResult result = client.execute(search);
                 if (result.isSucceeded()){
                     List<Mood> foundMoods = result.getSourceAsObjectList(Mood.class);
@@ -414,7 +414,7 @@ public class ElasticSearchController {
             if (searchParticipant){
                 query = "{" +
                         "\"query\" : {" +
-                        "\"match\" : {" +
+                        "\"term\" : {" +
                         "\"userName\" : \"" + username + "\"" +
                         "}}}";
             }
@@ -562,7 +562,7 @@ public class ElasticSearchController {
                         "\"query\" : {" +
                         "\"bool\" : {" +
                         "\"must\" : [" +
-                        "{ \"match\": { \"sender\": \"" + username[0] + "\" }}," +
+                        "{ \"term\": { \"sender\": \"" + username[0] + "\" }}," +
                         "{ \"term\": { \"accepted\": \"true\" }}" +
                         "]}}}";
             }
@@ -572,7 +572,7 @@ public class ElasticSearchController {
                             "\"query\" : {" +
                             "\"bool\" : {" +
                             "\"must\" : [" +
-                            "{ \"match\": { \"receiver\": \"" + username[0] + "\" }}," +
+                            "{ \"term\": { \"receiver\": \"" + username[0] + "\" }}," +
                             "{ \"term\": { \"accepted\": \"false\" }}" +
                             "]}}}";
                 }
@@ -861,7 +861,7 @@ public class ElasticSearchController {
             Search search = new Search.Builder(query)
                     .addIndex(groupIndex)
                     .addType(typeMood)
-                    .setParameter(Parameters.SIZE, 1000) // TODO: Our app likely won't have more than 1000 posts displyaed at a time, but y'know... maybe we'll modify this.
+                    .setParameter(Parameters.SIZE, 10000) // TODO: Our app likely won't have more than 10000 posts displyaed at a time, but y'know... maybe we'll modify this.
                     .refresh(true).build();
 
 
