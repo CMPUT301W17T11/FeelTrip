@@ -1,11 +1,13 @@
+Kevin/Michael:
 INTENT TESTING 
 OFFLINE MODE
 
+Ivan:
 Replace spinner with horizontal scrollview
 Fix postMoodScreen because the actual page is too long so you have to scroll up to reveal toolbar (this one might be done)
-
 Make an actual logo or something to fill in the title screen's massive blank spot
 
+Brett/Henry:
 Theme the status bar on the custom themes.... idk how I missed that
 Discard edit mood changes prompt on back press
 Theme the map popup on custom theme
