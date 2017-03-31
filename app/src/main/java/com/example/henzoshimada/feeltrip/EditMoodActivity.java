@@ -118,15 +118,24 @@ public class EditMoodActivity extends AppCompatActivity {
                     Log.d("Mytag", "Tapped on private");
                     setPostMode();
                     return true;
+                /*
                 case R.id.check_bottom_button:
                     Log.d("Mytag", "Tapped on submit");
                     addListenerOnSubmitButton();
                     return true;
+                    */
                 case R.id.date_bottom_button:
                     Log.d("Mytag", "Tapped on date");
-                    datePick(findViewById(R.id.date_bottom_button).getContext());
-                    //timePick(findViewById(R.id.date_bottom_button).getContext());
+                    timePick(findViewById(R.id.date_bottom_button).getContext());
+                    //datePick(findViewById(R.id.date_bottom_button).getContext());
+
                     return true;
+
+                case R.id.time_bottom_button:
+                    Log.d("Mytag", "Tapped on Time");
+                    timePick(findViewById(R.id.date_bottom_button).getContext());
+                    return true;
+
                 case R.id.photo_bottom_button:
                     Log.d("Mytag", "Tapped on photo");
                     cameraPerm();
@@ -276,6 +285,13 @@ public class EditMoodActivity extends AppCompatActivity {
         BottomNavigationView options_bar = (BottomNavigationView) findViewById(R.id.options_post);
         options_bar.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
+        ImageButton submitButton = (ImageButton) findViewById(R.id.check_bottom_button);
+        submitButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                addListenerOnSubmitButton();
+            }
+        });
 
     } //end of on create
 
@@ -348,7 +364,7 @@ public class EditMoodActivity extends AppCompatActivity {
                     mood.setNullLocation();
                 }
                 if (emotionalState.equals("")) {
-                    throw new RuntimeException();
+
                 } else {
                     mood.setEmotionalState(emotionalState);
                 }
@@ -375,7 +391,7 @@ public class EditMoodActivity extends AppCompatActivity {
                 finish();
             } else {
                 ElasticSearchController.AddMoodTask addMoodTask = new ElasticSearchController.AddMoodTask();
-                Participant participant = FeelTripApplication.getParticipant();
+                //Participant participant = FeelTripApplication.getParticipant();
                 if (showPublicOn) {
                     mood.setPublic();
                 } else {
@@ -415,9 +431,7 @@ public class EditMoodActivity extends AppCompatActivity {
                 finish();
             }
         } catch (NullPointerException e) {
-            Toast.makeText(getApplicationContext(), "Description Required " + e, Toast.LENGTH_SHORT).show();
-        } catch (RuntimeException e) {
-            Toast.makeText(getApplicationContext(), "Emoji choice required " + e, Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), "Missing required fields ", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -426,7 +440,10 @@ public class EditMoodActivity extends AppCompatActivity {
     }
 
     private void takeAPhoto() {
-        String path = Environment.getExternalStorageDirectory().getAbsolutePath() + "/Camera";
+        //Taken: http://stackoverflow.com/questions/29576098/get-path-of-dcim-folder-on-both-primary-and-secondary-storage
+        // On: March 17, 2017 at 17:25
+        //String path = Environment.getExternalStorageDirectory().getAbsolutePath() + "/Camera";
+        String path = Environment.DIRECTORY_DCIM;
         File folder = new File(path);
         if (!folder.exists())
             folder.mkdir();

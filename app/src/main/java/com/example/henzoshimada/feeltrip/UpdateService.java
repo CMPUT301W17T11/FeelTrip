@@ -19,6 +19,5 @@ public class UpdateService extends IntentService{
     protected void onHandleIntent(Intent intent){
         UpdateQueueController updateQueueController = FeelTripApplication.getUpdateQueueController();
         updateQueueController.runUpdate();
-        Log.d("debug", "finished");
     }
 }

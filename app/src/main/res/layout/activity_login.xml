@@ -26,6 +26,8 @@
             android:layout_alignParentTop="true"
             android:layout_alignStart="@+id/pass_text"
             android:layout_marginTop="220dp"
+            android:maxLines="1"
+            android:inputType="text"
             android:hint="Please enter username: " />
 
         <EditText

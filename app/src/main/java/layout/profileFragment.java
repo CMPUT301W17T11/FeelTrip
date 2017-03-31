@@ -13,11 +13,16 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.FrameLayout;
+import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.Toast;
 
+import com.daimajia.swipe.SwipeLayout;
 import com.example.henzoshimada.feeltrip.EditMoodActivity;
 import com.example.henzoshimada.feeltrip.ElasticSearchController;
 import com.example.henzoshimada.feeltrip.FeelTripApplication;
+import com.example.henzoshimada.feeltrip.ListViewAdapter;
 import com.example.henzoshimada.feeltrip.Mood;
 import com.example.henzoshimada.feeltrip.MoodAdapter;
 import com.example.henzoshimada.feeltrip.R;
@@ -25,6 +30,7 @@ import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 
@@ -32,8 +38,13 @@ public class profileFragment extends Fragment {
 
     private ListView oldMoodListView;
     private ArrayList<Mood> moodArrayList;
+    //private ArrayAdapter<Mood> adapter;
+    private ListViewAdapter adapter;
 
-    private ArrayAdapter<Mood> adapter;
+
+    private ListView mListView;
+    private ListViewAdapter mAdapter;
+    private Context mContext = getActivity();
 
     private static final String frag = "profile";
 
@@ -52,7 +63,7 @@ public class profileFragment extends Fragment {
                              Bundle savedInstanceState) {
         Log.d("myTag","onCreateView");
         // Inflate the layout for this fragment
-        FrameLayout view = (FrameLayout) inflater.inflate(R.layout.fragment_profile,
+        LinearLayout view = (LinearLayout) inflater.inflate(R.layout.fragment_profile,
                 container, false);
 
         oldMoodListView = (ListView) view.findViewById(R.id.profileList);
@@ -81,8 +92,6 @@ public class profileFragment extends Fragment {
                         catch(Exception e) {
                             Log.d("tag", "Fail while loading edit mood");
                         }
-
-
                     }
                 });
         return view;
@@ -110,9 +119,8 @@ public class profileFragment extends Fragment {
             FeelTripApplication.setFrag(frag);
         }
 //        FeelTripApplication.loadFromElasticSearch();
-        adapter = FeelTripApplication.getMoodAdapter(getActivity());
-
-
+        //adapter = FeelTripApplication.getMoodAdapter(getActivity());
+        adapter = FeelTripApplication.getListViewAdapter(getContext());
 
         //adapter = new ArrayAdapter<Mood>(getActivity(), R.layout.list_item, moodArrayList); //view,dataArray
         oldMoodListView.setAdapter(adapter);
@@ -122,7 +130,7 @@ public class profileFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        FeelTripApplication.getMoodAdapter(getActivity()).notifyDataSetChanged();
+        //FeelTripApplication.getMoodAdapter(getActivity()).notifyDataSetChanged();
     }
 
 /*
@@ -158,6 +166,4 @@ public class profileFragment extends Fragment {
             super.onActivityResult(requestCode, resultCode, data);
         }
     }
-
-
 }

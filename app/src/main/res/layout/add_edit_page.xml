@@ -1,24 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true">
+
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-    </android.support.design.widget.AppBarLayout>
     <EditText
+        android:id="@+id/moodEventDescription"
         android:layout_width="match_parent"
         android:layout_height="100dp"
         android:hint="Post a mood description"
-        android:id="@+id/moodEventDescription"/>
+        android:maxLines="1"
+        android:inputType="text"/>
 
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="255dp"
         android:id="@+id/imgView"/>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/check_bottom_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        app:fabSize="mini"
+        app:srcCompat="@mipmap/doneimage"
+        android:layout_gravity="right"
+        android:layout_marginRight="30sp"
+        app:backgroundTint="@color/green"/>
+
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -107,9 +127,10 @@
         </LinearLayout>
 
     </HorizontalScrollView>
+
     <android.support.design.widget.BottomNavigationView
         android:id="@+id/options_post"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
         android:layout_marginBottom="1dp"
@@ -118,3 +139,5 @@
         app:menu="@menu/post_menu"/>
 
 </LinearLayout>
+
+</ScrollView>

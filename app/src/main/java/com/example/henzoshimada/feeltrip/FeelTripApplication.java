@@ -4,6 +4,8 @@ import android.app.Application;
 import android.content.Context;
 import android.util.Log;
 
+import com.daimajia.swipe.adapters.BaseSwipeAdapter;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -172,6 +174,41 @@ public class FeelTripApplication extends Application {
         return moodArrayList;
     }
 
+    //request adapter
+    private static  RequestAdapter requestAdapter = null;
+    private static ArrayList<FollowRequest> requestsArray = new ArrayList<FollowRequest>();
+    public static RequestAdapter getRequestAdapter(Context context) {
+        if (requestAdapter == null) {
+            requestAdapter = new RequestAdapter(requestsArray, context.getApplicationContext());
+        }
+        return requestAdapter;
+    }
+
+    public static ArrayList<FollowRequest> getRequestsArray() {
+        if(requestsArray == null) {
+            requestsArray = new ArrayList<FollowRequest>();
+        }
+        return requestsArray;
+    }
+
+    //user search adapter
+    private static  UserFoundAdapter userFoundAdapter = null;
+    private static ArrayList<String> usersFoundArray = new ArrayList<String>();
+    public static UserFoundAdapter getUserFoundAdapter(Context context) {
+        if (userFoundAdapter == null) {
+            userFoundAdapter = new UserFoundAdapter(usersFoundArray, context.getApplicationContext());
+        }
+        return userFoundAdapter;
+    }
+
+    public static ArrayList<String> getUsersFoundArray() {
+        if(usersFoundArray == null) {
+            usersFoundArray = new ArrayList<String>();
+        }
+        return usersFoundArray;
+    }
+
+
     public static void setMoodArrayList(ArrayList<Mood> moodArrayList) {
         FeelTripApplication.moodArrayList = moodArrayList;
     }
@@ -236,6 +273,22 @@ public class FeelTripApplication extends Application {
         }
     }
 
+    public static ListViewAdapter getListViewAdapter(Context context) {
+        if (listViewAdapter == null) {
+            listViewAdapter = new ListViewAdapter(context);
+        }
+        return listViewAdapter;
+    }
 
+    private static ListViewAdapter listViewAdapter = null;
+
+    public static String username;
+    public static String getUserName(){
+        return username;
+    }
+
+    public static void setUsername(String name){
+        username = name;
+    }
 
 }
