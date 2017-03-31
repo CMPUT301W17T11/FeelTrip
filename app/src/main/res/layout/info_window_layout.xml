@@ -59,10 +59,20 @@
             android:id="@+id/info_window_append"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="-Feeling Happy"
+            android:text="-Feeling "
             android:textAppearance="?android:attr/textAppearanceButton"
             android:textColor="@android:color/black"
             android:textStyle="bold|italic" />
+
+        <TextView
+            android:id="@+id/info_window_emotion"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Happy"
+            android:textAppearance="?android:attr/textAppearanceButton"
+            android:textColor="@android:color/black"
+            android:textStyle="bold|italic" />
+
         <ImageView
             android:id="@+id/info_window_emojiImage"
             android:adjustViewBounds="true"

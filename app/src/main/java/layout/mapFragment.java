@@ -16,6 +16,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.text.Html;
 import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -189,33 +190,72 @@ public class mapFragment extends Fragment implements
                 TextView social_situationView = (TextView) view.findViewById(R.id.info_window_socialSituation);
                 TextView dateView = (TextView) view.findViewById(R.id.info_window_date);
                 TextView feelingView = (TextView) view.findViewById(R.id.info_window_append);
+                TextView emotionView = (TextView) view.findViewById(R.id.info_window_emotion);
                 ImageView emojiView = (ImageView) view.findViewById(R.id.info_window_emojiImage);
                 ImageView imageView = (ImageView) view.findViewById(R.id.info_window_image);
 
+                if(FeelTripApplication.getThemeID() == R.style.CustomTheme_Light || FeelTripApplication.getThemeID() == R.style.CustomTheme_Dark) {
+                    usernameView.setTextColor(FeelTripApplication.getTEXTCOLORPRIMARY());
+                    dateView.setTextColor(FeelTripApplication.getTEXTCOLORTERTIARY());
+                    descriptionView.setTextColor(FeelTripApplication.getTEXTCOLORPRIMARY());
+                    feelingView.setTextColor(FeelTripApplication.getTEXTCOLORPRIMARY());
+                    social_situationView.setTextColor(FeelTripApplication.getTEXTCOLORPRIMARY());
+                }
+
                 usernameView.setText(mood.getUsername());
-                descriptionView.setText(mood.getDescription());
-                social_situationView.setText(mood.getSocialSit());
                 dateView.setText(mood.getDate().toString());
-                feelingView.setText(" - Feeling " + mood.getEmotionalState());
+                descriptionView.setText(Html.fromHtml(mood.getDescription())); //TODO: This is depreciated, maybe replace?
+                feelingView.setText(" - Feeling ");
+
+                emotionView.setText(mood.getEmotionalState());
+                switch (mood.getEmotionalState()) {
+                    case "Angry":
+                        emotionView.setTextColor(Color.RED);
+                        break;
+                    case "Confused":
+                        emotionView.setTextColor(0xFF9900CC);
+                        break;
+                    case "Disgusted":
+                        emotionView.setTextColor(Color.GREEN);
+                        break;
+                    case "Fearful":
+                        emotionView.setTextColor(Color.CYAN);
+                        break;
+                    case "Happy":
+                        emotionView.setTextColor(Color.YELLOW);
+                        break;
+                    case "Sad":
+                        emotionView.setTextColor(Color.BLUE);
+                        break;
+                    case "Shameful":
+                        emotionView.setTextColor(Color.MAGENTA);
+                        break;
+                    case "Cool":
+                        emotionView.setTextColor(0xFFFF9966);
+                        break;
+                    default:
+                        break;
+                }
+
+                social_situationView.setText(mood.getSocialSit());
 
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    int emojiID = getContext().getApplicationContext().getResources().getIdentifier("emoji" + String.valueOf(mood.getEmoji()),"drawable",getContext().getApplicationContext().getPackageName());
-                    if(emojiID != 0) {
+                    int emojiID = getContext().getApplicationContext().getResources().getIdentifier("emoji" + String.valueOf(mood.getEmoji()), "drawable", getContext().getApplicationContext().getPackageName());
+                    if (emojiID != 0) {
                         emojiView.setImageResource(emojiID);
-                    }
-                    else { // This field can only be accessed if something goes wrong, or if someone alters the main database. It's mainly a fallback safety.
-                        emojiView.setImageResource(getContext().getApplicationContext().getResources().getIdentifier("err","drawable",getContext().getApplicationContext().getPackageName()));
+                    } else { // This field can only be accessed if something goes wrong, or if someone alters the main database. It's mainly a fallback safety.
+                        emojiView.setImageResource(getContext().getApplicationContext().getResources().getIdentifier("err", "drawable", getContext().getApplicationContext().getPackageName()));
                     }
                 }
                 //######################################################
                 String encodedImageString = mood.getImage();
-                if(encodedImageString != null) {
+                if (encodedImageString != null) {
                     byte[] decodedString = Base64.decode(encodedImageString, Base64.DEFAULT);
-                    Log.d("Bitmap","Length: "+decodedString.length);
+                    Log.d("Bitmap", "Length: " + decodedString.length);
                     Bitmap photo = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
                     imageView.setImageBitmap(photo);
                     Log.d("imageTag", "have image");
-                }else {
+                } else {
                     imageView.setImageBitmap(null);
                     imageView.setVisibility(View.GONE);
                     Log.d("imageTag", "no image");
