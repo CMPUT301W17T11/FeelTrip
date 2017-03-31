@@ -2,4 +2,15 @@ INTENT TESTING
 OFFLINE MODE
 
 Replace spinner with horizontal scrollview
-Fix postMoodScreen because the actual page is too long so you have to scroll up to reveal toolbar
+Fix postMoodScreen because the actual page is too long so you have to scroll up to reveal toolbar (this one might be done)
+
+Make an actual logo or something to fill in the title screen's massive blank spot
+
+Theme the status bar on the custom themes.... idk how I missed that
+Fix status bar on custom light theme, disappears on mood post screen
+Theme the map popup on custom theme
+Theme the date and time selector
+Theme the sidebar on custom theme
+Create the big themes
+
+
