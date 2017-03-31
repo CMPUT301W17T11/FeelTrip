@@ -1,2 +1,5 @@
 INTENT TESTING 
 OFFLINE MODE
+
+Replace spinner with horizontal scrollview
+Fix postMoodScreen because the actual page is too long so you have to scroll up to reveal toolbar
