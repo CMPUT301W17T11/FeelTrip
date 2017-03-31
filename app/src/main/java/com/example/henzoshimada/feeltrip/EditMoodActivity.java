@@ -126,7 +126,7 @@ public class EditMoodActivity extends AppCompatActivity {
                     */
                 case R.id.date_bottom_button:
                     Log.d("Mytag", "Tapped on date");
-                    timePick(findViewById(R.id.date_bottom_button).getContext());
+                    datePick(findViewById(R.id.date_bottom_button).getContext());
                     //datePick(findViewById(R.id.date_bottom_button).getContext());
 
                     return true;
@@ -333,14 +333,14 @@ public class EditMoodActivity extends AppCompatActivity {
 
     public void datePick(Context context) {
         Log.d("Mytag", "Went into date");
-        new DatePickerDialog(context,datePickerDialogListener, dateTime.get(Calendar.YEAR),
+        new DatePickerDialog(context, AlertDialog.THEME_DEVICE_DEFAULT_DARK,datePickerDialogListener, dateTime.get(Calendar.YEAR), //TODO: Theme these properly
                 dateTime.get(Calendar.MONTH), dateTime.get(Calendar.DAY_OF_MONTH)).show();
     }
 
     public void timePick(Context context) {
         //selectDate();
         Log.d("Mytag", "Went into date");
-        new TimePickerDialog(context, AlertDialog.THEME_DEVICE_DEFAULT_LIGHT, onTimeSetListener, dateTime.get(Calendar.HOUR_OF_DAY),
+        new TimePickerDialog(context, AlertDialog.THEME_DEVICE_DEFAULT_DARK, onTimeSetListener, dateTime.get(Calendar.HOUR_OF_DAY),
                 dateTime.get(Calendar.MINUTE), true).show();
     }
 

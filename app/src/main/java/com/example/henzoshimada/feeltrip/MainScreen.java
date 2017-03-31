@@ -80,7 +80,7 @@ public class MainScreen extends AppCompatActivity{
     private ArrayAdapter<String> follwingAdapter;
     private UserFoundAdapter userFoundAdapter;
 
-    private Participant participant = FeelTripApplication.getParticipant();
+    private Participant participant = FeelTripApplication.getParticipant();;
 
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mDrawerToggle;
@@ -317,7 +317,7 @@ public class MainScreen extends AppCompatActivity{
             bottomNavigationView.setItemTextColor(navList);
         }
 
-      mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.drawer_open, R.string.drawer_close) {
             @Override
             public void onDrawerOpened(View drawerView) {
@@ -358,16 +358,10 @@ public class MainScreen extends AppCompatActivity{
 
         follwingAdapter = new ArrayAdapter<>(this, R.layout.username_list_item, followingArray); //view,dataArray
         followingView.setAdapter(follwingAdapter);
-      
-    }
-
-    private void searchUser(View view){
 
         userFoundAdapter = FeelTripApplication.getUserFoundAdapter(this);
         userFoundView.setAdapter(userFoundAdapter);
-
-        //loadRequestsArray();
-        //loadFollowingsArray();
+      
     }
 
     private void searchUser(View view){
@@ -424,10 +418,8 @@ public class MainScreen extends AppCompatActivity{
         ElasticSearchController.loadFromElasticSearch();
         FeelTripApplication.getMoodAdapter(getBaseContext()).notifyDataSetChanged();
 
-
-        //todo load req,folow arrays
-        loadRequestsArray();
-        loadFollowingsArray();
+//        loadRequestsArray();
+//        loadFollowingsArray();
     }
 
     private void loadRequestsArray(){//sender

@@ -5,6 +5,7 @@ import android.app.FragmentTransaction;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.os.SystemClock;
 import android.text.Html;
 import android.util.Base64;
@@ -89,12 +90,53 @@ public class ListViewAdapter extends BaseSwipeAdapter {
             ImageView emojiImage = (ImageView) convertView.findViewById(R.id.emojiImage);
             TextView description = (TextView) convertView.findViewById(R.id.description);
             TextView append = (TextView) convertView.findViewById(R.id.append);
+            TextView emotion = (TextView) convertView.findViewById(R.id.emotion);
             TextView socialSituation = (TextView) convertView.findViewById(R.id.socialSituation);
             ImageView image = (ImageView) convertView.findViewById(R.id.image);
+
+            if(FeelTripApplication.getThemeID() == R.style.CustomTheme_Light || FeelTripApplication.getThemeID() == R.style.CustomTheme_Dark) {
+                userName.setTextColor(FeelTripApplication.getTEXTCOLORPRIMARY());
+                date.setTextColor(FeelTripApplication.getTEXTCOLORTERTIARY());
+                description.setTextColor(FeelTripApplication.getTEXTCOLORPRIMARY());
+                append.setTextColor(FeelTripApplication.getTEXTCOLORPRIMARY());
+                socialSituation.setTextColor(FeelTripApplication.getTEXTCOLORPRIMARY());
+            }
+
             userName.setText(moodItem.getUsername());
             date.setText(moodItem.getDate().toString());
             description.setText(Html.fromHtml(moodItem.getDescription())); //TODO: This is depreciated, maybe replace?
-            append.setText(" - Feeling " + moodItem.getEmotionalState());
+            append.setText(" - Feeling ");
+
+            emotion.setText(moodItem.getEmotionalState());
+            switch (moodItem.getEmotionalState()) {
+                case "Angry":
+                    emotion.setTextColor(Color.RED);
+                    break;
+                case "Confused":
+                    emotion.setTextColor(0xFF9900CC);
+                    break;
+                case "Disgusted":
+                    emotion.setTextColor(Color.GREEN);
+                    break;
+                case "Fearful":
+                    emotion.setTextColor(Color.CYAN);
+                    break;
+                case "Happy":
+                    emotion.setTextColor(Color.YELLOW);
+                    break;
+                case "Sad":
+                    emotion.setTextColor(Color.BLUE);
+                    break;
+                case "Shameful":
+                    emotion.setTextColor(Color.MAGENTA);
+                    break;
+                case "Cool":
+                    emotion.setTextColor(0xFFFF9966);
+                    break;
+                default:
+                    break;
+            }
+
             socialSituation.setText(moodItem.getSocialSit());
 
             int emojiID = mContext.getResources().getIdentifier("emoji" + String.valueOf(moodItem.getEmoji()), "drawable", mContext.getPackageName());

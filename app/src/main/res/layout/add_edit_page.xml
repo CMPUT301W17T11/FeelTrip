@@ -5,139 +5,137 @@
     android:layout_height="match_parent"
     android:fillViewport="true">
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-    <android.support.design.widget.AppBarLayout
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent">
 
-    <EditText
-        android:id="@+id/moodEventDescription"
-        android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:hint="Post a mood description"
-        android:maxLines="1"
-        android:inputType="text"/>
+        <EditText
+            android:id="@+id/moodEventDescription"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:hint="Post a mood description"
+            android:maxLines="1"
+            android:inputType="text"/>
 
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="255dp"
-        android:id="@+id/imgView"/>
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="255dp"
+            android:id="@+id/imgView"/>
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/check_bottom_button"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:clickable="true"
-        app:fabSize="mini"
-        app:srcCompat="@mipmap/doneimage"
-        android:layout_gravity="right"
-        android:layout_marginRight="30sp"
-        app:backgroundTint="@color/green"/>
-
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/feelingTextView"
-            android:textColor="?android:attr/textColorSecondary"
-            android:text="Feeling: "
-            android:textSize="25sp"
-            android:layout_marginStart="10dp"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/default_photo_off"
-            android:textColor="@color/red"
-            android:textSize="25sp"
-            android:id="@+id/emotionString"/>
-
-        </LinearLayout>
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        >
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/locationTextView"
-            android:textColor="?android:attr/textColorSecondary"
-            android:text="Location: "
-            android:layout_marginLeft="10dp"/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/default_off"
-            android:id="@+id/modeLocation"
-            android:textColor="@color/red"/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/modeTextView"
-            android:textColor="?android:attr/textColorSecondary"
-            android:text="Mode: "
-            android:layout_marginLeft="20dp"/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/mode_private"
-            android:id="@+id/modePost"
-            android:textColor="@color/red"/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/photoAttachedTextView"
-            android:textColor="?android:attr/textColorSecondary"
-            android:text="Photo Attached: "
-            android:layout_marginLeft="20dp"/>
-        <TextView
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/check_bottom_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/default_photo_off"
-            android:id="@+id/modePhoto"
-            android:textColor="@color/red"/>
+            android:clickable="true"
+            app:fabSize="mini"
+            app:srcCompat="@mipmap/doneimage"
+            android:layout_gravity="right"
+            android:layout_marginRight="30sp"
+            app:backgroundTint="@color/green"/>
 
-    </LinearLayout>
-    <Spinner
-        android:background="@drawable/shadow"
-        android:id="@+id/social_event_spinner"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:prompt="@string/filter_prompt">
-    </Spinner>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/feelingTextView"
+                android:text="Feeling: "
+                android:textSize="25sp"
+                android:layout_marginStart="10dp"/>
 
-    <HorizontalScrollView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:scrollbars="none">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/default_photo_off"
+                android:textColor="@color/red"
+                android:textSize="25sp"
+                android:id="@+id/emotionString"/>
+
+        </LinearLayout>
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:id="@+id/emojiList">
+            >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/locationTextView"
+                android:text="Location: "
+                android:layout_marginLeft="10dp"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/default_off"
+                android:id="@+id/modeLocation"
+                android:textColor="@color/red"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/modeTextView"
+                android:text="Mode: "
+                android:layout_marginLeft="20dp"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/mode_private"
+                android:id="@+id/modePost"
+                android:textColor="@color/red"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/photoAttachedTextView"
+                android:text="Photo Attached: "
+                android:layout_marginLeft="20dp"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/default_photo_off"
+                android:id="@+id/modePhoto"
+                android:textColor="@color/red"/>
+
         </LinearLayout>
+        <Spinner
+            android:background="@drawable/shadow"
+            android:id="@+id/social_event_spinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:prompt="@string/filter_prompt">
+        </Spinner>
 
-    </HorizontalScrollView>
+        <HorizontalScrollView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:id="@+id/emojiList">
+                <!--<LinearLayout-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:orientation="vertical"-->
+                <!--android:layout_marginStart="10dp"-->
+                <!--android:id="@+id/emojiLayout" >-->
+                <!--</LinearLayout>-->
+            </LinearLayout>
 
-    <android.support.design.widget.BottomNavigationView
-        android:id="@+id/options_post"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:layout_marginBottom="1dp"
-        android:layout_marginEnd="1dp"
-        android:background="?android:attr/windowBackground"
-        app:menu="@menu/post_menu"/>
+        </HorizontalScrollView>
 
-</LinearLayout>
+        <android.support.design.widget.BottomNavigationView
+            android:id="@+id/options_post"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:layout_marginBottom="1dp"
+            android:layout_marginEnd="1dp"
+            android:background="?android:attr/windowBackground"
+            app:menu="@menu/post_menu"/>
+
+    </LinearLayout>
 
 </ScrollView>
