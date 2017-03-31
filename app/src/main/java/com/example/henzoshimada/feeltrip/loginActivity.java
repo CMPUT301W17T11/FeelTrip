@@ -59,6 +59,7 @@ public class loginActivity extends AppCompatActivity {
         else {
             Toast.makeText(getApplicationContext(),"Incorrect username or password!",Toast.LENGTH_SHORT).show();
         }
+        FeelTripApplication.setUsername(userField.getText().toString());
         return;
     }
     public void regUser(View v){

@@ -117,6 +117,8 @@ public class MainScreen extends AppCompatActivity{
         return super.dispatchTouchEvent( event );
     }
 
+
+
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
 
@@ -125,6 +127,8 @@ public class MainScreen extends AppCompatActivity{
             Fragment fragment;
             FragmentManager fm = getFragmentManager();
             FragmentTransaction ft = fm.beginTransaction();
+            Fragment fragCurrent = fm.findFragmentById(R.id.fragent_frame);
+            //Log.d("swipe",""+fragCurrent);
             switch (item.getItemId()) {
                 case R.id.navigation_home:
                     Log.d("Mytag","Tapped on home");

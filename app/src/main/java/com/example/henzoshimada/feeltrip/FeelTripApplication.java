@@ -4,6 +4,8 @@ import android.app.Application;
 import android.content.Context;
 import android.util.Log;
 
+import com.daimajia.swipe.adapters.BaseSwipeAdapter;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -211,6 +213,22 @@ public class FeelTripApplication extends Application {
         }
     }
 
+    public static ListViewAdapter getListViewAdapter(Context context) {
+        if (listViewAdapter == null) {
+            listViewAdapter = new ListViewAdapter(context);
+        }
+        return listViewAdapter;
+    }
 
+    private static ListViewAdapter listViewAdapter = null;
+
+    public static String username;
+    public static String getUserName(){
+        return username;
+    }
+
+    public static void setUsername(String name){
+        username = name;
+    }
 
 }
