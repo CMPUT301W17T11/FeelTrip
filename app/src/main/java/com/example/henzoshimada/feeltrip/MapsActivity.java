@@ -214,10 +214,10 @@ public class MapsActivity extends FragmentActivity implements
             //update participant last known location
             participant.setLatitude(latitude);
             participant.setLongitude(longitude);
-            /* todo put this back after merge with michael
+
             ElasticSearchController.EditParticipantTask editParticipantTask = new ElasticSearchController.EditParticipantTask("geoLocation");
             editParticipantTask.execute(participant);
-*/
+
             if (marker != null){
                 marker.remove();
             }

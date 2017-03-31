@@ -368,10 +368,10 @@ public class mapFragment extends Fragment implements
             //update participant last known location
             participant.setLongitude(mLastKnownLocation.getLongitude());
             participant.setLatitude(mLastKnownLocation.getLatitude());
-        /* todo put this back after merge with michael
+
             ElasticSearchController.EditParticipantTask editParticipantTask = new ElasticSearchController.EditParticipantTask("geoLocation");
             editParticipantTask.execute(participant);
-    */
+
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 setMoodMarker();
             }
