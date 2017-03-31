@@ -402,7 +402,10 @@ public class EditMoodActivity extends AppCompatActivity {
 */
 
     private void takeAPhoto() {
-        String path = Environment.getExternalStorageDirectory().getAbsolutePath() + "/Camera";
+        //Taken: http://stackoverflow.com/questions/29576098/get-path-of-dcim-folder-on-both-primary-and-secondary-storage
+        // On: March 17, 2017 at 17:25
+        //String path = Environment.getExternalStorageDirectory().getAbsolutePath() + "/Camera";
+        String path = Environment.DIRECTORY_DCIM;
         File folder = new File(path);
         if (!folder.exists())
             folder.mkdir();
