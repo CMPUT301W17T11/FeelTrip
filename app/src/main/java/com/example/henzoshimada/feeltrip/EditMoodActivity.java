@@ -333,14 +333,14 @@ public class EditMoodActivity extends AppCompatActivity {
 
     public void datePick(Context context) {
         Log.d("Mytag", "Went into date");
-        new DatePickerDialog(context, AlertDialog.THEME_DEVICE_DEFAULT_DARK,datePickerDialogListener, dateTime.get(Calendar.YEAR), //TODO: Theme these properly
+        new DatePickerDialog(context, datePickerDialogListener, dateTime.get(Calendar.YEAR), //TODO: Theme these properly
                 dateTime.get(Calendar.MONTH), dateTime.get(Calendar.DAY_OF_MONTH)).show();
     }
 
     public void timePick(Context context) {
         //selectDate();
         Log.d("Mytag", "Went into date");
-        new TimePickerDialog(context, AlertDialog.THEME_DEVICE_DEFAULT_DARK, onTimeSetListener, dateTime.get(Calendar.HOUR_OF_DAY),
+        new TimePickerDialog(context, onTimeSetListener, dateTime.get(Calendar.HOUR_OF_DAY),
                 dateTime.get(Calendar.MINUTE), true).show();
     }
 

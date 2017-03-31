@@ -4,6 +4,7 @@ import android.os.AsyncTask;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.google.common.reflect.Parameter;
 import com.google.gson.Gson;
 import com.google.common.collect.Lists;
 import com.searchly.jestdroid.DroidClientConfig;
@@ -28,6 +29,7 @@ import io.searchbox.core.SearchResult;
 import io.searchbox.core.Update;
 import io.searchbox.indices.CreateIndex;
 import io.searchbox.indices.mapping.PutMapping;
+import io.searchbox.params.Parameters;
 
 /**
  * Created by Esus2 on 2017-03-11.
@@ -859,6 +861,7 @@ public class ElasticSearchController {
             Search search = new Search.Builder(query)
                     .addIndex(groupIndex)
                     .addType(typeMood)
+                    .setParameter(Parameters.SIZE, 1000) // TODO: Our app likely won't have more than 1000 posts displyaed at a time, but y'know... maybe we'll modify this.
                     .refresh(true).build();
 
 

@@ -101,7 +101,7 @@ public class mapFragment extends Fragment implements
         View rootView = inflater.inflate(R.layout.fragment_map, container, false);
 
         mMapView = (MapView) rootView.findViewById(R.id.mapView);
-        mMapView.onCreate(savedInstanceState);
+        mMapView.onCreate(savedInstanceState); //TODO: This throws random errors that crash the app. May need to look into.
         //verifyLocationPermissions(getActivity());
         View locationButton = ((View) mMapView.findViewById(1).getParent()).findViewById(2);
 
