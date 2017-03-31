@@ -6,6 +6,7 @@ import android.content.res.ColorStateList;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
@@ -35,10 +36,11 @@ public class MoodAdapter extends ArrayAdapter<Mood> {
         TextView date;
         TextView description;
         TextView append;
-        ImageView emoji;
+        TextView emotion;
         TextView socialSituation;
         ImageView emojiImage;
         ImageView image;
+
 
     }
 
@@ -76,6 +78,7 @@ public class MoodAdapter extends ArrayAdapter<Mood> {
             viewHolder.emojiImage = (ImageView) convertView.findViewById(R.id.emojiImage);
             viewHolder.description = (TextView) convertView.findViewById(R.id.description);
             viewHolder.append = (TextView) convertView.findViewById(R.id.append);
+            viewHolder.emotion = (TextView) convertView.findViewById(R.id.emotion);
             viewHolder.socialSituation = (TextView) convertView.findViewById(R.id.socialSituation);
             viewHolder.image = (ImageView) convertView.findViewById(R.id.image);
 
@@ -105,7 +108,38 @@ public class MoodAdapter extends ArrayAdapter<Mood> {
         viewHolder.userName.setText(mood.getUsername());
         viewHolder.date.setText(mood.getDate().toString());
         viewHolder.description.setText(Html.fromHtml(mood.getDescription())); //TODO: This is depreciated, maybe replace?
-        viewHolder.append.setText(" - Feeling " + mood.getEmotionalState());
+        viewHolder.append.setText(" - Feeling ");
+
+        viewHolder.emotion.setText(mood.getEmotionalState());
+        switch (mood.getEmotionalState()) {
+            case "Angry":
+                viewHolder.emotion.setTextColor(Color.RED);
+                break;
+            case "Confused":
+                viewHolder.emotion.setTextColor(0xFF9900CC);
+                break;
+            case "Disgusted":
+                viewHolder.emotion.setTextColor(Color.GREEN);
+                break;
+            case "Fearful":
+                viewHolder.emotion.setTextColor(Color.CYAN);
+                break;
+            case "Happy":
+                viewHolder.emotion.setTextColor(Color.YELLOW);
+                break;
+            case "Sad":
+                viewHolder.emotion.setTextColor(Color.BLUE);
+                break;
+            case "Shameful":
+                viewHolder.emotion.setTextColor(Color.MAGENTA);
+                break;
+            case "Cool":
+                viewHolder.emotion.setTextColor(0xFFFF9966);
+                break;
+            default:
+                break;
+        }
+
         viewHolder.socialSituation.setText(mood.getSocialSit());
 
         //#######################################################

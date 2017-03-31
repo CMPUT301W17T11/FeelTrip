@@ -58,9 +58,18 @@
             android:id="@+id/append"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="-Feeling Happy"
+            android:text="-Feeling "
             android:textAppearance="?android:attr/textAppearanceButton"
             android:textStyle="bold|italic" />
+
+        <TextView
+            android:id="@+id/emotion"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Happy"
+            android:textAppearance="?android:attr/textAppearanceButton"
+            android:textStyle="bold|italic" />
+
         <ImageView
             android:id="@+id/emojiImage"
             android:adjustViewBounds="true"
