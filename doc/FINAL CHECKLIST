@@ -7,6 +7,7 @@ Fix postMoodScreen because the actual page is too long so you have to scroll up 
 Make an actual logo or something to fill in the title screen's massive blank spot
 
 Theme the status bar on the custom themes.... idk how I missed that
+Discard edit mood changes prompt on back press
 Theme the map popup on custom theme
 Theme the date and time selector
 Theme the sidebar on custom theme
