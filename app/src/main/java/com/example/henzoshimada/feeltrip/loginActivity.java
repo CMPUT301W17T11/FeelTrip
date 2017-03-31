@@ -115,6 +115,7 @@ public class loginActivity extends AppCompatActivity {
         }
 
         Participant participant = FeelTripApplication.getParticipant();
+        participant.clearFollowing();
         participant.setUserName(participants.get(0).getUserName());
         participant.setPassword(participants.get(0).getPassword());
         participant.setId(participants.get(0).getId());

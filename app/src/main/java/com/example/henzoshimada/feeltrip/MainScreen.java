@@ -71,7 +71,7 @@ public class MainScreen extends AppCompatActivity{
     private ArrayAdapter<String> follwingAdapter;
     private UserFoundAdapter userFoundAdapter;
 
-    private Participant participant = FeelTripApplication.getParticipant();
+    private Participant participant;
 
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mDrawerToggle;
@@ -179,6 +179,7 @@ public class MainScreen extends AppCompatActivity{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        participant = FeelTripApplication.getParticipant();
         setContentView(R.layout.activity_main);
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
@@ -258,22 +259,29 @@ public class MainScreen extends AppCompatActivity{
             @Override
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
+                usersFoundArray.clear();
+                userFoundAdapter.notifyDataSetChanged();
+
+                followingArray.clear();
+                follwingAdapter.notifyDataSetChanged();
                 //load stuff here
-                Log.d("followTag", "onDrawerOpen; " + getTitle());
                 notFoundTextView.setVisibility(View.GONE);
                 loadRequestsArray();
                 loadFollowingsArray();
-                Log.d("followTag", "done load");
+
                 invalidateOptionsMenu();
             }
 
             @Override
             public void onDrawerClosed(View drawerView) {
                 super.onDrawerClosed(drawerView);
-                Log.d("drawerTag", "onDrawerClosed: " + getTitle());
                 inputTextView.setText("");
                 usersFoundArray.clear();
                 userFoundAdapter.notifyDataSetChanged();
+
+                followingArray.clear();
+                follwingAdapter.notifyDataSetChanged();
+
                 notFoundTextView.setVisibility(View.GONE);
                 invalidateOptionsMenu();
             }
@@ -357,7 +365,6 @@ public class MainScreen extends AppCompatActivity{
 
         ElasticSearchController.GetRequestTask getRequestTask = new ElasticSearchController.GetRequestTask(false);
         getRequestTask.execute(FeelTripApplication.getParticipant().getUserName());
-        Log.d("debug", FeelTripApplication.getParticipant().getUserName());
 
         try {
             requestsArray.addAll(getRequestTask.get());
@@ -367,13 +374,11 @@ public class MainScreen extends AppCompatActivity{
             return;
         }
 
-        Log.d("followTag","request size: "+requestsArray.size());
         requestAdapter.notifyDataSetChanged();
     }
 
     private void loadFollowingsArray(){//receiver
         followingArray.clear();
-        followingArray.addAll(participant.getFollowing());
 
         // extra work need to be done when other user accepted participant's request
         ElasticSearchController.GetRequestTask getAcceptedRequest = new ElasticSearchController.GetRequestTask(true);
@@ -397,7 +402,7 @@ public class MainScreen extends AppCompatActivity{
             // then delete this request
             deleteRequestTask.execute(request);
         }
-
+        followingArray.addAll(participant.getFollowing());
         follwingAdapter.notifyDataSetChanged();
     }
 
