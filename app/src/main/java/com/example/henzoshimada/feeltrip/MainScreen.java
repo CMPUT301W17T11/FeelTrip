@@ -1,8 +1,14 @@
 package com.example.henzoshimada.feeltrip;
 
 import android.content.Context;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.graphics.Rect;
+import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.support.annotation.NonNull;
+import android.support.annotation.RequiresApi;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -27,6 +33,7 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.app.Fragment;
 import android.app.FragmentManager;
@@ -43,7 +50,9 @@ import layout.mapFragment;
 import layout.profileFragment;
 
 // This is the main screen: This is what the Participant first sees
+
 public class MainScreen extends AppCompatActivity{
+
     private Spinner emotionalStateSpinner;
 
     // The following are constants for emotion based emoji
@@ -71,7 +80,7 @@ public class MainScreen extends AppCompatActivity{
     private ArrayAdapter<String> follwingAdapter;
     private UserFoundAdapter userFoundAdapter;
 
-    private Participant participant;
+    private Participant participant = FeelTripApplication.getParticipant();
 
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mDrawerToggle;
@@ -157,7 +166,7 @@ public class MainScreen extends AppCompatActivity{
                 default:
                     fragment = new homeFragmment();
                     ft.replace(R.id.fragent_frame,fragment);
-                    ft.addToBackStack(null);
+//                    ft.addToBackStack(null);
                     ft.commit();
                     break;
             }
@@ -183,6 +192,13 @@ public class MainScreen extends AppCompatActivity{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
+//        setTheme(R.style.NaughtyPenguins); //TODO - theme
+//        setTheme(R.style.DefaultTheme);
+        setTheme(FeelTripApplication.getThemeID());
+
+
         participant = FeelTripApplication.getParticipant();
         setContentView(R.layout.activity_main);
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
@@ -250,15 +266,58 @@ public class MainScreen extends AppCompatActivity{
                 searchUser(v);
             }
         });
-
+      
         inputTextView = (EditText) findViewById(R.id.user_search);
         userFoundView = (ListView) findViewById(R.id.found_user);
         followingView = (ListView) findViewById(R.id.follow_list);
         requestView = (ListView) findViewById(R.id.request_list);
         notFoundTextView = (TextView) findViewById(R.id.not_found_text);
 
+        if(FeelTripApplication.getThemeID() == R.style.CustomTheme_Light || FeelTripApplication.getThemeID() == R.style.CustomTheme_Dark) {
+            android.support.design.widget.AppBarLayout appBarLayout = (android.support.design.widget.AppBarLayout) findViewById(R.id.appBarLayout);
+            appBarLayout.setBackgroundColor(FeelTripApplication.getCOLORPRIMARY());
 
-        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+            EditText searchText = (EditText) findViewById(R.id.keyword);
+            searchText.getBackground().setColorFilter(FeelTripApplication.getTEXTCOLORTERTIARY(), PorterDuff.Mode.SRC_IN);
+            searchText.setHintTextColor(FeelTripApplication.getTEXTCOLORTERTIARY());
+
+            int[][] tintstates = new int[][] {
+                    new int[] { android.R.attr.state_pressed},  // pressed
+                    new int[] {-android.R.attr.state_pressed}  // unpressed
+            };
+
+            int[] tintcolors = new int[] {
+                    FeelTripApplication.getTEXTCOLORTERTIARY(),
+                    FeelTripApplication.getTEXTCOLORTERTIARY()
+            };
+            ColorStateList tintList = new ColorStateList(tintstates, tintcolors);
+            searchButton.setBackgroundTintList(tintList);
+
+            TextView pastWeekView = (TextView) findViewById(R.id.textView2);
+            pastWeekView.setTextColor(FeelTripApplication.getTEXTCOLORTERTIARY());
+            TextView moodsFilterView = (TextView) findViewById(R.id.textView3);
+            moodsFilterView.setTextColor(FeelTripApplication.getTEXTCOLORTERTIARY());
+            TextView mostRecentView = (TextView) findViewById(R.id.textView4);
+            mostRecentView.setTextColor(FeelTripApplication.getTEXTCOLORTERTIARY());
+            TextView friendsOnlyView = (TextView) findViewById(R.id.textView5);
+            friendsOnlyView.setTextColor(FeelTripApplication.getTEXTCOLORTERTIARY());
+
+            int[][] navstates = new int[][] {
+                    new int[] { android.R.attr.state_checked},  // checked
+                    new int[] {-android.R.attr.state_checked}  // unchecked
+            };
+
+            int[] navcolors = new int[] {
+                    FeelTripApplication.getCOLORPRIMARY(),
+                    FeelTripApplication.getTEXTCOLORSECONDARY()
+            };
+            ColorStateList navList = new ColorStateList(navstates, navcolors);
+            android.support.design.widget.BottomNavigationView bottomNavigationView = (android.support.design.widget.BottomNavigationView) findViewById(R.id.navigation);
+            bottomNavigationView.setItemIconTintList(navList);
+            bottomNavigationView.setItemTextColor(navList);
+        }
+
+      mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.drawer_open, R.string.drawer_close) {
             @Override
             public void onDrawerOpened(View drawerView) {
@@ -299,6 +358,10 @@ public class MainScreen extends AppCompatActivity{
 
         follwingAdapter = new ArrayAdapter<>(this, R.layout.username_list_item, followingArray); //view,dataArray
         followingView.setAdapter(follwingAdapter);
+      
+    }
+
+    private void searchUser(View view){
 
         userFoundAdapter = FeelTripApplication.getUserFoundAdapter(this);
         userFoundView.setAdapter(userFoundAdapter);
@@ -356,12 +419,16 @@ public class MainScreen extends AppCompatActivity{
             textView.setVisibility(View.VISIBLE);
         }
 
+        EditText string_keyword = (EditText) findViewById(R.id.keyword);
+        FilterController.setKeywordfilter(string_keyword.getText().toString()); // Always take into account what's written in the "Keyword search" field. This eliminates confusion when words are typed but "Search" isn't explicitly tapped
         ElasticSearchController.loadFromElasticSearch();
         FeelTripApplication.getMoodAdapter(getBaseContext()).notifyDataSetChanged();
 
 
+        //todo load req,folow arrays
+        loadRequestsArray();
+        loadFollowingsArray();
     }
-
 
     private void loadRequestsArray(){//sender
         requestsArray = FeelTripApplication.getRequestsArray();
@@ -465,23 +532,6 @@ public class MainScreen extends AppCompatActivity{
             }
         });
     }
-
-        /*
-    // Taken from: https://www.mkyong.com/android/android-spinner-drop-down-list-example/
-    // On: March 5, 2017 17:03
-    public void addItemsOnFilterSpinner() {
-        filterSpinner = (Spinner) findViewById(R.id.filter_spinner);
-        List<String> filterList = new ArrayList<>();
-
-        filterList.add("filter1");
-        filterList.add("filter2");
-        filterList.add("filter3");
-
-        ArrayAdapter<String> filterListAdapter = new ArrayAdapter<>(this,
-                android.R.layout.simple_spinner_item, filterList);
-        filterListAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        filterSpinner.setAdapter(filterListAdapter);
-    }*/
     private void updateMap(){
         FeelTripApplication.setFrag("map");
         Fragment fragment = new mapFragment();

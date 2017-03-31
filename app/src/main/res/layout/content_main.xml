@@ -24,7 +24,6 @@
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:theme="@style/AppTheme.AppBarOverlay"
         android:id="@+id/appBarLayout">
         <LinearLayout
             android:layout_width="match_parent"
@@ -40,6 +39,8 @@
                         android:layout_width="307dp"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="10dp"
+                        android:textColorHint="?android:attr/textColorTertiary"
+                        android:backgroundTint="?android:attr/textColorTertiary"
                         android:hint="@string/hintfilter" />
 
 
@@ -47,8 +48,9 @@
                         android:id="@+id/imageButton"
                         android:layout_width="40dp"
                         android:layout_height="40dp"
-                        android:background="@color/colorPrimary"
+                        android:background="@android:color/transparent"
                         android:onClick="searchKeyword"
+                        android:tint="?android:attr/textColorTertiary"
                         app:srcCompat="@android:drawable/ic_menu_search" />
 
             </LinearLayout>
@@ -105,6 +107,7 @@
                     android:id="@+id/textView2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:textColor="?android:attr/textColorTertiary"
                     android:text="Filter by: 7 days"
                     android:textSize="10dp"/>
 
@@ -113,6 +116,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="20dp"
+                    android:textColor="?android:attr/textColorTertiary"
                     android:text="Filter by: Most recent"
                     android:textSize="10dp"/>
 
@@ -121,6 +125,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="20dp"
+                    android:textColor="?android:attr/textColorTertiary"
                     android:text="Filter by: friends"
                     android:textSize="10dp"/>
 
@@ -128,6 +133,7 @@
                     android:id="@+id/textView3"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:textColor="?android:attr/textColorTertiary"
                     android:text="Filter by: moods"
                     android:layout_marginStart="20dp"
                     android:textSize="10dp"/>
@@ -140,14 +146,14 @@
 0
     <android.support.design.widget.BottomNavigationView
         android:id="@+id/navigation"
-        android:layout_width="match_parent"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
         android:background="?android:attr/windowBackground"
+        app:itemIconTint="@drawable/bottom_nav_color"
+        app:itemTextColor="@drawable/bottom_nav_color"
         app:menu="@menu/navigation"
-        android:layout_marginBottom="1dp"
-        android:layout_alignParentBottom="true"
-        android:layout_marginEnd="1dp" />
+        android:layout_alignParentBottom="true"/>
 
 
 

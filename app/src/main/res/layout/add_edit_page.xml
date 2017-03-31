@@ -11,6 +11,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
     <EditText
         android:id="@+id/moodEventDescription"
         android:layout_width="match_parent"
@@ -42,6 +46,8 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:id="@+id/feelingTextView"
+            android:textColor="?android:attr/textColorSecondary"
             android:text="Feeling: "
             android:textSize="25sp"
             android:layout_marginStart="10dp"/>
@@ -63,6 +69,8 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:id="@+id/locationTextView"
+            android:textColor="?android:attr/textColorSecondary"
             android:text="Location: "
             android:layout_marginLeft="10dp"/>
         <TextView
@@ -74,6 +82,8 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:id="@+id/modeTextView"
+            android:textColor="?android:attr/textColorSecondary"
             android:text="Mode: "
             android:layout_marginLeft="20dp"/>
         <TextView
@@ -85,6 +95,8 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:id="@+id/photoAttachedTextView"
+            android:textColor="?android:attr/textColorSecondary"
             android:text="Photo Attached: "
             android:layout_marginLeft="20dp"/>
         <TextView
@@ -96,7 +108,7 @@
 
     </LinearLayout>
     <Spinner
-        android:background="@android:drawable/dialog_holo_light_frame"
+        android:background="@drawable/shadow"
         android:id="@+id/social_event_spinner"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -105,19 +117,13 @@
 
     <HorizontalScrollView
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:scrollbars="none">
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:id="@+id/emojiList">
-            <!--<LinearLayout-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:orientation="vertical"-->
-                <!--android:layout_marginStart="10dp"-->
-                <!--android:id="@+id/emojiLayout" >-->
-            <!--</LinearLayout>-->
         </LinearLayout>
 
     </HorizontalScrollView>

@@ -434,7 +434,7 @@ public class mapFragment extends Fragment implements
     }
 
     public void verifyLocationPermissions(Activity activity) {
-        Log.d("permTag","in verify perm");
+        Log.d("permTag", "in verify perm");
         // Check if we have location permission
         try {
             int permission = ActivityCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_FINE_LOCATION);
@@ -450,9 +450,11 @@ public class mapFragment extends Fragment implements
                     mMap.setMyLocationEnabled(true);
                 }
             }
+
         } catch (NullPointerException e) {
             Log.d("permTag", "verify: NULLPOINTER"); //TODO: Handle
         }
+
     }
 
 

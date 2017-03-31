@@ -22,8 +22,6 @@ import java.util.concurrent.ExecutionException;
      */
 public class FeelTripApplication extends Application {
 
-
-
     private static final List<String> allEmotions = Arrays.asList( // MODIFY THIS IF YOU WISH TO ADD/DELETE EMOTIONS
             "Zero", // THIS IS HERE SO WE CAN REFERENCE THE EMOTIONS WITHOUT WORRYING ABOUT ZERO INDEXING
             "Angry",
@@ -41,6 +39,68 @@ public class FeelTripApplication extends Application {
 
     public static String getEmotionalState(int index){
         return allEmotions.get(index);
+    }
+
+
+    // THEMES HERE
+    private static int themeID = R.style.DefaultTheme;
+
+    public static int getThemeID() {
+        return themeID;
+    }
+
+    public static void setThemeID(int themeID) {
+        FeelTripApplication.themeID = themeID;
+    }
+
+    public static int getCOLORPRIMARY() {
+        return COLORPRIMARY;
+    }
+
+    public static void setCOLORPRIMARY(int COLORPRIMARY) {
+        FeelTripApplication.COLORPRIMARY = COLORPRIMARY;
+    }
+
+    public static int getTEXTCOLORPRIMARY() {
+        return TEXTCOLORPRIMARY;
+    }
+
+    public static void setTEXTCOLORPRIMARY(int TEXTCOLORPRIMARY) {
+        FeelTripApplication.TEXTCOLORPRIMARY = TEXTCOLORPRIMARY;
+    }
+
+    public static int getTEXTCOLORSECONDARY() {
+        return TEXTCOLORSECONDARY;
+    }
+
+    public static void setTEXTCOLORSECONDARY(int TEXTCOLORSECONDARY) {
+        FeelTripApplication.TEXTCOLORSECONDARY = TEXTCOLORSECONDARY;
+    }
+
+    public static int getTEXTCOLORTERTIARY() {
+        return TEXTCOLORTERTIARY;
+    }
+
+    public static void setTEXTCOLORTERTIARY(int TEXTCOLORTERTIARY) {
+        FeelTripApplication.TEXTCOLORTERTIARY = TEXTCOLORTERTIARY;
+    }
+
+    private static int COLORPRIMARY = 0xFF3F51B5;
+
+    private static int TEXTCOLORPRIMARY = 0xFF3F51B5;
+
+    private static int TEXTCOLORSECONDARY = 0xFF3F51B5;
+
+    private static int TEXTCOLORTERTIARY = 0xFF3F51B5;
+
+    private static int BACKGROUNDCOLOR = 0xFF3F51B5;
+
+    public static int getBACKGROUNDCOLOR() {
+        return BACKGROUNDCOLOR;
+    }
+
+    public static void setBACKGROUNDCOLOR(int BACKGROUNDCOLOR) {
+        FeelTripApplication.BACKGROUNDCOLOR = BACKGROUNDCOLOR;
     }
 
     // Singleton

@@ -30,8 +30,7 @@
         android:layout_height="wrap_content"
         android:layout_width="240dp"
         android:orientation="vertical"
-        android:layout_gravity="start"
-        >
+        android:layout_gravity="start">
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
@@ -40,6 +39,9 @@
                 android:id="@+id/user_search"
                 android:layout_width="190dp"
                 android:layout_height="50dp"
+                android:hint="Search"
+                android:background="#FFF">
+            </EditText>
                 android:background="#FFF"
                 android:hint="Search"
                 android:inputType="text"
@@ -51,6 +53,7 @@
                 android:background="#FFF"
                 app:srcCompat="@android:drawable/ic_menu_search" />
         </LinearLayout>
+
         <TextView
             android:id="@+id/not_found_text"
             android:layout_width="match_parent"
@@ -60,6 +63,7 @@
             android:textColor="@android:color/black"
             android:background="#FFF"
             android:visibility="gone"/>
+
         <ListView
             android:id="@+id/found_user"
             android:layout_width="match_parent"

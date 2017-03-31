@@ -2,10 +2,14 @@ package com.example.henzoshimada.feeltrip;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.res.ColorStateList;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.text.Html;
 import android.util.Base64;
 import android.util.Log;
@@ -14,6 +18,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.henzoshimada.feeltrip.Mood;
@@ -31,9 +36,11 @@ public class MoodAdapter extends ArrayAdapter<Mood> {
         TextView date;
         TextView description;
         TextView append;
+        TextView emotion;
         TextView socialSituation;
         ImageView emojiImage;
         ImageView image;
+
 
     }
 
@@ -45,8 +52,14 @@ public class MoodAdapter extends ArrayAdapter<Mood> {
 
     //private int lastPosition = -1;
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP) // TODO: Update min API to 21
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
+
+//        getContext().setTheme(R.style.NaughtyPenguins); //TODO - theme
+//        getContext().setTheme(R.style.DefaultTheme);
+        getContext().setTheme(FeelTripApplication.getThemeID());
+
         // Get the data item for this position
         Mood mood = getItem(position);
         // Check if an existing view is being reused, otherwise inflate the view
@@ -65,8 +78,18 @@ public class MoodAdapter extends ArrayAdapter<Mood> {
             viewHolder.emojiImage = (ImageView) convertView.findViewById(R.id.emojiImage);
             viewHolder.description = (TextView) convertView.findViewById(R.id.description);
             viewHolder.append = (TextView) convertView.findViewById(R.id.append);
+            viewHolder.emotion = (TextView) convertView.findViewById(R.id.emotion);
             viewHolder.socialSituation = (TextView) convertView.findViewById(R.id.socialSituation);
             viewHolder.image = (ImageView) convertView.findViewById(R.id.image);
+
+            if(FeelTripApplication.getThemeID() == R.style.CustomTheme_Light || FeelTripApplication.getThemeID() == R.style.CustomTheme_Dark) {
+                viewHolder.userName.setTextColor(FeelTripApplication.getTEXTCOLORPRIMARY());
+                viewHolder.date.setTextColor(FeelTripApplication.getTEXTCOLORTERTIARY());
+                viewHolder.description.setTextColor(FeelTripApplication.getTEXTCOLORPRIMARY());
+                viewHolder.append.setTextColor(FeelTripApplication.getTEXTCOLORPRIMARY());
+                viewHolder.socialSituation.setTextColor(FeelTripApplication.getTEXTCOLORPRIMARY());
+            }
+
 
             result=convertView;
 
@@ -85,7 +108,38 @@ public class MoodAdapter extends ArrayAdapter<Mood> {
         viewHolder.userName.setText(mood.getUsername());
         viewHolder.date.setText(mood.getDate().toString());
         viewHolder.description.setText(Html.fromHtml(mood.getDescription())); //TODO: This is depreciated, maybe replace?
-        viewHolder.append.setText(" - Feeling " + mood.getEmotionalState());
+        viewHolder.append.setText(" - Feeling ");
+
+        viewHolder.emotion.setText(mood.getEmotionalState());
+        switch (mood.getEmotionalState()) {
+            case "Angry":
+                viewHolder.emotion.setTextColor(Color.RED);
+                break;
+            case "Confused":
+                viewHolder.emotion.setTextColor(0xFF9900CC);
+                break;
+            case "Disgusted":
+                viewHolder.emotion.setTextColor(Color.GREEN);
+                break;
+            case "Fearful":
+                viewHolder.emotion.setTextColor(Color.CYAN);
+                break;
+            case "Happy":
+                viewHolder.emotion.setTextColor(Color.YELLOW);
+                break;
+            case "Sad":
+                viewHolder.emotion.setTextColor(Color.BLUE);
+                break;
+            case "Shameful":
+                viewHolder.emotion.setTextColor(Color.MAGENTA);
+                break;
+            case "Cool":
+                viewHolder.emotion.setTextColor(0xFFFF9966);
+                break;
+            default:
+                break;
+        }
+
         viewHolder.socialSituation.setText(mood.getSocialSit());
 
         //#######################################################
@@ -106,9 +160,9 @@ public class MoodAdapter extends ArrayAdapter<Mood> {
             viewHolder.image.setImageBitmap(photo);
             Log.d("imageTag", "have image");
         }else {
-            viewHolder.image.setImageBitmap(null);
             Log.d("imageTag", "no image");
         }
+
         return convertView;
     }
 }

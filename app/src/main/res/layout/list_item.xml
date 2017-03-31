@@ -1,6 +1,8 @@
 <com.daimajia.swipe.SwipeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@drawable/shadow"
     android:id = "@+id/swipe"> <!--TEST ONLY-->
     <!-- Bottom View Start-->
     <LinearLayout
@@ -40,33 +42,50 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="20sp"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:textColor="@android:color/black" />
+            android:textColor="?android:attr/textColorPrimary"
+            android:textAppearance="?android:attr/textAppearanceSmall"/>
         <TextView
             android:id="@+id/socialSituation"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceButton"
-            android:textColor="@android:color/black"
             android:layout_marginStart="10sp"
             android:textStyle="bold" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/userName"
+        android:textStyle="italic"
+        android:layout_marginTop="25dp"
+        android:textColor="?android:attr/textColorTertiary"
+        android:text="Fri Mar 24 22:26:55 MDT 2017"/>
+
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true">
         </LinearLayout>
 
         <TextView
             android:id="@+id/date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textColor="?android:attr/textColorPrimary"
+            android:text="My dog and I had a good walk today"/>
             android:layout_below="@+id/userName"
             android:layout_marginTop="25dp"
-            android:textColor="@color/gray"
             android:textStyle="italic" />
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true">
-
-            <TextView
+          
+          <TextView
                 android:id="@+id/description"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -81,8 +100,18 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceButton"
-                android:textColor="@android:color/black"
+                android:text="-Feeling "
+                android:textAppearance="?android:attr/textAppearanceButton"
                 android:textStyle="bold|italic" />
+          
+            <TextView
+                android:id="@+id/emotion"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Happy"
+                android:textAppearance="?android:attr/textAppearanceButton"
+                android:textStyle="bold|italic" />
+          
             <ImageView
                 android:id="@+id/emojiImage"
                 android:adjustViewBounds="true"
@@ -93,6 +122,7 @@
                 android:layout_marginStart="15sp"
                 android:scaleType="fitCenter" />
         </LinearLayout>
+
         <ImageView
             android:id="@+id/image"
             android:layout_width="match_parent"

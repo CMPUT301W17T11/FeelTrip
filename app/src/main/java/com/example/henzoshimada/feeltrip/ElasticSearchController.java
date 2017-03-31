@@ -53,11 +53,17 @@ public class ElasticSearchController {
             "{ \"user\" : { \"properties\" : { \"password\" : {\"type\" : \"string\", \"index\" : \"not_analyzed\"} } } }"
     ).refresh(true).build();
 
-    static PutMapping moodMapping = new PutMapping.Builder(
+    static PutMapping moodLocationMapping = new PutMapping.Builder(
             groupIndex,
             typeMood,
             "{ \"mood\" : { \"properties\" : { \"location\" : {\"type\" : \"geo_point\"} } } }"
             ).refresh(true).build();
+
+    static PutMapping moodUsernameMapping = new PutMapping.Builder(
+            groupIndex,
+            typeUser,
+            "{ \"mood\" : { \"properties\" : { \"username\" : {\"type\" : \"string\", \"index\" : \"not_analyzed\"} } } }"
+    ).refresh(true).build();
 
 
     public static void loadFromElasticSearch(){
@@ -98,7 +104,8 @@ public class ElasticSearchController {
 
                     try {
                         // where is the client?
-                        client.execute(moodMapping); // Sets type of location to be "geo_point" on elasticsearch
+                        client.execute(moodUsernameMapping); // Sets username to be a non_indexed string on elasticsearch
+                        client.execute(moodLocationMapping); // Sets type of location to be "geo_point" on elasticsearch
                         DocumentResult result = client.execute(index);
                         if (result.isSucceeded()) {
                             mood.setId(result.getId());
@@ -122,7 +129,7 @@ public class ElasticSearchController {
         }
     }
 
-    public static class EditMoodTask extends AsyncTask<Mood, Void, Boolean>{
+    public static class EditMoodTask extends AsyncTask<Mood, Void, Boolean>{ //TODO: Take concurrency into account
 
         @Override
         protected Boolean doInBackground(Mood ... moods ) {

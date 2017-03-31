@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TableRow xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/theme_seekBar_text"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content" >
+
+    <TextView
+        android:id="@+id/themeTextLight"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="left"
+        android:paddingLeft="85dp"
+        android:text="LIGHT"
+        android:textStyle="bold|italic"
+        android:textColor="@android:color/white"/>
+
+    <TextView
+        android:id="@+id/themeTextDark"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="right"
+        android:paddingRight="85dp"
+        android:text="DARK"
+        android:textStyle="bold|italic"
+        android:textColor="@android:color/white"/>
+
+</TableRow>

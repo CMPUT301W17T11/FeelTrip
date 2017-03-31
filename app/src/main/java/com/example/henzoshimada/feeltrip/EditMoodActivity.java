@@ -1,5 +1,4 @@
 package com.example.henzoshimada.feeltrip;
-// removed unused imports, may slow down build
 
 import android.*;
 import android.app.Activity;
@@ -9,6 +8,7 @@ import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -25,10 +25,10 @@ import android.os.Bundle;
 import android.text.Html;
 import android.util.Base64;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewParent;
 import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -41,7 +41,6 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.gson.Gson;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -150,10 +149,48 @@ public class EditMoodActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
+//        setTheme(R.style.NaughtyPenguins); //TODO - theme
+//        setTheme(R.style.DefaultTheme);
+        setTheme(FeelTripApplication.getThemeID());
+
         setContentView(R.layout.add_edit_page);
         EditMoodActivity.context = getApplicationContext();
+
+
         inputMoodDescription = (EditText) findViewById(R.id.moodEventDescription);
         modeLocationText = (TextView) findViewById(R.id.modeLocation);
+
+
+        if(FeelTripApplication.getThemeID() == R.style.CustomTheme_Light || FeelTripApplication.getThemeID() == R.style.CustomTheme_Dark) {
+            inputMoodDescription.setHintTextColor(FeelTripApplication.getTEXTCOLORTERTIARY());
+
+            TextView feelingTextView = (TextView) findViewById(R.id.feelingTextView);
+            feelingTextView.setTextColor(FeelTripApplication.getTEXTCOLORSECONDARY());
+            TextView locationTextView = (TextView) findViewById(R.id.locationTextView);
+            locationTextView.setTextColor(FeelTripApplication.getTEXTCOLORSECONDARY());
+            TextView modeTextView = (TextView) findViewById(R.id.modeTextView);
+            modeTextView.setTextColor(FeelTripApplication.getTEXTCOLORSECONDARY());
+            TextView photoAttachedTextView = (TextView) findViewById(R.id.photoAttachedTextView);
+            photoAttachedTextView.setTextColor(FeelTripApplication.getTEXTCOLORSECONDARY());
+
+            int[][] navstates = new int[][] {
+                    new int[] { android.R.attr.state_checked},  // checked
+                    new int[] {-android.R.attr.state_checked}  // unchecked
+            };
+
+            int[] navcolors = new int[] {
+                    FeelTripApplication.getCOLORPRIMARY(),
+                    FeelTripApplication.getTEXTCOLORSECONDARY()
+            };
+            ColorStateList navList = new ColorStateList(navstates, navcolors);
+            android.support.design.widget.BottomNavigationView bottomNavigationView = (android.support.design.widget.BottomNavigationView) findViewById(R.id.options_post);
+            bottomNavigationView.setItemIconTintList(navList);
+            bottomNavigationView.setItemTextColor(navList);
+        }
+
+
         activity = this;
         context = this;
         showPublicOn = false;
@@ -162,9 +199,6 @@ public class EditMoodActivity extends AppCompatActivity {
         verifyLocationPermissions(this);
         editmood = null;
         encodedPhoto = null;
-//        socialSit = null;
-//        emotionalState = null;
-//        dateTime = null;
 
         Integer posEditMood;
         Bundle extras = getIntent().getExtras();
@@ -298,9 +332,8 @@ public class EditMoodActivity extends AppCompatActivity {
     }
 
     public void datePick(Context context) {
-        //selectDate();
         Log.d("Mytag", "Went into date");
-        new DatePickerDialog(context,AlertDialog.THEME_DEVICE_DEFAULT_LIGHT,datePickerDialogListener, dateTime.get(Calendar.YEAR),
+        new DatePickerDialog(context,datePickerDialogListener, dateTime.get(Calendar.YEAR),
                 dateTime.get(Calendar.MONTH), dateTime.get(Calendar.DAY_OF_MONTH)).show();
     }
 
@@ -405,15 +438,6 @@ public class EditMoodActivity extends AppCompatActivity {
     public static Context getAppContext() {
         return EditMoodActivity.context;
     }
-/*
-    private Mood submitMood(){
-    //create mood obj
-    //create elastic search.addmoodtask
-    //addmoodtask.execute(mood)
-    //handle queue if offline
-
-    }
-*/
 
     private void takeAPhoto() {
         //Taken: http://stackoverflow.com/questions/29576098/get-path-of-dcim-folder-on-both-primary-and-secondary-storage
@@ -442,7 +466,6 @@ public class EditMoodActivity extends AppCompatActivity {
             return photoStream.toByteArray();
         }
 
-        //
         while (true) {
             photo.compress(Bitmap.CompressFormat.JPEG, quality, photoStream);
             byte[] compressedPhoto = photoStream.toByteArray();
@@ -567,6 +590,7 @@ public class EditMoodActivity extends AppCompatActivity {
         ArrayAdapter<String> socialSituationAdapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_spinner_item, socialSituationList);
         socialSituationAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
         socialSituationSpinner.setAdapter(socialSituationAdapter);
     }
 
@@ -700,7 +724,7 @@ public class EditMoodActivity extends AppCompatActivity {
             emojiButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    View layout = ((LinearLayout)v.getParent()); // Cast to a View from  ViewParent, since ViewParents don't allow us to use getTag()
+                    View layout = ((LinearLayout)v.getParent()); // Cast to a View from a ViewParent, since ViewParents don't allow us to use getTag()
                     int selected = (int) layout.getTag();
                     selectEmotion(selected);
                 }
@@ -714,8 +738,14 @@ public class EditMoodActivity extends AppCompatActivity {
             emojiTextview.setText(FeelTripApplication.getEmotionalState(emotionID));
 
             emojiTextview.setTextSize(15);
-            emojiTextview.setTextColor(Color.GRAY);
             emojiTextview.setGravity(Gravity.CENTER);
+            if(FeelTripApplication.getThemeID() == R.style.CustomTheme_Light || FeelTripApplication.getThemeID() == R.style.CustomTheme_Dark) {
+                emojiTextview.setTextColor(FeelTripApplication.getTEXTCOLORSECONDARY());
+            } else {
+                TypedValue tv = new TypedValue();
+                getTheme().resolveAttribute(android.R.attr.textColorSecondary, tv, true);
+                emojiTextview.setTextColor(getResources().getColor(tv.resourceId)); //TODO: Depreciated. Next call up is API 23
+            }
             emojiTextview.setTypeface(emojiTextview.getTypeface(), Typeface.BOLD);
             emojiLayout.addView(emojiTextview);
 
