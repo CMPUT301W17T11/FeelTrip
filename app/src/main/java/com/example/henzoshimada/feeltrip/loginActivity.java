@@ -21,6 +21,12 @@ public class loginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        // load local queue into updateQueue
+        UpdateQueueController updateQueueController = FeelTripApplication.getUpdateQueueController();
+        updateQueueController.setContext(this);
+        updateQueueController.loadFromFile();
+
+
         // set up a NetworkStateListener
         // This listener remains valid during the lifetime of this activity
         NetworkStateListener networkStateListener = new NetworkStateListener();
@@ -109,6 +115,7 @@ public class loginActivity extends AppCompatActivity {
         }
 
         Participant participant = FeelTripApplication.getParticipant();
+        participant.clearFollowing();
         participant.setUserName(participants.get(0).getUserName());
         participant.setPassword(participants.get(0).getPassword());
         participant.setId(participants.get(0).getId());
@@ -117,8 +124,13 @@ public class loginActivity extends AppCompatActivity {
 
         // extra work need to be done when other user accepted participant's request
         ElasticSearchController.DeleteRequestTask deleteRequestTask = new ElasticSearchController.DeleteRequestTask();
+        ElasticSearchController.EditParticipantTask editParticipantTask = new ElasticSearchController.EditParticipantTask("following");
         for (FollowRequest request : acceptedRequests){
+            // add to following list
             participant.addFollowing(request.getReceiver());
+            // update following list change to server
+            editParticipantTask.execute(participant);
+            // then delete this request
             deleteRequestTask.execute(request);
         }
     }

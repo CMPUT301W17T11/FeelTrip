@@ -61,6 +61,7 @@ public class homeFragmment extends Fragment{
 
         oldMoodListView = (ListView) view.findViewById(R.id.homeList);
 
+        //i think this is useless lol
         //http://stackoverflow.com/questions/20922036/android-cant-call-setonitemclicklistener-from-a-listview
         //2017-02-02
         //when click an item in list

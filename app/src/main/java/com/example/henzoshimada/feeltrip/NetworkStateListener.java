@@ -21,35 +21,15 @@ public class NetworkStateListener extends BroadcastReceiver{
     {
         //final PendingResult result = goAsync();
 
-        Log.d("debug", "entered");
         ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService( Context.CONNECTIVITY_SERVICE );
         NetworkInfo activeNetInfo = connectivityManager.getActiveNetworkInfo();
 
         if ( activeNetInfo != null )
         {
             if (activeNetInfo.isConnected()){
-                /*
-                Thread thread = new Thread(){
-                  @Override
-                  public void run(){
-                      UpdateQueueController updateQueueController = FeelTripApplication.getUpdateQueueController();
-                      updateQueueController.runUpdate();
-                  }
-
-                };
-                thread.start();
-                UpdateQueueController updateQueueController = FeelTripApplication.getUpdateQueueController();
-                result.setResultCode(RESULT_OK);
-                Log.d("debug", "finished");
-                Log.d("debug size is", ""+updateQueueController.getSize());
-                result.finish();
-                */
-
-
+                // start a service to update local mood event changes
                 Intent serviceIntent = new Intent(context, UpdateService.class);
                 context.startService(serviceIntent);
-
-
             }
         }
 

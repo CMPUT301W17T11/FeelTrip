@@ -4,9 +4,19 @@ import android.content.Context;
 import android.graphics.Rect;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.view.MenuItemCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.SearchView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
@@ -16,6 +26,7 @@ import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ListView;
 import android.widget.Spinner;
 import android.app.Fragment;
 import android.app.FragmentManager;
@@ -25,17 +36,14 @@ import android.widget.ToggleButton;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 import layout.homeFragmment;
 import layout.mapFragment;
 import layout.profileFragment;
 
 // This is the main screen: This is what the Participant first sees
-public class MainScreen extends AppCompatActivity {
-    private Context context;
-    private Spinner filterSpinner;
-    private String emotionalState;
-    private String socialSit;
+public class MainScreen extends AppCompatActivity{
     private Spinner emotionalStateSpinner;
 
     // The following are constants for emotion based emoji
@@ -48,6 +56,25 @@ public class MainScreen extends AppCompatActivity {
     public static final int shameful = 0x1F61E;
     public static final int cool = 0x1F60E;
     public static final int somethingwentwrong = 0x1F31A;
+    private ListView userFoundView;  //who participant searched
+    private ListView followingView; //who participant is following
+    private ListView requestView;   //who participant wants to follow
+    private EditText inputTextView;
+    private TextView notFoundTextView;
+
+    //use custom adapter
+    private ArrayList<String> usersFoundArray = FeelTripApplication.getUsersFoundArray();
+    private ArrayList<String> followingArray = new ArrayList<String>(); //todo use default adapter
+    private ArrayList<FollowRequest> requestsArray; //use custom adabter
+
+    private RequestAdapter requestAdapter;
+    private ArrayAdapter<String> follwingAdapter;
+    private UserFoundAdapter userFoundAdapter;
+
+    private Participant participant;
+
+    private DrawerLayout mDrawerLayout;
+    private ActionBarDrawerToggle mDrawerToggle;
 
     public int emojiUnicode(String emotion) {
         switch(emotion) {
@@ -135,20 +162,24 @@ public class MainScreen extends AppCompatActivity {
 //            finish();
 //            startActivity(i);
             //onPause(); // Refreshes the current activity without calling onCreate
+
             onResume();
             return true;
         }
 
     };
 
+
     private void setFirstItemNavigationView() {
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.getMenu().getItem(1).setChecked(true);
         navigation.getMenu().performIdentifierAction(R.id.navigation_home, 0);
     }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        participant = FeelTripApplication.getParticipant();
         setContentView(R.layout.activity_main);
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
@@ -208,13 +239,109 @@ public class MainScreen extends AppCompatActivity {
             }
         });
 
+        ImageButton searchUserButton = (ImageButton) findViewById(R.id.user_search_button);
+        searchUserButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                searchUser(v);
+            }
+        });
 
+        inputTextView = (EditText) findViewById(R.id.user_search);
+        userFoundView = (ListView) findViewById(R.id.found_user);
+        followingView = (ListView) findViewById(R.id.follow_list);
+        requestView = (ListView) findViewById(R.id.request_list);
+        notFoundTextView = (TextView) findViewById(R.id.not_found_text);
+
+
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.drawer_open, R.string.drawer_close) {
+            @Override
+            public void onDrawerOpened(View drawerView) {
+                super.onDrawerOpened(drawerView);
+                usersFoundArray.clear();
+                userFoundAdapter.notifyDataSetChanged();
+
+                followingArray.clear();
+                follwingAdapter.notifyDataSetChanged();
+                //load stuff here
+                notFoundTextView.setVisibility(View.GONE);
+                loadRequestsArray();
+                loadFollowingsArray();
+
+                invalidateOptionsMenu();
+            }
+
+            @Override
+            public void onDrawerClosed(View drawerView) {
+                super.onDrawerClosed(drawerView);
+                inputTextView.setText("");
+                usersFoundArray.clear();
+                userFoundAdapter.notifyDataSetChanged();
+
+                followingArray.clear();
+                follwingAdapter.notifyDataSetChanged();
+
+                notFoundTextView.setVisibility(View.GONE);
+                invalidateOptionsMenu();
+            }
+        };
+
+        mDrawerLayout.addDrawerListener(mDrawerToggle);
+
+        //requestAdapter = new RequestAdapter(requestsArray, this); //view,dataArray
+        requestAdapter = FeelTripApplication.getRequestAdapter(this);
+        requestView.setAdapter(requestAdapter);
+
+        follwingAdapter = new ArrayAdapter<>(this, R.layout.username_list_item, followingArray); //view,dataArray
+        followingView.setAdapter(follwingAdapter);
+
+        userFoundAdapter = FeelTripApplication.getUserFoundAdapter(this);
+        userFoundView.setAdapter(userFoundAdapter);
+
+        //loadRequestsArray();
+        //loadFollowingsArray();
+    }
+
+    private void searchUser(View view){
+        String inputText = inputTextView.getText().toString();
+        usersFoundArray.clear();
+
+        // search for participants that matches keyword
+        ElasticSearchController.GetParticipantTask getParticipantTask = new ElasticSearchController.GetParticipantTask(true, inputText);
+        getParticipantTask.execute();
+
+
+        // add userNames to userFoundArray
+        try {
+            ArrayList<Participant> participants = new ArrayList<>();
+            participants.addAll(getParticipantTask.get());
+
+            for (Participant foundUser : participants){
+                // add foundUser to list except:
+                // already followed this user
+                // found user is self
+                if (!participant.getFollowing().contains(foundUser.getUserName()) &&
+                        !foundUser.getUserName().equals(participant.getUserName())){
+                    usersFoundArray.add(foundUser.getUserName());
+                }
+            }
+            if (usersFoundArray.size() == 0){
+                notFoundTextView.setVisibility(View.VISIBLE);
+            }
+        } catch (InterruptedException e) {
+            return;
+        } catch (ExecutionException e) {
+            return;
+        }
+        userFoundAdapter.notifyDataSetChanged();
+
+        Log.d("searchUser","search user click");
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-
         ToggleButton toggleFriends = (ToggleButton) findViewById(R.id.toggleFriends);
         TextView textView = (TextView) findViewById(R.id.textView5);
         if(FeelTripApplication.getFrag().equals("profile")) {
@@ -227,6 +354,56 @@ public class MainScreen extends AppCompatActivity {
 
         ElasticSearchController.loadFromElasticSearch();
         FeelTripApplication.getMoodAdapter(getBaseContext()).notifyDataSetChanged();
+
+
+    }
+
+
+    private void loadRequestsArray(){//sender
+        requestsArray = FeelTripApplication.getRequestsArray();
+        requestsArray.clear();
+
+        ElasticSearchController.GetRequestTask getRequestTask = new ElasticSearchController.GetRequestTask(false);
+        getRequestTask.execute(FeelTripApplication.getParticipant().getUserName());
+
+        try {
+            requestsArray.addAll(getRequestTask.get());
+        } catch (InterruptedException e) {
+            return;
+        } catch (ExecutionException e) {
+            return;
+        }
+
+        requestAdapter.notifyDataSetChanged();
+    }
+
+    private void loadFollowingsArray(){//receiver
+        followingArray.clear();
+
+        // extra work need to be done when other user accepted participant's request
+        ElasticSearchController.GetRequestTask getAcceptedRequest = new ElasticSearchController.GetRequestTask(true);
+        ElasticSearchController.DeleteRequestTask deleteRequestTask = new ElasticSearchController.DeleteRequestTask();
+        ElasticSearchController.EditParticipantTask editParticipantTask = new ElasticSearchController.EditParticipantTask("following");
+
+        getAcceptedRequest.execute(participant.getUserName());
+        ArrayList<FollowRequest> acceptedRequests = new ArrayList<>();
+        try {
+            acceptedRequests.addAll(getAcceptedRequest.get());
+        } catch (InterruptedException e) {
+            return;
+        } catch (ExecutionException e) {
+            return;
+        }
+        for (FollowRequest request : acceptedRequests){
+            // add to following list
+            participant.addFollowing(request.getReceiver());
+            // update following list change to server
+            editParticipantTask.execute(participant);
+            // then delete this request
+            deleteRequestTask.execute(request);
+        }
+        followingArray.addAll(participant.getFollowing());
+        follwingAdapter.notifyDataSetChanged();
     }
 
     public String getEmojiByUnicode(int unicode){

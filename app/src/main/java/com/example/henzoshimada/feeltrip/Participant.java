@@ -1,5 +1,7 @@
 package com.example.henzoshimada.feeltrip;
 
+import android.util.Log;
+
 import java.util.ArrayList;
 
 import io.searchbox.annotations.JestId;
@@ -54,6 +56,10 @@ public class Participant {
 
     public void addAllFollowing(ArrayList<String> following){
         this.following.addAll(following);
+    }
+
+    public void clearFollowing(){
+        this.following.clear();
     }
 
     public void addFollowing(String userName){

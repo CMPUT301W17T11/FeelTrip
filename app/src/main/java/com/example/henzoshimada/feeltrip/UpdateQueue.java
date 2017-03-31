@@ -1,6 +1,7 @@
 package com.example.henzoshimada.feeltrip;
 
 import java.util.ArrayDeque;
+import java.util.ArrayList;
 
 /**
  * Created by Esus2 on 2017-03-09.
@@ -53,5 +54,12 @@ public class UpdateQueue {
      */
     public Boolean isEmpty(){
         return queue.isEmpty();
+    }
+
+    public ArrayList<Mood> toArray(){
+        ArrayList<Mood> moods = new ArrayList<>();
+        moods.addAll(queue);
+
+        return moods;
     }
 }
