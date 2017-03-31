@@ -10,16 +10,21 @@
         android:id="@+id/private_toggle"
         android:icon="@mipmap/privateimage"
         android:title="Private toggle" />
-
+<!--
     <item
         android:id="@+id/check_bottom_button"
         android:icon="@mipmap/doneimage"
         android:title="Submit" />
-
+-->
     <item
         android:id="@+id/date_bottom_button"
         android:icon="@mipmap/dateimage"
         android:title="Date" />
+    <item
+        android:id="@+id/time_bottom_button"
+        android:icon="@mipmap/ic_timer"
+        android:title="Time" />
+
     <item
         android:id="@+id/photo_bottom_button"
         android:icon="@mipmap/cameraimage"

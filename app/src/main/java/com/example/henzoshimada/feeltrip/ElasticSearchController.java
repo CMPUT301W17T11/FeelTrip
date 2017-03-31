@@ -22,7 +22,6 @@ import java.util.concurrent.ExecutionException;
 
 import io.searchbox.core.Delete;
 import io.searchbox.core.DocumentResult;
-import io.searchbox.core.Get;
 import io.searchbox.core.Index;
 import io.searchbox.core.Search;
 import io.searchbox.core.SearchResult;
@@ -54,11 +53,17 @@ public class ElasticSearchController {
             "{ \"user\" : { \"properties\" : { \"password\" : {\"type\" : \"string\", \"index\" : \"not_analyzed\"} } } }"
     ).refresh(true).build();
 
-    static PutMapping moodMapping = new PutMapping.Builder(
+    static PutMapping moodLocationMapping = new PutMapping.Builder(
             groupIndex,
             typeMood,
             "{ \"mood\" : { \"properties\" : { \"location\" : {\"type\" : \"geo_point\"} } } }"
             ).refresh(true).build();
+
+    static PutMapping moodUsernameMapping = new PutMapping.Builder(
+            groupIndex,
+            typeUser,
+            "{ \"mood\" : { \"properties\" : { \"username\" : {\"type\" : \"string\", \"index\" : \"not_analyzed\"} } } }"
+    ).refresh(true).build();
 
 
     public static void loadFromElasticSearch(){
@@ -99,7 +104,8 @@ public class ElasticSearchController {
 
                     try {
                         // where is the client?
-                        client.execute(moodMapping); // Sets type of location to be "geo_point" on elasticsearch
+                        client.execute(moodUsernameMapping); // Sets username to be a non_indexed string on elasticsearch
+                        client.execute(moodLocationMapping); // Sets type of location to be "geo_point" on elasticsearch
                         DocumentResult result = client.execute(index);
                         if (result.isSucceeded()) {
                             mood.setId(result.getId());
@@ -123,7 +129,7 @@ public class ElasticSearchController {
         }
     }
 
-    public static class EditMoodTask extends AsyncTask<Mood, Void, Boolean>{
+    public static class EditMoodTask extends AsyncTask<Mood, Void, Boolean>{ //TODO: Take concurrency into account
 
         @Override
         protected Boolean doInBackground(Mood ... moods ) {
@@ -379,12 +385,19 @@ public class ElasticSearchController {
 
     public static class GetParticipantTask extends AsyncTask<String, Void, ArrayList<Participant>> {
 
-        private String username;
-        private String password;
+        private String username = null;
+        private String password = null;
+
+        private boolean searchParticipant = false;
 
         public GetParticipantTask(String username, String password) { // must specify username and password upon creation of the controller
             this.username = username;
             this.password = password;
+        }
+
+        public GetParticipantTask(boolean searchParticipant, String username){
+            this.searchParticipant = searchParticipant;
+            this.username = username;
         }
 
         @Override
@@ -395,13 +408,26 @@ public class ElasticSearchController {
 
             ArrayList<Participant> participants = new ArrayList<>();
             String query; // elasticsearch bool queries are amazing in every way
-            query = "{" +
-                    "\"query\" : {" +
-                    "\"bool\" : {" +
-                    "\"must\" : [" +
-                    "{ \"term\": { \"userName\": \"" + username + "\" }}," +
-                    "{ \"term\": { \"password\": \"" + password + "\" }}" +
-                    "]}}}";
+
+            if (searchParticipant){
+                query = "{" +
+                        "\"query\" : {" +
+                        "\"match\" : {" +
+                        "\"userName\" : \"" + username + "\"" +
+                        "}}}";
+            }
+            else {
+                if (password == null){
+                    return null;
+                }
+                query = "{" +
+                        "\"query\" : {" +
+                        "\"bool\" : {" +
+                        "\"must\" : [" +
+                        "{ \"term\": { \"userName\": \"" + username + "\" }}," +
+                        "{ \"term\": { \"password\": \"" + password + "\" }}" +
+                        "]}}}";
+            }
 
             Log.d("query", query);
 
@@ -429,6 +455,11 @@ public class ElasticSearchController {
     }
 
     public static class EditParticipantTask extends AsyncTask<Participant, Void, Void>{
+        private String fieldToEdit;
+
+        public EditParticipantTask(String fieldToEdit){
+            this.fieldToEdit = fieldToEdit;
+        }
 
         @Override
         protected Void doInBackground(Participant...participants){
@@ -438,11 +469,25 @@ public class ElasticSearchController {
 
             for (Participant participant : participants){
 
-                String following = new Gson().toJson(participant.getFollowing());
-                String query = "{\"doc\" : {"+
-                        "\"following\" : " + following +
-                        "}}";
+                String query;
 
+                if (fieldToEdit.equals("following")) {
+                    String following = new Gson().toJson(participant.getFollowing());
+                    query = "{\"doc\" : {" +
+                            "\"following\" : " + following +
+                            "}}";
+
+                }
+                else if (fieldToEdit.equals("geoLocation")){
+
+                    query = "{\"doc\" : {" +
+                            "\"longitude\" : \"" + participant.getLongitude() + "\" ," +
+                            "\"latitude\" : \"" + participant.getLatitude() + "\"" +
+                            "}}";
+                }
+                else{
+                    return null;
+                }
 
                 Log.d("query is :", query);
 
@@ -513,19 +558,35 @@ public class ElasticSearchController {
             if (checkAccept){
                 query = "{" +
                         "\"query\" : {" +
-                        "\"match\" : {" +
-                        "\"sender\" :\"" + username[0] + "\" , " +
-                        "\"accepted\" : \"true\" }" +
-                        " }}";
+                        "\"bool\" : {" +
+                        "\"must\" : [" +
+                        "{ \"match\": { \"sender\": \"" + username[0] + "\" }}," +
+                        "{ \"term\": { \"accepted\": \"true\" }}" +
+                        "]}}}";
             }
             else {
-                query = "{" +
-                        "\"query\" : {" +
-                        "\"match\" : {" +
-                        "\"receiver\" :\"" + username[0] + "\"}" +
-                        " }}";
+                if (username.length == 1) {
+                    query = "{" +
+                            "\"query\" : {" +
+                            "\"bool\" : {" +
+                            "\"must\" : [" +
+                            "{ \"match\": { \"receiver\": \"" + username[0] + "\" }}," +
+                            "{ \"term\": { \"accepted\": \"false\" }}" +
+                            "]}}}";
+                }
+                else {
+                    query = "{" +
+                            "\"query\" : {" +
+                            "\"bool\" : {" +
+                            "\"must\" : [" +
+                            "{ \"term\": { \"sender\": \"" + username[0] + "\" }}," +
+                            "{ \"term\": { \"receiver\": \"" + username[1] + "\" }}," +
+                            "{ \"term\": { \"accepted\": \"false\" }}" +
+                            "]}}}";
+                }
             }
 
+            Log.d("query", query);
             Search search = new Search.Builder(query)
                     .addIndex(groupIndex)
                     .addType(typeRequest)
@@ -539,7 +600,7 @@ public class ElasticSearchController {
                     followRequests.addAll(foundRequests);
                 }
                 else {
-                    Log.i("Error", "the search query failed to find any moods that matched");
+                    Log.i("Error", "the search query failed to find any request that matched");
                 }
             }
             catch (Exception e) {

@@ -7,7 +7,15 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
     tools:openDrawer="start">
-
+    <include
+        layout="@layout/content_main"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+    <FrameLayout
+        android:id="@+id/content_frame"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+<!--
     <android.support.design.widget.NavigationView
         android:id="@+id/nav_view"
         android:layout_width="wrap_content"
@@ -16,10 +24,82 @@
         android:fitsSystemWindows="true"
         app:headerLayout="@layout/nav_header_main"
         app:menu="@menu/activity_main_drawer" />
+-->
+    <LinearLayout
+        android:id="@+id/left_drawer"
+        android:layout_height="wrap_content"
+        android:layout_width="240dp"
+        android:orientation="vertical"
+        android:layout_gravity="start">
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
 
-    <include
-        layout="@layout/content_main"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+            <EditText
+                android:id="@+id/user_search"
+                android:layout_width="190dp"
+                android:layout_height="50dp"
+                android:hint="Search"
+                android:background="#FFF">
+            </EditText>
+                android:background="#FFF"
+                android:hint="Search"
+                android:inputType="text"
+                android:maxLines="1"/>
+            <ImageButton
+                android:id="@+id/user_search_button"
+                android:layout_width="52dp"
+                android:layout_height="match_parent"
+                android:background="#FFF"
+                app:srcCompat="@android:drawable/ic_menu_search" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/not_found_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="  No matched results"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textColor="@android:color/black"
+            android:background="#FFF"
+            android:visibility="gone"/>
+
+        <ListView
+            android:id="@+id/found_user"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#FFF"
+            android:choiceMode="singleChoice"
+            android:divider="@android:color/transparent"
+            android:dividerHeight="0dp" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Following:"
+            android:background="#FFF"/>
+        <ListView android:id="@+id/follow_list"
+            android:layout_width="match_parent"
+            android:layout_height="250dp"
+            android:choiceMode="singleChoice"
+            android:divider="@android:color/transparent"
+            android:dividerHeight="0dp"
+            android:background="#FFF"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Follower Requests:"
+            android:background="#FFF"/>
+        <ListView android:id="@+id/request_list"
+            android:layout_width="match_parent"
+            android:layout_height="250dp"
+            android:choiceMode="singleChoice"
+            android:divider="@android:color/transparent"
+            android:dividerHeight="0dp"
+            android:background="#FFF"/>
+
+    </LinearLayout>
+
+
 
 </android.support.v4.widget.DrawerLayout>
