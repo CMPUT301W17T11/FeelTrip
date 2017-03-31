@@ -3,7 +3,6 @@ package layout;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.util.Log;
@@ -11,27 +10,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.FrameLayout;
-import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.Toast;
 
-import com.daimajia.swipe.SwipeLayout;
 import com.example.henzoshimada.feeltrip.EditMoodActivity;
-import com.example.henzoshimada.feeltrip.ElasticSearchController;
 import com.example.henzoshimada.feeltrip.FeelTripApplication;
 import com.example.henzoshimada.feeltrip.ListViewAdapter;
 import com.example.henzoshimada.feeltrip.Mood;
-import com.example.henzoshimada.feeltrip.MoodAdapter;
 import com.example.henzoshimada.feeltrip.R;
-import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
-import java.util.concurrent.ExecutionException;
 
 
 public class profileFragment extends Fragment {

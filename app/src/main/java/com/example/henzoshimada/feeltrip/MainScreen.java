@@ -214,7 +214,7 @@ public class MainScreen extends AppCompatActivity{
                 //Toast.makeText(getApplicationContext(),"Toggled filter for recent posts!",Toast.LENGTH_SHORT).show();
                 FeelTripApplication.getFilterController().setPastweekfilter(isChecked);
                 ElasticSearchController.loadFromElasticSearch();
-                FeelTripApplication.getMoodAdapter(getBaseContext()).notifyDataSetChanged();
+                FeelTripApplication.getListViewAdapter(getBaseContext()).notifyDataSetChanged();
                 if (FeelTripApplication.getFrag().equals("map")) {
                     updateMap();
                 }
@@ -229,7 +229,7 @@ public class MainScreen extends AppCompatActivity{
                 //Toast.makeText(getApplicationContext(),"Toggled filter for friends!",Toast.LENGTH_SHORT).show();
                 FeelTripApplication.getFilterController().setFriendsonlyfilter(isChecked);
                 ElasticSearchController.loadFromElasticSearch();
-                FeelTripApplication.getMoodAdapter(getBaseContext()).notifyDataSetChanged();
+                FeelTripApplication.getListViewAdapter(getBaseContext()).notifyDataSetChanged();
                 if (FeelTripApplication.getFrag().equals("map")) {
                     updateMap();
                 }
@@ -244,7 +244,7 @@ public class MainScreen extends AppCompatActivity{
                 //Toast.makeText(getApplicationContext(),"Toggled filter for friends!",Toast.LENGTH_SHORT).show();
                 FeelTripApplication.getFilterController().setMostrecentfilter(isChecked);
                 ElasticSearchController.loadFromElasticSearch();
-                FeelTripApplication.getMoodAdapter(getBaseContext()).notifyDataSetChanged();
+                FeelTripApplication.getListViewAdapter(getBaseContext()).notifyDataSetChanged();
                 if (FeelTripApplication.getFrag().equals("map")) {
                     updateMap();
                 }
@@ -416,7 +416,7 @@ public class MainScreen extends AppCompatActivity{
         EditText string_keyword = (EditText) findViewById(R.id.keyword);
         FilterController.setKeywordfilter(string_keyword.getText().toString()); // Always take into account what's written in the "Keyword search" field. This eliminates confusion when words are typed but "Search" isn't explicitly tapped
         ElasticSearchController.loadFromElasticSearch();
-        FeelTripApplication.getMoodAdapter(getBaseContext()).notifyDataSetChanged();
+        FeelTripApplication.getListViewAdapter(getBaseContext()).notifyDataSetChanged();
 
 //        loadRequestsArray();
 //        loadFollowingsArray();
@@ -480,7 +480,7 @@ public class MainScreen extends AppCompatActivity{
         EditText string_keyword = (EditText) findViewById(R.id.keyword);
         FilterController.setKeywordfilter(string_keyword.getText().toString());
         ElasticSearchController.loadFromElasticSearch();
-        FeelTripApplication.getMoodAdapter(getBaseContext()).notifyDataSetChanged();
+        FeelTripApplication.getListViewAdapter(getBaseContext()).notifyDataSetChanged();
     }
 
 
@@ -516,7 +516,7 @@ public class MainScreen extends AppCompatActivity{
                     FilterController.setEmotionfilter("");
                 }
                 ElasticSearchController.loadFromElasticSearch();
-                FeelTripApplication.getMoodAdapter(getBaseContext()).notifyDataSetChanged();
+                FeelTripApplication.getListViewAdapter(getBaseContext()).notifyDataSetChanged();
 
             } // to close the onItemSelected
             public void onNothingSelected(AdapterView<?> parent)

@@ -158,14 +158,7 @@ public class FeelTripApplication extends Application {
         return filterController;
     }
 
-    private static  MoodAdapter moodAdapter = null;
     private static ArrayList<Mood> moodArrayList = new ArrayList<Mood>();
-    public static MoodAdapter getMoodAdapter(Context context) {
-        if (moodAdapter == null) {
-            moodAdapter = new MoodAdapter(moodArrayList, context.getApplicationContext());
-        }
-        return moodAdapter;
-    }
 
     public static ArrayList<Mood> getMoodArrayList() {
         if(moodArrayList == null) {
