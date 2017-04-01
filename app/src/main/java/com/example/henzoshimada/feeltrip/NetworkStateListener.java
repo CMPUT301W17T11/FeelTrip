@@ -13,6 +13,11 @@ import android.util.Log;
 
 public class NetworkStateListener extends BroadcastReceiver{
 
+    /*
+        code borrowed from http://stackoverflow.com/questions/1783117/network-listener-android
+        Name: Eric
+        Date: 2017-03-25
+     */
     @Override
     public void onReceive(Context context, Intent intent )
     {

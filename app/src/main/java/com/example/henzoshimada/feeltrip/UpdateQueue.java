@@ -56,6 +56,14 @@ public class UpdateQueue {
         return queue.isEmpty();
     }
 
+
+    /**
+     * To array array list.
+     * convert UpdateQueue object into an ArrayList object.
+     * Used for saving this queue to file.
+     *
+     * @return the array list
+     */
     public ArrayList<Mood> toArray(){
         ArrayList<Mood> moods = new ArrayList<>();
         moods.addAll(queue);

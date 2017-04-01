@@ -14,10 +14,10 @@ import java.util.concurrent.ExecutionException;
  */
 // Structure of code borrowed from FillerCreep. 2017-03-09
 
-    /*
-    this class implements a singleton of UpdateQueue and provides a global access point
-    to the queue.
-     */
+/*
+    this class implements a singleton of objects and create access points to all global
+    resources.
+*/
 public class FeelTripApplication extends Application {
 
     private static final List<String> allEmotions = Arrays.asList( // MODIFY THIS IF YOU WISH TO ADD/DELETE EMOTIONS
@@ -139,7 +139,6 @@ public class FeelTripApplication extends Application {
     public static void setNetworkAvailable(Boolean b){
         networkAvailable = b;
     }
-
     public static Boolean getNetworkAvailable(){
         if (networkAvailable == null){
             networkAvailable = Boolean.FALSE;
