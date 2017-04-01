@@ -235,14 +235,14 @@ public class MapsActivity extends FragmentActivity implements
 
     @Override
     public void onMarkerDrag(Marker arg0) {
-        // TODO Auto-generated method stub
-        //Log.d("info","onMarkerDrag");
+        // Auto-generated method stub
+        // Log.d("info","onMarkerDrag");
     }
 
     @Override
     public void onMarkerDragEnd(Marker arg0) {
         //Log.d("info","onMarkerDragEnd");
-        // TODO Auto-generated method stub
+        // Auto-generated method stub
         LatLng dragPosition = arg0.getPosition();
         latitude = dragPosition.latitude;
         longitude = dragPosition.longitude;

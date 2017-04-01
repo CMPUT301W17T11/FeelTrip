@@ -61,7 +61,7 @@ public class mapFragment extends Fragment implements
         GoogleMap.OnMapClickListener{
     // ActivityCompat.OnRequestPermissionsResultCallback{
 
-    MapView mMapView;
+    public MapView mMapView;
 
 
     /**

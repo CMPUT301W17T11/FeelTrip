@@ -34,8 +34,8 @@ public class RequestAdapter extends ArrayAdapter<FollowRequest> {
         ImageButton acceptButton;
     }
 
-    public RequestAdapter(ArrayList<FollowRequest> RequestArrayList, Context context) {
-        super(context, R.layout.request_list_item, RequestArrayList);
+    public RequestAdapter(ArrayList<FollowRequest> requestArrayList, Context context) {
+        super(context, R.layout.request_list_item, requestArrayList);
         //this.dataSet = moodArrayList;
         //this.mContext=context;
     }

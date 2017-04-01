@@ -36,8 +36,8 @@ public class UserFoundAdapter extends ArrayAdapter<String> {
 
     }
 
-    public UserFoundAdapter(ArrayList<String> RequestArrayList, Context context) {
-        super(context, R.layout.search_user_list_item, RequestArrayList);
+    public UserFoundAdapter(ArrayList<String> userFoundArrayList, Context context) {
+        super(context, R.layout.search_user_list_item, userFoundArrayList);
         //this.dataSet = moodArrayList;
         //this.mContext=context;
     }
