@@ -41,7 +41,7 @@ public class Mood {
 
     private Long made; //for storing when the mood event is first posted to elasticsearch
 
-    private static boolean delState; // 1 for delete, 0 for add
+    private boolean delState; // 1 for delete, 0 for add
     //TODO: Test deleting a mood from ES after popping from local queue
 
     private int emoji;
@@ -67,7 +67,7 @@ public class Mood {
     7 ----> emoji image
     */
 
-    private static boolean[] stateVector;
+    private boolean[] stateVector;
 
 
     public Mood() {
