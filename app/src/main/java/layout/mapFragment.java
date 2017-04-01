@@ -54,6 +54,10 @@ import java.util.concurrent.ExecutionException;
 
 
 //18 March 2017 http://stackoverflow.com/questions/19353255/how-to-put-google-maps-v2-on-a-fragment-using-viewpager
+
+/**
+ * Class for fragment showing the map
+ */
 public class mapFragment extends Fragment implements
         GoogleMap.OnMyLocationButtonClickListener,
         OnMapReadyCallback,
@@ -165,6 +169,15 @@ public class mapFragment extends Fragment implements
 
     }
 
+    /**
+     * Manipulates the map once available.
+     * This callback is triggered when the map is ready to be used.
+     * This is where we can add markers or lines, add listeners or move the camera. In this case,
+     * we just add a marker near Sydney, Australia.
+     * If Google Play services is not installed on the device, the user will be prompted to install
+     * it inside the SupportMapFragment. This method will only be triggered once the user has
+     * installed Google Play services and returned to the app.
+     */
     //called when map is ready
     @Override
     public void onMapReady(GoogleMap map) {
@@ -331,11 +344,14 @@ public class mapFragment extends Fragment implements
         }
     }
 
+    /**
+     * Gets array from Elastic search and place each mood as a marker on the map
+     */
     @RequiresApi(api = Build.VERSION_CODES.M)
     public void setMoodMarker(){
 
         //get array for setting marker, make sure participant location is set
-        testCreateMoodArray();
+        getMoodArray();
 
         Log.d("mapTag","set marker");
         if (mMap != null) {
@@ -379,7 +395,12 @@ public class mapFragment extends Fragment implements
 
     }
 
-    //https://developers.google.com/android/reference/com/google/android/gms/maps/GoogleMap.OnMyLocationButtonClickListener
+    /**
+     * Called when my location button is clicker
+     * store location in participant object
+     * @return
+     */
+    //31 March https://developers.google.com/android/reference/com/google/android/gms/maps/GoogleMap.OnMyLocationButtonClickListener
     //called when pressing  my location button
     @Override
     public boolean onMyLocationButtonClick() {
@@ -429,8 +450,12 @@ public class mapFragment extends Fragment implements
         return false;
     }
 
+    /**
+     * set location in FeelTripApplication and get array of moods within 5km radius
+     * Note: Must be called after participant location is set
+     */
     //must be called after participant location is set
-    private void testCreateMoodArray() {
+    private void getMoodArray() {
         //FeelTripApplication.loadFromElasticSearch(); THIS LINE ISN'T NEEDED DUE TO THE WAY WE CALL mapFragment
         try {
             FeelTripApplication.setLatitude(participant.getLatitude());
@@ -473,6 +498,10 @@ public class mapFragment extends Fragment implements
         mSelectedMarker = null;
     }
 
+    /**
+     * Check if ACCESS_FINE_LOCATION permission is granted, if not, ask for the permission
+     * @param activity
+     */
     public void verifyLocationPermissions(Activity activity) {
         Log.d("permTag", "in verify perm");
         // Check if we have location permission

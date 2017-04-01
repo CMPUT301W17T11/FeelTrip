@@ -73,11 +73,13 @@ public class MainScreen extends AppCompatActivity{
 
     //use custom adapter
     private ArrayList<String> usersFoundArray = FeelTripApplication.getUsersFoundArray();
-    private ArrayList<String> followingArray = new ArrayList<String>(); //todo use default adapter
+    //private ArrayList<String> followingArray = new ArrayList<String>(); //todo use default adapter
+    private ArrayList<String> followingArray = FeelTripApplication.getFollowingArray();
     private ArrayList<FollowRequest> requestsArray; //use custom adabter
 
     private RequestAdapter requestAdapter;
-    private ArrayAdapter<String> follwingAdapter;
+    //private ArrayAdapter<String> follwingAdapter;
+    private FollowingAdapter follwingAdapter;
     private UserFoundAdapter userFoundAdapter;
 
     private Participant participant = FeelTripApplication.getParticipant();;
@@ -150,6 +152,7 @@ public class MainScreen extends AppCompatActivity{
                 case R.id.navigation_profile:
                     Log.d("Mytag","Tapped on profile");
                     FeelTripApplication.setFrag("profile");
+                    Log.d("Mytag","main get "+FeelTripApplication.getFrag()+"--");
                     fragment = new profileFragment();
                     ft.replace(R.id.fragent_frame,fragment);
                     //ft.addToBackStack(null);
@@ -263,6 +266,7 @@ public class MainScreen extends AppCompatActivity{
         searchUserButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                notFoundTextView.setVisibility(View.GONE);
                 searchUser(v);
             }
         });
@@ -356,7 +360,8 @@ public class MainScreen extends AppCompatActivity{
         requestAdapter = FeelTripApplication.getRequestAdapter(this);
         requestView.setAdapter(requestAdapter);
 
-        follwingAdapter = new ArrayAdapter<>(this, R.layout.username_list_item, followingArray); //view,dataArray
+        //follwingAdapter = new ArrayAdapter<>(this, R.layout.username_list_item, followingArray); //view,dataArray
+        follwingAdapter = FeelTripApplication.getFollowingAdapter(this);
         followingView.setAdapter(follwingAdapter);
 
         userFoundAdapter = FeelTripApplication.getUserFoundAdapter(this);

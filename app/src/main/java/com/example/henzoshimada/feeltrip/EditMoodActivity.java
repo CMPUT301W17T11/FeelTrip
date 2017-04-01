@@ -331,12 +331,26 @@ public class EditMoodActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Called when user click the Pick Date option
+     * Uses DatePickerDiaLog
+     *
+     * @param context
+     * @see DatePickerDialog
+     */
     public void datePick(Context context) {
         Log.d("Mytag", "Went into date");
         new DatePickerDialog(context, datePickerDialogListener, dateTime.get(Calendar.YEAR), //TODO: Theme these properly
                 dateTime.get(Calendar.MONTH), dateTime.get(Calendar.DAY_OF_MONTH)).show();
     }
 
+    /**
+     * Called when user click the Pick Time option
+     * Uses TimePickerDialog
+     *
+     * @param context
+     * @see TimePickerDialog
+     */
     public void timePick(Context context) {
         //selectDate();
         Log.d("Mytag", "Went into date");
@@ -552,7 +566,7 @@ public class EditMoodActivity extends AppCompatActivity {
     }
 
 
-    //https://www.youtube.com/watch?v=8mFW6dA5xDE
+    //23 Feb 2017 https://www.youtube.com/watch?v=8mFW6dA5xDE
     DatePickerDialog.OnDateSetListener datePickerDialogListener = new DatePickerDialog.OnDateSetListener() {
         @Override
         public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
@@ -565,6 +579,7 @@ public class EditMoodActivity extends AppCompatActivity {
         }
     };
 
+    //23 Feb 2017 https://www.youtube.com/watch?v=8mFW6dA5xDE
     TimePickerDialog.OnTimeSetListener onTimeSetListener = new TimePickerDialog.OnTimeSetListener() {
         @Override
         public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
@@ -676,6 +691,10 @@ public class EditMoodActivity extends AppCompatActivity {
         Log.d("myTag", "location on is: " + String.valueOf(locationOn));
     }
 */
+    /**
+     * Check if ACCESS_FINE_LOCATION permission is granted, if not, ask for the permission
+     * @param activity
+     */
     public void verifyLocationPermissions(Activity activity) {
         // Check if we have location permission
         int permission = ActivityCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_FINE_LOCATION);
