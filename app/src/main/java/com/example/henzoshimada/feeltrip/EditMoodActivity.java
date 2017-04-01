@@ -6,6 +6,7 @@ import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
@@ -294,6 +295,29 @@ public class EditMoodActivity extends AppCompatActivity {
         });
 
     } //end of on create
+
+    @Override
+    public void onBackPressed() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        builder.setMessage("Returning will discard any working changes you may have made. Are you sure you wish to return?")
+                .setTitle("Discard Changes?");
+
+        builder.setPositiveButton("RETURN", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                EditMoodActivity.super.onBackPressed();
+            }
+        });
+        builder.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                // User cancelled the dialog
+            }
+        });
+        // Create the AlertDialog
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
 
     private int getIndex(Spinner spinner, String myString) {
         int index = 0;
