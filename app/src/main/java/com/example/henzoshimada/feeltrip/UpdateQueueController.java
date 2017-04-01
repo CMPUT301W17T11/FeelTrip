@@ -2,6 +2,7 @@ package com.example.henzoshimada.feeltrip;
 
 
 import android.content.Context;
+import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -44,6 +45,7 @@ public class UpdateQueueController {
      */
     public void addMood(Mood mood){
         updateQueue.enQueue(mood);
+        Log.d("debug", "delstate when enqueue: "+mood.getDelState());
         saveInFile();
     }
 
@@ -99,6 +101,7 @@ public class UpdateQueueController {
         }
         Mood mood;
 
+        Log.d("debug", "size is: "+getSize());
         /* does not get size dynamically because if internet goes off during update,
            moods will be re-enqueued to updateQueue and the loop never stops
          */
@@ -114,12 +117,16 @@ public class UpdateQueueController {
             else{
                 // this mood needs to be deleted
                 if (mood.getDelState()){
+                    Log.d("debug", "entered delete");
                     ElasticSearchController.DeleteMoodTask deleteMoodTask = new ElasticSearchController.DeleteMoodTask();
                     deleteMoodTask.execute(mood);
                 }
 
                 // this mood needs to be edited
                 else{
+                    //Log.d("debug", "entered edit");
+                    Log.d("debug", "mood changed"+mood.getStateByIndex(1));
+                    Log.d("debug", "mood changed"+mood.getDescription());
                     ElasticSearchController.EditMoodTask editMoodTask = new ElasticSearchController.EditMoodTask();
                     editMoodTask.execute(mood);
                 }
@@ -143,6 +150,9 @@ public class UpdateQueueController {
             Gson gson = new Gson();
             Type listType = new TypeToken<ArrayList<Mood>>(){}.getType();
             moods = gson.fromJson(in,listType);
+            for (Mood mood : moods){
+                Log.d("debug", "delstate after loaded: "+mood.getDelState());
+            }
             addAllMood(moods);
 
         } catch (FileNotFoundException e) {
