@@ -204,13 +204,6 @@ public class MainScreen extends AppCompatActivity{
 
     };
 
-
-    private void setFirstItemNavigationView() {
-        BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
-        navigation.getMenu().getItem(1).setChecked(true);
-        navigation.getMenu().performIdentifierAction(R.id.navigation_home, 0);
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -223,9 +216,6 @@ public class MainScreen extends AppCompatActivity{
 
         participant = FeelTripApplication.getParticipant();
         setContentView(R.layout.activity_main);
-        BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
-        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
-        setFirstItemNavigationView();
         addItemsOnEmotionalStateSpinner();
 
         ToggleButton toggleRecent = (ToggleButton) findViewById(R.id.toggleRecent);
@@ -324,19 +314,10 @@ public class MainScreen extends AppCompatActivity{
             TextView friendsOnlyView = (TextView) findViewById(R.id.textView5);
             friendsOnlyView.setTextColor(FeelTripApplication.getTEXTCOLORTERTIARY());
 
-            int[][] navstates = new int[][] {
-                    new int[] { android.R.attr.state_checked},  // checked
-                    new int[] {-android.R.attr.state_checked}  // unchecked
-            };
+        }
 
-            int[] navcolors = new int[] {
-                    FeelTripApplication.getCOLORPRIMARY(),
-                    FeelTripApplication.getTEXTCOLORSECONDARY()
-            };
-            ColorStateList navList = new ColorStateList(navstates, navcolors);
-            android.support.design.widget.BottomNavigationView bottomNavigationView = (android.support.design.widget.BottomNavigationView) findViewById(R.id.navigation);
-            bottomNavigationView.setItemIconTintList(navList);
-            bottomNavigationView.setItemTextColor(navList);
+        else if(FeelTripApplication.getThemeID() == R.style.GalaxyTheme) {
+
         }
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);

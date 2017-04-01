@@ -1,19 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <item
+    <ImageView
         android:id="@+id/navigation_profile"
-        android:icon="@drawable/ic_person_black_24dp"
-        android:title="@string/title_profile" />
+        android:src="@drawable/ic_person_black_24dp"/>
 
-    <item
+    <ImageView
         android:id="@+id/navigation_home"
-        android:icon="@drawable/ic_home_black_24dp"
-        android:title="@string/title_home" />
+        android:src="@drawable/ic_home_black_24dp"/>
 
-    <item
+    <ImageView
         android:id="@+id/navigation_map"
-        android:icon="@drawable/ic_location_searching_black_24dp"
-        android:title="@string/title_map" />
+        android:src="@drawable/ic_location_searching_black_24dp"/>
 
 </menu>

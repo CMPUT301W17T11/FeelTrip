@@ -385,7 +385,7 @@ public class loginActivity extends AppCompatActivity implements ColorPicker.OnCo
 
     public void swapToGalaxyTheme(View v) {
         setTheme(R.style.DefaultTheme);
-        FeelTripApplication.setThemeID(R.style.DefaultTheme);
+        FeelTripApplication.setThemeID(R.style.GalaxyTheme);
         Intent intent = new Intent(this, loginActivity.class);
         Bundle bundle = new Bundle();
         EditText userField = (EditText) this.findViewById(R.id.user_text);

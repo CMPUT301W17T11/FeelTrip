@@ -144,18 +144,40 @@
         </LinearLayout>
     </android.support.design.widget.AppBarLayout>
 
-0
-    <android.support.design.widget.BottomNavigationView
-        android:id="@+id/navigation"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:background="?android:attr/windowBackground"
-        app:itemIconTint="@drawable/bottom_nav_color"
-        app:itemTextColor="@drawable/bottom_nav_color"
-        app:menu="@menu/navigation"
-        android:layout_alignParentBottom="true"/>
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        tools:context="com.example.henzoshimada.feeltrip.MainScreen">
 
+        <com.akiniyalocts.minor.MinorLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            app:minor_center_items="true"
+            android:background="@color/colorPrimary">
+
+            <com.akiniyalocts.minor.MinorView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:minor_title_selected_color="@color/colorPrimary"
+                app:minor_title="Profile"
+                app:minor_title_text_color="@color/gray"
+                app:minor_icon_view="@layout/nav_minor"/>
+
+            <com.akiniyalocts.minor.MinorView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:minor_title_selected_color="@color/colorPrimary"
+                app:minor_selected="true"
+                app:minor_title="Home"
+                app:minor_title_text_color="@color/gray"
+                app:minor_icon_view="@layout/nav_minor"/>
+
+        </com.akiniyalocts.minor.MinorLayout>
+
+    </RelativeLayout>
 
 
 
