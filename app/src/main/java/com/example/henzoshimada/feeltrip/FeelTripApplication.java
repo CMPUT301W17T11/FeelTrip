@@ -134,6 +134,7 @@ public class FeelTripApplication extends Application {
         return updateQueueController;
     }
 
+
     private static Boolean networkAvailable = null;
     public static void setNetworkAvailable(Boolean b){
         networkAvailable = b;

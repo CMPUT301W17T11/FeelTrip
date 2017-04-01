@@ -349,7 +349,7 @@ public class EditMoodActivity extends AppCompatActivity {
         try {
             if (editflag) {
                 Mood mood = editmood;
-                //mood.resetState();
+                mood.resetState();
                 mood.setAdd();
                 ElasticSearchController.EditMoodTask editMoodTask = new ElasticSearchController.EditMoodTask();
                 if (showPublicOn) {
