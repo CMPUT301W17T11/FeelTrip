@@ -144,18 +144,53 @@
         </LinearLayout>
     </android.support.design.widget.AppBarLayout>
 
-0
-    <android.support.design.widget.BottomNavigationView
-        android:id="@+id/navigation"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:background="?android:attr/windowBackground"
-        app:itemIconTint="@drawable/bottom_nav_color"
-        app:itemTextColor="@drawable/bottom_nav_color"
-        app:menu="@menu/navigation"
-        android:layout_alignParentBottom="true"/>
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
+        <com.akiniyalocts.minor.MinorLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:id="@+id/minor_navigation"
+            android:layout_alignParentBottom="true"
+            app:minor_center_items="true"
+            android:background="?android:attr/windowBackground">
+
+            <com.example.henzoshimada.feeltrip.BetterMinorView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:id="@+id/minor_profile"
+                app:minor_title_selected_color="?android:attr/colorPrimary"
+                app:minor_title=""
+                app:minor_title_text_color="?android:attr/textColorSecondary"
+                app:minor_icon_view="@layout/nav_minor_profile"/>
+
+            <com.example.henzoshimada.feeltrip.BetterMinorView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:id="@+id/minor_home"
+                app:minor_title_selected_color="?android:attr/colorPrimary"
+                app:minor_title=""
+                app:minor_title_text_color="?android:attr/textColorSecondary"
+                app:minor_icon_view="@layout/nav_minor_home"/>
+
+            <com.example.henzoshimada.feeltrip.BetterMinorView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:id="@+id/minor_maps"
+                app:minor_title_selected_color="?android:attr/colorPrimary"
+                app:minor_title=""
+                app:minor_title_text_color="?android:attr/textColorSecondary"
+                app:minor_icon_view="@layout/nav_minor_maps"/>
+
+        </com.akiniyalocts.minor.MinorLayout>
+
+    </RelativeLayout>
 
 
 
