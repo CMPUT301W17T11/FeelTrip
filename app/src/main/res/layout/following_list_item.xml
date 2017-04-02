@@ -10,27 +10,16 @@
         android:layout_width="63sp"
         android:layout_height="48sp"
         android:layout_weight="0.34"
-        android:text="some long ass namxgjkfjdknvjkfvfdkvhfdvknjdvfdvffcve"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:textColor="@android:color/black" />
 
+
     <ImageButton
-        android:id="@id/cancel_request"
+        android:id="@+id/unfollow_button"
         android:layout_width="wrap_content"
         android:layout_height="27sp"
         android:background="@null"
         android:scaleType="fitEnd"
-        android:src="@mipmap/ic_cancel3"
-        android:visibility="visible" />
-
-    <ImageButton
-        android:id="@id/accept_request"
-        android:layout_width="wrap_content"
-        android:layout_height="27sp"
-        android:layout_marginStart="10sp"
-        android:background="@null"
-        android:scaleType="fitStart"
-        android:src="@mipmap/ic_accept3" />
-
+        android:src="@mipmap/ic_unfollow" />
 
 </LinearLayout>
