@@ -84,6 +84,12 @@ public class loginActivity extends AppCompatActivity implements ColorPicker.OnCo
                     default:
                         break;
                 }
+                if(FeelTripApplication.getThemeID() == R.style.Simplicity) {
+                    colorpicker.setVisibility(View.GONE);
+                    sv.setVisibility(View.GONE);
+                    themeSeekbarTable.setVisibility(View.GONE);
+                    themeSeekbar.setProgress(50);
+                }
                 EditText userField = (EditText) this.findViewById(R.id.user_text);
                 EditText passField = (EditText) this.findViewById(R.id.pass_text);
                 userField.setText(extras.getString("user"));
@@ -246,6 +252,11 @@ public class loginActivity extends AppCompatActivity implements ColorPicker.OnCo
         if(!participants.isEmpty()) {
             getUserInfo(participants);
 
+            if(FeelTripApplication.getTEXTCOLORPRIMARY() == -1 && FeelTripApplication.getThemeID() == R.style.CustomTheme_Light) {
+                setTheme(R.style.Simplicity);
+                FeelTripApplication.setThemeID(R.style.Simplicity);
+            }
+
             Intent intent = new Intent(this, MainScreen.class);
             startActivity(intent);
         }
@@ -368,9 +379,9 @@ public class loginActivity extends AppCompatActivity implements ColorPicker.OnCo
         finish();
     }
 
-    public void swapToSimplicityTheme(View v) {
-        setTheme(R.style.Simplicity);
-        FeelTripApplication.setThemeID(R.style.Simplicity);
+    public void swapToDefaultTheme(View v) {
+        setTheme(R.style.DefaultTheme);
+        FeelTripApplication.setThemeID(R.style.DefaultTheme);
         Intent intent = new Intent(this, loginActivity.class);
         Bundle bundle = new Bundle();
         EditText userField = (EditText) this.findViewById(R.id.user_text);

@@ -713,17 +713,21 @@ public class EditMoodActivity extends AppCompatActivity {
     }
 
     public void addItemsOnEmojiScroller() throws IllegalAccessException {
-        Field[] fields = R.drawable.class.getFields();
-        List<Integer> drawables = new ArrayList<Integer>();
-        for (Field field : fields) {
-            // Take only those with name starting with "emoji"
-            if (field.getName().startsWith("emoji")) {
-                drawables.add(field.getInt(null));
-            }
-        }
 
         emojiList = (LinearLayout) findViewById(R.id.emojiList);
-        for (int i = 1; i <= drawables.size(); i++) {
+
+        int theme_offset;
+        switch (FeelTripApplication.getThemeID()) {
+            case R.style.Simplicity:
+                theme_offset = 1;
+                break;
+            default:
+                theme_offset = 0;
+                break;
+        }
+        theme_offset = theme_offset * NUM_EMOTIONS;
+
+        for (int i = 1 + theme_offset; i <= theme_offset + NUM_EMOTIONS; i++) {
 
             LinearLayout emojiLayout = new LinearLayout(this);
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
