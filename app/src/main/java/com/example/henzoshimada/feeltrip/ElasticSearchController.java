@@ -53,7 +53,7 @@ public class ElasticSearchController {
             groupIndex,
             typeUser,
             "{ \"user\" : { \"properties\" : { \"password\" : {\"type\" : \"string\", \"index\" : \"not_analyzed\"} } } }"
-    ).refresh(true).build();
+            ).refresh(true).build();
 
     static PutMapping moodLocationMapping = new PutMapping.Builder(
             groupIndex,
@@ -63,8 +63,20 @@ public class ElasticSearchController {
 
     static PutMapping moodUsernameMapping = new PutMapping.Builder(
             groupIndex,
-            typeUser,
+            typeMood,
             "{ \"mood\" : { \"properties\" : { \"username\" : {\"type\" : \"string\", \"index\" : \"not_analyzed\"} } } }"
+            ).refresh(true).build();
+
+    static PutMapping requestSenderMapping = new PutMapping.Builder(
+            groupIndex,
+            typeRequest,
+            "{ \"request\" : { \"properties\" : { \"sender\" : {\"type\" : \"string\", \"index\" : \"not_analyzed\"} } } }"
+    ).refresh(true).build();
+
+    static PutMapping requestReceiverMapping = new PutMapping.Builder(
+            groupIndex,
+            typeRequest,
+            "{ \"request\" : { \"properties\" : { \"receiver\" : {\"type\" : \"string\", \"index\" : \"not_analyzed\"} } } }"
     ).refresh(true).build();
 
 
@@ -528,6 +540,8 @@ public class ElasticSearchController {
                             .build();
 
                     try {
+                        client.execute(requestSenderMapping);
+                        client.execute(requestReceiverMapping);
                         DocumentResult result = client.execute(index);
                         if (result.isSucceeded()) {
                             followRequest.setId(result.getId());

@@ -29,7 +29,9 @@ import com.larswerkman.holocolorpicker.SVBar;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
-public class loginActivity extends AppCompatActivity implements ColorPicker.OnColorChangedListener, SeekBar.OnSeekBarChangeListener {
+public class loginActivity extends AppCompatActivity implements
+        ColorPicker.OnColorChangedListener,
+        SeekBar.OnSeekBarChangeListener {
 
     private ColorPicker picker;
     private SVBar svBar;
@@ -291,7 +293,7 @@ public class loginActivity extends AppCompatActivity implements ColorPicker.OnCo
                 ElasticSearchController.AddParticipantTask addParticipantTask = new ElasticSearchController.AddParticipantTask();
                 Participant participant = new Participant(userString, passString);
                 addParticipantTask.execute(participant);
-                Toast.makeText(getApplicationContext(),"User Creation sucessful!",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(),"User Creation successful!",Toast.LENGTH_SHORT).show();
             }
             else {
                 Toast.makeText(getApplicationContext(),"Both username and password must be filled!",Toast.LENGTH_SHORT).show();

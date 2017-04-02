@@ -24,11 +24,18 @@ import com.example.henzoshimada.feeltrip.Mood;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
+/**
+ * Custom Adapter for searching users to follow
+ */
 public class UserFoundAdapter extends ArrayAdapter<String> {
 
     //private ArrayList<Mood> dataSet;
     //Context mContext;
 
+
+    /**
+     * View contains, a username, follow button
+     */
     // View lookup cache
     private static class ViewHolder {
         TextView userName;
@@ -45,6 +52,14 @@ public class UserFoundAdapter extends ArrayAdapter<String> {
 
     //private int lastPosition = -1;
 
+    /**
+     * set username
+     * set On Click Listener for follow button
+     * @param position
+     * @param convertView
+     * @param parent
+     * @return
+     */
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
         // Get the data item for this position
@@ -73,10 +88,14 @@ public class UserFoundAdapter extends ArrayAdapter<String> {
 
         viewHolder.userName.setText(userName);
 
+        /**
+         * onClick, send request to server if there is no pending request
+         * else, Toast and do nothing
+         */
         viewHolder.followButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d("requestTag","accept follow request");
+                Log.d("requestTag","send follow request");
                 String receiver = FeelTripApplication.getUsersFoundArray().get(position);
                 String sender = FeelTripApplication.getParticipant().getUserName();
 

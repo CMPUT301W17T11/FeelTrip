@@ -22,12 +22,19 @@ import com.example.henzoshimada.feeltrip.Mood;
 
 import java.util.ArrayList;
 
+/**
+ * Custom Adapter for Follow Request
+ */
 public class RequestAdapter extends ArrayAdapter<FollowRequest> {
 
     //private ArrayList<Mood> dataSet;
     //Context mContext;
 
     // View lookup cache
+
+    /**
+     * View contains, a username, cancel button and accept button
+     */
     private static class ViewHolder {
         TextView userName;
         ImageButton cancelButton;
@@ -43,6 +50,14 @@ public class RequestAdapter extends ArrayAdapter<FollowRequest> {
 
     //private int lastPosition = -1;
 
+    /**
+     * set username
+     * set On Click Listener for accept button, cancel button
+     * @param position
+     * @param convertView
+     * @param parent
+     * @return
+     */
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
         // Get the data item for this position
@@ -72,6 +87,9 @@ public class RequestAdapter extends ArrayAdapter<FollowRequest> {
 
         viewHolder.userName.setText(followRequest.getSender());
 
+        /**
+         * accept follow request and update server, then remove from UI
+         */
         viewHolder.acceptButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -88,6 +106,9 @@ public class RequestAdapter extends ArrayAdapter<FollowRequest> {
             }
         });
 
+        /**
+         * decline follow request and update server, then remove from UI
+         */
         viewHolder.cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
