@@ -230,6 +230,7 @@ public class MainScreen extends AppCompatActivity{
 
         else if(FeelTripApplication.getThemeID() == R.style.Simplicity) {
             minorHome.setIcon(R.drawable.simplicity_icon_home);
+            minorHome.setTextColor(Color.BLACK);
         }
 
         else if(FeelTripApplication.getThemeID() == R.style.GalaxyTheme) {
@@ -271,6 +272,7 @@ public class MainScreen extends AppCompatActivity{
 
         else if(FeelTripApplication.getThemeID() == R.style.Simplicity) {
             minorProfile.setIcon(R.drawable.simplicity_icon_profile);
+            minorProfile.setTextColor(Color.BLACK);
         }
 
         else if(FeelTripApplication.getThemeID() == R.style.GalaxyTheme) {
@@ -313,6 +315,7 @@ public class MainScreen extends AppCompatActivity{
 
         else if(FeelTripApplication.getThemeID() == R.style.Simplicity) {
             minorMaps.setIcon(R.drawable.simplicity_icon_maps);
+            minorMaps.setTextColor(Color.BLACK);
         }
 
         else if(FeelTripApplication.getThemeID() == R.style.GalaxyTheme) {
