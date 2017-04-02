@@ -233,6 +233,10 @@ public class MainScreen extends AppCompatActivity{
             minorHome.setTextColor(Color.BLACK);
         }
 
+        else if(FeelTripApplication.getThemeID() == R.style.Overwatch) {
+            minorHome.setIcon(R.drawable.overwatch_icon_home);
+        }
+
         else if(FeelTripApplication.getThemeID() == R.style.GalaxyTheme) {
             minorHome.setIcon(R.drawable.galaxy_icon_home_selected); //TODO: THEME
         }
@@ -273,6 +277,10 @@ public class MainScreen extends AppCompatActivity{
         else if(FeelTripApplication.getThemeID() == R.style.Simplicity) {
             minorProfile.setIcon(R.drawable.simplicity_icon_profile);
             minorProfile.setTextColor(Color.BLACK);
+        }
+
+        else if(FeelTripApplication.getThemeID() == R.style.Overwatch) {
+            minorProfile.setIcon(R.drawable.overwatch_icon_profile);
         }
 
         else if(FeelTripApplication.getThemeID() == R.style.GalaxyTheme) {
@@ -316,6 +324,10 @@ public class MainScreen extends AppCompatActivity{
         else if(FeelTripApplication.getThemeID() == R.style.Simplicity) {
             minorMaps.setIcon(R.drawable.simplicity_icon_maps);
             minorMaps.setTextColor(Color.BLACK);
+        }
+
+        else if(FeelTripApplication.getThemeID() == R.style.Overwatch) {
+            minorMaps.setIcon(R.drawable.overwatch_icon_maps);
         }
 
         else if(FeelTripApplication.getThemeID() == R.style.GalaxyTheme) {
@@ -485,8 +497,18 @@ public class MainScreen extends AppCompatActivity{
             minorMaps.setIcon(R.drawable.simplicity_icon_maps);
         }
 
-        else if(FeelTripApplication.getThemeID() == R.style.GalaxyTheme) {
+        else if(FeelTripApplication.getThemeID() == R.style.Overwatch) {
+            minorHome.setIcon(R.drawable.overwatch_icon_home);
+            minorProfile.setIcon(R.drawable.overwatch_icon_profile);
+            minorMaps.setIcon(R.drawable.overwatch_icon_maps);
+        }
 
+        else if(FeelTripApplication.getThemeID() == R.style.GalaxyTheme) {
+            RelativeLayout background = (RelativeLayout) findViewById(R.id.content_main);
+            background.setBackgroundResource(R.drawable.galaxy_bg);
+            minorHome.setIcon(R.drawable.galaxy_icon_home_unselected);
+            minorProfile.setIcon(R.drawable.overwatch_icon_profile); // TODO: theme
+            minorMaps.setIcon(R.drawable.overwatch_icon_maps);
         }
 
         else {

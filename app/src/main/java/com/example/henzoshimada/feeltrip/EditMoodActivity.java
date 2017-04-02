@@ -839,6 +839,12 @@ public class EditMoodActivity extends AppCompatActivity {
             case R.style.Simplicity:
                 theme_offset = 1;
                 break;
+            case R.style.Overwatch:
+                theme_offset = 2;
+                break;
+            case R.style.GalaxyTheme:
+                theme_offset = 3;
+                break;
             default:
                 theme_offset = 0;
                 break;

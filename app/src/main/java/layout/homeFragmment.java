@@ -87,8 +87,12 @@ public class homeFragmment extends Fragment{
             addEntry.setImageResource(R.drawable.simplicity_icon_edit);
         }
 
+        else if(FeelTripApplication.getThemeID() == R.style.Overwatch) {
+            addEntry.setImageResource(R.drawable.overwatch_icon_edit);
+        }
+
         else if(FeelTripApplication.getThemeID() == R.style.GalaxyTheme) {
-            oldMoodListView.setBackground(getActivity().getDrawable(R.drawable.galaxy_bg));
+
         }
 
         //http://stackoverflow.com/questions/20922036/android-cant-call-setonitemclicklistener-from-a-listview
