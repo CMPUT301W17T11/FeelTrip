@@ -48,6 +48,11 @@ public class UpdateQueueController {
         saveInFile();
     }
 
+    /**
+     * Add all mood.
+     *
+     * @param moods the moods
+     */
     public void addAllMood(ArrayList<Mood> moods){
         for (Mood mood : moods){
             addMood(mood);
@@ -133,8 +138,9 @@ public class UpdateQueueController {
     }
 
 
-
-
+    /**
+     * Load from file. (From a JSon)
+     */
     public void loadFromFile() {
         ArrayList<Mood> moods;
         try {
@@ -155,6 +161,10 @@ public class UpdateQueueController {
     }
 
 
+    /**
+     * Save in file.
+     * ie. save the changes locally into a JSon
+     */
     public void saveInFile() {
         if (getSize() == 0){
             return;
@@ -178,6 +188,11 @@ public class UpdateQueueController {
         }
     }
 
+    /**
+     * Set context.
+     *
+     * @param context the context
+     */
     public void setContext(Context context){
         this.context = context;
     }

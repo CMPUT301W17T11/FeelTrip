@@ -17,10 +17,12 @@ import static java.lang.Thread.sleep;
 /**
  * Created by Kevin on 31-Mar-17.
  */
-
 public class EditMoodActivityTest extends ActivityInstrumentationTestCase2<EditMoodActivity> {
     private Solo solo;
 
+    /**
+     * Instantiates a new Edit mood activity test.
+     */
     public EditMoodActivityTest() {
         super(com.example.henzoshimada.feeltrip.EditMoodActivity.class);
     }
@@ -31,16 +33,27 @@ public class EditMoodActivityTest extends ActivityInstrumentationTestCase2<EditM
 
     }
 
+    /**
+     * Test start.
+     *
+     * @throws Exception the exception
+     */
     public void testStart() throws Exception {
         Activity activity = getActivity();
     }
 
+    /**
+     * Test input description.
+     */
     public void testInputDescription() {
         String inputText = "Some test";
         solo.enterText((EditText) solo.getView(R.id.moodEventDescription),inputText);
         assertTrue(solo.waitForText(inputText));
     }
 
+    /**
+     * Test select social sit.
+     */
     public void testSelectSocialSit() {
         int i = 0;
         solo.pressSpinnerItem(0, i);
@@ -48,11 +61,17 @@ public class EditMoodActivityTest extends ActivityInstrumentationTestCase2<EditM
         assertTrue(spinnerTextSelected);
     }
 
+    /**
+     * Test edit location.
+     */
     public void testEditLocation() {
         solo.clickOnMenuItem("GPS Toggle");
         solo.assertCurrentActivity("Wrong Activity", MapsActivity.class);
     }
 
+    /**
+     * Test private toggle.
+     */
     public void testPrivateToggle(){
         solo.clickOnView(solo.getView(R.id.private_toggle));
         TextView view = (TextView) solo.getView(R.id.modePost);
@@ -62,6 +81,9 @@ public class EditMoodActivityTest extends ActivityInstrumentationTestCase2<EditM
         assertEquals("Private", view.getText());
     }
 
+    /**
+     * Test choose emoji.
+     */
     public void testChooseEmoji(){
         solo.pressSoftKeyboardDoneButton();
         solo.clickOnScreen(71, 1488); //coordinate of angry (Phone: Pixel)
@@ -69,6 +91,9 @@ public class EditMoodActivityTest extends ActivityInstrumentationTestCase2<EditM
         assertEquals("Angry", view.getText());
     }
 
+    /**
+     * Test description too long.
+     */
     public void testDescriptionTooLong(){
         testChooseEmoji();
         solo.enterText((EditText) solo.getView(R.id.moodEventDescription),"123456789012345678901");

@@ -57,21 +57,51 @@ import layout.homeFragmment;
 import layout.mapFragment;
 import layout.profileFragment;
 
-// This is the main screen: This is what the Participant first sees
-
+/**
+ * The type Main screen.
+ * The main screen contatins everything that the participant will see and use when first
+ * logging into the app.
+ */
 public class MainScreen extends AppCompatActivity{
 
     private Spinner emotionalStateSpinner;
 
-    // The following are constants for emotion based emoji
+    /**
+     * The constant angry.
+     */
+// The following are constants for emotion based emoji
     public static final int angry = 0x1F624;
+    /**
+     * The constant confused.
+     */
     public static final int confused = 0x1F635;
+    /**
+     * The constant disgusted.
+     */
     public static final int disgusted = 0x1F623; //might change this one...
+    /**
+     * The constant fearful.
+     */
     public static final int fearful = 0x1F628;
+    /**
+     * The constant happy.
+     */
     public static final int happy = 0x1F60A;
+    /**
+     * The constant sad.
+     */
     public static final int sad = 0x1F622;
+    /**
+     * The constant shameful.
+     */
     public static final int shameful = 0x1F61E;
+    /**
+     * The constant cool.
+     */
     public static final int cool = 0x1F60E;
+    /**
+     * The constant somethingwentwrong.
+     */
     public static final int somethingwentwrong = 0x1F31A;
     private ListView userFoundView;  //who participant searched
     private ListView followingView; //who participant is following
@@ -95,6 +125,12 @@ public class MainScreen extends AppCompatActivity{
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mDrawerToggle;
 
+    /**
+     * Emoji unicode int.
+     *
+     * @param emotion the emotion
+     * @return the int
+     */
     public int emojiUnicode(String emotion) {
         switch(emotion) {
             case "Angry":
@@ -118,7 +154,8 @@ public class MainScreen extends AppCompatActivity{
         }
     }
 
-    // Taken from http://stackoverflow.com/questions/4828636/edittext-clear-focus-on-touch-outside on 2017-03-27 08:52
+    // Taken from http://stackoverflow.com/questions/4828636/edittext-clear-focus-on-touch-outside
+    // on 2017-03-27 08:52
     @Override
     public boolean dispatchTouchEvent(MotionEvent event) {
         if (event.getAction() == MotionEvent.ACTION_DOWN) {
@@ -158,6 +195,11 @@ public class MainScreen extends AppCompatActivity{
         dialog.show();
     }
 
+    /**
+     * This is the method that will run when the Home button is pressed
+     * This is what we needed to use so we could have dynamic icons for the different themes
+     */
+
     private void onHomeTouch() {
         Fragment fragment;
         FragmentManager fm = getFragmentManager();
@@ -191,6 +233,10 @@ public class MainScreen extends AppCompatActivity{
         onResume();
     }
 
+    /**
+     * This is what will run when the profile button is selected
+     * This is what we needed to use so we could have dynamic icons for the different themes
+     */
     private void onProfileTouch() {
         Fragment fragment;
         FragmentManager fm = getFragmentManager();
@@ -222,6 +268,11 @@ public class MainScreen extends AppCompatActivity{
         }
         onResume();
     }
+
+    /**
+     * This is what will run when the map button is selected
+     * This is what we needed to use so we could have dynamic icons for the different themes
+     */
 
     private void onMapsTouch() {
         Fragment fragment;
@@ -260,6 +311,12 @@ public class MainScreen extends AppCompatActivity{
         minorHome.performClick();
     }
 
+    /**
+     * The onCreate is what runs when an instance of the MainScreen is first ran
+     * It holds everything that is shown on the main screen, all the togglebuttons, and buttons
+     * to the other activities, etc.
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -452,6 +509,12 @@ public class MainScreen extends AppCompatActivity{
       
     }
 
+    /**
+     * This is the method that is used to search for another user using the search in the
+     * side swipe menu for followers/following
+     * @param view
+     */
+
     private void searchUser(View view){
         String inputText = inputTextView.getText().toString();
         usersFoundArray.clear();
@@ -510,6 +573,10 @@ public class MainScreen extends AppCompatActivity{
 //        loadFollowingsArray();
     }
 
+    /**
+     * This is how we load the requests of other users to the current participant to follow their
+     * mood events
+     */
     private void loadRequestsArray(){//sender
         requestsArray = FeelTripApplication.getRequestsArray();
         requestsArray.clear();
@@ -529,6 +596,10 @@ public class MainScreen extends AppCompatActivity{
         requestAdapter.notifyDataSetChanged();
     }
 
+    /**
+     * This is how we load the other users that the current participant is currently following and
+     * can see their mood events
+     */
     private void loadFollowingsArray(){//receiver
         followingArray.clear();
 
@@ -558,6 +629,12 @@ public class MainScreen extends AppCompatActivity{
         follwingAdapter.notifyDataSetChanged();
     }
 
+    /**
+     * Get emoji by unicode string.
+     *
+     * @param unicode the unicode
+     * @return the string
+     */
     public String getEmojiByUnicode(int unicode){
         if (unicode == 0) {
             return "";
@@ -565,6 +642,12 @@ public class MainScreen extends AppCompatActivity{
         return new String(Character.toChars(unicode));
     }
 
+    /**
+     * Search keyword.
+     * This is the filter function of searching by a particular word in a mood event
+     *
+     * @param v the v
+     */
     public void searchKeyword(View v){
         EditText string_keyword = (EditText) findViewById(R.id.keyword);
         FilterController.setKeywordfilter(string_keyword.getText().toString());
@@ -613,6 +696,7 @@ public class MainScreen extends AppCompatActivity{
             }
         });
     }
+
     private void updateMap(){
         FeelTripApplication.setFrag("map");
         Fragment fragment = new mapFragment();

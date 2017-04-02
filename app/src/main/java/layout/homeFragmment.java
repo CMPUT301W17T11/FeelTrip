@@ -22,13 +22,18 @@ import com.example.henzoshimada.feeltrip.R;
 
 import java.util.ArrayList;
 
-/*
-  A simple {@link Fragment} subclass.
-  Activities that contain this fragment must implement the
-  {@link homeFragmment.OnFragmentInteractionListener} interface
-  to handle interaction events.
-  Use the {@link homeFragmment#newInstance} factory method to
-  create an instance of this fragment.
+/**
+ * The type Home fragmment.
+ *
+ * A simple {@link Fragment} subclass.
+ * Activities that contain this fragment must implement the
+ * {@link homeFragmment.OnFragmentInteractionListener} interface
+ * to handle interaction events.
+ * Use the {@link homeFragmment#newInstance} factory method to
+ * create an instance of this fragment.
+ *
+ *
+ * Home fragment is the fragment equivalent of the MainScreen activity
  */
 public class homeFragmment extends Fragment{
 

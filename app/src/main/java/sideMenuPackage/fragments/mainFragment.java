@@ -12,7 +12,6 @@ import com.example.henzoshimada.feeltrip.R;
 /**
  * Created by Ivan on 3/8/2017.
  */
-
 public class mainFragment extends Fragment{
 
     @Nullable

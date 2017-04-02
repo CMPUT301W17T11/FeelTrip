@@ -10,7 +10,6 @@ import android.util.Log;
 /**
  * Created by Esus2 on 2017-03-25.
  */
-
 public class NetworkStateListener extends BroadcastReceiver{
 
     @Override

@@ -57,6 +57,7 @@ import java.util.concurrent.ExecutionException;
 
 /**
  * Class for fragment showing the map
+ * fragment equivalent of MapActivity
  */
 public class mapFragment extends Fragment implements
         GoogleMap.OnMyLocationButtonClickListener,
@@ -65,6 +66,9 @@ public class mapFragment extends Fragment implements
         GoogleMap.OnMapClickListener{
     // ActivityCompat.OnRequestPermissionsResultCallback{
 
+    /**
+     * The M map view.
+     */
     public MapView mMapView;
 
 
@@ -500,7 +504,8 @@ public class mapFragment extends Fragment implements
 
     /**
      * Check if ACCESS_FINE_LOCATION permission is granted, if not, ask for the permission
-     * @param activity
+     *
+     * @param activity the activity
      */
     public void verifyLocationPermissions(Activity activity) {
         Log.d("permTag", "in verify perm");
