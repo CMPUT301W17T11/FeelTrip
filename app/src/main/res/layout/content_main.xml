@@ -147,33 +147,46 @@
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        tools:context="com.example.henzoshimada.feeltrip.MainScreen">
+        android:layout_height="match_parent">
 
         <com.akiniyalocts.minor.MinorLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:clickable="true"
+            android:id="@+id/minor_navigation"
             android:layout_alignParentBottom="true"
             app:minor_center_items="true"
-            android:background="@color/colorPrimary">
+            android:background="?android:attr/windowBackground">
 
-            <com.akiniyalocts.minor.MinorView
+            <com.example.henzoshimada.feeltrip.BetterMinorView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:minor_title_selected_color="@color/colorPrimary"
-                app:minor_title="Profile"
-                app:minor_title_text_color="@color/gray"
-                app:minor_icon_view="@layout/nav_minor"/>
+                android:clickable="true"
+                android:id="@+id/minor_profile"
+                app:minor_title_selected_color="?android:attr/colorPrimary"
+                app:minor_title=""
+                app:minor_title_text_color="?android:attr/textColorSecondary"
+                app:minor_icon_view="@layout/nav_minor_profile"/>
 
-            <com.akiniyalocts.minor.MinorView
+            <com.example.henzoshimada.feeltrip.BetterMinorView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:minor_title_selected_color="@color/colorPrimary"
-                app:minor_selected="true"
-                app:minor_title="Home"
-                app:minor_title_text_color="@color/gray"
-                app:minor_icon_view="@layout/nav_minor"/>
+                android:clickable="true"
+                android:id="@+id/minor_home"
+                app:minor_title_selected_color="?android:attr/colorPrimary"
+                app:minor_title=""
+                app:minor_title_text_color="?android:attr/textColorSecondary"
+                app:minor_icon_view="@layout/nav_minor_home"/>
+
+            <com.example.henzoshimada.feeltrip.BetterMinorView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:id="@+id/minor_maps"
+                app:minor_title_selected_color="?android:attr/colorPrimary"
+                app:minor_title=""
+                app:minor_title_text_color="?android:attr/textColorSecondary"
+                app:minor_icon_view="@layout/nav_minor_maps"/>
 
         </com.akiniyalocts.minor.MinorLayout>
 
