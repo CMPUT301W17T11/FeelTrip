@@ -4,8 +4,6 @@ import android.app.Application;
 import android.content.Context;
 import android.util.Log;
 
-import com.daimajia.swipe.adapters.BaseSwipeAdapter;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -136,6 +134,35 @@ public class FeelTripApplication extends Application {
         return updateQueueController;
     }
 
+
+    private static Boolean networkAvailable = null;
+    public static void setNetworkAvailable(Boolean b){
+        networkAvailable = b;
+    }
+
+    public static Boolean getNetworkAvailable(){
+        if (networkAvailable == null){
+            networkAvailable = Boolean.FALSE;
+        }
+        return networkAvailable;
+    }
+
+    private static ArrayList<Mood> localMainList = null;
+    private static ArrayList<Mood> localProfileList = null;
+
+    public static ArrayList<Mood> getLocalMainList(){
+        if (localMainList == null){
+            localMainList = new ArrayList<>();
+        }
+        return localMainList;
+    }
+
+    public static ArrayList<Mood> getLocalProfileList(){
+        if (localProfileList == null){
+            localProfileList = new ArrayList<>();
+        }
+        return localProfileList;
+    }
 
     private static Participant participant = null;
     /**

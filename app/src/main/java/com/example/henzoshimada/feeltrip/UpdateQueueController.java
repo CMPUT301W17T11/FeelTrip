@@ -2,6 +2,7 @@ package com.example.henzoshimada.feeltrip;
 
 
 import android.content.Context;
+import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -143,6 +144,9 @@ public class UpdateQueueController {
             Gson gson = new Gson();
             Type listType = new TypeToken<ArrayList<Mood>>(){}.getType();
             moods = gson.fromJson(in,listType);
+            for (Mood mood : moods){
+                Log.d("debug", "delstate after loaded: "+mood.getDelState());
+            }
             addAllMood(moods);
 
         } catch (FileNotFoundException e) {
@@ -167,7 +171,6 @@ public class UpdateQueueController {
             Gson gson = new Gson();
             gson.toJson(moods, out);
             out.flush();
-
             fos.close();
         }
         catch (IOException e) {

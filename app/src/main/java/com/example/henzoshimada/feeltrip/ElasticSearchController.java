@@ -81,8 +81,22 @@ public class ElasticSearchController {
 
 
     public static void loadFromElasticSearch(){
-        Log.d("listTag", "load from ES");
-        FeelTripApplication.getMoodArrayList().clear();
+        ArrayList<Mood> moodArray =  FeelTripApplication.getMoodArrayList();
+        moodArray.clear();
+
+        // no internet connection
+        if (!FeelTripApplication.getNetworkAvailable()){
+            if (FeelTripApplication.getFrag().equals("main")){
+                ArrayList<Mood> localCache = FeelTripApplication.getLocalMainList();
+                moodArray.addAll(localCache);
+            }
+            else if(FeelTripApplication.getFrag().equals("profile")){
+                ArrayList<Mood> localCache = FeelTripApplication.getLocalProfileList();
+                moodArray.addAll(localCache);
+            }
+            return;
+        }
+
         GetFilteredMoodsTask getMoodTask;
         if(FeelTripApplication.getFrag().equals("main") || FeelTripApplication.getFrag().equals("profile") || FeelTripApplication.getFrag().equals("map")) {
             getMoodTask = new GetFilteredMoodsTask(FeelTripApplication.getFrag());
@@ -157,7 +171,7 @@ public class ElasticSearchController {
                     return null;
                 }
                 String moodId = mood.getId();
-                if (moodId == "-1") { //mood doesn't exist within the elasticsearch database yet, so we can't edit it
+                if (moodId.equals("-1")) { //mood doesn't exist within the elasticsearch database yet, so we can't edit it
                     Log.i("Error", "This mood does not exist within the Elasticsearch database");
                     return null;
                 }
@@ -252,7 +266,6 @@ public class ElasticSearchController {
                         return null;
                     }
 
-                    mood.resetState();
                     Log.d("update query: ", query);
                 }
             return true;
@@ -810,6 +823,7 @@ public class ElasticSearchController {
             verifySettings();
 
             ArrayList<Mood> moods = new ArrayList<>();
+            ArrayList<Mood> localCache = null;
             String query; // things are going to get complicated very fast now, booleans are here to understand whether a filter is being applied or not
             query = "{" +
                     "\"query\" : {" +
@@ -842,11 +856,13 @@ public class ElasticSearchController {
                          "}}," +
                          "\"must_not\" : { \"term\" : { \"username\" : \"" + participant + "\" }}" +
                          "}}";
+                localCache = FeelTripApplication.getLocalMainList();
             }
 
             else if (profilemode) {
                 query += "\"must\" : { \"term\" : { \"username\" : \"" + participant + "\" }}" +
                          "}}";
+                localCache = FeelTripApplication.getLocalProfileList();
             }
 
             else if (mapmode) {
@@ -894,6 +910,11 @@ public class ElasticSearchController {
                         moods.clear();
                         moods.addAll(map.values());
                     }
+                    if (localCache != null) {
+                        localCache.clear();
+                        localCache.addAll(foundMoods);
+                    }
+
                 }
                 else {
                     Log.i("Error", "the search query failed to find any moods that matched");

@@ -41,7 +41,7 @@ public class Mood {
 
     private Long made; //for storing when the mood event is first posted to elasticsearch
 
-    private static boolean delState; // 1 for delete, 0 for add
+    private boolean delState; // 1 for delete, 0 for add
     //TODO: Test deleting a mood from ES after popping from local queue
 
     private int emoji;
@@ -67,7 +67,7 @@ public class Mood {
     7 ----> emoji image
     */
 
-    private static boolean[] stateVector;
+    private boolean[] stateVector;
 
 
     public Mood() {
@@ -81,6 +81,7 @@ public class Mood {
         latitude = null;
         longitude = null;
         stateVector = new boolean[size];
+        resetState();
         delState = false;
         made = null;
         id = null;
@@ -100,6 +101,7 @@ public class Mood {
         latitude = null;
         longitude = null;
         stateVector = new boolean[size];
+        resetState();
         delState = false;
         made = null;
         id = null;
@@ -115,9 +117,7 @@ public class Mood {
     }
 
     public void setId(String id) {
-        if (this.id != id) {
             this.id = id;
-        }
     }
 
     // Evaluate stateVector and check if this mood event is changed.
@@ -142,7 +142,7 @@ public class Mood {
         return stateVector[index];
     }
 
-    public void setStateByIndex(int index) {
+    private void setStateByIndex(int index) {
         if (!stateVector[index]) {
             stateVector[index] = true;
         }
