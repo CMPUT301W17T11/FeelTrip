@@ -458,6 +458,7 @@ public class MainScreen extends AppCompatActivity{
 
         try {
             requestsArray.addAll(getRequestTask.get());
+            Log.d("size" , "" + requestsArray.size());
         } catch (InterruptedException e) {
             return;
         } catch (ExecutionException e) {

@@ -67,6 +67,18 @@ public class ElasticSearchController {
             "{ \"mood\" : { \"properties\" : { \"username\" : {\"type\" : \"string\", \"index\" : \"not_analyzed\"} } } }"
             ).refresh(true).build();
 
+    static PutMapping requestSenderMapping = new PutMapping.Builder(
+            groupIndex,
+            typeRequest,
+            "{ \"request\" : { \"properties\" : { \"sender\" : {\"type\" : \"string\", \"index\" : \"not_analyzed\"} } } }"
+    ).refresh(true).build();
+
+    static PutMapping requestReceiverMapping = new PutMapping.Builder(
+            groupIndex,
+            typeRequest,
+            "{ \"request\" : { \"properties\" : { \"receiver\" : {\"type\" : \"string\", \"index\" : \"not_analyzed\"} } } }"
+    ).refresh(true).build();
+
 
     public static void loadFromElasticSearch(){
         Log.d("listTag", "load from ES");
@@ -528,6 +540,8 @@ public class ElasticSearchController {
                             .build();
 
                     try {
+                        client.execute(requestSenderMapping);
+                        client.execute(requestReceiverMapping);
                         DocumentResult result = client.execute(index);
                         if (result.isSucceeded()) {
                             followRequest.setId(result.getId());
