@@ -86,6 +86,12 @@ public class loginActivity extends AppCompatActivity implements
                     default:
                         break;
                 }
+                if(FeelTripApplication.getThemeID() == R.style.Simplicity) {
+                    colorpicker.setVisibility(View.GONE);
+                    sv.setVisibility(View.GONE);
+                    themeSeekbarTable.setVisibility(View.GONE);
+                    themeSeekbar.setProgress(50);
+                }
                 EditText userField = (EditText) this.findViewById(R.id.user_text);
                 EditText passField = (EditText) this.findViewById(R.id.pass_text);
                 userField.setText(extras.getString("user"));
@@ -139,6 +145,11 @@ public class loginActivity extends AppCompatActivity implements
         int textcolorsecondary;
         int textcolortertiary;
         int backgroundcolor;
+
+        if(FeelTripApplication.getThemeID() == R.style.Simplicity && color != -1) {
+            setTheme(R.style.CustomTheme_Light);
+            FeelTripApplication.setThemeID(R.style.CustomTheme_Light);
+        }
 
         textcolorprimary = color;
         textcolorsecondary = lighter(textcolorprimary, 0.6f);
@@ -247,6 +258,11 @@ public class loginActivity extends AppCompatActivity implements
         }
         if(!participants.isEmpty()) {
             getUserInfo(participants);
+
+            if(FeelTripApplication.getTEXTCOLORPRIMARY() == -1 && FeelTripApplication.getThemeID() == R.style.CustomTheme_Light) {
+                setTheme(R.style.Simplicity);
+                FeelTripApplication.setThemeID(R.style.Simplicity);
+            }
 
             Intent intent = new Intent(this, MainScreen.class);
             startActivity(intent);
@@ -370,9 +386,9 @@ public class loginActivity extends AppCompatActivity implements
         finish();
     }
 
-    public void swapToNaughtyPenguinsTheme(View v) {
-        setTheme(R.style.NaughtyPenguins);
-        FeelTripApplication.setThemeID(R.style.NaughtyPenguins);
+    public void swapToDefaultTheme(View v) {
+        setTheme(R.style.DefaultTheme);
+        FeelTripApplication.setThemeID(R.style.DefaultTheme);
         Intent intent = new Intent(this, loginActivity.class);
         Bundle bundle = new Bundle();
         EditText userField = (EditText) this.findViewById(R.id.user_text);
@@ -387,7 +403,7 @@ public class loginActivity extends AppCompatActivity implements
 
     public void swapToGalaxyTheme(View v) {
         setTheme(R.style.DefaultTheme);
-        FeelTripApplication.setThemeID(R.style.DefaultTheme);
+        FeelTripApplication.setThemeID(R.style.GalaxyTheme);
         Intent intent = new Intent(this, loginActivity.class);
         Bundle bundle = new Bundle();
         EditText userField = (EditText) this.findViewById(R.id.user_text);
