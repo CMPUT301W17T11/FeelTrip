@@ -29,7 +29,9 @@ import com.larswerkman.holocolorpicker.SVBar;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
-public class loginActivity extends AppCompatActivity implements ColorPicker.OnColorChangedListener, SeekBar.OnSeekBarChangeListener {
+public class loginActivity extends AppCompatActivity implements
+        ColorPicker.OnColorChangedListener,
+        SeekBar.OnSeekBarChangeListener {
 
     private ColorPicker picker;
     private SVBar svBar;
@@ -84,6 +86,12 @@ public class loginActivity extends AppCompatActivity implements ColorPicker.OnCo
                     default:
                         break;
                 }
+                if(FeelTripApplication.getThemeID() == R.style.Simplicity) {
+                    colorpicker.setVisibility(View.GONE);
+                    sv.setVisibility(View.GONE);
+                    themeSeekbarTable.setVisibility(View.GONE);
+                    themeSeekbar.setProgress(50);
+                }
                 EditText userField = (EditText) this.findViewById(R.id.user_text);
                 EditText passField = (EditText) this.findViewById(R.id.pass_text);
                 userField.setText(extras.getString("user"));
@@ -137,6 +145,11 @@ public class loginActivity extends AppCompatActivity implements ColorPicker.OnCo
         int textcolorsecondary;
         int textcolortertiary;
         int backgroundcolor;
+
+        if(FeelTripApplication.getThemeID() == R.style.Simplicity && color != -1) {
+            setTheme(R.style.CustomTheme_Light);
+            FeelTripApplication.setThemeID(R.style.CustomTheme_Light);
+        }
 
         textcolorprimary = color;
         textcolorsecondary = lighter(textcolorprimary, 0.6f);
@@ -246,6 +259,11 @@ public class loginActivity extends AppCompatActivity implements ColorPicker.OnCo
         if(!participants.isEmpty()) {
             getUserInfo(participants);
 
+            if(FeelTripApplication.getTEXTCOLORPRIMARY() == -1 && FeelTripApplication.getThemeID() == R.style.CustomTheme_Light) {
+                setTheme(R.style.Simplicity);
+                FeelTripApplication.setThemeID(R.style.Simplicity);
+            }
+
             Intent intent = new Intent(this, MainScreen.class);
             startActivity(intent);
         }
@@ -275,7 +293,7 @@ public class loginActivity extends AppCompatActivity implements ColorPicker.OnCo
                 ElasticSearchController.AddParticipantTask addParticipantTask = new ElasticSearchController.AddParticipantTask();
                 Participant participant = new Participant(userString, passString);
                 addParticipantTask.execute(participant);
-                Toast.makeText(getApplicationContext(),"User Creation sucessful!",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(),"User Creation successful!",Toast.LENGTH_SHORT).show();
             }
             else {
                 Toast.makeText(getApplicationContext(),"Both username and password must be filled!",Toast.LENGTH_SHORT).show();
@@ -368,9 +386,9 @@ public class loginActivity extends AppCompatActivity implements ColorPicker.OnCo
         finish();
     }
 
-    public void swapToNaughtyPenguinsTheme(View v) {
-        setTheme(R.style.NaughtyPenguins);
-        FeelTripApplication.setThemeID(R.style.NaughtyPenguins);
+    public void swapToDefaultTheme(View v) {
+        setTheme(R.style.DefaultTheme);
+        FeelTripApplication.setThemeID(R.style.DefaultTheme);
         Intent intent = new Intent(this, loginActivity.class);
         Bundle bundle = new Bundle();
         EditText userField = (EditText) this.findViewById(R.id.user_text);
@@ -385,7 +403,7 @@ public class loginActivity extends AppCompatActivity implements ColorPicker.OnCo
 
     public void swapToGalaxyTheme(View v) {
         setTheme(R.style.DefaultTheme);
-        FeelTripApplication.setThemeID(R.style.DefaultTheme);
+        FeelTripApplication.setThemeID(R.style.GalaxyTheme);
         Intent intent = new Intent(this, loginActivity.class);
         Bundle bundle = new Bundle();
         EditText userField = (EditText) this.findViewById(R.id.user_text);

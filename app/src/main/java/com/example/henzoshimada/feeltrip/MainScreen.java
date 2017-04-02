@@ -1,6 +1,8 @@
 package com.example.henzoshimada.feeltrip;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
@@ -32,6 +34,7 @@ import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
@@ -39,7 +42,12 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ToggleButton;
+
+import com.akiniyalocts.minor.MinorLayout;
+import com.akiniyalocts.minor.MinorView;
+import com.akiniyalocts.minor.behavior.MinorBehavior;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -73,11 +81,13 @@ public class MainScreen extends AppCompatActivity{
 
     //use custom adapter
     private ArrayList<String> usersFoundArray = FeelTripApplication.getUsersFoundArray();
-    private ArrayList<String> followingArray = new ArrayList<String>(); //todo use default adapter
+    //private ArrayList<String> followingArray = new ArrayList<String>(); //todo use default adapter
+    private ArrayList<String> followingArray = FeelTripApplication.getFollowingArray();
     private ArrayList<FollowRequest> requestsArray; //use custom adabter
 
     private RequestAdapter requestAdapter;
-    private ArrayAdapter<String> follwingAdapter;
+    //private ArrayAdapter<String> follwingAdapter;
+    private FollowingAdapter follwingAdapter;
     private UserFoundAdapter userFoundAdapter;
 
     private Participant participant = FeelTripApplication.getParticipant();;
@@ -126,67 +136,128 @@ public class MainScreen extends AppCompatActivity{
         return super.dispatchTouchEvent( event );
     }
 
+    @Override
+    public void onBackPressed() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
+        builder.setMessage("Are you sure you wish to logout?")
+                .setTitle("Logout?");
 
-    private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
-            = new BottomNavigationView.OnNavigationItemSelectedListener() {
-
-        @Override
-        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-            Fragment fragment;
-            FragmentManager fm = getFragmentManager();
-            FragmentTransaction ft = fm.beginTransaction();
-            Fragment fragCurrent = fm.findFragmentById(R.id.fragent_frame);
-            //Log.d("swipe",""+fragCurrent);
-            switch (item.getItemId()) {
-                case R.id.navigation_home:
-                    Log.d("Mytag","Tapped on home");
-                    FeelTripApplication.setFrag("main");
-                    fragment = new homeFragmment();
-                    ft.replace(R.id.fragent_frame,fragment);
-                    //ft.addToBackStack(null);
-                    ft.commit();
-                    break;
-                case R.id.navigation_profile:
-                    Log.d("Mytag","Tapped on profile");
-                    FeelTripApplication.setFrag("profile");
-                    fragment = new profileFragment();
-                    ft.replace(R.id.fragent_frame,fragment);
-                    //ft.addToBackStack(null);
-                    ft.commit();
-                    break;
-                case R.id.navigation_map:
-                    Log.d("Mytag","Tapped on map");
-                    FeelTripApplication.setFrag("map");
-                    fragment = new mapFragment();
-                    ft.replace(R.id.fragent_frame,fragment);
-                    //ft.addToBackStack(null);
-                    ft.commit();
-                    break;
-                default:
-                    fragment = new homeFragmment();
-                    ft.replace(R.id.fragent_frame,fragment);
-//                    ft.addToBackStack(null);
-                    ft.commit();
-                    break;
+        builder.setPositiveButton("LOGOUT", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                MainScreen.super.onBackPressed();
             }
-//            Intent i = getIntent();
-//            i.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-//            finish();
-//            startActivity(i);
-            //onPause(); // Refreshes the current activity without calling onCreate
+        });
+        builder.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                // User cancelled the dialog
+            }
+        });
+        // Create the AlertDialog
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
 
-            onResume();
-            return true;
+    private void onHomeTouch() {
+        Fragment fragment;
+        FragmentManager fm = getFragmentManager();
+        FragmentTransaction ft = fm.beginTransaction();
+        Fragment fragCurrent = fm.findFragmentById(R.id.fragent_frame);
+        Log.d("Mytag","Tapped on home");
+        FeelTripApplication.setFrag("main");
+        fragment = new homeFragmment();
+        ft.replace(R.id.fragent_frame,fragment);
+        //ft.addToBackStack(null);
+        ft.commit();
+        BetterMinorView minorHome = (BetterMinorView)findViewById(R.id.minor_home);
+        BetterMinorView minorProfile = (BetterMinorView)findViewById(R.id.minor_profile);
+        BetterMinorView minorMaps = (BetterMinorView)findViewById(R.id.minor_maps);
+        minorHome.selected();
+        minorProfile.unselected();
+        minorMaps.unselected();
+
+
+        if(FeelTripApplication.getThemeID() == R.style.CustomTheme_Light || FeelTripApplication.getThemeID() == R.style.CustomTheme_Dark) {
+            minorHome.setTextColor(FeelTripApplication.getCOLORPRIMARY());
+            minorHome.setIconColor(FeelTripApplication.getCOLORPRIMARY());
+            minorProfile.setTextColor(FeelTripApplication.getTEXTCOLORSECONDARY());
+            minorProfile.setIconColor(FeelTripApplication.getTEXTCOLORSECONDARY());
+            minorMaps.setTextColor(FeelTripApplication.getTEXTCOLORSECONDARY());
+            minorMaps.setIconColor(FeelTripApplication.getTEXTCOLORSECONDARY());
         }
+        else if(FeelTripApplication.getThemeID() == R.style.GalaxyTheme) {
+            minorHome.setIcon(R.drawable.galaxy_icon_home_selected); //TODO: THEME
+        }
+        onResume();
+    }
 
-    };
+    private void onProfileTouch() {
+        Fragment fragment;
+        FragmentManager fm = getFragmentManager();
+        FragmentTransaction ft = fm.beginTransaction();
+        Fragment fragCurrent = fm.findFragmentById(R.id.fragent_frame);
+        Log.d("Mytag","Tapped on profile");
+        FeelTripApplication.setFrag("profile");
+        fragment = new profileFragment();
+        ft.replace(R.id.fragent_frame,fragment);
+        //ft.addToBackStack(null);
+        ft.commit();
+        BetterMinorView minorHome = (BetterMinorView)findViewById(R.id.minor_home);
+        BetterMinorView minorProfile = (BetterMinorView)findViewById(R.id.minor_profile);
+        BetterMinorView minorMaps = (BetterMinorView)findViewById(R.id.minor_maps);
+        minorProfile.selected();
+        minorHome.unselected();
+        minorMaps.unselected();
 
+        if(FeelTripApplication.getThemeID() == R.style.CustomTheme_Light || FeelTripApplication.getThemeID() == R.style.CustomTheme_Dark) {
+            minorHome.setTextColor(FeelTripApplication.getTEXTCOLORSECONDARY());
+            minorHome.setIconColor(FeelTripApplication.getTEXTCOLORSECONDARY());
+            minorProfile.setTextColor(FeelTripApplication.getCOLORPRIMARY());
+            minorProfile.setIconColor(FeelTripApplication.getCOLORPRIMARY());
+            minorMaps.setTextColor(FeelTripApplication.getTEXTCOLORSECONDARY());
+            minorMaps.setIconColor(FeelTripApplication.getTEXTCOLORSECONDARY());
+        }
+        else if(FeelTripApplication.getThemeID() == R.style.GalaxyTheme) {
+            minorHome.setIcon(R.drawable.galaxy_icon_home_selected); //TODO: THEME
+        }
+        onResume();
+    }
+
+    private void onMapsTouch() {
+        Fragment fragment;
+        FragmentManager fm = getFragmentManager();
+        FragmentTransaction ft = fm.beginTransaction();
+        Fragment fragCurrent = fm.findFragmentById(R.id.fragent_frame);
+        Log.d("Mytag","Tapped on map");
+        FeelTripApplication.setFrag("map");
+        fragment = new mapFragment();
+        ft.replace(R.id.fragent_frame,fragment);
+        //ft.addToBackStack(null);
+        ft.commit();
+        BetterMinorView minorHome = (BetterMinorView)findViewById(R.id.minor_home);
+        BetterMinorView minorProfile = (BetterMinorView)findViewById(R.id.minor_profile);
+        BetterMinorView minorMaps = (BetterMinorView)findViewById(R.id.minor_maps);
+        minorMaps.selected();
+        minorHome.unselected();
+        minorProfile.unselected();
+
+        if(FeelTripApplication.getThemeID() == R.style.CustomTheme_Light || FeelTripApplication.getThemeID() == R.style.CustomTheme_Dark) {
+            minorHome.setTextColor(FeelTripApplication.getTEXTCOLORSECONDARY());
+            minorHome.setIconColor(FeelTripApplication.getTEXTCOLORSECONDARY());
+            minorProfile.setTextColor(FeelTripApplication.getTEXTCOLORSECONDARY());
+            minorProfile.setIconColor(FeelTripApplication.getTEXTCOLORSECONDARY());
+            minorMaps.setTextColor(FeelTripApplication.getCOLORPRIMARY());
+            minorMaps.setIconColor(FeelTripApplication.getCOLORPRIMARY());
+        }
+        else if(FeelTripApplication.getThemeID() == R.style.GalaxyTheme) {
+            minorHome.setIcon(R.drawable.galaxy_icon_home_selected); //TODO: THEME
+        }
+        onResume();
+    }
 
     private void setFirstItemNavigationView() {
-        BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
-        navigation.getMenu().getItem(1).setChecked(true);
-        navigation.getMenu().performIdentifierAction(R.id.navigation_home, 0);
+        final MinorView minorHome = (MinorView)findViewById(R.id.minor_home);
+        minorHome.performClick();
     }
 
     @Override
@@ -201,8 +272,30 @@ public class MainScreen extends AppCompatActivity{
 
         participant = FeelTripApplication.getParticipant();
         setContentView(R.layout.activity_main);
-        BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
-        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+        BetterMinorView minorHome = (BetterMinorView)findViewById(R.id.minor_home);
+        minorHome.setText("Home");
+        minorHome.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onHomeTouch();
+            }
+        });
+        BetterMinorView minorProfile = (BetterMinorView)findViewById(R.id.minor_profile);
+        minorProfile.setText("Profile");
+        minorProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onProfileTouch();
+            }
+        });
+        BetterMinorView minorMaps = (BetterMinorView)findViewById(R.id.minor_maps);
+        minorMaps.setText("Maps");
+        minorMaps.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onMapsTouch();
+            }
+        });
         setFirstItemNavigationView();
         addItemsOnEmotionalStateSpinner();
 
@@ -263,6 +356,7 @@ public class MainScreen extends AppCompatActivity{
         searchUserButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                notFoundTextView.setVisibility(View.GONE);
                 searchUser(v);
             }
         });
@@ -302,19 +396,12 @@ public class MainScreen extends AppCompatActivity{
             TextView friendsOnlyView = (TextView) findViewById(R.id.textView5);
             friendsOnlyView.setTextColor(FeelTripApplication.getTEXTCOLORTERTIARY());
 
-            int[][] navstates = new int[][] {
-                    new int[] { android.R.attr.state_checked},  // checked
-                    new int[] {-android.R.attr.state_checked}  // unchecked
-            };
+//            minorProfile.setBackgroundTintList();
 
-            int[] navcolors = new int[] {
-                    FeelTripApplication.getCOLORPRIMARY(),
-                    FeelTripApplication.getTEXTCOLORSECONDARY()
-            };
-            ColorStateList navList = new ColorStateList(navstates, navcolors);
-            android.support.design.widget.BottomNavigationView bottomNavigationView = (android.support.design.widget.BottomNavigationView) findViewById(R.id.navigation);
-            bottomNavigationView.setItemIconTintList(navList);
-            bottomNavigationView.setItemTextColor(navList);
+        }
+
+        else if(FeelTripApplication.getThemeID() == R.style.GalaxyTheme) {
+
         }
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -356,7 +443,8 @@ public class MainScreen extends AppCompatActivity{
         requestAdapter = FeelTripApplication.getRequestAdapter(this);
         requestView.setAdapter(requestAdapter);
 
-        follwingAdapter = new ArrayAdapter<>(this, R.layout.username_list_item, followingArray); //view,dataArray
+        //follwingAdapter = new ArrayAdapter<>(this, R.layout.username_list_item, followingArray); //view,dataArray
+        follwingAdapter = FeelTripApplication.getFollowingAdapter(this);
         followingView.setAdapter(follwingAdapter);
 
         userFoundAdapter = FeelTripApplication.getUserFoundAdapter(this);
@@ -431,6 +519,7 @@ public class MainScreen extends AppCompatActivity{
 
         try {
             requestsArray.addAll(getRequestTask.get());
+            Log.d("size" , "" + requestsArray.size());
         } catch (InterruptedException e) {
             return;
         } catch (ExecutionException e) {

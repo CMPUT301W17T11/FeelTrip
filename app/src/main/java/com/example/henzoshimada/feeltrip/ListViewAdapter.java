@@ -53,6 +53,9 @@ public class ListViewAdapter extends BaseSwipeAdapter {
     public void fillValues(final int position, View convertView) {
         final SwipeLayout swipeLayout = (SwipeLayout)convertView.findViewById(getSwipeLayoutResourceId(position));
         Log.d("swipe","Name Global: "+FeelTripApplication.getUserName());
+        if(!(FeelTripApplication.getUserName().equals((mood.get(position).getUsername())))){
+            swipeLayout.setSwipeEnabled(false);
+        }
         swipeLayout.addSwipeListener(new SimpleSwipeListener() {
             @Override
             public void onOpen(SwipeLayout layout) {

@@ -6,12 +6,12 @@ import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.graphics.Typeface;
 import android.location.Location;
 import android.net.Uri;
@@ -295,6 +295,29 @@ public class EditMoodActivity extends AppCompatActivity {
 
     } //end of on create
 
+    @Override
+    public void onBackPressed() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        builder.setMessage("Returning will discard any working changes you may have made. Are you sure you wish to return?")
+                .setTitle("Discard Changes?");
+
+        builder.setPositiveButton("RETURN", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                EditMoodActivity.super.onBackPressed();
+            }
+        });
+        builder.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                // User cancelled the dialog
+            }
+        });
+        // Create the AlertDialog
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+
     private int getIndex(Spinner spinner, String myString) {
         int index = 0;
 
@@ -331,12 +354,26 @@ public class EditMoodActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Called when user click the Pick Date option
+     * Uses DatePickerDiaLog
+     *
+     * @param context
+     * @see DatePickerDialog
+     */
     public void datePick(Context context) {
         Log.d("Mytag", "Went into date");
         new DatePickerDialog(context, datePickerDialogListener, dateTime.get(Calendar.YEAR), //TODO: Theme these properly
                 dateTime.get(Calendar.MONTH), dateTime.get(Calendar.DAY_OF_MONTH)).show();
     }
 
+    /**
+     * Called when user click the Pick Time option
+     * Uses TimePickerDialog
+     *
+     * @param context
+     * @see TimePickerDialog
+     */
     public void timePick(Context context) {
         //selectDate();
         Log.d("Mytag", "Went into date");
@@ -554,7 +591,7 @@ public class EditMoodActivity extends AppCompatActivity {
     }
 
 
-    //https://www.youtube.com/watch?v=8mFW6dA5xDE
+    //23 Feb 2017 https://www.youtube.com/watch?v=8mFW6dA5xDE
     DatePickerDialog.OnDateSetListener datePickerDialogListener = new DatePickerDialog.OnDateSetListener() {
         @Override
         public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
@@ -567,6 +604,7 @@ public class EditMoodActivity extends AppCompatActivity {
         }
     };
 
+    //23 Feb 2017 https://www.youtube.com/watch?v=8mFW6dA5xDE
     TimePickerDialog.OnTimeSetListener onTimeSetListener = new TimePickerDialog.OnTimeSetListener() {
         @Override
         public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
@@ -678,6 +716,10 @@ public class EditMoodActivity extends AppCompatActivity {
         Log.d("myTag", "location on is: " + String.valueOf(locationOn));
     }
 */
+    /**
+     * Check if ACCESS_FINE_LOCATION permission is granted, if not, ask for the permission
+     * @param activity
+     */
     public void verifyLocationPermissions(Activity activity) {
         // Check if we have location permission
         int permission = ActivityCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_FINE_LOCATION);
@@ -692,17 +734,21 @@ public class EditMoodActivity extends AppCompatActivity {
     }
 
     public void addItemsOnEmojiScroller() throws IllegalAccessException {
-        Field[] fields = R.drawable.class.getFields();
-        List<Integer> drawables = new ArrayList<Integer>();
-        for (Field field : fields) {
-            // Take only those with name starting with "emoji"
-            if (field.getName().startsWith("emoji")) {
-                drawables.add(field.getInt(null));
-            }
-        }
 
         emojiList = (LinearLayout) findViewById(R.id.emojiList);
-        for (int i = 1; i <= drawables.size(); i++) {
+
+        int theme_offset;
+        switch (FeelTripApplication.getThemeID()) {
+            case R.style.Simplicity:
+                theme_offset = 1;
+                break;
+            default:
+                theme_offset = 0;
+                break;
+        }
+        theme_offset = theme_offset * NUM_EMOTIONS;
+
+        for (int i = 1 + theme_offset; i <= theme_offset + NUM_EMOTIONS; i++) {
 
             LinearLayout emojiLayout = new LinearLayout(this);
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
@@ -715,7 +761,7 @@ public class EditMoodActivity extends AppCompatActivity {
             emojiButton.setAdjustViewBounds(true);
             emojiButton.setMaxHeight(150);
             emojiButton.setMaxWidth(150);
-            emojiButton.setBackgroundResource(R.color.white);
+            emojiButton.setBackgroundResource(R.color.transparent);
             if(getApplicationContext().getResources().getIdentifier("emoji" + i, "drawable", getApplicationContext().getPackageName()) != 0) { // Check if desired emoji exists
                 emojiButton.setImageResource(getApplicationContext().getResources().getIdentifier("emoji" + i, "drawable", getApplicationContext().getPackageName()));
             } else {

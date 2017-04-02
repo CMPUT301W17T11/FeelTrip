@@ -25,9 +25,13 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+/**
+ * Class for editing the location of a mood
+ */
 public class MapsActivity extends FragmentActivity implements
         GoogleMap.OnMyLocationButtonClickListener,
         OnMapReadyCallback,
@@ -131,6 +135,8 @@ public class MapsActivity extends FragmentActivity implements
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED) {
             if (mMap != null) {
+                MapStyleOptions style = MapStyleOptions.loadRawResourceStyle(this, R.raw.mapstyle_night);
+                mMap.setMapStyle(style);
                 mMap.setMyLocationEnabled(true);
                 mMap.setOnMyLocationButtonClickListener(this);
                 View locationButton = ((View) mMapView.findViewById(1).getParent()).findViewById(2);
@@ -235,14 +241,14 @@ public class MapsActivity extends FragmentActivity implements
 
     @Override
     public void onMarkerDrag(Marker arg0) {
-        // TODO Auto-generated method stub
-        //Log.d("info","onMarkerDrag");
+        // Auto-generated method stub
+        // Log.d("info","onMarkerDrag");
     }
 
     @Override
     public void onMarkerDragEnd(Marker arg0) {
         //Log.d("info","onMarkerDragEnd");
-        // TODO Auto-generated method stub
+        // Auto-generated method stub
         LatLng dragPosition = arg0.getPosition();
         latitude = dragPosition.latitude;
         longitude = dragPosition.longitude;
@@ -256,6 +262,10 @@ public class MapsActivity extends FragmentActivity implements
         // TODO Auto-generated method stub
     }
 
+    /**
+     * Called when submit button is called, set longitude and latitude as result for call back in EditMoodActivity
+     *
+     */
     private void storeLocation(){
         Log.d("locTag","store location");
         Intent intent = new Intent();

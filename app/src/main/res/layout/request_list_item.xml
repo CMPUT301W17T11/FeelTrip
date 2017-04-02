@@ -20,7 +20,7 @@
         android:layout_height="27sp"
         android:background="@null"
         android:scaleType="fitEnd"
-        android:src="@mipmap/ic_clear2"
+        android:src="@mipmap/ic_cancel3"
         android:visibility="visible" />
 
     <ImageButton
@@ -30,7 +30,7 @@
         android:layout_marginStart="10sp"
         android:background="@null"
         android:scaleType="fitStart"
-        android:src="@mipmap/ic_accept2" />
+        android:src="@mipmap/ic_accept3" />
 
 
 </LinearLayout>

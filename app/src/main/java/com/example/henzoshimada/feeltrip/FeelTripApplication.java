@@ -227,6 +227,23 @@ public class FeelTripApplication extends Application {
         return usersFoundArray;
     }
 
+    //following adapter
+    private static  FollowingAdapter followingAdapter = null;
+    private static ArrayList<String> followingArray = new ArrayList<String>();
+    public static FollowingAdapter getFollowingAdapter(Context context) {
+        if (followingAdapter == null) {
+            followingAdapter = new FollowingAdapter(followingArray, context.getApplicationContext());
+        }
+        return followingAdapter;
+    }
+
+    public static ArrayList<String> getFollowingArray() {
+        if(followingArray == null) {
+            followingArray = new ArrayList<String>();
+        }
+        return followingArray;
+    }
+
 
     public static void setMoodArrayList(ArrayList<Mood> moodArrayList) {
         FeelTripApplication.moodArrayList = moodArrayList;
@@ -246,8 +263,6 @@ public class FeelTripApplication extends Application {
             return;
         }
     }
-
-
 
     //lat var, setter,gett
     //lon
