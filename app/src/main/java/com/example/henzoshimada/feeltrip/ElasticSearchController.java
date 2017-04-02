@@ -33,8 +33,11 @@ import io.searchbox.params.Parameters;
 
 /**
  * Created by Esus2 on 2017-03-11.
+ * <p>
+ * This class is how the application "talks" to Elastic Search
+ * This class is what creates and sends the queries, as well as handles the response and the info
+ * that will be send to other methods in the app for use
  */
-
 public class ElasticSearchController {
     private static JestDroidClient client;
     private static final String groupIndex = "cmput301w17t11";
@@ -43,36 +46,54 @@ public class ElasticSearchController {
     private static final String typeRequest = "request";
 
 
+    /**
+     * The Username mapping.
+     */
     static PutMapping usernameMapping = new PutMapping.Builder(
             groupIndex,
             typeUser,
             "{ \"user\" : { \"properties\" : { \"userName\" : {\"type\" : \"string\", \"index\" : \"not_analyzed\"} } } }"
             ).refresh(true).build();
 
+    /**
+     * The Password mapping.
+     */
     static PutMapping passwordMapping = new PutMapping.Builder(
             groupIndex,
             typeUser,
             "{ \"user\" : { \"properties\" : { \"password\" : {\"type\" : \"string\", \"index\" : \"not_analyzed\"} } } }"
             ).refresh(true).build();
 
+    /**
+     * The Mood location mapping.
+     */
     static PutMapping moodLocationMapping = new PutMapping.Builder(
             groupIndex,
             typeMood,
             "{ \"mood\" : { \"properties\" : { \"location\" : {\"type\" : \"geo_point\"} } } }"
             ).refresh(true).build();
 
+    /**
+     * The Mood username mapping.
+     */
     static PutMapping moodUsernameMapping = new PutMapping.Builder(
             groupIndex,
             typeMood,
             "{ \"mood\" : { \"properties\" : { \"username\" : {\"type\" : \"string\", \"index\" : \"not_analyzed\"} } } }"
             ).refresh(true).build();
 
+    /**
+     * The Request sender mapping.
+     */
     static PutMapping requestSenderMapping = new PutMapping.Builder(
             groupIndex,
             typeRequest,
             "{ \"request\" : { \"properties\" : { \"sender\" : {\"type\" : \"string\", \"index\" : \"not_analyzed\"} } } }"
     ).refresh(true).build();
 
+    /**
+     * The Request receiver mapping.
+     */
     static PutMapping requestReceiverMapping = new PutMapping.Builder(
             groupIndex,
             typeRequest,
@@ -80,6 +101,13 @@ public class ElasticSearchController {
     ).refresh(true).build();
 
 
+    /**
+     * Load from elastic search.
+     * <p>
+     * This is the method that will load either the Participants moods if they are on the profile
+     * page, or only other users that they are following or have their moods as "public" if they are
+     * on the home page.
+     */
     public static void loadFromElasticSearch(){
         ArrayList<Mood> moodArray =  FeelTripApplication.getMoodArrayList();
         moodArray.clear();
@@ -117,6 +145,10 @@ public class ElasticSearchController {
     }
 
 
+    /**
+     * The type Add mood task.
+     * This is the method that will add a mood to the database of Elastic search
+     */
     public static class AddMoodTask extends AsyncTask<Mood, Void, Boolean> {
 
         @Override
@@ -157,6 +189,11 @@ public class ElasticSearchController {
         }
     }
 
+    /**
+     * The type Edit mood task.
+     * This is what runs if the participant is on their profile page and they select one of their
+     * moods. It will automatically expand for editing if the participant chooses to change anything
+     */
     public static class EditMoodTask extends AsyncTask<Mood, Void, Boolean>{ //TODO: Take concurrency into account
 
         @Override
@@ -273,6 +310,10 @@ public class ElasticSearchController {
     }
 
 
+    /**
+     * The type Delete mood task.
+     * Deletes the mood locally and from the Elastic search database
+     */
     public static class DeleteMoodTask extends AsyncTask<Mood, Void, Void> {
 
         @Override
@@ -300,13 +341,26 @@ public class ElasticSearchController {
         }
     }
 
-    // call constructor GetMoodTask(String filterBy) if filtering by a specific field
+    /**
+     * The type Get mood task.
+     */
+// call constructor GetMoodTask(String filterBy) if filtering by a specific field
     // call constructor GetMoodTask() if fetching all moods
     public static class GetMoodTask extends AsyncTask<String, Void, ArrayList<Mood>> {
         private String fieldToSearch;
+
+        /**
+         * Instantiates a new Get mood task.
+         *
+         * @param filterBy the filter by
+         */
         public GetMoodTask(String filterBy){
             this.fieldToSearch = filterBy;
         }
+
+        /**
+         * Instantiates a new Get mood task.
+         */
         public GetMoodTask(){this.fieldToSearch = null; }
 
         @Override
@@ -354,6 +408,12 @@ public class ElasticSearchController {
         }
     }
 
+    /**
+     * The type Add participant task.
+     * This method is used when registering a new user onto the Elastic Seach database.
+     * It will check if the username used is unique and not used before and will create an account
+     * for that username, otherwise an error message will be sent to the participant
+     */
     public static class AddParticipantTask extends AsyncTask<Participant, Void, Void> {
 
         @Override
@@ -386,6 +446,9 @@ public class ElasticSearchController {
         }
     }
 
+    /**
+     * The type Delete participant task.
+     */
     public static class DeleteParticipantTask extends AsyncTask<Participant, Void, Void> {
 
         @Override
@@ -410,6 +473,9 @@ public class ElasticSearchController {
         }
     }
 
+    /**
+     * The type Get participant task.
+     */
     public static class GetParticipantTask extends AsyncTask<String, Void, ArrayList<Participant>> {
 
         private String username = null;
@@ -417,11 +483,23 @@ public class ElasticSearchController {
 
         private boolean searchParticipant = false;
 
+        /**
+         * Instantiates a new Get participant task.
+         *
+         * @param username the username
+         * @param password the password
+         */
         public GetParticipantTask(String username, String password) { // must specify username and password upon creation of the controller
             this.username = username;
             this.password = password;
         }
 
+        /**
+         * Instantiates a new Get participant task.
+         *
+         * @param searchParticipant the search participant
+         * @param username          the username
+         */
         public GetParticipantTask(boolean searchParticipant, String username){
             this.searchParticipant = searchParticipant;
             this.username = username;
@@ -481,9 +559,17 @@ public class ElasticSearchController {
         }
     }
 
+    /**
+     * The type Edit participant task.
+     */
     public static class EditParticipantTask extends AsyncTask<Participant, Void, Void>{
         private String fieldToEdit;
 
+        /**
+         * Instantiates a new Edit participant task.
+         *
+         * @param fieldToEdit the field to edit
+         */
         public EditParticipantTask(String fieldToEdit){
             this.fieldToEdit = fieldToEdit;
         }
@@ -537,6 +623,10 @@ public class ElasticSearchController {
     }
 
 
+    /**
+     * The type Add request task.
+     * This mood is what adds a request to Elastic search to follow another user
+     */
     public static class AddRequestTask extends AsyncTask<FollowRequest, Void, Void> {
 
         @Override
@@ -569,9 +659,17 @@ public class ElasticSearchController {
         }
     }
 
+    /**
+     * The type Get request task.
+     */
     public static class GetRequestTask extends AsyncTask<String, Void, ArrayList<FollowRequest>>{
         private boolean checkAccept;
 
+        /**
+         * Instantiates a new Get request task.
+         *
+         * @param checkAccept the check accept
+         */
         public GetRequestTask(boolean checkAccept){
             this.checkAccept = checkAccept;
         }
@@ -640,6 +738,9 @@ public class ElasticSearchController {
         }
     }
 
+    /**
+     * The type Edit request task.
+     */
     public static class EditRequestTask extends AsyncTask<FollowRequest, Void, Void>{
 
         @Override
@@ -676,6 +777,9 @@ public class ElasticSearchController {
     }
 
 
+    /**
+     * The type Delete request task.
+     */
     public static class DeleteRequestTask extends AsyncTask<FollowRequest, Void, Void> {
 
         @Override
@@ -704,10 +808,18 @@ public class ElasticSearchController {
     }
 
 
+    /**
+     * The type Get username task.
+     */
     public static class GetUsernameTask extends AsyncTask<String, Void, ArrayList<Participant>> {
 
         private String username;
 
+        /**
+         * Instantiates a new Get username task.
+         *
+         * @param username the username
+         */
         public GetUsernameTask(String username) { // must specify username and password upon creation of the controller
             this.username = username;
         }
@@ -753,7 +865,10 @@ public class ElasticSearchController {
         }
     }
 
-    // The following method is to call respective filter queries on Elasticsearch.
+    /**
+     * The Get filtered moods task.
+     */
+// The following method is to call respective filter queries on Elasticsearch.
     public static class GetFilteredMoodsTask extends AsyncTask<String, Void, ArrayList<Mood>> { // fetch user's moods, sorted by newest to oldest.
         // These booleans are only here for brief clarity within the already confusing enough filter call.
         private boolean mainmode;
@@ -771,6 +886,12 @@ public class ElasticSearchController {
         private String participant; // stores the participant's username
         private Double currentlat = null;
         private Double currentlon = null;
+
+        /**
+         * Instantiates a new Get filtered moods task.
+         *
+         * @param searchmode the searchmode
+         */
         public GetFilteredMoodsTask(String searchmode){ // must pass this specific set of Strings in this order while constructing
             switch(searchmode) {
                 case "main":
@@ -928,7 +1049,10 @@ public class ElasticSearchController {
         }
     }
 
-    // singleton
+    /**
+     * Verify settings.
+     */
+// singleton
     public static void verifySettings() {
         if (client == null) {
             DroidClientConfig.Builder builder = new DroidClientConfig.Builder("http://cmput301.softwareprocess.es:8080");

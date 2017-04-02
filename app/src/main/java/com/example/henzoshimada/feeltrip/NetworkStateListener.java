@@ -10,13 +10,20 @@ import android.util.Log;
 /**
  * Created by Esus2 on 2017-03-25.
  */
-
 public class NetworkStateListener extends BroadcastReceiver{
 
     /*
         code borrowed from http://stackoverflow.com/questions/1783117/network-listener-android
         Name: Eric
         Date: 2017-03-25
+     */
+
+    /**
+     * This overrides is to properly handle the intent being received. In this case,
+     * intent only filters network connectivity changed.
+     *
+     * @param context The Context in which the receiver is running
+     * @param intent The intent being received
      */
     @Override
     public void onReceive(Context context, Intent intent )

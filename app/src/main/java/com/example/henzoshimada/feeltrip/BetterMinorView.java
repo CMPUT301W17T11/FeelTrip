@@ -19,7 +19,6 @@ import com.akiniyalocts.minor.MinorView;
  * Created by Brett on 2017-04-01.
  * Full credit of this code goes to com.akiniyalocts.minor.MinorView, I take none
  */
-
 public class BetterMinorView extends MinorView {
     private int selectedTitleColor = -1;
     private int titleColor = -1;
@@ -30,20 +29,46 @@ public class BetterMinorView extends MinorView {
     private LayoutParams params;
     private float inactiveSize;
 
+    /**
+     * Instantiates a new Better minor view.
+     *
+     * @param context the context
+     */
     public BetterMinorView(Context context) {
         super(context);
     }
 
+    /**
+     * Instantiates a new Better minor view.
+     *
+     * @param context the context
+     * @param attrs   the attrs
+     */
     public BetterMinorView(Context context, AttributeSet attrs) {
         super(context, attrs);
         this.initView(context, attrs);
     }
 
+    /**
+     * Instantiates a new Better minor view.
+     *
+     * @param context      the context
+     * @param attrs        the attrs
+     * @param defStyleAttr the def style attr
+     */
     public BetterMinorView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         this.initView(context, attrs);
     }
 
+    /**
+     * Instantiates a new Better minor view.
+     *
+     * @param context      the context
+     * @param attrs        the attrs
+     * @param defStyleAttr the def style attr
+     * @param defStyleRes  the def style res
+     */
     public BetterMinorView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
         this.initView(context, attrs);
@@ -166,6 +191,11 @@ public class BetterMinorView extends MinorView {
         }
     }
 
+    /**
+     * Sets icon.
+     *
+     * @param drawable the drawable
+     */
     public void setIcon(int drawable) {
         if(this.iconView != null) {
             if(this.iconView instanceof ImageView) {
@@ -176,6 +206,11 @@ public class BetterMinorView extends MinorView {
         }
     }
 
+    /**
+     * Sets icon color.
+     *
+     * @param color the color
+     */
     public void setIconColor(int color) {
         if(this.iconView != null) {
             if(this.iconView instanceof ImageView) {
@@ -185,6 +220,11 @@ public class BetterMinorView extends MinorView {
         }
     }
 
+    /**
+     * Sets text color.
+     *
+     * @param color the color
+     */
     public void setTextColor(int color) {
         if(this.titleTextView != null) {
             this.titleTextView.setTextColor(color);
@@ -195,6 +235,11 @@ public class BetterMinorView extends MinorView {
         }
     }
 
+    /**
+     * Sets text.
+     *
+     * @param title the title
+     */
     public void setText(String title) {
         if(title != null) {
             this.titleTextView.setText(title);

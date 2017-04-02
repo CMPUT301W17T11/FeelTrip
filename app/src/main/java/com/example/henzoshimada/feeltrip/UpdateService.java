@@ -10,13 +10,15 @@ import android.util.Log;
  */
 public class UpdateService extends IntentService{
 
+    /**
+     * Instantiates a new Update service.
+     */
     public UpdateService(){
         super("UpdateService");
     }
 
     /**
-      Javadoc cannot be created for this method.
-      It calls runUpdate method to do the job when this service is called
+     * This override is to call queue controller for offline functionality of the app
      */
     @Override
     protected void onHandleIntent(Intent intent){

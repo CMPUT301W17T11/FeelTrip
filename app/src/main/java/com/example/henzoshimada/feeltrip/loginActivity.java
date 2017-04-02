@@ -29,6 +29,11 @@ import com.larswerkman.holocolorpicker.SVBar;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
+/**
+ * The type Login activity.
+ * The Simplicity theme is embedded throughout this class so as to make it an "Easter egg" rather
+ * than just another theme we created for the app
+ */
 public class loginActivity extends AppCompatActivity implements
         ColorPicker.OnColorChangedListener,
         SeekBar.OnSeekBarChangeListener {
@@ -37,6 +42,9 @@ public class loginActivity extends AppCompatActivity implements
     private SVBar svBar;
     private Button button;
     private TextView text;
+    /**
+     * The Bottom sheet.
+     */
     android.support.v4.widget.NestedScrollView bottomSheet;
     private BottomSheetBehavior mBottomSheetBehavior;
     private SeekBar themeSeekBar;
@@ -138,6 +146,11 @@ public class loginActivity extends AppCompatActivity implements
 
     } //end of onCreate
 
+    /**
+     * This is what we use to change the colour of the application as its own "theme"
+     * This is how each colour can be changed without any lag to the application
+     * @param color
+     */
     @Override
     public void onColorChanged(int color) {
         int colorprimary;
@@ -181,11 +194,8 @@ public class loginActivity extends AppCompatActivity implements
     /**
      * Lightens a color by a given factor.
      *
-     * @param color
-     *            The color to lighten
-     * @param factor
-     *            The factor to lighten the color. 0 will make the color unchanged. 1 will make the
-     *            color white.
+     * @param color  The color to lighten
+     * @param factor The factor to lighten the color. 0 will make the color unchanged. 1 will make the            color white.
      * @return lighter version of the specified color.
      */
     public static int lighter(int color, float factor) {
@@ -195,6 +205,9 @@ public class loginActivity extends AppCompatActivity implements
         return Color.argb(Color.alpha(color), red, green, blue);
     }
 
+    /**
+     * These methods are needed even though the do nothing and return nothing, we must implement these
+     */
     @Override
     public void onProgressChanged(SeekBar seekBar, int progress,
                                   boolean fromUser) {
@@ -242,6 +255,11 @@ public class loginActivity extends AppCompatActivity implements
         return super.dispatchTouchEvent(event);
     }
 
+    /**
+     * Check user.
+     *
+     * @param v the v
+     */
     public void checkUser(View v){ // TODO: Check and fix cases where pass or username contains special chars.
         EditText userField = (EditText) this.findViewById(R.id.user_text);
         EditText passField = (EditText) this.findViewById(R.id.pass_text);
@@ -273,6 +291,12 @@ public class loginActivity extends AppCompatActivity implements
         FeelTripApplication.setUsername(userField.getText().toString());
         return;
     }
+
+    /**
+     * Reg user.
+     *
+     * @param v the v
+     */
     public void regUser(View v){
         EditText userField = (EditText) this.findViewById(R.id.user_text);
         EditText passField = (EditText) this.findViewById(R.id.pass_text);
@@ -305,6 +329,11 @@ public class loginActivity extends AppCompatActivity implements
         return;
     }
 
+    /**
+     * Get user info.
+     *
+     * @param participants the participants
+     */
     public void getUserInfo(ArrayList<Participant> participants){
         ArrayList<FollowRequest> followRequests = new ArrayList<>();
         ArrayList<FollowRequest> acceptedRequests = new ArrayList<>();
@@ -347,6 +376,11 @@ public class loginActivity extends AppCompatActivity implements
         }
     }
 
+    /**
+     * Swap to custom theme.
+     *
+     * @param v the v
+     */
     public void swapToCustomTheme(View v) {
         ColorPicker colorpicker = (ColorPicker) findViewById(R.id.picker);
         SVBar sv = (SVBar) findViewById(R.id.svbar);
@@ -356,6 +390,10 @@ public class loginActivity extends AppCompatActivity implements
         themeSeekbarTable.setVisibility(View.VISIBLE);
     }
 
+    /**
+     * Swap to custom theme light.
+     * This is what differentiates the themes to be "light"
+     */
     public void swapToCustomThemeLight() {
         setTheme(R.style.CustomTheme_Light);
         FeelTripApplication.setThemeID(R.style.CustomTheme_Light);
@@ -371,6 +409,10 @@ public class loginActivity extends AppCompatActivity implements
         finish();
     }
 
+    /**
+     * Swap to custom theme dark.
+     * This is what differentiates the themes to be "dark"
+     */
     public void swapToCustomThemeDark() {
         setTheme(R.style.CustomTheme_Dark);
         FeelTripApplication.setThemeID(R.style.CustomTheme_Dark);
@@ -386,6 +428,11 @@ public class loginActivity extends AppCompatActivity implements
         finish();
     }
 
+    /**
+     * Swap to default theme.
+     *
+     * @param v the v
+     */
     public void swapToDefaultTheme(View v) {
         setTheme(R.style.DefaultTheme);
         FeelTripApplication.setThemeID(R.style.DefaultTheme);
@@ -401,6 +448,11 @@ public class loginActivity extends AppCompatActivity implements
         finish();
     }
 
+    /**
+     * Swap to galaxy theme.
+     *
+     * @param v the v
+     */
     public void swapToGalaxyTheme(View v) {
         setTheme(R.style.DefaultTheme);
         FeelTripApplication.setThemeID(R.style.GalaxyTheme);
@@ -416,9 +468,14 @@ public class loginActivity extends AppCompatActivity implements
         finish();
     }
 
+    /**
+     * Swap to overwatch theme.
+     *
+     * @param v the v
+     */
     public void swapToOverwatchTheme(View v) {
-        setTheme(R.style.DefaultTheme);
-        FeelTripApplication.setThemeID(R.style.DefaultTheme);
+        setTheme(R.style.Overwatch);
+        FeelTripApplication.setThemeID(R.style.Overwatch);
         Intent intent = new Intent(this, loginActivity.class);
         Bundle bundle = new Bundle();
         EditText userField = (EditText) this.findViewById(R.id.user_text);

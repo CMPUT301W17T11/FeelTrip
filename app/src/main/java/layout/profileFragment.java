@@ -23,6 +23,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 
+/**
+ * The type Profile fragment.
+ * This fragment is for the participants profile page where they can see all the moods that they
+ * created, which they will be able to edit as well
+ */
 public class profileFragment extends Fragment {
 
     private ListView oldMoodListView;
@@ -42,9 +47,18 @@ public class profileFragment extends Fragment {
     private boolean mItemPressed = false; // Detects if user is currently holding down a view
     private static final int SWIPE_DURATION = 250; // needed for velocity implementation
     private static final int MOVE_DURATION = 150;
+    /**
+     * The M down x.
+     */
     float mDownX;
     private int mSwipeSlop = -1;
+    /**
+     * The Swiped.
+     */
     boolean swiped;
+    /**
+     * The M item id top map.
+     */
     HashMap<Long, Integer> mItemIdTopMap = new HashMap<Long, Integer>();
 
     @Override

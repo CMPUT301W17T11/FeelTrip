@@ -51,7 +51,6 @@ public class UpdateQueueController {
     /**
      * Adds an ArrayList of moods to updateQueue.
      * needed when load from file
-     *
      * @param moods the moods
      */
     public void addAllMood(ArrayList<Mood> moods){
@@ -96,6 +95,7 @@ public class UpdateQueueController {
 
 
     /**
+     * run update
      * This method will be called from the Update service when internet connection is resumed
      * it goes through the update queue and do add/update/delete accordingly.
      */
@@ -191,7 +191,7 @@ public class UpdateQueueController {
 
     /**
      * Set context.
-     * set the context needed for loadFromFile
+     * set the context needed for file operations
      * @param context the context
      */
     public void setContext(Context context){

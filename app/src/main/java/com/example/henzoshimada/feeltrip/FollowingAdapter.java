@@ -26,11 +26,23 @@ public class FollowingAdapter extends ArrayAdapter<String> {
      * View contains, a username, unfollow button
      */
     private static class ViewHolder {
+        /**
+         * The User name.
+         */
         TextView userName;
+        /**
+         * The Unfollow button.
+         */
         ImageButton unfollowButton;
 
     }
 
+    /**
+     * Instantiates a new Following adapter.
+     *
+     * @param RequestArrayList the request array list
+     * @param context          the context
+     */
     public FollowingAdapter(ArrayList<String> RequestArrayList, Context context) {
         super(context, R.layout.following_list_item, RequestArrayList);
         //this.dataSet = moodArrayList;
@@ -42,6 +54,7 @@ public class FollowingAdapter extends ArrayAdapter<String> {
     /**
      * set username
      * set On Click Listener for unfollow button
+     * This method is to get the View for the follower/following functionality
      * @param position
      * @param convertView
      * @param parent

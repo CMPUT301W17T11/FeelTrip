@@ -29,11 +29,20 @@ import java.util.ArrayList;
 import static com.example.henzoshimada.feeltrip.R.id.userName;
 import static java.security.AccessController.getContext;
 
+/**
+ * The type List view adapter.
+ */
 public class ListViewAdapter extends BaseSwipeAdapter {
 
 
     private Context mContext;
     private ArrayList<Mood> mood = FeelTripApplication.getMoodArrayList();
+
+    /**
+     * Instantiates a new List view adapter.
+     *
+     * @param mContext the m context
+     */
     public ListViewAdapter(Context mContext) {
         this.mContext = mContext.getApplicationContext();
     }

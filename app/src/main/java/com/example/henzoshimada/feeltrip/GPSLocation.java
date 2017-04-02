@@ -26,17 +26,35 @@ public class GPSLocation extends Service implements LocationListener {
 
     private final Context mContext;
 
-    // Flag for GPS status
+    /**
+     * The Is gps enabled.
+     */
+// Flag for GPS status
     boolean isGPSEnabled = false;
 
-    // Flag for network status
+    /**
+     * The Is network enabled.
+     */
+// Flag for network status
     boolean isNetworkEnabled = false;
 
-    // Flag for GPS status
+    /**
+     * The Can get location.
+     */
+// Flag for GPS status
     boolean canGetLocation = false;
 
+    /**
+     * The Location.
+     */
     Location location; // Location
+    /**
+     * The Latitude.
+     */
     double latitude; // Latitude
+    /**
+     * The Longitude.
+     */
     double longitude; // Longitude
 
     // The minimum distance to change Updates in meters
@@ -45,14 +63,27 @@ public class GPSLocation extends Service implements LocationListener {
     // The minimum time between updates in milliseconds
     private static final long MIN_TIME_BW_UPDATES = 1000 * 60 * 1; // 1 minute
 
-    // Declaring a Location Manager
+    /**
+     * The Location manager.
+     */
+// Declaring a Location Manager
     protected LocationManager locationManager;
 
+    /**
+     * Instantiates a new Gps location.
+     *
+     * @param context the context
+     */
     public GPSLocation(Context context) {
         this.mContext = context;
         getLocation();
     }
 
+    /**
+     * Gets location.
+     *
+     * @return the location
+     */
     public Location getLocation() {
         try {
             locationManager = (LocationManager) mContext.getSystemService(LOCATION_SERVICE);
@@ -113,7 +144,7 @@ public class GPSLocation extends Service implements LocationListener {
     /**
      * Stop using GPS listener
      * Calling this function will stop using GPS in your app.
-     * */
+     */
     public void stopUsingGPS(){
         if(locationManager != null){
             locationManager.removeUpdates(GPSLocation.this);
@@ -123,7 +154,9 @@ public class GPSLocation extends Service implements LocationListener {
 
     /**
      * Function to get latitude
-     * */
+     *
+     * @return the double
+     */
     public double getLatitude(){
         if(location != null){
             latitude = location.getLatitude();
@@ -136,7 +169,9 @@ public class GPSLocation extends Service implements LocationListener {
 
     /**
      * Function to get longitude
-     * */
+     *
+     * @return the double
+     */
     public double getLongitude(){
         if(location != null){
             longitude = location.getLongitude();
@@ -148,8 +183,9 @@ public class GPSLocation extends Service implements LocationListener {
 
     /**
      * Function to check GPS/Wi-Fi enabled
-     * @return boolean
-     * */
+     *
+     * @return boolean boolean
+     */
     public boolean canGetLocation() {
         return this.canGetLocation;
     }
@@ -158,7 +194,7 @@ public class GPSLocation extends Service implements LocationListener {
     /**
      * Function to show settings alert dialog.
      * On pressing the Settings button it will launch Settings Options.
-     * */
+     */
     public void showSettingsAlert(){
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(mContext);
 
