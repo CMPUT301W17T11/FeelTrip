@@ -12,7 +12,6 @@ import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.graphics.Typeface;
 import android.location.Location;
 import android.net.Uri;
@@ -737,7 +736,7 @@ public class EditMoodActivity extends AppCompatActivity {
             emojiButton.setAdjustViewBounds(true);
             emojiButton.setMaxHeight(150);
             emojiButton.setMaxWidth(150);
-            emojiButton.setBackgroundResource(R.color.white);
+            emojiButton.setBackgroundResource(R.color.transparent);
             if(getApplicationContext().getResources().getIdentifier("emoji" + i, "drawable", getApplicationContext().getPackageName()) != 0) { // Check if desired emoji exists
                 emojiButton.setImageResource(getApplicationContext().getResources().getIdentifier("emoji" + i, "drawable", getApplicationContext().getPackageName()));
             } else {

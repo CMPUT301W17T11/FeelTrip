@@ -368,9 +368,9 @@ public class loginActivity extends AppCompatActivity implements ColorPicker.OnCo
         finish();
     }
 
-    public void swapToNaughtyPenguinsTheme(View v) {
-        setTheme(R.style.NaughtyPenguins);
-        FeelTripApplication.setThemeID(R.style.NaughtyPenguins);
+    public void swapToSimplicityTheme(View v) {
+        setTheme(R.style.Simplicity);
+        FeelTripApplication.setThemeID(R.style.Simplicity);
         Intent intent = new Intent(this, loginActivity.class);
         Bundle bundle = new Bundle();
         EditText userField = (EditText) this.findViewById(R.id.user_text);
