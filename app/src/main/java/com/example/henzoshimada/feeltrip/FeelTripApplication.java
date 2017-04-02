@@ -221,8 +221,6 @@ public class FeelTripApplication extends Application {
         }
     }
 
-
-
     //lat var, setter,gett
     //lon
     private static double longitude;

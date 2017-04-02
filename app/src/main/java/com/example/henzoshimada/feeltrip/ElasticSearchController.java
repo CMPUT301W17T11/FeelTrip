@@ -53,7 +53,7 @@ public class ElasticSearchController {
             groupIndex,
             typeUser,
             "{ \"user\" : { \"properties\" : { \"password\" : {\"type\" : \"string\", \"index\" : \"not_analyzed\"} } } }"
-    ).refresh(true).build();
+            ).refresh(true).build();
 
     static PutMapping moodLocationMapping = new PutMapping.Builder(
             groupIndex,
@@ -63,9 +63,9 @@ public class ElasticSearchController {
 
     static PutMapping moodUsernameMapping = new PutMapping.Builder(
             groupIndex,
-            typeUser,
+            typeMood,
             "{ \"mood\" : { \"properties\" : { \"username\" : {\"type\" : \"string\", \"index\" : \"not_analyzed\"} } } }"
-    ).refresh(true).build();
+            ).refresh(true).build();
 
 
     public static void loadFromElasticSearch(){
