@@ -417,8 +417,8 @@ public class loginActivity extends AppCompatActivity implements
     }
 
     public void swapToOverwatchTheme(View v) {
-        setTheme(R.style.DefaultTheme);
-        FeelTripApplication.setThemeID(R.style.DefaultTheme);
+        setTheme(R.style.Overwatch);
+        FeelTripApplication.setThemeID(R.style.Overwatch);
         Intent intent = new Intent(this, loginActivity.class);
         Bundle bundle = new Bundle();
         EditText userField = (EditText) this.findViewById(R.id.user_text);
