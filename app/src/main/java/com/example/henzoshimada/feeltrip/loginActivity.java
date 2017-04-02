@@ -55,6 +55,11 @@ public class loginActivity extends AppCompatActivity implements
 
 //        setTheme(R.style.NaughtyPenguins); //TODO - theme
 //        setTheme(R.style.DefaultTheme);
+
+        if (FeelTripApplication.getThemeID() == R.style.Simplicity) {
+            FeelTripApplication.setThemeID(R.style.CustomTheme_Light);
+        }
+
         setTheme(FeelTripApplication.getThemeID());
 
         setContentView(R.layout.activity_login);
@@ -158,11 +163,6 @@ public class loginActivity extends AppCompatActivity implements
         int textcolorsecondary;
         int textcolortertiary;
         int backgroundcolor;
-
-        if(FeelTripApplication.getThemeID() == R.style.Simplicity && color != -1) {
-            setTheme(R.style.CustomTheme_Light);
-            FeelTripApplication.setThemeID(R.style.CustomTheme_Light);
-        }
 
         textcolorprimary = color;
         textcolorsecondary = lighter(textcolorprimary, 0.6f);

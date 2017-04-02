@@ -471,7 +471,9 @@ public class MainScreen extends AppCompatActivity{
             TextView friendsOnlyView = (TextView) findViewById(R.id.textView5);
             friendsOnlyView.setTextColor(FeelTripApplication.getTEXTCOLORTERTIARY());
 
-//            minorProfile.setBackgroundTintList();
+            minorHome.setIcon(R.drawable.ic_home_black_24dp);
+            minorProfile.setIcon(R.drawable.ic_person_black_24dp);
+            minorMaps.setIcon(R.drawable.ic_location_searching_black_24dp);
 
         }
 
