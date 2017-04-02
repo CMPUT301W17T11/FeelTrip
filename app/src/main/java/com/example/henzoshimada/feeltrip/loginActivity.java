@@ -144,6 +144,11 @@ public class loginActivity extends AppCompatActivity implements ColorPicker.OnCo
         int textcolortertiary;
         int backgroundcolor;
 
+        if(FeelTripApplication.getThemeID() == R.style.Simplicity && color != -1) {
+            setTheme(R.style.CustomTheme_Light);
+            FeelTripApplication.setThemeID(R.style.CustomTheme_Light);
+        }
+
         textcolorprimary = color;
         textcolorsecondary = lighter(textcolorprimary, 0.6f);
         textcolortertiary = lighter(textcolorprimary, 0.4f);
