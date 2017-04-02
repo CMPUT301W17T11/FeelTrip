@@ -227,6 +227,11 @@ public class MainScreen extends AppCompatActivity{
             minorMaps.setTextColor(FeelTripApplication.getTEXTCOLORSECONDARY());
             minorMaps.setIconColor(FeelTripApplication.getTEXTCOLORSECONDARY());
         }
+
+        else if(FeelTripApplication.getThemeID() == R.style.Simplicity) {
+            minorHome.setIcon(R.drawable.simplicity_icon_home);
+        }
+
         else if(FeelTripApplication.getThemeID() == R.style.GalaxyTheme) {
             minorHome.setIcon(R.drawable.galaxy_icon_home_selected); //TODO: THEME
         }
@@ -263,8 +268,13 @@ public class MainScreen extends AppCompatActivity{
             minorMaps.setTextColor(FeelTripApplication.getTEXTCOLORSECONDARY());
             minorMaps.setIconColor(FeelTripApplication.getTEXTCOLORSECONDARY());
         }
+
+        else if(FeelTripApplication.getThemeID() == R.style.Simplicity) {
+            minorProfile.setIcon(R.drawable.simplicity_icon_profile);
+        }
+
         else if(FeelTripApplication.getThemeID() == R.style.GalaxyTheme) {
-            minorHome.setIcon(R.drawable.galaxy_icon_home_selected); //TODO: THEME
+            minorHome.setIcon(R.drawable.galaxy_icon_home_unselected); //TODO: THEME
         }
         onResume();
     }
@@ -300,8 +310,13 @@ public class MainScreen extends AppCompatActivity{
             minorMaps.setTextColor(FeelTripApplication.getCOLORPRIMARY());
             minorMaps.setIconColor(FeelTripApplication.getCOLORPRIMARY());
         }
+
+        else if(FeelTripApplication.getThemeID() == R.style.Simplicity) {
+            minorMaps.setIcon(R.drawable.simplicity_icon_maps);
+        }
+
         else if(FeelTripApplication.getThemeID() == R.style.GalaxyTheme) {
-            minorHome.setIcon(R.drawable.galaxy_icon_home_selected); //TODO: THEME
+            minorHome.setIcon(R.drawable.galaxy_icon_home_unselected); //TODO: THEME
         }
         onResume();
     }
@@ -353,7 +368,7 @@ public class MainScreen extends AppCompatActivity{
                 onMapsTouch();
             }
         });
-        setFirstItemNavigationView();
+
         addItemsOnEmotionalStateSpinner();
 
         ToggleButton toggleRecent = (ToggleButton) findViewById(R.id.toggleRecent);
@@ -457,9 +472,25 @@ public class MainScreen extends AppCompatActivity{
 
         }
 
+        else if(FeelTripApplication.getThemeID() == R.style.Simplicity) {
+            RelativeLayout background = (RelativeLayout) findViewById(R.id.content_main);
+            background.setBackgroundResource(R.drawable.simplicity_bg);
+            minorHome.setIcon(R.drawable.simplicity_icon_home);
+            minorProfile.setIcon(R.drawable.simplicity_icon_profile);
+            minorMaps.setIcon(R.drawable.simplicity_icon_maps);
+        }
+
         else if(FeelTripApplication.getThemeID() == R.style.GalaxyTheme) {
 
         }
+
+        else {
+            minorHome.setIcon(R.drawable.ic_home_black_24dp);
+            minorProfile.setIcon(R.drawable.ic_person_black_24dp);
+            minorMaps.setIcon(R.drawable.ic_location_searching_black_24dp);
+        }
+
+        setFirstItemNavigationView();
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.drawer_open, R.string.drawer_close) {

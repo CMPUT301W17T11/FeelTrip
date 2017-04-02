@@ -35,6 +35,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
@@ -212,6 +213,16 @@ public class EditMoodActivity extends AppCompatActivity {
             android.support.design.widget.BottomNavigationView bottomNavigationView = (android.support.design.widget.BottomNavigationView) findViewById(R.id.options_post);
             bottomNavigationView.setItemIconTintList(navList);
             bottomNavigationView.setItemTextColor(navList);
+        }
+
+        else if(FeelTripApplication.getThemeID() == R.style.Simplicity) {
+            ScrollView background = (ScrollView) findViewById(R.id.editMood_scrollView);
+            background.setBackgroundResource(R.drawable.simplicity_bg);
+        }
+
+        else if(FeelTripApplication.getThemeID() == R.style.GalaxyTheme) {
+            ScrollView background = (ScrollView) findViewById(R.id.editMood_scrollView);
+            background.setBackgroundResource(R.drawable.galaxy_bg);
         }
 
 

@@ -5,5 +5,4 @@
     android:layout_height="24dp"
     android:maxHeight="24dp"
     android:maxWidth="24dp"
-    android:adjustViewBounds="true"
-    android:src="@drawable/ic_home_black_24dp"/>
+    android:adjustViewBounds="true"/>

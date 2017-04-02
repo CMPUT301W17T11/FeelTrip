@@ -83,6 +83,10 @@ public class homeFragmment extends Fragment{
             oldMoodListView.setBackgroundColor(FeelTripApplication.getBACKGROUNDCOLOR());
         }
 
+        else if(FeelTripApplication.getThemeID() == R.style.Simplicity) {
+            addEntry.setImageResource(R.drawable.simplicity_icon_edit);
+        }
+
         else if(FeelTripApplication.getThemeID() == R.style.GalaxyTheme) {
             oldMoodListView.setBackground(getActivity().getDrawable(R.drawable.galaxy_bg));
         }
