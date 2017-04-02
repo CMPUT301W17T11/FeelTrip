@@ -49,8 +49,8 @@ public class UpdateQueueController {
     }
 
     /**
-     * Add all mood.
-     *
+     * Adds an ArrayList of moods to updateQueue.
+     * needed when load from file
      * @param moods the moods
      */
     public void addAllMood(ArrayList<Mood> moods){
@@ -95,6 +95,7 @@ public class UpdateQueueController {
 
 
     /**
+     * run update
      * This method will be called from the Update service when internet connection is resumed
      * it goes through the update queue and do add/update/delete accordingly.
      */
@@ -139,7 +140,8 @@ public class UpdateQueueController {
 
 
     /**
-     * Load from file. (From a JSon)
+     * Load from file.
+     * Load mood events into updateQueue every time app is started
      */
     public void loadFromFile() {
         ArrayList<Mood> moods;
@@ -151,7 +153,6 @@ public class UpdateQueueController {
             Type listType = new TypeToken<ArrayList<Mood>>(){}.getType();
             moods = gson.fromJson(in,listType);
             for (Mood mood : moods){
-                Log.d("debug", "delstate after loaded: "+mood.getDelState());
             }
             addAllMood(moods);
 
@@ -163,7 +164,7 @@ public class UpdateQueueController {
 
     /**
      * Save in file.
-     * ie. save the changes locally into a JSon
+     * save updateQueue to file whenever a new mood event is added to updateQueue
      */
     public void saveInFile() {
         if (getSize() == 0){
@@ -190,7 +191,7 @@ public class UpdateQueueController {
 
     /**
      * Set context.
-     *
+     * set the context needed for file operations
      * @param context the context
      */
     public void setContext(Context context){

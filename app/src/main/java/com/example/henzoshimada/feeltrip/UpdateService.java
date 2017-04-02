@@ -18,7 +18,7 @@ public class UpdateService extends IntentService{
     }
 
     /**
-     * This overide is to update the queue controller for offline functionality of the app
+     * This override is to call queue controller for offline functionality of the app
      */
     @Override
     protected void onHandleIntent(Intent intent){

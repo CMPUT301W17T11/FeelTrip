@@ -112,7 +112,7 @@ public class ElasticSearchController {
         ArrayList<Mood> moodArray =  FeelTripApplication.getMoodArrayList();
         moodArray.clear();
 
-        // no internet connection
+        // no internet connection, load local cache into moodArrayList
         if (!FeelTripApplication.getNetworkAvailable()){
             if (FeelTripApplication.getFrag().equals("main")){
                 ArrayList<Mood> localCache = FeelTripApplication.getLocalMainList();

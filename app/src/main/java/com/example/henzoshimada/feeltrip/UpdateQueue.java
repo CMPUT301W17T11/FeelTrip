@@ -57,8 +57,11 @@ public class UpdateQueue {
         return queue.isEmpty();
     }
 
+
     /**
-     * To array the list of all moods.
+     * To array array list.
+     * convert UpdateQueue object into an ArrayList object.
+     * Used for saving this queue to file.
      *
      * @return the array list
      */
