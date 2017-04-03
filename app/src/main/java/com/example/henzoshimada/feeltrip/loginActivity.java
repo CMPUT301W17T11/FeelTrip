@@ -52,6 +52,11 @@ public class loginActivity extends AppCompatActivity implements
 
         setContentView(R.layout.activity_login);
 
+        if(FeelTripApplication.getThemeID() == R.style.GalaxyTheme) {
+            CoordinatorLayout loginBackground = (CoordinatorLayout) findViewById(R.id.login_background);
+            loginBackground.setBackgroundResource(R.drawable.galaxy_bg);
+        }
+
         bottomSheet = (android.support.v4.widget.NestedScrollView) findViewById( R.id.bottom_sheet );
 
         mBottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
