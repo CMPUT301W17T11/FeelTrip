@@ -211,6 +211,9 @@ public class EditMoodActivity extends AppCompatActivity {
             background.setBackgroundResource(R.drawable.simplicity_bg);
         }
 
+        else if(FeelTripApplication.getThemeID() == R.style.Overwatch) {
+        }
+
         else if(FeelTripApplication.getThemeID() == R.style.GalaxyTheme) {
             ScrollView background = (ScrollView) findViewById(R.id.editMood_scrollView);
             background.setBackgroundResource(R.drawable.galaxy_bg);

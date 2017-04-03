@@ -57,6 +57,7 @@ public class loginActivity extends AppCompatActivity implements
             loginBackground.setBackgroundResource(R.drawable.galaxy_bg);
         }
 
+
         bottomSheet = (android.support.v4.widget.NestedScrollView) findViewById( R.id.bottom_sheet );
 
         mBottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
