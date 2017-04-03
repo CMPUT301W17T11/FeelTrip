@@ -12,7 +12,6 @@ import com.robotium.solo.Solo;
 /**
  * Created by Kevin on 31-Mar-17.
  */
-
 public class LoginActivityTest extends ActivityInstrumentationTestCase2<loginActivity> {
     private Solo solo;
     private EditText userNameView;
@@ -23,6 +22,9 @@ public class LoginActivityTest extends ActivityInstrumentationTestCase2<loginAct
     private String password = "testcaseuser";
     private String invalidPassword = "sdfgh";
 
+    /**
+     * Instantiates a new Login activity test.
+     */
     public LoginActivityTest() {
         super(loginActivity.class);
     }
@@ -36,16 +38,27 @@ public class LoginActivityTest extends ActivityInstrumentationTestCase2<loginAct
         registerButtonView = solo.getView(R.id.reg_button);
     }
 
+    /**
+     * Test start.
+     *
+     * @throws Exception the exception
+     */
     public void testStart() throws Exception {
         Activity activity = getActivity();
     }
 
+    /**
+     * Test input user name.
+     */
     public void testInputUserName() {
         String inputText = userName;
         solo.enterText(userNameView,inputText);
         assertTrue(solo.waitForText(inputText));
     }
 
+    /**
+     * Test input password.
+     */
     public void testInputPassword() {
         String inputText = password;
         solo.enterText(passwordView,inputText);
@@ -58,6 +71,9 @@ public class LoginActivityTest extends ActivityInstrumentationTestCase2<loginAct
         deleteParticipantTask.execute(participant);
     }
 
+    /**
+     * Test existing account.
+     */
     public void testExistingAccount() {
         //some user that is not in ES
         testInputUserName();
@@ -74,6 +90,9 @@ public class LoginActivityTest extends ActivityInstrumentationTestCase2<loginAct
 
     }
 
+    /**
+     * Test non existing account.
+     */
     public void testNonExistingAccount() {
         //some user that is not in ES
         testInputUserName();
@@ -85,6 +104,9 @@ public class LoginActivityTest extends ActivityInstrumentationTestCase2<loginAct
         deleteTestParticipant();
     }
 
+    /**
+     * Test create account.
+     */
     public void testCreateAccount() {
         //some user that is not in ES
         testInputUserName();
@@ -97,6 +119,9 @@ public class LoginActivityTest extends ActivityInstrumentationTestCase2<loginAct
         deleteTestParticipant();
     }
 
+    /**
+     * Test unique user name.
+     */
     public void testUniqueUserName() {
         //some user that is not in ES
         testInputUserName();
@@ -109,6 +134,9 @@ public class LoginActivityTest extends ActivityInstrumentationTestCase2<loginAct
         deleteTestParticipant();
     }
 
+    /**
+     * Test incorrect login info.
+     */
     public void testIncorrectLoginInfo() {
         //some user that is not in ES
         testInputUserName();
@@ -125,6 +153,9 @@ public class LoginActivityTest extends ActivityInstrumentationTestCase2<loginAct
     }
 
 
+    /**
+     * Test edit mood.
+     */
     public void testEditMood(){
         //login
         testInputUserName();
@@ -163,6 +194,9 @@ public class LoginActivityTest extends ActivityInstrumentationTestCase2<loginAct
         deleteTestParticipant();
     }
 
+    /**
+     * Test create mood.
+     */
     public void testCreateMood(){
         //login
         testInputUserName();

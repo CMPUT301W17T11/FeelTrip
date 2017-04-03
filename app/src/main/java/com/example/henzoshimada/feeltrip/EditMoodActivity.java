@@ -35,6 +35,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
@@ -50,8 +51,15 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+/**
+ * The type Edit mood activity.
+ * This is the screen to add a new mood, as well as edit a previous mood
+ */
 public class EditMoodActivity extends AppCompatActivity {
 
+    /**
+     * The constant MAX_PHOTO_SIZE.
+     */
     public static final int MAX_PHOTO_SIZE = 65536;
     private static int NUM_EMOTIONS = FeelTripApplication.getNumEmotions();
     private EditText inputMoodDescription;
@@ -80,6 +88,9 @@ public class EditMoodActivity extends AppCompatActivity {
     private Location mLastKnownLocation;
 
 
+    /**
+     * The Format date time.
+     */
     DateFormat formatDateTime = DateFormat.getDateInstance();
     private Calendar dateTime = Calendar.getInstance();
     private String socialSit;
@@ -88,9 +99,15 @@ public class EditMoodActivity extends AppCompatActivity {
     private ByteArrayOutputStream photoStream = new ByteArrayOutputStream();
     private String encodedPhoto;
     private String imagePathAndFileName;
+    /**
+     * The Image file uri.
+     */
     Uri imageFileUri;
     private static final int TAKE_PHOTO = 2;
     private static final int GET_LOC = 3;
+    /**
+     * The Activity.
+     */
     Activity activity;
     private static Context context;
     private String emotionalState;
@@ -101,8 +118,16 @@ public class EditMoodActivity extends AppCompatActivity {
     private Mood editmood;
     private boolean editflag;
 
+    /**
+     * The Mode location text.
+     */
     TextView modeLocationText;
 
+    /**
+     * This is the listener to toggle the different attributes that is connected with a mood. This
+     * keeps track of whether the participant wants a location attacked or wants their mood to be
+     * private or public, etc.
+     */
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
 
@@ -190,6 +215,16 @@ public class EditMoodActivity extends AppCompatActivity {
             bottomNavigationView.setItemTextColor(navList);
         }
 
+        else if(FeelTripApplication.getThemeID() == R.style.Simplicity) {
+            ScrollView background = (ScrollView) findViewById(R.id.editMood_scrollView);
+            background.setBackgroundResource(R.drawable.simplicity_bg);
+        }
+
+        else if(FeelTripApplication.getThemeID() == R.style.GalaxyTheme) {
+            ScrollView background = (ScrollView) findViewById(R.id.editMood_scrollView);
+            background.setBackgroundResource(R.drawable.galaxy_bg);
+        }
+
 
         activity = this;
         context = this;
@@ -213,6 +248,9 @@ public class EditMoodActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
+        /**
+         * If this is not a new mood, then load all the old information that is found on the database
+         */
         if (editmood != null) {
             try {
                 dateTime.setTime(editmood.getDate());
@@ -293,7 +331,7 @@ public class EditMoodActivity extends AppCompatActivity {
             }
         });
 
-    } //end of on create
+    } //end of onCreate
 
     @Override
     public void onBackPressed() {
@@ -317,7 +355,12 @@ public class EditMoodActivity extends AppCompatActivity {
         dialog.show();
     }
 
-
+    /**
+     * Get the index of the current mood
+     * @param spinner
+     * @param myString
+     * @return
+     */
     private int getIndex(Spinner spinner, String myString) {
         int index = 0;
 
@@ -330,6 +373,9 @@ public class EditMoodActivity extends AppCompatActivity {
         return index;
     }
 
+    /**
+     * Sets post mode.
+     */
     public void setPostMode() {
         TextView modeShowPublic = (TextView) findViewById(R.id.modePost);
         if (showPublicOn == true) {
@@ -343,6 +389,11 @@ public class EditMoodActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Camera perm.
+     * If the app has permission to access the camera then it will take a photo, else it will ask
+     * for the permission from the participant to access the camera on the device
+     */
     public void cameraPerm() {
         int loginPermissionCheck = ContextCompat.checkSelfPermission(context, android.Manifest.permission.CAMERA);
         if (loginPermissionCheck != PackageManager.PERMISSION_GRANTED) {
@@ -358,7 +409,7 @@ public class EditMoodActivity extends AppCompatActivity {
      * Called when user click the Pick Date option
      * Uses DatePickerDiaLog
      *
-     * @param context
+     * @param context the context
      * @see DatePickerDialog
      */
     public void datePick(Context context) {
@@ -371,7 +422,7 @@ public class EditMoodActivity extends AppCompatActivity {
      * Called when user click the Pick Time option
      * Uses TimePickerDialog
      *
-     * @param context
+     * @param context the context
      * @see TimePickerDialog
      */
     public void timePick(Context context) {
@@ -381,11 +432,17 @@ public class EditMoodActivity extends AppCompatActivity {
                 dateTime.get(Calendar.MINUTE), true).show();
     }
 
-
+    /**
+     * This is what sends the mood to Elastic search database to be stored, as long as the information
+     * entered is valid.
+     * @throws DescriptionTooLongException
+     */
     private void submitMood() throws DescriptionTooLongException {
         try {
             if (editflag) {
                 Mood mood = editmood;
+                mood.resetState();
+                mood.setAdd();
                 ElasticSearchController.EditMoodTask editMoodTask = new ElasticSearchController.EditMoodTask();
                 if (showPublicOn) {
                     mood.setPublic();
@@ -472,9 +529,19 @@ public class EditMoodActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Gets app context.
+     *
+     * @return the app context
+     */
     public static Context getAppContext() {
         return EditMoodActivity.context;
     }
+
+    /**
+     * This method accesses the device's camera to take a photo and stores it in the DCIM directory
+     * that the participant will be able to access afterwards.
+     */
 
     private void takeAPhoto() {
         //Taken: http://stackoverflow.com/questions/29576098/get-path-of-dcim-folder-on-both-primary-and-secondary-storage
@@ -495,6 +562,15 @@ public class EditMoodActivity extends AppCompatActivity {
         startActivityForResult(intent, TAKE_PHOTO);
     }
 
+    /**
+     * This is the method that is used to compress a photo if it needs to be.
+     * It will always compress the photo at least once with the highest quality (100), ie with
+     * the minimal compression, so it can be stored as a JPEG file.
+     *
+     * TALKED WITH TA: Zharkyn Kassenov on March 20, 2017, 18:00
+     * @param photo
+     * @return
+     */
     private byte[] compress(Bitmap photo) {
         int quality = 100;
 
@@ -514,6 +590,13 @@ public class EditMoodActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * This is the method that handles the different activity results, whether it be accessing the
+     * camera, or retrieving the location of the mood.
+     * @param requestCode
+     * @param resultCode
+     * @param intent
+     */
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
         Log.d("tag", "In Take Photo");
         TextView modePicture = (TextView) findViewById(R.id.modePhoto);
@@ -589,7 +672,10 @@ public class EditMoodActivity extends AppCompatActivity {
     }
 
 
-    //23 Feb 2017 https://www.youtube.com/watch?v=8mFW6dA5xDE
+    /**
+     * The Date picker dialog listener.
+     */
+//23 Feb 2017 https://www.youtube.com/watch?v=8mFW6dA5xDE
     DatePickerDialog.OnDateSetListener datePickerDialogListener = new DatePickerDialog.OnDateSetListener() {
         @Override
         public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
@@ -602,7 +688,10 @@ public class EditMoodActivity extends AppCompatActivity {
         }
     };
 
-    //23 Feb 2017 https://www.youtube.com/watch?v=8mFW6dA5xDE
+    /**
+     * The On time set listener.
+     */
+//23 Feb 2017 https://www.youtube.com/watch?v=8mFW6dA5xDE
     TimePickerDialog.OnTimeSetListener onTimeSetListener = new TimePickerDialog.OnTimeSetListener() {
         @Override
         public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
@@ -632,7 +721,10 @@ public class EditMoodActivity extends AppCompatActivity {
         socialSituationSpinner.setAdapter(socialSituationAdapter);
     }
 
-    // get the selected dropdown list value
+    /**
+     * Add listener on submit button.
+     */
+// get the selected dropdown list value
     public void addListenerOnSubmitButton() {
 
         socialSituationSpinner = (Spinner) findViewById(R.id.social_event_spinner);
@@ -714,9 +806,11 @@ public class EditMoodActivity extends AppCompatActivity {
         Log.d("myTag", "location on is: " + String.valueOf(locationOn));
     }
 */
+
     /**
      * Check if ACCESS_FINE_LOCATION permission is granted, if not, ask for the permission
-     * @param activity
+     *
+     * @param activity the activity
      */
     public void verifyLocationPermissions(Activity activity) {
         // Check if we have location permission
@@ -731,6 +825,11 @@ public class EditMoodActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Add items on emoji scroller.
+     *
+     * @throws IllegalAccessException the illegal access exception
+     */
     public void addItemsOnEmojiScroller() throws IllegalAccessException {
 
         emojiList = (LinearLayout) findViewById(R.id.emojiList);
@@ -739,6 +838,12 @@ public class EditMoodActivity extends AppCompatActivity {
         switch (FeelTripApplication.getThemeID()) {
             case R.style.Simplicity:
                 theme_offset = 1;
+                break;
+            case R.style.Overwatch:
+                theme_offset = 2;
+                break;
+            case R.style.GalaxyTheme:
+                theme_offset = 3;
                 break;
             default:
                 theme_offset = 0;

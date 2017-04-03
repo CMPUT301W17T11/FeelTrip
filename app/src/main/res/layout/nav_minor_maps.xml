@@ -3,5 +3,6 @@
     android:id="@+id/navigation_profile"
     android:layout_width="24dp"
     android:layout_height="24dp"
-    android:adjustViewBounds="true"
-    android:src="@drawable/ic_location_searching_black_24dp"/>
+    android:maxHeight="24dp"
+    android:maxWidth="24dp"
+    android:adjustViewBounds="true"/>

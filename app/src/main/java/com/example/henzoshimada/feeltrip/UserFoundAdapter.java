@@ -38,11 +38,23 @@ public class UserFoundAdapter extends ArrayAdapter<String> {
      */
     // View lookup cache
     private static class ViewHolder {
+        /**
+         * The User name.
+         */
         TextView userName;
+        /**
+         * The Follow button.
+         */
         ImageButton followButton;
 
     }
 
+    /**
+     * Instantiates a new User found adapter.
+     *
+     * @param userFoundArrayList the user found array list
+     * @param context            the context
+     */
     public UserFoundAdapter(ArrayList<String> userFoundArrayList, Context context) {
         super(context, R.layout.search_user_list_item, userFoundArrayList);
         //this.dataSet = moodArrayList;
@@ -55,6 +67,8 @@ public class UserFoundAdapter extends ArrayAdapter<String> {
     /**
      * set username
      * set On Click Listener for follow button
+     * This method is to get the View for whether a user has been found for the following/follower
+     * functionality
      * @param position
      * @param convertView
      * @param parent

@@ -15,6 +15,9 @@ import java.util.concurrent.ExecutionException;
 
 public class FeelTripTests extends ActivityInstrumentationTestCase2 {
 
+    /**
+     * Instantiates a new Feel trip tests.
+     */
     public FeelTripTests() {
         super(MainScreen.class);
     }
@@ -30,6 +33,9 @@ public class FeelTripTests extends ActivityInstrumentationTestCase2 {
     }
     */
 
+    /**
+     * Test get participant.
+     */
     public void testGetParticipant(){
         Participant participant = new Participant("user1", "pass");
         Participant p1 = FeelTripApplication.getParticipant();
@@ -39,8 +45,9 @@ public class FeelTripTests extends ActivityInstrumentationTestCase2 {
     }
 
 
-
-
+    /**
+     * Test update queue controller.
+     */
     public void testUpdateQueueController(){
         UpdateQueueController qc = FeelTripApplication.getUpdateQueueController();
         Mood mood = new Mood("user1");
@@ -52,6 +59,9 @@ public class FeelTripTests extends ActivityInstrumentationTestCase2 {
         assertTrue("MSG", qc2.popMood().getUsername().equals("user1"));
     }
 
+    /**
+     * Test add mood task.
+     */
     public void testAddMoodTask(){
         ElasticSearchController.AddMoodTask addMoodTask = new ElasticSearchController.AddMoodTask();
         Mood mood = new Mood("user1");
@@ -64,6 +74,9 @@ public class FeelTripTests extends ActivityInstrumentationTestCase2 {
         addMoodTask.execute(mood);
     }
 
+    /**
+     * Test get mood task.
+     */
     public void testGetMoodTask(){
         ArrayList<Mood> moods = new ArrayList<>();
         ElasticSearchController.GetMoodTask get = new ElasticSearchController.GetMoodTask();
@@ -78,6 +91,11 @@ public class FeelTripTests extends ActivityInstrumentationTestCase2 {
         assertEquals("test getMood", "user1", moods.get(0).getUsername());
     }
 
+    /**
+     * Test edit task.
+     *
+     * @throws DescriptionTooLongException the description too long exception
+     */
     public void testEditTask() throws DescriptionTooLongException {
         ArrayList<Mood> moods = new ArrayList<Mood>();
         ElasticSearchController.GetMoodTask getMoodTask = new ElasticSearchController.GetMoodTask();
@@ -104,6 +122,9 @@ public class FeelTripTests extends ActivityInstrumentationTestCase2 {
         editMoodTask.execute(mood);
     }
 
+    /**
+     * Test search mood task.
+     */
     public void testSearchMoodTask(){
         ArrayList<Mood> moods = new ArrayList<>();
         ElasticSearchController.GetMoodTask get = new ElasticSearchController.GetMoodTask("description");
@@ -118,6 +139,9 @@ public class FeelTripTests extends ActivityInstrumentationTestCase2 {
         assertEquals("test getMood", "test edit", moods.get(0).getDescription());
     }
 
+    /**
+     * Test delete mood task.
+     */
     public void testDeleteMoodTask(){
         ArrayList<Mood> moods = new ArrayList<Mood>();
         ElasticSearchController.DeleteMoodTask deleteMoodTask = new ElasticSearchController.DeleteMoodTask();
@@ -175,6 +199,9 @@ public class FeelTripTests extends ActivityInstrumentationTestCase2 {
     }
     */
 
+    /**
+     * Test arrayto string.
+     */
     public void testArraytoString() {
         ArrayList<String> stringArrayList = new ArrayList<>();
         stringArrayList.add("Hello");
@@ -189,7 +216,10 @@ public class FeelTripTests extends ActivityInstrumentationTestCase2 {
     }
 
 
-    // The following are tests for the NewMoodEvent class
+    /**
+     * Test set mood option.
+     */
+// The following are tests for the NewMoodEvent class
 /*
     public void testSetDescription() throws DescriptionTooLongException {
         Mood mood = new Mood();
@@ -209,24 +239,36 @@ public class FeelTripTests extends ActivityInstrumentationTestCase2 {
         assertNotNull(mood.getMoodOption());
     }
 
+    /**
+     * Test get mood option.
+     */
     public void testGetMoodOption() {
         Mood mood = new Mood();
         mood.setMoodOption("Happy");
         assertEquals(mood.getMoodOption(), "Happy");
     }
 
+    /**
+     * Test set social sit.
+     */
     public void testSetSocialSit() {
         Mood mood = new Mood();
         mood.setSocialSit("Alone");
         assertNotNull(mood.getSocialSit());
     }
 
+    /**
+     * Test get social sit.
+     */
     public void testGetSocialSit() {
         Mood mood = new Mood();
         mood.setSocialSit("Alone");
         assertEquals(mood.getSocialSit(), "Alone");
     }
 
+    /**
+     * Test set private.
+     */
     public void testSetPrivate() {
         Mood mood = new Mood();
         assertFalse(mood.getPrivate());
@@ -234,6 +276,9 @@ public class FeelTripTests extends ActivityInstrumentationTestCase2 {
         assertTrue(mood.getPrivate());
     }
 
+    /**
+     * Test get private.
+     */
     public void testGetPrivate() {
         Mood mood = new Mood();
         assertFalse(mood.getPrivate());
@@ -241,6 +286,9 @@ public class FeelTripTests extends ActivityInstrumentationTestCase2 {
         assertTrue(mood.getPrivate());
     }
 
+    /**
+     * Test sett map position.
+     */
     public void testSettMapPosition() {
         Mood mood = new Mood();
         Double lat = 123213.000324;
@@ -250,6 +298,9 @@ public class FeelTripTests extends ActivityInstrumentationTestCase2 {
         assertEquals(mood.getMapPosition()[1], lon);
     }
 
+    /**
+     * Test get map position.
+     */
     public void testGetMapPosition() {
         Mood mood = new Mood();
         Double lat = 8324892.32948324;
@@ -259,6 +310,9 @@ public class FeelTripTests extends ActivityInstrumentationTestCase2 {
         assertEquals(mood.getMapPosition()[1], lon);
     }
 
+    /**
+     * Test getinvalid id.
+     */
     public void testGetinvalidID() {
         Mood mood = new Mood();
         String moodID = mood.getId();

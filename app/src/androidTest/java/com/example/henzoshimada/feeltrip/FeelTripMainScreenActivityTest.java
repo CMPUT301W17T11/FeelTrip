@@ -16,10 +16,12 @@ import static java.lang.Thread.sleep;
 /**
  * Created by Kevin on 31-Mar-17.
  */
-
 public class FeelTripMainScreenActivityTest extends ActivityInstrumentationTestCase2<MainScreen> {
     private Solo solo;
 
+    /**
+     * Instantiates a new Feel trip main screen activity test.
+     */
     public FeelTripMainScreenActivityTest() {
         super(com.example.henzoshimada.feeltrip.MainScreen.class);
     }
@@ -29,16 +31,27 @@ public class FeelTripMainScreenActivityTest extends ActivityInstrumentationTestC
         solo = new Solo(getInstrumentation(), getActivity()); //(get connection to device, get activity)
     }
 
+    /**
+     * Test start.
+     *
+     * @throws Exception the exception
+     */
     public void testStart() throws Exception {
         Activity activity = getActivity();
     }
 
+    /**
+     * Test go to edit mood.
+     */
     public void testGoToEditMood() {
         solo.clickOnImageButton(0);
         solo.assertCurrentActivity("Wrong class", EditMoodActivity.class);
     }
 
 
+    /**
+     * Test input text.
+     */
     public void testInputText() {
         String inputText = "Some test";
         solo.enterText((EditText) solo.getView(R.id.keyword),inputText);
@@ -46,6 +59,9 @@ public class FeelTripMainScreenActivityTest extends ActivityInstrumentationTestC
     }
 
 
+    /**
+     * Test go to profile frag.
+     */
     public void testGoToProfileFrag(){
         solo.clickOnView(solo.getView(R.id.navigation_profile));
         try {
@@ -58,6 +74,9 @@ public class FeelTripMainScreenActivityTest extends ActivityInstrumentationTestC
         assertEquals("profile", frag);
     }
 
+    /**
+     * Test go to map frag.
+     */
     public void testGoToMapFrag(){
         solo.clickOnView(solo.getView(R.id.navigation_map));
         try {
@@ -70,6 +89,9 @@ public class FeelTripMainScreenActivityTest extends ActivityInstrumentationTestC
         assertEquals("map", frag);
     }
 
+    /**
+     * Test go to home frag.
+     */
     public void testGoToHomeFrag(){
         solo.clickOnView(solo.getView(R.id.navigation_home));
         try {

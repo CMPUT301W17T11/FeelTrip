@@ -21,8 +21,8 @@ public class UpdateQueue {
     }
 
     /**
-     * En queue.
      * Enqueue a mood object to the end of queue
+     *
      * @param mood the mood
      */
     public void enQueue(Mood mood){
@@ -32,6 +32,7 @@ public class UpdateQueue {
     /**
      * De queue mood.
      * Remove a mood object from top of queue and return the object
+     *
      * @return the mood
      */
     public Mood deQueue(){
@@ -56,6 +57,14 @@ public class UpdateQueue {
         return queue.isEmpty();
     }
 
+
+    /**
+     * To array array list.
+     * convert UpdateQueue object into an ArrayList object.
+     * Used for saving this queue to file.
+     *
+     * @return the array list
+     */
     public ArrayList<Mood> toArray(){
         ArrayList<Mood> moods = new ArrayList<>();
         moods.addAll(queue);

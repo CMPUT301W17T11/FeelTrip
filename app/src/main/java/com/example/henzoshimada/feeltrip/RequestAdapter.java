@@ -24,6 +24,7 @@ import java.util.ArrayList;
 
 /**
  * Custom Adapter for Follow Request
+ * This is to help organize and be a controller to request following another user
  */
 public class RequestAdapter extends ArrayAdapter<FollowRequest> {
 
@@ -36,11 +37,26 @@ public class RequestAdapter extends ArrayAdapter<FollowRequest> {
      * View contains, a username, cancel button and accept button
      */
     private static class ViewHolder {
+        /**
+         * The User name.
+         */
         TextView userName;
+        /**
+         * The Cancel button.
+         */
         ImageButton cancelButton;
+        /**
+         * The Accept button.
+         */
         ImageButton acceptButton;
     }
 
+    /**
+     * Instantiates a new Request adapter.
+     *
+     * @param requestArrayList the request array list
+     * @param context          the context
+     */
     public RequestAdapter(ArrayList<FollowRequest> requestArrayList, Context context) {
         super(context, R.layout.request_list_item, requestArrayList);
         //this.dataSet = moodArrayList;

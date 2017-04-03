@@ -22,13 +22,18 @@ import com.example.henzoshimada.feeltrip.R;
 
 import java.util.ArrayList;
 
-/*
-  A simple {@link Fragment} subclass.
-  Activities that contain this fragment must implement the
-  {@link homeFragmment.OnFragmentInteractionListener} interface
-  to handle interaction events.
-  Use the {@link homeFragmment#newInstance} factory method to
-  create an instance of this fragment.
+/**
+ * The type Home fragmment.
+ *
+ * A simple {@link Fragment} subclass.
+ * Activities that contain this fragment must implement the
+ * {@link homeFragmment.OnFragmentInteractionListener} interface
+ * to handle interaction events.
+ * Use the {@link homeFragmment#newInstance} factory method to
+ * create an instance of this fragment.
+ *
+ *
+ * Home fragment is the fragment equivalent of the MainScreen activity
  */
 public class homeFragmment extends Fragment{
 
@@ -78,8 +83,16 @@ public class homeFragmment extends Fragment{
             oldMoodListView.setBackgroundColor(FeelTripApplication.getBACKGROUNDCOLOR());
         }
 
+        else if(FeelTripApplication.getThemeID() == R.style.Simplicity) {
+            addEntry.setImageResource(R.drawable.simplicity_icon_edit);
+        }
+
+        else if(FeelTripApplication.getThemeID() == R.style.Overwatch) {
+            addEntry.setImageResource(R.drawable.overwatch_icon_edit);
+        }
+
         else if(FeelTripApplication.getThemeID() == R.style.GalaxyTheme) {
-            oldMoodListView.setBackground(getActivity().getDrawable(R.drawable.galaxy_bg));
+
         }
 
         //http://stackoverflow.com/questions/20922036/android-cant-call-setonitemclicklistener-from-a-listview
