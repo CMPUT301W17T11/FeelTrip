@@ -610,19 +610,6 @@ public class MainScreen extends AppCompatActivity{
     }
 
     /**
-     * Get emoji by unicode string.
-     *
-     * @param unicode the unicode
-     * @return the string
-     */
-    public String getEmojiByUnicode(int unicode){
-        if (unicode == 0) {
-            return "";
-        }
-        return new String(Character.toChars(unicode));
-    }
-
-    /**
      * Search keyword.
      * This is the filter function of searching by a particular word in a mood event
      *
@@ -658,6 +645,9 @@ public class MainScreen extends AppCompatActivity{
                 }
                 ElasticSearchController.loadFromElasticSearch();
                 FeelTripApplication.getListViewAdapter(getBaseContext()).notifyDataSetChanged();
+                if (FeelTripApplication.getFrag().equals("map")) {
+                    updateMap();
+                }
 
             } // to close the onItemSelected
             public void onNothingSelected(AdapterView<?> parent)
