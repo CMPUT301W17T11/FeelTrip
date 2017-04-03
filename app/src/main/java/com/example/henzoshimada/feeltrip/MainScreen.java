@@ -401,6 +401,7 @@ public class MainScreen extends AppCompatActivity{
         }
 
 
+
         ToggleButton toggleRecent = (ToggleButton) findViewById(R.id.toggleRecent);
         toggleRecent.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 
@@ -502,6 +503,21 @@ public class MainScreen extends AppCompatActivity{
             minorProfile.setIcon(R.drawable.ic_person_black_24dp);
             minorMaps.setIcon(R.drawable.ic_location_searching_black_24dp);
 
+
+        }
+
+        else if(FeelTripApplication.getThemeID() == R.style.Simplicity) {
+            RelativeLayout background = (RelativeLayout) findViewById(R.id.content_main);
+            background.setBackgroundResource(R.drawable.simplicity_bg);
+            minorHome.setIcon(R.drawable.simplicity_icon_home);
+            minorProfile.setIcon(R.drawable.simplicity_icon_profile);
+            minorMaps.setIcon(R.drawable.simplicity_icon_maps);
+        }
+
+        else if(FeelTripApplication.getThemeID() == R.style.Overwatch) {
+            minorHome.setIcon(R.drawable.overwatch_icon_home);
+            minorProfile.setIcon(R.drawable.overwatch_icon_profile);
+            minorMaps.setIcon(R.drawable.overwatch_icon_maps);
         }
 
         else if(FeelTripApplication.getThemeID() == R.style.Simplicity) {
