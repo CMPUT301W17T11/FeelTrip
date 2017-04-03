@@ -93,26 +93,11 @@
                     android:textOn=""
                     android:layout_marginStart="50dp" />
 
-                <HorizontalScrollView
+                <Spinner
+                    android:id="@+id/filterMood"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/emojisView">
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:id="@+id/filterMood"
-                        android:paddingLeft="10sp">
-                        <!--<LinearLayout-->
-                        <!--android:layout_width="wrap_content"-->
-                        <!--android:layout_height="wrap_content"-->
-                        <!--android:orientation="vertical"-->
-                        <!--android:layout_marginStart="10dp"-->
-                        <!--android:id="@+id/emojiLayout" >-->
-                        <!--</LinearLayout>-->
-                    </LinearLayout>
-
-                </HorizontalScrollView>
+                    android:layout_marginStart="80dp"/>
             </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"

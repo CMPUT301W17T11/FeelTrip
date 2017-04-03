@@ -394,13 +394,7 @@ public class MainScreen extends AppCompatActivity{
         });
 
         setFirstItemNavigationView();
-        //addItemsOnEmotionalStateSpinner();
-        try {
-            addItemsOnEmojiScroller();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        }
-
+        addItemsOnEmotionalStateSpinner();
 
 
         ToggleButton toggleRecent = (ToggleButton) findViewById(R.id.toggleRecent);
@@ -745,20 +739,12 @@ public class MainScreen extends AppCompatActivity{
         FeelTripApplication.getListViewAdapter(getBaseContext()).notifyDataSetChanged();
     }
 
-
-
-    /*private void addItemsOnEmotionalStateSpinner(){ //TODO: Redo the way this is called so the feelings can be dynamically loaded
-        //emotionalStateSpinner = (Spinner) findViewById(R.id.filterMood);
+    private void addItemsOnEmotionalStateSpinner(){ //TODO: Redo the way this is called so the feelings can be dynamically loaded
+        emotionalStateSpinner = (Spinner) findViewById(R.id.filterMood);
         List<String> emotionalStateList = new ArrayList<>();
-        emotionalStateList.add("None");
-        emotionalStateList.add("Angry " + getEmojiByUnicode(emojiUnicode("Angry"))); // TODO: Replace these unicode emojis with image ones.
-        emotionalStateList.add("Confused " + getEmojiByUnicode(emojiUnicode("Confused")));
-        emotionalStateList.add("Disgusted " + getEmojiByUnicode(emojiUnicode("Disgusted")));
-        emotionalStateList.add("Fearful " + getEmojiByUnicode(emojiUnicode("Fearful")));
-        emotionalStateList.add("Happy " + getEmojiByUnicode(emojiUnicode("Happy")));
-        emotionalStateList.add("Sad " + getEmojiByUnicode(emojiUnicode("Sad")));
-        emotionalStateList.add("Shameful " + getEmojiByUnicode(emojiUnicode("Shameful")));
-        emotionalStateList.add("Cool " + getEmojiByUnicode(emojiUnicode("Cool")));
+        for(int i = 0; i <= FeelTripApplication.getNumEmotions(); i++) {
+            emotionalStateList.add(FeelTripApplication.getEmotionalState(i));
+        }
 
 
 
@@ -785,76 +771,6 @@ public class MainScreen extends AppCompatActivity{
             {
             }
         });
-    }*/
-
-    public void addItemsOnEmojiScroller() throws IllegalAccessException {
-
-        emojiList = (LinearLayout) findViewById(R.id.filterMood);
-
-        int theme_offset;
-        switch (FeelTripApplication.getThemeID()) {
-            case R.style.Simplicity:
-                theme_offset = 1;
-                break;
-            default:
-                theme_offset = 0;
-                break;
-        }
-        theme_offset = theme_offset * NUM_EMOTIONS;
-
-        for (int i = 1 + theme_offset; i <= theme_offset + NUM_EMOTIONS; i++) {
-
-            LinearLayout emojiLayout = new LinearLayout(this);
-            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-            params.gravity = Gravity.CENTER_VERTICAL;
-            emojiLayout.setPadding(0,0,20,0);
-            emojiLayout.setOrientation(LinearLayout.VERTICAL);
-            emojiLayout.setTag(i); // This is crucial for grabbing the "index" of the clicked emoji later
-
-            emojiButton = new ImageButton(getApplicationContext());
-            emojiButton.setAdjustViewBounds(true);
-            emojiButton.setMaxHeight(70);
-            emojiButton.setMaxWidth(70);
-            emojiButton.setBackgroundResource(R.color.transparent);
-            if(getApplicationContext().getResources().getIdentifier("emoji" + i, "drawable", getApplicationContext().getPackageName()) != 0) { // Check if desired emoji exists
-                emojiButton.setImageResource(getApplicationContext().getResources().getIdentifier("emoji" + i, "drawable", getApplicationContext().getPackageName()));
-            } else {
-                emojiButton.setImageResource(getApplicationContext().getResources().getIdentifier("err", "drawable", getApplicationContext().getPackageName()));
-            }
-            emojiButton.setPadding(0,0,0,0);
-            emojiLayout.addView(emojiButton);
-            emojiButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    View layout = ((LinearLayout)v.getParent()); // Cast to a View from a ViewParent, since ViewParents don't allow us to use getTag()
-                    int selected = (int) layout.getTag();
-                    Toast.makeText(getApplicationContext(), "Emoticons tapped", Toast.LENGTH_SHORT).show();
-                }
-            });
-
-            int emotionID = i % NUM_EMOTIONS;
-            emojiTextview = new TextView(getApplicationContext());
-            if(emotionID == 0) {
-                emotionID = NUM_EMOTIONS;
-            }
-            emojiTextview.setText(FeelTripApplication.getEmotionalState(emotionID));
-
-            emojiTextview.setTextSize(15);
-            emojiTextview.setGravity(Gravity.CENTER);
-            if(FeelTripApplication.getThemeID() == R.style.CustomTheme_Light || FeelTripApplication.getThemeID() == R.style.CustomTheme_Dark) {
-                emojiTextview.setTextColor(FeelTripApplication.getTEXTCOLORSECONDARY());
-            } else {
-                TypedValue tv = new TypedValue();
-                getTheme().resolveAttribute(android.R.attr.textColorSecondary, tv, true);
-                emojiTextview.setTextColor(getResources().getColor(tv.resourceId)); //TODO: Depreciated. Next call up is API 23
-            }
-            emojiTextview.setTypeface(emojiTextview.getTypeface(), Typeface.BOLD);
-            emojiLayout.addView(emojiTextview);
-
-            emojiList.addView(emojiLayout);
-
-        }
-
     }
 
     private void updateMap(){
