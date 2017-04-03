@@ -7,6 +7,7 @@ import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.Rect;
+import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.support.annotation.NonNull;
@@ -24,6 +25,8 @@ import android.os.Bundle;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -35,12 +38,14 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
@@ -65,49 +70,15 @@ import layout.profileFragment;
 public class MainScreen extends AppCompatActivity{
 
     private Spinner emotionalStateSpinner;
-
-    /**
-     * The constant angry.
-     */
-// The following are constants for emotion based emoji
-    public static final int angry = 0x1F624;
-    /**
-     * The constant confused.
-     */
-    public static final int confused = 0x1F635;
-    /**
-     * The constant disgusted.
-     */
-    public static final int disgusted = 0x1F623; //might change this one...
-    /**
-     * The constant fearful.
-     */
-    public static final int fearful = 0x1F628;
-    /**
-     * The constant happy.
-     */
-    public static final int happy = 0x1F60A;
-    /**
-     * The constant sad.
-     */
-    public static final int sad = 0x1F622;
-    /**
-     * The constant shameful.
-     */
-    public static final int shameful = 0x1F61E;
-    /**
-     * The constant cool.
-     */
-    public static final int cool = 0x1F60E;
-    /**
-     * The constant somethingwentwrong.
-     */
-    public static final int somethingwentwrong = 0x1F31A;
     private ListView userFoundView;  //who participant searched
     private ListView followingView; //who participant is following
     private ListView requestView;   //who participant wants to follow
     private EditText inputTextView;
     private TextView notFoundTextView;
+    private static int NUM_EMOTIONS = FeelTripApplication.getNumEmotions();
+    private LinearLayout emojiList;
+    private ImageButton emojiButton;
+    private TextView emojiTextview;
 
     //use custom adapter
     private ArrayList<String> usersFoundArray = FeelTripApplication.getUsersFoundArray();
@@ -124,35 +95,6 @@ public class MainScreen extends AppCompatActivity{
 
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mDrawerToggle;
-
-    /**
-     * Emoji unicode int.
-     *
-     * @param emotion the emotion
-     * @return the int
-     */
-    public int emojiUnicode(String emotion) {
-        switch(emotion) {
-            case "Angry":
-                return angry;
-            case "Confused":
-                return confused;
-            case "Disgusted":
-                return disgusted;
-            case "Fearful":
-                return fearful;
-            case "Happy":
-                return happy;
-            case "Sad":
-                return sad;
-            case "Shameful":
-                return shameful;
-            case "Cool":
-                return cool;
-            default:
-                return somethingwentwrong; // the secret "only accessible by hacks" face
-        }
-    }
 
     // Taken from http://stackoverflow.com/questions/4828636/edittext-clear-focus-on-touch-outside
     // on 2017-03-27 08:52
@@ -233,6 +175,10 @@ public class MainScreen extends AppCompatActivity{
             minorHome.setTextColor(Color.BLACK);
         }
 
+        else if(FeelTripApplication.getThemeID() == R.style.Overwatch) {
+            minorHome.setIcon(R.drawable.overwatch_icon_home);
+        }
+
         else if(FeelTripApplication.getThemeID() == R.style.GalaxyTheme) {
             minorHome.setIcon(R.drawable.galaxy_icon_home_selected); //TODO: THEME
         }
@@ -273,6 +219,10 @@ public class MainScreen extends AppCompatActivity{
         else if(FeelTripApplication.getThemeID() == R.style.Simplicity) {
             minorProfile.setIcon(R.drawable.simplicity_icon_profile);
             minorProfile.setTextColor(Color.BLACK);
+        }
+
+        else if(FeelTripApplication.getThemeID() == R.style.Overwatch) {
+            minorProfile.setIcon(R.drawable.overwatch_icon_profile);
         }
 
         else if(FeelTripApplication.getThemeID() == R.style.GalaxyTheme) {
@@ -316,6 +266,10 @@ public class MainScreen extends AppCompatActivity{
         else if(FeelTripApplication.getThemeID() == R.style.Simplicity) {
             minorMaps.setIcon(R.drawable.simplicity_icon_maps);
             minorMaps.setTextColor(Color.BLACK);
+        }
+
+        else if(FeelTripApplication.getThemeID() == R.style.Overwatch) {
+            minorMaps.setIcon(R.drawable.overwatch_icon_maps);
         }
 
         else if(FeelTripApplication.getThemeID() == R.style.GalaxyTheme) {
@@ -372,9 +326,11 @@ public class MainScreen extends AppCompatActivity{
             }
         });
 
+        setFirstItemNavigationView();
         addItemsOnEmotionalStateSpinner();
 
-        ToggleButton toggleRecent = (ToggleButton) findViewById(R.id.toggleRecent);
+
+        Switch toggleRecent = (Switch) findViewById(R.id.toggleRecent);
         toggleRecent.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 
             @Override
@@ -389,7 +345,7 @@ public class MainScreen extends AppCompatActivity{
             }
         });
 
-        ToggleButton toggleFriends = (ToggleButton) findViewById(R.id.toggleFriends);
+        Switch toggleFriends = (Switch) findViewById(R.id.toggleFriends);
         toggleFriends.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 
             @Override
@@ -404,7 +360,7 @@ public class MainScreen extends AppCompatActivity{
             }
         });
 
-        ToggleButton toggleMostRecent = (ToggleButton) findViewById(R.id.toggleMostRecent);
+        Switch toggleMostRecent = (Switch) findViewById(R.id.toggleMostRecent);
         toggleMostRecent.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 
             @Override
@@ -471,7 +427,10 @@ public class MainScreen extends AppCompatActivity{
             TextView friendsOnlyView = (TextView) findViewById(R.id.textView5);
             friendsOnlyView.setTextColor(FeelTripApplication.getTEXTCOLORTERTIARY());
 
-//            minorProfile.setBackgroundTintList();
+            minorHome.setIcon(R.drawable.ic_home_black_24dp);
+            minorProfile.setIcon(R.drawable.ic_person_black_24dp);
+            minorMaps.setIcon(R.drawable.ic_location_searching_black_24dp);
+
 
         }
 
@@ -483,8 +442,32 @@ public class MainScreen extends AppCompatActivity{
             minorMaps.setIcon(R.drawable.simplicity_icon_maps);
         }
 
-        else if(FeelTripApplication.getThemeID() == R.style.GalaxyTheme) {
+        else if(FeelTripApplication.getThemeID() == R.style.Overwatch) {
+            minorHome.setIcon(R.drawable.overwatch_icon_home);
+            minorProfile.setIcon(R.drawable.overwatch_icon_profile);
+            minorMaps.setIcon(R.drawable.overwatch_icon_maps);
+        }
 
+        else if(FeelTripApplication.getThemeID() == R.style.Simplicity) {
+            RelativeLayout background = (RelativeLayout) findViewById(R.id.content_main);
+            background.setBackgroundResource(R.drawable.simplicity_bg);
+            minorHome.setIcon(R.drawable.simplicity_icon_home);
+            minorProfile.setIcon(R.drawable.simplicity_icon_profile);
+            minorMaps.setIcon(R.drawable.simplicity_icon_maps);
+        }
+
+        else if(FeelTripApplication.getThemeID() == R.style.Overwatch) {
+            minorHome.setIcon(R.drawable.overwatch_icon_home);
+            minorProfile.setIcon(R.drawable.overwatch_icon_profile);
+            minorMaps.setIcon(R.drawable.overwatch_icon_maps);
+        }
+
+        else if(FeelTripApplication.getThemeID() == R.style.GalaxyTheme) {
+            RelativeLayout background = (RelativeLayout) findViewById(R.id.content_main);
+            background.setBackgroundResource(R.drawable.galaxy_bg);
+            minorHome.setIcon(R.drawable.galaxy_icon_home_unselected);
+            minorProfile.setIcon(R.drawable.overwatch_icon_profile); // TODO: theme
+            minorMaps.setIcon(R.drawable.overwatch_icon_maps);
         }
 
         else {
@@ -588,7 +571,7 @@ public class MainScreen extends AppCompatActivity{
     @Override
     protected void onResume() {
         super.onResume();
-        ToggleButton toggleFriends = (ToggleButton) findViewById(R.id.toggleFriends);
+        Switch toggleFriends = (Switch) findViewById(R.id.toggleFriends);
         TextView textView = (TextView) findViewById(R.id.textView5);
         if(FeelTripApplication.getFrag().equals("profile")) {
             toggleFriends.setVisibility(View.GONE);
@@ -689,22 +672,12 @@ public class MainScreen extends AppCompatActivity{
         FeelTripApplication.getListViewAdapter(getBaseContext()).notifyDataSetChanged();
     }
 
-
-
     private void addItemsOnEmotionalStateSpinner(){ //TODO: Redo the way this is called so the feelings can be dynamically loaded
         emotionalStateSpinner = (Spinner) findViewById(R.id.filterMood);
         List<String> emotionalStateList = new ArrayList<>();
-        emotionalStateList.add("None");
-        emotionalStateList.add("Angry " + getEmojiByUnicode(emojiUnicode("Angry"))); // TODO: Replace these unicode emojis with image ones.
-        emotionalStateList.add("Confused " + getEmojiByUnicode(emojiUnicode("Confused")));
-        emotionalStateList.add("Disgusted " + getEmojiByUnicode(emojiUnicode("Disgusted")));
-        emotionalStateList.add("Fearful " + getEmojiByUnicode(emojiUnicode("Fearful")));
-        emotionalStateList.add("Happy " + getEmojiByUnicode(emojiUnicode("Happy")));
-        emotionalStateList.add("Sad " + getEmojiByUnicode(emojiUnicode("Sad")));
-        emotionalStateList.add("Shameful " + getEmojiByUnicode(emojiUnicode("Shameful")));
-        emotionalStateList.add("Cool " + getEmojiByUnicode(emojiUnicode("Cool")));
-
-
+        for(int i = 0; i <= FeelTripApplication.getNumEmotions(); i++) {
+            emotionalStateList.add("Filter emotion: " + FeelTripApplication.getEmotionalState(i));
+        }
 
         ArrayAdapter<String> emotionalStateAdapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_spinner_item, emotionalStateList);

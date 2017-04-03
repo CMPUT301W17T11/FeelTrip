@@ -173,4 +173,5 @@ public class profileFragment extends Fragment {
             super.onActivityResult(requestCode, resultCode, data);
         }
     }
+
 }

@@ -46,6 +46,7 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.Circle;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
@@ -110,7 +111,8 @@ public class mapFragment extends Fragment implements
         View rootView = inflater.inflate(R.layout.fragment_map, container, false);
 
         mMapView = (MapView) rootView.findViewById(R.id.mapView);
-        mMapView.onCreate(savedInstanceState); //TODO: This throws random errors that crash the app. May need to look into.
+        try {
+            mMapView.onCreate(savedInstanceState); //TODO: This throws random errors that crash the app. May need to look into.
         //verifyLocationPermissions(getActivity());
         View locationButton = ((View) mMapView.findViewById(1).getParent()).findViewById(2);
 
@@ -122,6 +124,9 @@ public class mapFragment extends Fragment implements
         rlp.setMargins(0, 0, 80, 200); // left, top, right, bottom
 
         mMapView.onResume(); // needed to get the map to display immediately
+        } catch (Exception e) {
+            Log.d("mapTag", "Failed to find Resource ID #0x7f07000e");
+        }
 
         try {
             MapsInitializer.initialize(getActivity().getApplicationContext());
@@ -187,6 +192,20 @@ public class mapFragment extends Fragment implements
     public void onMapReady(GoogleMap map) {
         Log.d("markerTag","on map ready");
         mMap = map;
+
+
+        try {
+            if (FeelTripApplication.getThemeID() == R.style.Simplicity) {
+                MapStyleOptions style = MapStyleOptions.loadRawResourceStyle(getActivity().getApplicationContext(), R.raw.mapstyle_grayscale);
+                mMap.setMapStyle(style);
+            } else if (FeelTripApplication.getThemeID() == R.style.GalaxyTheme) {
+                MapStyleOptions style = MapStyleOptions.loadRawResourceStyle(getActivity().getApplicationContext(), R.raw.mapstyle_night);
+                mMap.setMapStyle(style);
+            }
+        }
+        catch(NullPointerException e) {
+            Log.d("map", "Failed to load map style");
+        }
 
         // Set listener for marker click event.  See the bottom of this class for its behavior.
         mMap.setOnMarkerClickListener(this);

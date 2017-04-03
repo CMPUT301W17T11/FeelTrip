@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.Rect;
 import android.support.design.widget.BottomSheetBehavior;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -16,12 +17,15 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TableLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.daimajia.androidanimations.library.Techniques;
+import com.daimajia.androidanimations.library.YoYo;
 import com.larswerkman.holocolorpicker.ColorPicker;
 import com.larswerkman.holocolorpicker.OpacityBar;
 import com.larswerkman.holocolorpicker.SVBar;
@@ -55,6 +59,7 @@ public class loginActivity extends AppCompatActivity implements
 
 //        setTheme(R.style.NaughtyPenguins); //TODO - theme
 //        setTheme(R.style.DefaultTheme);
+
         setTheme(FeelTripApplication.getThemeID());
 
         setContentView(R.layout.activity_login);
@@ -94,14 +99,12 @@ public class loginActivity extends AppCompatActivity implements
                     default:
                         break;
                 }
-                if(FeelTripApplication.getThemeID() == R.style.Simplicity) {
-                    colorpicker.setVisibility(View.GONE);
-                    sv.setVisibility(View.GONE);
-                    themeSeekbarTable.setVisibility(View.GONE);
-                    themeSeekbar.setProgress(50);
-                }
+
                 EditText userField = (EditText) this.findViewById(R.id.user_text);
                 EditText passField = (EditText) this.findViewById(R.id.pass_text);
+                YoYo.with(Techniques.Landing).duration(1000).delay(0).playOn(this.findViewById(R.id.user_text));
+                YoYo.with(Techniques.Landing).duration(1000).delay(0).playOn(this.findViewById(R.id.pass_text));
+                YoYo.with(Techniques.Landing).duration(1000).delay(0).playOn(this.findViewById(R.id.logoButton));
                 userField.setText(extras.getString("user"));
                 passField.setText(extras.getString("pass"));
             }
@@ -146,6 +149,22 @@ public class loginActivity extends AppCompatActivity implements
 
     } //end of onCreate
 
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        ColorPicker colorpicker = (ColorPicker) findViewById(R.id.picker);
+        SVBar sv = (SVBar) findViewById(R.id.svbar);
+        TableLayout themeSeekbarTable = (TableLayout) findViewById(R.id.theme_seekBar_table);
+        SeekBar themeSeekbar = (SeekBar) findViewById(R.id.theme_seekBar);
+        if(FeelTripApplication.getThemeID() == R.style.Simplicity) {
+            colorpicker.setVisibility(View.GONE);
+            sv.setVisibility(View.GONE);
+            themeSeekbarTable.setVisibility(View.GONE);
+            themeSeekbar.setProgress(50);
+        }
+    }
+
     /**
      * This is what we use to change the colour of the application as its own "theme"
      * This is how each colour can be changed without any lag to the application
@@ -159,11 +178,6 @@ public class loginActivity extends AppCompatActivity implements
         int textcolortertiary;
         int backgroundcolor;
 
-        if(FeelTripApplication.getThemeID() == R.style.Simplicity && color != -1) {
-            setTheme(R.style.CustomTheme_Light);
-            FeelTripApplication.setThemeID(R.style.CustomTheme_Light);
-        }
-
         textcolorprimary = color;
         textcolorsecondary = lighter(textcolorprimary, 0.6f);
         textcolortertiary = lighter(textcolorprimary, 0.4f);
@@ -175,7 +189,7 @@ public class loginActivity extends AppCompatActivity implements
         FeelTripApplication.setTEXTCOLORTERTIARY(textcolortertiary);
 
 
-        RelativeLayout loginBackground = (RelativeLayout) findViewById(R.id.login_background);
+        CoordinatorLayout loginBackground = (CoordinatorLayout) findViewById(R.id.login_background);
         int alpha = 169;
         backgroundcolor = Color.argb(alpha, Color.red(FeelTripApplication.getTEXTCOLORPRIMARY()), Color.green(FeelTripApplication.getTEXTCOLORPRIMARY()), Color.blue(FeelTripApplication.getTEXTCOLORPRIMARY()));
         FeelTripApplication.setBACKGROUNDCOLOR(backgroundcolor);
@@ -409,10 +423,17 @@ public class loginActivity extends AppCompatActivity implements
         finish();
     }
 
+
+    public void showCredits(View view){
+        Intent intent = new Intent(this, creditsActivity.class);
+        startActivity(intent);
+    }
+
     /**
      * Swap to custom theme dark.
      * This is what differentiates the themes to be "dark"
      */
+
     public void swapToCustomThemeDark() {
         setTheme(R.style.CustomTheme_Dark);
         FeelTripApplication.setThemeID(R.style.CustomTheme_Dark);

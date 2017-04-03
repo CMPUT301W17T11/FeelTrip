@@ -1000,10 +1000,6 @@ public class ElasticSearchController {
 
             query += "}},";
 
-            if (mostrecentfilter) {
-                query += "\"size\" : 1,";
-            }
-
             query +="\"sort\" : { \"made\": { \"order\": \"desc\" }}" +
                     "}";
 
@@ -1022,20 +1018,30 @@ public class ElasticSearchController {
                 if (result.isSucceeded()){
                     List<Mood> foundMoods = result.getSourceAsObjectList(Mood.class);
                     moods.addAll(foundMoods);
-                    if(!profilemode) { // take into account that we only want the most recent post of each user - so we'll use a LinkedHashMap to de-duplicate by username
-                        List<Mood> revmoods = Lists.reverse(moods); // Reverse the order of the moods list since the LinkedHashMap will squash the duplicates in a "Last Man Standing" format
-                        Map<String, Mood> map = new LinkedHashMap<>();
-                        for (Mood mood : revmoods) {
-                            map.put(mood.getUsername(), mood);
+                    if(!mostrecentfilter) {
+                        if (!profilemode) { // take into account that we only want the most recent post of each user - so we'll use a LinkedHashMap to de-duplicate by username
+                            List<Mood> revmoods = moods; // Reverse the order of the moods list since the LinkedHashMap will squash the duplicates in a "Last Man Standing" format
+                            Map<String, Mood> map = new LinkedHashMap<>();
+                            for (Mood mood : revmoods) {
+                                map.put(mood.getUsername(), mood);
+                            }
+                            moods.clear();
+                            moods.addAll(map.values());
                         }
-                        moods.clear();
-                        moods.addAll(map.values());
-                    }
-                    if (localCache != null) {
-                        localCache.clear();
-                        localCache.addAll(foundMoods);
-                    }
+                        if (localCache != null) {
+                            localCache.clear();
+                            localCache.addAll(foundMoods);
+                        }
+                    } else {
+                        moods.subList(1, moods.size()).clear();
 
+                        if (localCache != null) {
+                            localCache.clear();
+                            localCache.addAll(moods);
+                        }
+
+                        return moods;
+                    }
                 }
                 else {
                     Log.i("Error", "the search query failed to find any moods that matched");

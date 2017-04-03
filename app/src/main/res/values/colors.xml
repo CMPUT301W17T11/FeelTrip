@@ -9,8 +9,11 @@
     <color name="green">#43a047</color>
     <color name="gray">#bebdb9</color>
     <color name="dark_gray">#706E6E</color>
-    <color name="light_gray">#D3D3D3</color>
+    <color name="light_gray">#584F4A</color>
     <color name="white">#FFFFFF</color>
-    <color name="orange">#FFA500</color>
-    <color name="silver">#C0C0C0</color>
+    <color name="orange">#2F2526</color>
+    <color name="silver">#FAA02E</color>
+    <color name="orangeLight">#FCBD49</color>
+    <color name="galaxy_blue">#AA000050</color>
+    <color name="darkStatusBar">#060606</color>
 </resources>

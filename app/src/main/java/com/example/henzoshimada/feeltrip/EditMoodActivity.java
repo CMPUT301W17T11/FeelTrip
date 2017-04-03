@@ -508,7 +508,7 @@ public class EditMoodActivity extends AppCompatActivity {
                 mood.setSocialSit(socialSit);
 
                 if (inputMoodDescription.getText().toString().equals("")) {
-                    throw new NullPointerException();
+                    mood.setDescription(String.valueOf(inputMoodDescription.getText()));
                 } else {
                     mood.setDescription(String.valueOf(inputMoodDescription.getText()));
                 }
@@ -708,6 +708,7 @@ public class EditMoodActivity extends AppCompatActivity {
         socialSituationSpinner = (Spinner) findViewById(R.id.social_event_spinner);
         List<String> socialSituationList = new ArrayList<>();
 
+        socialSituationList.add("None");
         socialSituationList.add("Alone");
         socialSituationList.add("With one other person");
         socialSituationList.add("With two to several people");
@@ -838,6 +839,12 @@ public class EditMoodActivity extends AppCompatActivity {
         switch (FeelTripApplication.getThemeID()) {
             case R.style.Simplicity:
                 theme_offset = 1;
+                break;
+            case R.style.Overwatch:
+                theme_offset = 2;
+                break;
+            case R.style.GalaxyTheme:
+                theme_offset = 3;
                 break;
             default:
                 theme_offset = 0;

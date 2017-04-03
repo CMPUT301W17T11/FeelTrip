@@ -14,10 +14,10 @@
 
         <ImageButton
             android:layout_gravity="center"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingRight="25sp"
             android:src="@mipmap/cross_swipe"
-            android:adjustViewBounds="true"
             android:id ="@+id/swipeDelete"
             android:onClick="refreshList"
             android:background="@null"/>

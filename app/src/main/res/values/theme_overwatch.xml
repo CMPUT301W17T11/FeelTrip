@@ -3,14 +3,14 @@
 
     <style name="Overwatch" parent="DefaultTheme">
         <item name="android:textColorPrimary">@color/dark_gray</item>
-        <item name="android:textColorSecondary">@color/orange</item>
+        <item name="android:textColorSecondary">@color/orange</item> <!--when icon not selected-->
         <item name="android:textColorTertiary">@color/orange</item>
-        <item name="android:colorPrimary">@color/silver</item>
+        <item name="android:colorPrimary">@color/silver</item> <!--Top bar-->
         <item name="android:colorPrimaryDark">@color/dark_gray</item>
         <item name="android:windowBackground">@color/light_gray</item>
         <item name="colorAccent">@color/light_gray</item>
         <item name="android:windowAnimationStyle">@style/WindowAnimationTransition</item>
-        <item name="android:statusBarColor">@color/primary_dark_material_light</item>
+        <item name="android:statusBarColor">@color/orangeLight</item>
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
