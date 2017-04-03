@@ -322,7 +322,7 @@ public class loginActivity extends AppCompatActivity implements
             e.printStackTrace();
         }
         if(participants.isEmpty()) {
-            String userString = userField.getText().toString();
+            String userString = userField.getText().toString().trim();
             String passString = passField.getText().toString();
             if(!passString.isEmpty() && !userString.isEmpty()) {
                 ElasticSearchController.AddParticipantTask addParticipantTask = new ElasticSearchController.AddParticipantTask();
