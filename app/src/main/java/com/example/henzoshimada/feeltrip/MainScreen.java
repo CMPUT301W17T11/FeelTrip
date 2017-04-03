@@ -45,6 +45,7 @@ import android.widget.Spinner;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
@@ -69,45 +70,6 @@ import layout.profileFragment;
 public class MainScreen extends AppCompatActivity{
 
     private Spinner emotionalStateSpinner;
-
-    /**
-     * The constant angry.
-     */
-// The following are constants for emotion based emoji
-    public static final int angry = 0x1F624;
-    /**
-     * The constant confused.
-     */
-    public static final int confused = 0x1F635;
-    /**
-     * The constant disgusted.
-     */
-    public static final int disgusted = 0x1F623; //might change this one...
-    /**
-     * The constant fearful.
-     */
-    public static final int fearful = 0x1F628;
-    /**
-     * The constant happy.
-     */
-    public static final int happy = 0x1F60A;
-    /**
-     * The constant sad.
-     */
-    public static final int sad = 0x1F622;
-    /**
-     * The constant shameful.
-     */
-    public static final int shameful = 0x1F61E;
-    /**
-     * The constant cool.
-     */
-    public static final int cool = 0x1F60E;
-    /**
-     * The constant somethingwentwrong.
-     */
-    public static final int somethingwentwrong = 0x1F31A;
-
     private ListView userFoundView;  //who participant searched
     private ListView followingView; //who participant is following
     private ListView requestView;   //who participant wants to follow
@@ -133,35 +95,6 @@ public class MainScreen extends AppCompatActivity{
 
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mDrawerToggle;
-
-    /**
-     * Emoji unicode int.
-     *
-     * @param emotion the emotion
-     * @return the int
-     */
-    public int emojiUnicode(String emotion) {
-        switch(emotion) {
-            case "Angry":
-                return angry;
-            case "Confused":
-                return confused;
-            case "Disgusted":
-                return disgusted;
-            case "Fearful":
-                return fearful;
-            case "Happy":
-                return happy;
-            case "Sad":
-                return sad;
-            case "Shameful":
-                return shameful;
-            case "Cool":
-                return cool;
-            default:
-                return somethingwentwrong; // the secret "only accessible by hacks" face
-        }
-    }
 
     // Taken from http://stackoverflow.com/questions/4828636/edittext-clear-focus-on-touch-outside
     // on 2017-03-27 08:52
@@ -397,7 +330,7 @@ public class MainScreen extends AppCompatActivity{
         addItemsOnEmotionalStateSpinner();
 
 
-        ToggleButton toggleRecent = (ToggleButton) findViewById(R.id.toggleRecent);
+        Switch toggleRecent = (Switch) findViewById(R.id.toggleRecent);
         toggleRecent.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 
             @Override
@@ -412,7 +345,7 @@ public class MainScreen extends AppCompatActivity{
             }
         });
 
-        ToggleButton toggleFriends = (ToggleButton) findViewById(R.id.toggleFriends);
+        Switch toggleFriends = (Switch) findViewById(R.id.toggleFriends);
         toggleFriends.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 
             @Override
@@ -427,7 +360,7 @@ public class MainScreen extends AppCompatActivity{
             }
         });
 
-        ToggleButton toggleMostRecent = (ToggleButton) findViewById(R.id.toggleMostRecent);
+        Switch toggleMostRecent = (Switch) findViewById(R.id.toggleMostRecent);
         toggleMostRecent.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 
             @Override
@@ -638,7 +571,7 @@ public class MainScreen extends AppCompatActivity{
     @Override
     protected void onResume() {
         super.onResume();
-        ToggleButton toggleFriends = (ToggleButton) findViewById(R.id.toggleFriends);
+        Switch toggleFriends = (Switch) findViewById(R.id.toggleFriends);
         TextView textView = (TextView) findViewById(R.id.textView5);
         if(FeelTripApplication.getFrag().equals("profile")) {
             toggleFriends.setVisibility(View.GONE);

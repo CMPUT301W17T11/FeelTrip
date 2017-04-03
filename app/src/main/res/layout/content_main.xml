@@ -60,38 +60,24 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-                <ToggleButton
+                <Switch
                     android:id="@+id/toggleRecent"
-                    android:layout_width="40dp"
-                    android:layout_height="25dp"
-                    android:background="@drawable/toggle_selector"
-                    android:checked="false"
-                    android:text=""
-                    android:textOff=""
-                    android:textOn=""
-                    android:layout_marginStart="12dp"/>
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingStart="10dp"
+                    android:paddingEnd="10dp"/>
 
-                <ToggleButton
+                <Switch
                     android:id="@+id/toggleMostRecent"
-                    android:layout_width="40dp"
-                    android:layout_height="25dp"
-                    android:background="@drawable/toggle_selector"
-                    android:checked="false"
-                    android:text=""
-                    android:textOff=""
-                    android:textOn=""
-                    android:layout_marginStart="50dp" />
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingEnd="10dp"/>
 
-                <ToggleButton
+                <Switch
                     android:id="@+id/toggleFriends"
-                    android:layout_width="40dp"
-                    android:layout_height="25dp"
-                    android:background="@drawable/toggle_selector"
-                    android:checked="false"
-                    android:text=""
-                    android:textOff=""
-                    android:textOn=""
-                    android:layout_marginStart="50dp" />
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingEnd="10dp"/>
 
                 <Spinner
                     android:id="@+id/filterMood"
@@ -109,8 +95,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="?android:attr/textColorTertiary"
-                    android:text="Only past week"
-                    android:textSize="10dp"/>
+                    android:text="Past week"
+                    android:textSize="10dp"
+                    android:paddingStart="5dp"/>
 
                 <TextView
                     android:id="@+id/textView4"
@@ -118,8 +105,9 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="20dp"
                     android:textColor="?android:attr/textColorTertiary"
-                    android:text="Only most recent"
-                    android:textSize="10dp"/>
+                    android:text="Latest"
+                    android:textSize="10dp"
+                    android:paddingEnd="10dp"/>
 
                 <TextView
                     android:id="@+id/textView5"
@@ -127,7 +115,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="20dp"
                     android:textColor="?android:attr/textColorTertiary"
-                    android:text="Only friends"
+                    android:text="Friends"
                     android:textSize="10dp"/>
 
                 <TextView
@@ -135,7 +123,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="?android:attr/textColorTertiary"
-                    android:text="Only "
                     android:layout_marginStart="20dp"
                     android:textSize="10dp"/>
 

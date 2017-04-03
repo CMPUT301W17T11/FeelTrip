@@ -92,7 +92,6 @@ public class homeFragmment extends Fragment{
         }
 
         else if(FeelTripApplication.getThemeID() == R.style.GalaxyTheme) {
-
         }
 
         //http://stackoverflow.com/questions/20922036/android-cant-call-setonitemclicklistener-from-a-listview
