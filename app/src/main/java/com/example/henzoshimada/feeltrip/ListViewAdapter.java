@@ -64,12 +64,7 @@ public class ListViewAdapter extends BaseSwipeAdapter {
                 YoYo.with(Techniques.Tada).duration(500).delay(100).playOn(layout.findViewById(R.id.swipeDelete));
             }
         });
-        swipeLayout.setOnDoubleClickListener(new SwipeLayout.DoubleClickListener() {
-            @Override
-            public void onDoubleClick(SwipeLayout layout, boolean surface) {
-                Toast.makeText(mContext, "DoubleClick", Toast.LENGTH_SHORT).show();
-            }
-        });
+
         ImageButton ib = (ImageButton) convertView.findViewById(R.id.swipeDelete);
         ib.setOnClickListener(new View.OnClickListener() {
             @Override
