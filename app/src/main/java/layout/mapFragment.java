@@ -329,7 +329,7 @@ public class mapFragment extends Fragment implements
                     }
 
                 Bitmap emojiBitmap = BitmapFactory.decodeResource(getResources(), emojiID);
-                Bitmap resizedBitmap = Bitmap.createScaledBitmap(emojiBitmap, 100, 100, false);
+                Bitmap resizedBitmap = Bitmap.createScaledBitmap(emojiBitmap, 100, 120, false);
 
                     marker = mMap.addMarker(new MarkerOptions()
                             //.position(new LatLng(53.528033+i, -113.525355+i))
