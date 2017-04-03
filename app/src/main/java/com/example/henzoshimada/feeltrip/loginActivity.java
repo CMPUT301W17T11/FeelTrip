@@ -60,10 +60,6 @@ public class loginActivity extends AppCompatActivity implements
 //        setTheme(R.style.NaughtyPenguins); //TODO - theme
 //        setTheme(R.style.DefaultTheme);
 
-        if (FeelTripApplication.getThemeID() == R.style.Simplicity) {
-            FeelTripApplication.setThemeID(R.style.CustomTheme_Light);
-        }
-
         setTheme(FeelTripApplication.getThemeID());
 
         setContentView(R.layout.activity_login);
@@ -102,12 +98,6 @@ public class loginActivity extends AppCompatActivity implements
                         break;
                     default:
                         break;
-                }
-                if(FeelTripApplication.getThemeID() == R.style.Simplicity) {
-                    colorpicker.setVisibility(View.GONE);
-                    sv.setVisibility(View.GONE);
-                    themeSeekbarTable.setVisibility(View.GONE);
-                    themeSeekbar.setProgress(50);
                 }
 
                 EditText userField = (EditText) this.findViewById(R.id.user_text);
@@ -158,6 +148,22 @@ public class loginActivity extends AppCompatActivity implements
         themeSeekBar.setOnSeekBarChangeListener(this);
 
     } //end of onCreate
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        ColorPicker colorpicker = (ColorPicker) findViewById(R.id.picker);
+        SVBar sv = (SVBar) findViewById(R.id.svbar);
+        TableLayout themeSeekbarTable = (TableLayout) findViewById(R.id.theme_seekBar_table);
+        SeekBar themeSeekbar = (SeekBar) findViewById(R.id.theme_seekBar);
+        if(FeelTripApplication.getThemeID() == R.style.Simplicity) {
+            colorpicker.setVisibility(View.GONE);
+            sv.setVisibility(View.GONE);
+            themeSeekbarTable.setVisibility(View.GONE);
+            themeSeekbar.setProgress(50);
+        }
+    }
 
     /**
      * This is what we use to change the colour of the application as its own "theme"
