@@ -1,7 +1,6 @@
 package layout;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -11,11 +10,8 @@ import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
 import android.app.Fragment;
-//import android.support.v4.app.Fragment;
-import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.text.Html;
 import android.util.Base64;
 import android.util.Log;
@@ -40,19 +36,13 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.maps.model.CameraPosition;
-import com.google.android.gms.maps.model.Circle;
-import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;
-import java.util.concurrent.ExecutionException;
-
 
 //18 March 2017 http://stackoverflow.com/questions/19353255/how-to-put-google-maps-v2-on-a-fragment-using-viewpager
 
@@ -65,7 +55,6 @@ public class mapFragment extends Fragment implements
         OnMapReadyCallback,
         GoogleMap.OnMarkerClickListener,
         GoogleMap.OnMapClickListener{
-    // ActivityCompat.OnRequestPermissionsResultCallback{
 
     /**
      * The M map view.
@@ -96,10 +85,6 @@ public class mapFragment extends Fragment implements
     private Location mLastKnownLocation;
 
     private static final String frag = "map";
-
-    private CameraPosition mCameraPosition;
-    private static final String KEY_CAMERA_POSITION = "camera_position";
-    private static final String KEY_LOCATION = "location";
 
     private ArrayList<Mood> moodArrayList = new ArrayList<Mood>();
 
@@ -155,18 +140,6 @@ public class mapFragment extends Fragment implements
 
         participant = FeelTripApplication.getParticipant();
 
-
-        /*
-        try {
-            Log.d("mapTag", "before");
-            testCreateMoodArray();
-            Log.d("mapTag", "after");
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-*/
         // Build the Play services client for use by the Fused Location Provider and the Places API.
         // Use the addApi() method to request the Google Places API and the Fused Location Provider.
         mGoogleApiClient = new GoogleApiClient.Builder(getActivity())
@@ -216,7 +189,6 @@ public class mapFragment extends Fragment implements
             @Override
             public View getInfoWindow(Marker marker) {
                 //use default InfoWindow frame
-                //return null;
                 View view = getActivity().getLayoutInflater().inflate(R.layout.info_window_layout, null);
                 view.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT)); //width, height
                 int index = Integer.parseInt(marker.getSnippet());
@@ -283,7 +255,6 @@ public class mapFragment extends Fragment implements
                         emojiView.setImageResource(getContext().getApplicationContext().getResources().getIdentifier("err", "drawable", getContext().getApplicationContext().getPackageName()));
                     }
                 }
-                //######################################################
                 String encodedImageString = mood.getImage();
                 if (encodedImageString != null) {
                     byte[] decodedString = Base64.decode(encodedImageString, Base64.DEFAULT);
@@ -302,50 +273,6 @@ public class mapFragment extends Fragment implements
 
             @Override
             public View getInfoContents(Marker marker) {
-                /*
-                View view = getActivity().getLayoutInflater().inflate(R.layout.info_window_layout, null);
-                view.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT)); //width, height
-                int index = Integer.parseInt(marker.getSnippet());
-                Mood mood = moodArrayList.get(index);
-                TextView usernameView = (TextView) view.findViewById(R.id.info_window_person);
-                TextView descriptionView = (TextView) view.findViewById(R.id.info_window_description);
-                TextView social_situationView = (TextView) view.findViewById(R.id.info_window_socialSituation);
-                TextView dateView = (TextView) view.findViewById(R.id.info_window_date);
-                TextView feelingView = (TextView) view.findViewById(R.id.info_window_append);
-                ImageView emojiView = (ImageView) view.findViewById(R.id.info_window_emojiImage);
-                ImageView imageView = (ImageView) view.findViewById(R.id.info_window_image);
-
-                usernameView.setText(mood.getUsername());
-                descriptionView.setText(mood.getDescription());
-                social_situationView.setText(mood.getSocialSit());
-                dateView.setText(mood.getDate().toString());
-                feelingView.setText(mood.getEmotionalState());
-
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    int emojiID = getContext().getApplicationContext().getResources().getIdentifier("emoji" + String.valueOf(mood.getEmoji()),"drawable",getContext().getApplicationContext().getPackageName());
-                    if(emojiID != 0) {
-                        emojiView.setImageResource(emojiID);
-                    }
-                    else { // This field can only be accessed if something goes wrong, or if someone alters the main database. It's mainly a fallback safety.
-                        emojiView.setImageResource(getContext().getApplicationContext().getResources().getIdentifier("err","drawable",getContext().getApplicationContext().getPackageName()));
-                    }
-                }
-                //######################################################
-                String encodedImageString = mood.getImage();
-                if(encodedImageString != null) {
-                    byte[] decodedString = Base64.decode(encodedImageString, Base64.DEFAULT);
-                    Log.d("Bitmap","Length: "+decodedString.length);
-                    Bitmap photo = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-                    imageView.setImageBitmap(photo);
-                    Log.d("imageTag", "have image");
-                }else {
-                    imageView.setImageBitmap(null);
-                    imageView.setVisibility(View.GONE);
-                    Log.d("imageTag", "no image");
-                }
-
-                return view;
-                */
                 return null;
             }
         });
@@ -459,13 +386,13 @@ public class mapFragment extends Fragment implements
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 setMoodMarker();
             }
-
+            /*
             //5km radius circle for debug
             Circle circle = mMap.addCircle(new CircleOptions()
                     .center(new LatLng(mLastKnownLocation.getLatitude(),
                             mLastKnownLocation.getLongitude()))
                     .radius(5000) //in meters
-                    .strokeColor(Color.RED));
+                    .strokeColor(Color.RED));*/
             //mMap.animateCamera(CameraUpdateFactory.zoomTo(15), 2000, null);
         } else {
             Toast.makeText(getActivity(), "Please turn on Location Service and retry", Toast.LENGTH_SHORT).show();
@@ -479,7 +406,6 @@ public class mapFragment extends Fragment implements
      */
     //must be called after participant location is set
     private void getMoodArray() {
-        //FeelTripApplication.loadFromElasticSearch(); THIS LINE ISN'T NEEDED DUE TO THE WAY WE CALL mapFragment
         try {
             FeelTripApplication.setLatitude(participant.getLatitude());
             FeelTripApplication.setLongitude(participant.getLongitude());

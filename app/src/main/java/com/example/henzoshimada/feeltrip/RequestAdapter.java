@@ -1,24 +1,13 @@
 package com.example.henzoshimada.feeltrip;
 
-import android.app.Activity;
 import android.content.Context;
-import android.content.res.Resources;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.drawable.Drawable;
-import android.text.Html;
-import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.TextView;
-
-import com.example.henzoshimada.feeltrip.Mood;
 
 import java.util.ArrayList;
 
@@ -93,12 +82,9 @@ public class RequestAdapter extends ArrayAdapter<FollowRequest> {
             viewHolder.acceptButton = (ImageButton) convertView.findViewById(R.id.accept_request);
             viewHolder.cancelButton = (ImageButton) convertView.findViewById(R.id.cancel_request);
 
-            result=convertView;
-
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
-            result=convertView;
         }
 
         viewHolder.userName.setText(followRequest.getSender());

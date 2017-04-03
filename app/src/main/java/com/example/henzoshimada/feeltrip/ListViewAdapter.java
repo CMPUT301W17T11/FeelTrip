@@ -1,12 +1,8 @@
 package com.example.henzoshimada.feeltrip;
-import android.app.Fragment;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.os.SystemClock;
 import android.text.Html;
 import android.util.Base64;
 import android.util.Log;
@@ -25,9 +21,6 @@ import com.daimajia.swipe.SwipeLayout;
 import com.daimajia.swipe.adapters.BaseSwipeAdapter;
 
 import java.util.ArrayList;
-
-import static com.example.henzoshimada.feeltrip.R.id.userName;
-import static java.security.AccessController.getContext;
 
 /**
  * The type List view adapter.

@@ -96,7 +96,7 @@
                     android:layout_height="wrap_content"
                     android:textColor="?android:attr/textColorTertiary"
                     android:text="Past week"
-                    android:textSize="10dp"
+                    android:textSize="10sp"
                     android:paddingStart="5dp"/>
 
                 <TextView
@@ -106,7 +106,7 @@
                     android:layout_marginStart="20dp"
                     android:textColor="?android:attr/textColorTertiary"
                     android:text="Latest"
-                    android:textSize="10dp"
+                    android:textSize="10sp"
                     android:paddingEnd="10dp"/>
 
                 <TextView
@@ -116,7 +116,7 @@
                     android:layout_marginStart="20dp"
                     android:textColor="?android:attr/textColorTertiary"
                     android:text="Following"
-                    android:textSize="10dp"/>
+                    android:textSize="10sp"/>
 
                 <TextView
                     android:id="@+id/textView3"
@@ -124,7 +124,7 @@
                     android:layout_height="wrap_content"
                     android:textColor="?android:attr/textColorTertiary"
                     android:layout_marginStart="20dp"
-                    android:textSize="10dp"/>
+                    android:textSize="10sp"/>
 
             </LinearLayout>
 

@@ -38,7 +38,6 @@ import java.util.ArrayList;
 public class homeFragmment extends Fragment{
 
     private ListView oldMoodListView;
-    private ArrayList<Mood> moodArrayList;
     private ListViewAdapter adapter;
     private static final String frag = "main";
 
@@ -60,11 +59,6 @@ public class homeFragmment extends Fragment{
         });
 
         oldMoodListView = (ListView) view.findViewById(R.id.homeList);
-
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) { // TODO: Custom color theme
-//            oldMoodListView.setBackground(getResources().getDrawable(R.drawable.music_bg,getContext().getTheme()));
-        }
 
         if(FeelTripApplication.getThemeID() == R.style.CustomTheme_Light || FeelTripApplication.getThemeID() == R.style.CustomTheme_Dark) {
             android.support.design.widget.FloatingActionButton floatingActionButton = (android.support.design.widget.FloatingActionButton) view.findViewById(R.id.add_mood);
@@ -114,16 +108,7 @@ public class homeFragmment extends Fragment{
 
         return view;
     }
-    //start when we click home button
-/*
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        Log.d("myTag","onAttach");
-        //moodArrayList = new ArrayList<Mood>();
-        loadFromElasticSearch();
-    }
-*/
+
 
     //start when come back from add mood activity
     @Override
@@ -133,22 +118,10 @@ public class homeFragmment extends Fragment{
         if(!FeelTripApplication.getFrag().equals(frag)) {
             FeelTripApplication.setFrag(frag);
         }
-//        FeelTripApplication.loadFromElasticSearch();
-        adapter = FeelTripApplication.getListViewAdapter(getContext());
+        adapter = FeelTripApplication.getListViewAdapter(getActivity());
 
-        //adapter = new ArrayAdapter<Mood>(getActivity(), R.layout.list_item, moodArrayList); //view,dataArray
         oldMoodListView.setAdapter(adapter);
         Log.d("listTag","done loading3");
     }
-
-    /*
-    @Override
-    public void onResume(){
-        super.onResume();
-        Log.d("myTag","onResume");
-        loadFromElasticSearch();
-        adapter.notifyDataSetChanged();
-    }
-*/
 
 }

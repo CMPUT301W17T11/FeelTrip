@@ -1,9 +1,7 @@
 package com.example.henzoshimada.feeltrip;
 
 import android.app.IntentService;
-import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 
 /**
  * Created by Esus2 on 2017-03-26.

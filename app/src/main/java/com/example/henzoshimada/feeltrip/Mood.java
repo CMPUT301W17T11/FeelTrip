@@ -5,15 +5,9 @@ package com.example.henzoshimada.feeltrip;
 import android.text.Html;
 import android.text.TextUtils;
 
-import org.w3c.dom.Text;
-
-import android.graphics.Bitmap;
-
-
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
-import java.util.Objects;
 
 import io.searchbox.annotations.JestId;
 

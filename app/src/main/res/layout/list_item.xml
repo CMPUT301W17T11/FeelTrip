@@ -19,7 +19,6 @@
             android:paddingRight="25sp"
             android:src="@mipmap/cross_swipe"
             android:id ="@+id/swipeDelete"
-            android:onClick="refreshList"
             android:background="@null"/>
         <!-- Bottom View End-->
 

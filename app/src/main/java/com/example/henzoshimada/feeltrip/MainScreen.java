@@ -7,28 +7,11 @@ import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.Rect;
-import android.graphics.Typeface;
-import android.graphics.drawable.Drawable;
-import android.os.Build;
-import android.support.annotation.NonNull;
-import android.support.annotation.RequiresApi;
-import android.support.design.widget.BottomNavigationView;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.SearchView;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.util.TypedValue;
-import android.view.Gravity;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -37,7 +20,6 @@ import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
@@ -47,12 +29,8 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.widget.Switch;
 import android.widget.TextView;
-import android.widget.Toast;
-import android.widget.ToggleButton;
 
-import com.akiniyalocts.minor.MinorLayout;
 import com.akiniyalocts.minor.MinorView;
-import com.akiniyalocts.minor.behavior.MinorBehavior;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -75,23 +53,17 @@ public class MainScreen extends AppCompatActivity{
     private ListView requestView;   //who participant wants to follow
     private EditText inputTextView;
     private TextView notFoundTextView;
-    private static int NUM_EMOTIONS = FeelTripApplication.getNumEmotions();
-    private LinearLayout emojiList;
-    private ImageButton emojiButton;
-    private TextView emojiTextview;
 
     //use custom adapter
     private ArrayList<String> usersFoundArray = FeelTripApplication.getUsersFoundArray();
-    //private ArrayList<String> followingArray = new ArrayList<String>(); //todo use default adapter
     private ArrayList<String> followingArray = FeelTripApplication.getFollowingArray();
     private ArrayList<FollowRequest> requestsArray; //use custom adabter
 
     private RequestAdapter requestAdapter;
-    //private ArrayAdapter<String> follwingAdapter;
     private FollowingAdapter follwingAdapter;
     private UserFoundAdapter userFoundAdapter;
 
-    private Participant participant = FeelTripApplication.getParticipant();;
+    private Participant participant = FeelTripApplication.getParticipant();
 
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mDrawerToggle;
@@ -146,12 +118,10 @@ public class MainScreen extends AppCompatActivity{
         Fragment fragment;
         FragmentManager fm = getFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();
-        Fragment fragCurrent = fm.findFragmentById(R.id.fragent_frame);
         Log.d("Mytag","Tapped on home");
         FeelTripApplication.setFrag("main");
         fragment = new homeFragmment();
         ft.replace(R.id.fragent_frame,fragment);
-        //ft.addToBackStack(null);
         ft.commit();
         BetterMinorView minorHome = (BetterMinorView)findViewById(R.id.minor_home);
         BetterMinorView minorProfile = (BetterMinorView)findViewById(R.id.minor_profile);
@@ -193,7 +163,6 @@ public class MainScreen extends AppCompatActivity{
         Fragment fragment;
         FragmentManager fm = getFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();
-        Fragment fragCurrent = fm.findFragmentById(R.id.fragent_frame);
         Log.d("Mytag","Tapped on profile");
         FeelTripApplication.setFrag("profile");
         fragment = new profileFragment();
@@ -240,12 +209,10 @@ public class MainScreen extends AppCompatActivity{
         Fragment fragment;
         FragmentManager fm = getFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();
-        Fragment fragCurrent = fm.findFragmentById(R.id.fragent_frame);
         Log.d("Mytag","Tapped on map");
         FeelTripApplication.setFrag("map");
         fragment = new mapFragment();
         ft.replace(R.id.fragent_frame,fragment);
-        //ft.addToBackStack(null);
         ft.commit();
         BetterMinorView minorHome = (BetterMinorView)findViewById(R.id.minor_home);
         BetterMinorView minorProfile = (BetterMinorView)findViewById(R.id.minor_profile);
@@ -293,9 +260,6 @@ public class MainScreen extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-
-//        setTheme(R.style.NaughtyPenguins); //TODO - theme
-//        setTheme(R.style.DefaultTheme);
         setTheme(FeelTripApplication.getThemeID());
 
 
@@ -513,11 +477,9 @@ public class MainScreen extends AppCompatActivity{
 
         mDrawerLayout.addDrawerListener(mDrawerToggle);
 
-        //requestAdapter = new RequestAdapter(requestsArray, this); //view,dataArray
         requestAdapter = FeelTripApplication.getRequestAdapter(this);
         requestView.setAdapter(requestAdapter);
 
-        //follwingAdapter = new ArrayAdapter<>(this, R.layout.username_list_item, followingArray); //view,dataArray
         follwingAdapter = FeelTripApplication.getFollowingAdapter(this);
         followingView.setAdapter(follwingAdapter);
 
@@ -586,8 +548,6 @@ public class MainScreen extends AppCompatActivity{
         ElasticSearchController.loadFromElasticSearch();
         FeelTripApplication.getListViewAdapter(getBaseContext()).notifyDataSetChanged();
 
-//        loadRequestsArray();
-//        loadFollowingsArray();
     }
 
     /**
@@ -687,7 +647,6 @@ public class MainScreen extends AppCompatActivity{
         {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
             {
-                String selectedItem = parent.getItemAtPosition(position).toString();
                 if(position != 0) {
                     FilterController.setEmotionfilter(FeelTripApplication.getEmotionalState(position));
                 }

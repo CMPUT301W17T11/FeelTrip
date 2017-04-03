@@ -32,21 +32,11 @@ public class profileFragment extends Fragment {
 
     private ListView oldMoodListView;
     private ArrayList<Mood> moodArrayList;
-    //private ArrayAdapter<Mood> adapter;
     private ListViewAdapter adapter;
 
 
-    private ListView mListView;
-    private ListViewAdapter mAdapter;
-    private Context mContext = getActivity();
-
     private static final String frag = "profile";
 
-    //Swiping
-    private boolean mSwiping = false; // detects if user is swiping on ACTION_UP
-    private boolean mItemPressed = false; // Detects if user is currently holding down a view
-    private static final int SWIPE_DURATION = 250; // needed for velocity implementation
-    private static final int MOVE_DURATION = 150;
     /**
      * The M down x.
      */
@@ -59,8 +49,6 @@ public class profileFragment extends Fragment {
     /**
      * The M item id top map.
      */
-    HashMap<Long, Integer> mItemIdTopMap = new HashMap<Long, Integer>();
-
     @Override
     public View onCreateView(LayoutInflater inflater, final ViewGroup container,
                              Bundle savedInstanceState) {
@@ -89,7 +77,6 @@ public class profileFragment extends Fragment {
                         Log.d("listTag","on click");
 
                         Intent intent = new Intent(view.getContext(), EditMoodActivity.class);
-//                        Mood selected = FeelTripApplication.getMoodArrayList().get(position);
                         Bundle bundle = new Bundle();
                         bundle.putInt("editmood", position);
                         intent.putExtras(bundle);
@@ -104,16 +91,6 @@ public class profileFragment extends Fragment {
         return view;
     }
 
-    //start when we click home button
-/*
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        Log.d("myTag","onAttach");
-        //moodArrayList = new ArrayList<Mood>();
-        loadFromElasticSearch();
-    }
-*/
 
     //start when come back from add mood activity
 
@@ -125,8 +102,6 @@ public class profileFragment extends Fragment {
         if(!FeelTripApplication.getFrag().equals(frag)) {
             FeelTripApplication.setFrag(frag);
         }
-//        FeelTripApplication.loadFromElasticSearch();
-        //adapter = FeelTripApplication.getMoodAdapter(getActivity());
         adapter = FeelTripApplication.getListViewAdapter(getContext());
 
         //adapter = new ArrayAdapter<Mood>(getActivity(), R.layout.list_item, moodArrayList); //view,dataArray
@@ -137,18 +112,7 @@ public class profileFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        //FeelTripApplication.getMoodAdapter(getActivity()).notifyDataSetChanged();
     }
-
-/*
-    @Override
-    public void onResume(){
-        super.onResume();
-        Log.d("myTag","onResume");
-        loadFromElasticSearch();
-        adapter.notifyDataSetChanged();
-    }
-*/
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -158,7 +122,6 @@ public class profileFragment extends Fragment {
             if (Activity.RESULT_OK == resultCode) {
                 // Grab whatever data identifies that car that was sent in
                 // setResult(int, Intent)
-                //final int carId = data.getIntExtra(CarActivity.EXTRA_CAR_ID, -1);
                 Log.d("myTag", "we are back"+moodArrayList.size());
                 //FeelTripApplication.loadFromElasticSearch();
 

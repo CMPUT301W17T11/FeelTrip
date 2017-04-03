@@ -1,7 +1,5 @@
 package com.example.henzoshimada.feeltrip;
 
-import android.util.Log;
-
 import java.util.ArrayList;
 
 import io.searchbox.annotations.JestId;

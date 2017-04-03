@@ -2,17 +2,10 @@ package com.example.henzoshimada.feeltrip;
 
 import android.app.Activity;
 import android.test.ActivityInstrumentationTestCase2;
-import android.util.Log;
-import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
 import com.robotium.solo.Solo;
-
-import java.util.Arrays;
-import java.util.List;
-
-import static java.lang.Thread.sleep;
 
 /**
  * Created by Kevin on 31-Mar-17.

@@ -1,21 +1,12 @@
 package com.example.henzoshimada.feeltrip;
 
-import android.app.Activity;
 import android.content.Context;
-import android.content.res.Resources;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.drawable.Drawable;
-import android.text.Html;
-import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -92,12 +83,9 @@ public class UserFoundAdapter extends ArrayAdapter<String> {
             viewHolder.userName = (TextView) convertView.findViewById(R.id.userName);
             viewHolder.followButton = (ImageButton) convertView.findViewById(R.id.follow_button);
 
-            result=convertView;
-
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
-            result=convertView;
         }
 
         viewHolder.userName.setText(userName);

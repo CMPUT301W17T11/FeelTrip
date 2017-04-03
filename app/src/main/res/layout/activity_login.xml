@@ -89,7 +89,7 @@
             android:layout_height="wrap_content"
             android:text="Swipe up to change theme..."
             android:textColor="@android:color/white"
-            android:textSize="21dp"
+            android:textSize="21sp"
             android:layout_weight="1" />
 
         <com.larswerkman.holocolorpicker.ColorPicker

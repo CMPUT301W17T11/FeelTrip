@@ -389,15 +389,6 @@ public class FeelTripApplication extends Application {
 
 
     /**
-     * Sets mood array list.
-     *
-     * @param moodArrayList the mood array list
-     */
-    public static void setMoodArrayList(ArrayList<Mood> moodArrayList) {
-        FeelTripApplication.moodArrayList = moodArrayList;
-    }
-
-    /**
      * Gets frag.
      *
      * @return the frag
@@ -419,7 +410,6 @@ public class FeelTripApplication extends Application {
         }
         else {
             Log.i("Error", "The given search mode is invalid.");
-            return;
         }
     }
 

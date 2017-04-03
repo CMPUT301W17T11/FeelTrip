@@ -1,13 +1,8 @@
 package com.example.henzoshimada.feeltrip;
 
 import android.app.Activity;
-import android.app.Fragment;
-import android.support.design.widget.BottomNavigationView;
 import android.test.ActivityInstrumentationTestCase2;
-import android.util.Log;
-import android.view.View;
 import android.widget.EditText;
-import android.widget.TextView;
 
 import com.robotium.solo.Solo;
 

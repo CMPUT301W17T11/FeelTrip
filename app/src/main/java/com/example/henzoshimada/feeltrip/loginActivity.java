@@ -1,6 +1,5 @@
 package com.example.henzoshimada.feeltrip;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Color;
@@ -8,26 +7,20 @@ import android.graphics.PorterDuff;
 import android.graphics.Rect;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.CoordinatorLayout;
-import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TableLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
 import com.larswerkman.holocolorpicker.ColorPicker;
-import com.larswerkman.holocolorpicker.OpacityBar;
 import com.larswerkman.holocolorpicker.SVBar;
 
 import java.util.ArrayList;
@@ -44,8 +37,6 @@ public class loginActivity extends AppCompatActivity implements
 
     private ColorPicker picker;
     private SVBar svBar;
-    private Button button;
-    private TextView text;
     /**
      * The Bottom sheet.
      */
@@ -56,9 +47,6 @@ public class loginActivity extends AppCompatActivity implements
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-//        setTheme(R.style.NaughtyPenguins); //TODO - theme
-//        setTheme(R.style.DefaultTheme);
 
         setTheme(FeelTripApplication.getThemeID());
 
@@ -303,7 +291,6 @@ public class loginActivity extends AppCompatActivity implements
             Toast.makeText(getApplicationContext(),"Incorrect username or password!",Toast.LENGTH_SHORT).show();
         }
         FeelTripApplication.setUsername(userField.getText().toString());
-        return;
     }
 
     /**
@@ -340,7 +327,6 @@ public class loginActivity extends AppCompatActivity implements
         else {
             Toast.makeText(getApplicationContext(),"This user already exists!",Toast.LENGTH_SHORT).show();
         }
-        return;
     }
 
     /**

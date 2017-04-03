@@ -20,10 +20,8 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.places.Places;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
@@ -38,18 +36,6 @@ public class MapsActivity extends FragmentActivity implements
         GoogleMap.OnMarkerDragListener,
         GoogleMap.OnMapClickListener {
 
-    /**
-     * Request code for location permission request.
-     *
-     * @see #onRequestPermissionsResult(int, String[], int[])
-     */
-    private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
-
-    /**
-     * Flag indicating whether a requested permission has been denied after returning in
-     * {@link #onRequestPermissionsResult(int, String[], int[])}.
-     */
-    private boolean mPermissionDenied = false;
 
     private GoogleMap mMap;
 
@@ -58,13 +44,7 @@ public class MapsActivity extends FragmentActivity implements
     private GoogleApiClient mGoogleApiClient;
     private static Location mLastKnownLocation;
 
-    private CameraPosition mCameraPosition;
-    private static final String KEY_CAMERA_POSITION = "camera_position";
-    private static final String KEY_LOCATION = "location";
-
     private Marker marker;
-
-    private Marker mSelectedMarker;
 
     private double longitude ;
     private double latitude;
@@ -189,13 +169,6 @@ public class MapsActivity extends FragmentActivity implements
                 Log.d("camTag","fail");
             }
         }
-
-        // Add a marker in Sydney and move the camera
-        //LatLng sydney = new LatLng(-34, 151);
-        //mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-        //mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
-
-
     }
 
     //https://developers.google.com/android/reference/com/google/android/gms/maps/GoogleMap.OnMyLocationButtonClickListener
@@ -268,7 +241,7 @@ public class MapsActivity extends FragmentActivity implements
     @Override
     public void onMarkerDragStart(Marker arg0) {
         //Log.d("info","onMarkerDragStart");
-        // TODO Auto-generated method stub
+        // Auto-generated method stub
     }
 
     /**

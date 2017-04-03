@@ -13,7 +13,6 @@ import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
-import android.location.Location;
 import android.net.Uri;
 import android.os.Environment;
 import android.support.annotation.NonNull;
@@ -41,11 +40,8 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
-import com.google.android.gms.common.api.GoogleApiClient;
-
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.lang.reflect.Field;
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -82,11 +78,6 @@ public class EditMoodActivity extends AppCompatActivity {
     private static String[] PERMISSIONS_LOCATION = {
             Manifest.permission.ACCESS_FINE_LOCATION
     };
-
-
-    private GoogleApiClient mGoogleApiClient;
-    private Location mLastKnownLocation;
-
 
     /**
      * The Format date time.
@@ -774,39 +765,6 @@ public class EditMoodActivity extends AppCompatActivity {
             startActivityForResult(intent, GET_LOC);
         }
     }
-
-
-
-/*
-    private void toggleLocation() {
-        TextView modeLocation = (TextView) findViewById(R.id.modeLocation);
-        // The toggle is enabled
-        GPSLocation gps = new GPSLocation(EditMoodActivity.this);
-        verifyLocationPermissions(this);
-        gps.canGetLocation();
-        if (gps.getLocation() != null && !locationOn) {
-            locationOn = true;
-            Log.d("myTag", "try to get location");
-            // Check if GPS enabled
-            latitude = gps.getLatitude();
-            longitude = gps.getLongitude();
-            modeLocation.setText("On");
-            modeLocation.setTextColor(getResources().getColor(R.color.green));
-            // \n is for new line
-            Toast.makeText(getApplicationContext(), "Your Location is - \nLat: " + latitude + "\nLong: " + longitude, Toast.LENGTH_LONG).show();
-        } else {
-            locationOn = false;
-            // Can't get location.
-            // GPS or network is not enabled.
-            // Ask user to enable GPS/network in settings.
-            //gps.showSettingsAlert();
-            modeLocation.setText("Off");
-            modeLocation.setTextColor(getResources().getColor(R.color.red));
-        }
-        // The toggle is disabled
-        Log.d("myTag", "location on is: " + String.valueOf(locationOn));
-    }
-*/
 
     /**
      * Check if ACCESS_FINE_LOCATION permission is granted, if not, ask for the permission
