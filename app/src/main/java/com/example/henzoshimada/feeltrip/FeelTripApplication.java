@@ -21,7 +21,7 @@ import java.util.concurrent.ExecutionException;
 public class FeelTripApplication extends Application {
 
     private static final List<String> allEmotions = Arrays.asList( // MODIFY THIS IF YOU WISH TO ADD/DELETE EMOTIONS
-            "Zero", // THIS IS HERE SO WE CAN REFERENCE THE EMOTIONS WITHOUT WORRYING ABOUT ZERO INDEXING
+            "None", // THIS IS HERE SO WE CAN REFERENCE THE EMOTIONS WITHOUT WORRYING ABOUT ZERO INDEXING
             "Angry",
             "Confused",
             "Disgusted",
