@@ -90,6 +90,10 @@ public class ListViewAdapter extends BaseSwipeAdapter {
             }
         });
 
+        if(!FeelTripApplication.getUserName().equals(mood.get(position).getUsername())){
+            closeAllItems();
+        }
+
         try {
             Mood moodItem = mood.get(position);
             //Log.d("swipe","Mood Length: "+mood.size());
