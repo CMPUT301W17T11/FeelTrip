@@ -87,9 +87,9 @@
             android:id="@+id/theme_prompt"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Swipe up to change theme"
+            android:text="Swipe up to change theme..."
             android:textColor="@android:color/white"
-            android:textSize="20dp"
+            android:textSize="21dp"
             android:layout_weight="1" />
 
         <com.larswerkman.holocolorpicker.ColorPicker
@@ -144,6 +144,7 @@
                 android:layout_width="40dp"
                 android:layout_height="wrap_content"
                 android:text="Colour"
+                android:textStyle="italic"
                 android:onClick="swapToCustomTheme"
                 android:layout_weight="1" />
 
@@ -152,6 +153,7 @@
                 android:layout_width="40dp"
                 android:layout_height="wrap_content"
                 android:text="Default"
+                android:textStyle="italic"
                 android:onClick="swapToDefaultTheme"
                 android:layout_weight="1" />
             <Button
@@ -159,13 +161,15 @@
                 android:layout_width="40dp"
                 android:layout_height="wrap_content"
                 android:text="OW"
+                android:textStyle="italic"
                 android:onClick="swapToOverwatchTheme"
                 android:layout_weight="1" />
             <Button
                 android:id="@+id/button4"
                 android:layout_width="40dp"
                 android:layout_height="wrap_content"
-                android:text="Glaxy"
+                android:text="Galaxy"
+                android:textStyle="italic"
                 android:onClick="swapToGalaxyTheme"
                 android:layout_weight="1" />
 
