@@ -16,12 +16,15 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TableLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.daimajia.androidanimations.library.Techniques;
+import com.daimajia.androidanimations.library.YoYo;
 import com.larswerkman.holocolorpicker.ColorPicker;
 import com.larswerkman.holocolorpicker.OpacityBar;
 import com.larswerkman.holocolorpicker.SVBar;
@@ -92,8 +95,12 @@ public class loginActivity extends AppCompatActivity implements
                     themeSeekbarTable.setVisibility(View.GONE);
                     themeSeekbar.setProgress(50);
                 }
+
                 EditText userField = (EditText) this.findViewById(R.id.user_text);
                 EditText passField = (EditText) this.findViewById(R.id.pass_text);
+                YoYo.with(Techniques.Landing).duration(1000).delay(0).playOn(this.findViewById(R.id.user_text));
+                YoYo.with(Techniques.Landing).duration(1000).delay(0).playOn(this.findViewById(R.id.pass_text));
+                YoYo.with(Techniques.Landing).duration(1000).delay(0).playOn(this.findViewById(R.id.logoButton));
                 userField.setText(extras.getString("user"));
                 passField.setText(extras.getString("pass"));
             }
@@ -162,7 +169,7 @@ public class loginActivity extends AppCompatActivity implements
         FeelTripApplication.setTEXTCOLORTERTIARY(textcolortertiary);
 
 
-        RelativeLayout loginBackground = (RelativeLayout) findViewById(R.id.login_background);
+        LinearLayout loginBackground = (LinearLayout) findViewById(R.id.login_background);
         int alpha = 169;
         backgroundcolor = Color.argb(alpha, Color.red(FeelTripApplication.getTEXTCOLORPRIMARY()), Color.green(FeelTripApplication.getTEXTCOLORPRIMARY()), Color.blue(FeelTripApplication.getTEXTCOLORPRIMARY()));
         FeelTripApplication.setBACKGROUNDCOLOR(backgroundcolor);
@@ -371,6 +378,10 @@ public class loginActivity extends AppCompatActivity implements
         finish();
     }
 
+    public void showCredits(View view){
+        Intent intent = new Intent(this, creditsActivity.class);
+        startActivity(intent);
+    }
     public void swapToCustomThemeDark() {
         setTheme(R.style.CustomTheme_Dark);
         FeelTripApplication.setThemeID(R.style.CustomTheme_Dark);

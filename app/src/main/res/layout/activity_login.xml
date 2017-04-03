@@ -8,24 +8,34 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true">
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="643dp"
         android:id="@+id/login_background"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         tools:context="com.example.henzoshimada.feeltrip.loginActivity"
         android:descendantFocusability="beforeDescendants"
+        android:orientation="vertical"
+        android:gravity="center_horizontal"
+        android:layout_marginTop="100sp"
         android:focusableInTouchMode="true"
         tools:layout_editor_absoluteY="8dp"
         tools:layout_editor_absoluteX="8dp">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src = "@mipmap/ic_launcher"
+            android:adjustViewBounds="true"
+            android:maxWidth="200sp"
+            android:maxHeight="200sp"
+            android:id="@+id/logoButton"
+            android:onClick = "showCredits"/>
 
         <EditText
             android:id="@+id/user_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_alignStart="@+id/pass_text"
-            android:layout_marginTop="220dp"
             android:maxLines="1"
             android:inputType="text"
             android:hint="Please enter username: " />
@@ -34,22 +44,20 @@
             android:id="@+id/pass_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/user_text"
-            android:layout_centerHorizontal="true"
             android:inputType="textPassword"
             android:fontFamily="sans-serif"
             android:layout_marginTop="17dp"
             android:hint="Please enter password: " />
-
+    <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
         <Button
             android:id="@+id/login_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:onClick="checkUser"
-            android:text="Login"
-            android:layout_marginTop="51dp"
-            android:layout_below="@+id/pass_text"
-            android:layout_alignStart="@+id/pass_text" />
+            android:text="Login"/>
 
         <Button
             android:id="@+id/reg_button"
@@ -57,9 +65,9 @@
             android:layout_height="wrap_content"
             android:onClick="regUser"
             android:text="Register"
-            android:layout_alignTop="@+id/login_button"
-            android:layout_alignEnd="@+id/user_text" />
-    </RelativeLayout>
+            android:layout_marginStart="15sp"/>
+    </LinearLayout>
+    </LinearLayout>
 
 <android.support.v4.widget.NestedScrollView
     android:id="@+id/bottom_sheet"

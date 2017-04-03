@@ -22,7 +22,7 @@
 
         <ImageView
             android:layout_width="match_parent"
-            android:layout_height="255dp"
+            android:layout_height="210dp"
             android:id="@+id/imgView"/>
 
         <android.support.design.widget.FloatingActionButton
