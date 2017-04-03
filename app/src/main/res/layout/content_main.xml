@@ -124,7 +124,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="?android:attr/textColorTertiary"
-                    android:text="Filter by: 7 days"
+                    android:text="Only past week"
                     android:textSize="10dp"/>
 
                 <TextView
@@ -133,7 +133,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="20dp"
                     android:textColor="?android:attr/textColorTertiary"
-                    android:text="Filter by: Most recent"
+                    android:text="Only most recent"
                     android:textSize="10dp"/>
 
                 <TextView
@@ -142,7 +142,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="20dp"
                     android:textColor="?android:attr/textColorTertiary"
-                    android:text="Filter by: friends"
+                    android:text="Only friends"
                     android:textSize="10dp"/>
 
                 <TextView
@@ -150,7 +150,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="?android:attr/textColorTertiary"
-                    android:text="Filter by: moods"
+                    android:text="Only "
                     android:layout_marginStart="20dp"
                     android:textSize="10dp"/>
 

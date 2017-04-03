@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.Rect;
 import android.support.design.widget.BottomSheetBehavior;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -182,7 +183,7 @@ public class loginActivity extends AppCompatActivity implements
         FeelTripApplication.setTEXTCOLORTERTIARY(textcolortertiary);
 
 
-        LinearLayout loginBackground = (LinearLayout) findViewById(R.id.login_background);
+        CoordinatorLayout loginBackground = (CoordinatorLayout) findViewById(R.id.login_background);
         int alpha = 169;
         backgroundcolor = Color.argb(alpha, Color.red(FeelTripApplication.getTEXTCOLORPRIMARY()), Color.green(FeelTripApplication.getTEXTCOLORPRIMARY()), Color.blue(FeelTripApplication.getTEXTCOLORPRIMARY()));
         FeelTripApplication.setBACKGROUNDCOLOR(backgroundcolor);

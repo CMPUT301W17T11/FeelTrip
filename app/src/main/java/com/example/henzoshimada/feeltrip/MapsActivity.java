@@ -36,7 +36,7 @@ public class MapsActivity extends FragmentActivity implements
         GoogleMap.OnMyLocationButtonClickListener,
         OnMapReadyCallback,
         GoogleMap.OnMarkerDragListener,
-        GoogleMap.OnMapLongClickListener {
+        GoogleMap.OnMapClickListener {
 
     /**
      * Request code for location permission request.
@@ -135,8 +135,17 @@ public class MapsActivity extends FragmentActivity implements
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED) {
             if (mMap != null) {
-                MapStyleOptions style = MapStyleOptions.loadRawResourceStyle(this, R.raw.mapstyle_night);
-                mMap.setMapStyle(style);
+
+                if(FeelTripApplication.getThemeID() == R.style.Simplicity) {
+                    MapStyleOptions style = MapStyleOptions.loadRawResourceStyle(this, R.raw.mapstyle_grayscale);
+                    mMap.setMapStyle(style);
+                }
+
+                else if(FeelTripApplication.getThemeID() == R.style.GalaxyTheme) {
+                    MapStyleOptions style = MapStyleOptions.loadRawResourceStyle(this, R.raw.mapstyle_night);
+                    mMap.setMapStyle(style);
+                }
+
                 mMap.setMyLocationEnabled(true);
                 mMap.setOnMyLocationButtonClickListener(this);
                 View locationButton = ((View) mMapView.findViewById(1).getParent()).findViewById(2);
@@ -150,7 +159,7 @@ public class MapsActivity extends FragmentActivity implements
         if (mMap != null) {
             // Access to the location has been granted to the app.
             mMap.setOnMarkerDragListener(this);
-            mMap.setOnMapLongClickListener(this);
+            mMap.setOnMapClickListener(this);
             try {
                 //set marker to where mood is posted
                 if ((longitude != 0.0) && (latitude != 0.0)) {
@@ -278,7 +287,7 @@ public class MapsActivity extends FragmentActivity implements
     }
 
     @Override
-    public void onMapLongClick(LatLng latLng) {
+    public void onMapClick(LatLng latLng) {
         if (marker != null){
             marker.remove();
         }

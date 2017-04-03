@@ -5,6 +5,7 @@
         <item name="android:textColorSecondary">@color/dark_gray</item>
         <item name="android:textColorTertiary">@color/gray</item>
         <item name="android:colorPrimary">@color/transparent</item>
+        <item name="android:alertDialogStyle">@style/GalaxyTheme.alertDialog</item>
         <item name="android:windowBackground">@color/transparent</item>
         <item name="android:colorAccent">@color/galaxy_blue</item>
         <item name="android:textColorHint">@color/galaxy_blue</item>
@@ -14,6 +15,10 @@
         <item name="android:statusBarColor">@color/galaxy_blue</item>
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="GalaxyTheme.alertDialog">
+        <item name="android:windowBackground">@android:color/transparent</item>
     </style>
 
 </resources>

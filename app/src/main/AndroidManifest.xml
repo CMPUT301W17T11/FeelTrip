@@ -28,8 +28,11 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/DefaultTheme"
-        tools:replace="android:theme">
+        android:hardwareAccelerated="false"
+        android:largeHeap="true"
+        tools:replace="android:theme"
+        android:theme="@style/DefaultTheme" >
+        
         <service
             android:name=".UpdateService"
             android:exported="false" />

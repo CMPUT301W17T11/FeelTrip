@@ -2,16 +2,19 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@android:color/transparent"
     tools:context="layout.mapFragment">
 
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@android:color/transparent"
         android:layout_marginBottom="56dp"
         android:layout_marginTop="84dp">
 
         <com.google.android.gms.maps.MapView
             android:id="@+id/mapView"
+            android:background="@android:color/transparent"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
