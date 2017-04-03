@@ -746,8 +746,6 @@ public class MainScreen extends AppCompatActivity{
             emotionalStateList.add(FeelTripApplication.getEmotionalState(i));
         }
 
-
-
         ArrayAdapter<String> emotionalStateAdapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_spinner_item, emotionalStateList);
         emotionalStateAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
