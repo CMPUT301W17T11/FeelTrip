@@ -227,19 +227,22 @@ public class mapFragment extends Fragment implements
                         emotionView.setTextColor(Color.GREEN);
                         break;
                     case "Fearful":
-                        emotionView.setTextColor(Color.CYAN);
+                        emotionView.setTextColor(Color.BLUE);
                         break;
                     case "Happy":
                         emotionView.setTextColor(Color.YELLOW);
                         break;
                     case "Sad":
-                        emotionView.setTextColor(Color.BLUE);
+                        emotionView.setTextColor(Color.CYAN);
                         break;
                     case "Shameful":
                         emotionView.setTextColor(Color.MAGENTA);
                         break;
                     case "Cool":
                         emotionView.setTextColor(0xFFFF9966);
+                        break;
+                    case "Surprised":
+                        emotionView.setTextColor(0xFF996600);
                         break;
                     default:
                         break;
@@ -355,7 +358,6 @@ public class mapFragment extends Fragment implements
     @Override
     public boolean onMyLocationButtonClick() {
         Log.d("mapTag", "my locaiton button clicked");
-        Toast.makeText(getActivity(), "MyLocation button clicked", Toast.LENGTH_SHORT).show();
         // Return false so that we don't consume the event and the default behavior still occurs
         // (the camera animates to the user's current position).
         if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED

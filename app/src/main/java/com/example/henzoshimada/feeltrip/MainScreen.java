@@ -150,7 +150,8 @@ public class MainScreen extends AppCompatActivity{
         }
 
         else if(FeelTripApplication.getThemeID() == R.style.GalaxyTheme) {
-            minorHome.setIcon(R.drawable.galaxy_icon_home_selected); //TODO: THEME
+            minorHome.setIcon(R.drawable.galaxy_icon_home); //TODO: THEME
+            minorHome.setTextColor(Color.WHITE);
         }
         onResume();
     }
@@ -195,7 +196,8 @@ public class MainScreen extends AppCompatActivity{
         }
 
         else if(FeelTripApplication.getThemeID() == R.style.GalaxyTheme) {
-            minorHome.setIcon(R.drawable.galaxy_icon_home_unselected); //TODO: THEME
+            minorProfile.setIcon(R.drawable.galaxy_icon_profile);
+            minorProfile.setTextColor(Color.WHITE);
         }
         onResume();
     }
@@ -240,7 +242,8 @@ public class MainScreen extends AppCompatActivity{
         }
 
         else if(FeelTripApplication.getThemeID() == R.style.GalaxyTheme) {
-            minorHome.setIcon(R.drawable.galaxy_icon_home_unselected); //TODO: THEME
+            minorMaps.setIcon(R.drawable.galaxy_icon_maps);
+            minorMaps.setTextColor(Color.WHITE);
         }
         onResume();
     }
@@ -429,9 +432,9 @@ public class MainScreen extends AppCompatActivity{
         else if(FeelTripApplication.getThemeID() == R.style.GalaxyTheme) {
             RelativeLayout background = (RelativeLayout) findViewById(R.id.content_main);
             background.setBackgroundResource(R.drawable.galaxy_bg);
-            minorHome.setIcon(R.drawable.galaxy_icon_home_unselected);
-            minorProfile.setIcon(R.drawable.overwatch_icon_profile); // TODO: theme
-            minorMaps.setIcon(R.drawable.overwatch_icon_maps);
+            minorHome.setIcon(R.drawable.galaxy_icon_home);
+            minorProfile.setIcon(R.drawable.galaxy_icon_profile); // TODO: theme
+            minorMaps.setIcon(R.drawable.galaxy_icon_maps);
         }
 
         else {

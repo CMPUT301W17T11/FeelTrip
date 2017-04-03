@@ -29,7 +29,8 @@ public class FeelTripApplication extends Application {
             "Happy",
             "Sad",
             "Shameful",
-            "Cool");
+            "Cool",
+            "Surprised");
 
     /**
      * Gets num emotions.
