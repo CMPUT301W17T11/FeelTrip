@@ -434,6 +434,7 @@ public class EditMoodActivity extends AppCompatActivity {
                 Mood mood = editmood;
                 mood.resetState();
                 mood.setAdd();
+                FeelTripApplication.getLocalProfileList().remove(mood);
                 ElasticSearchController.EditMoodTask editMoodTask = new ElasticSearchController.EditMoodTask();
                 if (showPublicOn) {
                     mood.setPublic();
@@ -472,6 +473,8 @@ public class EditMoodActivity extends AppCompatActivity {
                     mood.setNullImage();
                 }
                 editMoodTask.execute(mood);
+                FeelTripApplication.getLocalProfileList().add(0, mood);
+
                 Log.d("tag", "Editing mood");
                 finish();
             } else {

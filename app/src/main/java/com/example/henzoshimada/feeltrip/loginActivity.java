@@ -263,8 +263,14 @@ public class loginActivity extends AppCompatActivity implements
      * @param v the v
      */
     public void checkUser(View v){ // TODO: Check and fix cases where pass or username contains special chars.
+        if (!FeelTripApplication.getNetworkAvailable()){
+            Toast.makeText(getApplicationContext(),"No internet connection!",Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         EditText userField = (EditText) this.findViewById(R.id.user_text);
         EditText passField = (EditText) this.findViewById(R.id.pass_text);
+
         ArrayList<Participant> participants = new ArrayList<>();
         ElasticSearchController.GetParticipantTask get = new ElasticSearchController.GetParticipantTask(userField.getText().toString(),
         passField.getText().toString());
@@ -299,6 +305,10 @@ public class loginActivity extends AppCompatActivity implements
      * @param v the v
      */
     public void regUser(View v){
+        if (!FeelTripApplication.getNetworkAvailable()){
+            Toast.makeText(getApplicationContext(),"No internet connection!",Toast.LENGTH_SHORT).show();
+            return;
+        }
         EditText userField = (EditText) this.findViewById(R.id.user_text);
         EditText passField = (EditText) this.findViewById(R.id.pass_text);
         ArrayList<Participant> participants = new ArrayList<>();

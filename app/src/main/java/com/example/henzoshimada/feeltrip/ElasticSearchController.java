@@ -174,12 +174,15 @@ public class ElasticSearchController {
                             mood.setAdd();
                             UpdateQueueController updateQueueController = FeelTripApplication.getUpdateQueueController();
                             updateQueueController.addMood(mood);
+                            FeelTripApplication.getLocalProfileList().add(0, mood);
                         }
                     } catch (Exception e) {
                         Log.i("Error", ""+e);
                         mood.setAdd();
                         UpdateQueueController updateQueueController = FeelTripApplication.getUpdateQueueController();
                         updateQueueController.addMood(mood);
+                        FeelTripApplication.getLocalProfileList().add(0, mood);
+
                     }
                 }
             }
@@ -298,6 +301,7 @@ public class ElasticSearchController {
                         Log.i("Error", "The application failed to build and send the moods");
                         UpdateQueueController updateQueueController = FeelTripApplication.getUpdateQueueController();
                         updateQueueController.addMood(mood);
+
                         return null;
                     }
 
@@ -333,6 +337,7 @@ public class ElasticSearchController {
                     mood.setDel();
                     UpdateQueueController updateQueueController = FeelTripApplication.getUpdateQueueController();
                     updateQueueController.addMood(mood);
+                    FeelTripApplication.getLocalProfileList().remove(mood);
                 }
             }
             return null;
