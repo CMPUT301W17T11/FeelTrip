@@ -431,7 +431,6 @@ public class mapFragment extends Fragment implements
     @Override
     public boolean onMyLocationButtonClick() {
         Log.d("mapTag", "my locaiton button clicked");
-        Toast.makeText(getActivity(), "MyLocation button clicked", Toast.LENGTH_SHORT).show();
         // Return false so that we don't consume the event and the default behavior still occurs
         // (the camera animates to the user's current position).
         if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
