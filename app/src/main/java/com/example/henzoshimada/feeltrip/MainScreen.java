@@ -107,6 +107,7 @@ public class MainScreen extends AppCompatActivity{
      * The constant somethingwentwrong.
      */
     public static final int somethingwentwrong = 0x1F31A;
+
     private ListView userFoundView;  //who participant searched
     private ListView followingView; //who participant is following
     private ListView requestView;   //who participant wants to follow
