@@ -4,6 +4,7 @@ import android.os.AsyncTask;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.google.common.collect.Lists;
 import com.google.gson.Gson;
 import com.searchly.jestdroid.DroidClientConfig;
 import com.searchly.jestdroid.JestClientFactory;
@@ -12,6 +13,7 @@ import com.searchly.jestdroid.JestDroidClient;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.LinkedHashMap;
@@ -1023,13 +1025,14 @@ public class ElasticSearchController {
                     moods.addAll(foundMoods);
                     if(!mostrecentfilter) {
                         if (!profilemode) { // take into account that we only want the most recent post of each user - so we'll use a LinkedHashMap to de-duplicate by username
-                            List<Mood> revmoods = moods; // Reverse the order of the moods list since the LinkedHashMap will squash the duplicates in a "Last Man Standing" format
-                            Map<String, Mood> map = new LinkedHashMap<>();
+                            List<Mood> revmoods = Lists.reverse(moods); // Reverse the order of the moods list since the LinkedHashMap will squash the duplicates in a "Last Man Standing" format
+                            LinkedHashMap<String, Mood> map = new LinkedHashMap<>();
                             for (Mood mood : revmoods) {
                                 map.put(mood.getUsername(), mood);
                             }
                             moods.clear();
                             moods.addAll(map.values());
+                            Collections.sort(moods);
                         }
                         if (localCache != null) {
                             localCache.clear();

@@ -17,7 +17,7 @@ import io.searchbox.annotations.JestId;
  * This mood class is the mood object that will store everything that is associated with a mood
  * this include the username and the description and the image, etc.
  */
-public class Mood {
+public class Mood implements Comparable<Mood>{
     private String username;
 
     private String emotionalState;
@@ -537,6 +537,12 @@ public class Mood {
             this.emoji = emoji;
             setStateByIndex(7);
         }
+    }
+
+    @Override
+    public int compareTo(Mood comparemood) {
+        Long comparemade=((Mood)comparemood).getMade();
+        return (int)(comparemade-this.made);
     }
 
 }
