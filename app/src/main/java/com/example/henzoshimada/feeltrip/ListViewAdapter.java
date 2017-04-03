@@ -146,6 +146,9 @@ public class ListViewAdapter extends BaseSwipeAdapter {
                 case "Cool":
                     emotion.setTextColor(0xFFFF9966);
                     break;
+                case "Surprised":
+                    emotion.setTextColor(0xFF996600);
+                    break;
                 default:
                     break;
             }
