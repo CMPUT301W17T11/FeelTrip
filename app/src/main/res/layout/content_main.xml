@@ -115,7 +115,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="20dp"
                     android:textColor="?android:attr/textColorTertiary"
-                    android:text="Friends"
+                    android:text="Following"
                     android:textSize="10dp"/>
 
                 <TextView

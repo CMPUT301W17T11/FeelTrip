@@ -1035,7 +1035,7 @@ public class ElasticSearchController {
                     } else {
                         moods.subList(1, moods.size()).clear();
 
-                        if (localCache != null) {   
+                        if (localCache != null) {
                             localCache.clear();
                             localCache.addAll(moods);
                         }

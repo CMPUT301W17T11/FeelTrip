@@ -676,7 +676,7 @@ public class MainScreen extends AppCompatActivity{
         emotionalStateSpinner = (Spinner) findViewById(R.id.filterMood);
         List<String> emotionalStateList = new ArrayList<>();
         for(int i = 0; i <= FeelTripApplication.getNumEmotions(); i++) {
-            emotionalStateList.add(FeelTripApplication.getEmotionalState(i));
+            emotionalStateList.add("Filter emotion: " + FeelTripApplication.getEmotionalState(i));
         }
 
         ArrayAdapter<String> emotionalStateAdapter = new ArrayAdapter<>(this,
