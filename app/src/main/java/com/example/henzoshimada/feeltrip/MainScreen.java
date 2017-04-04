@@ -550,6 +550,9 @@ public class MainScreen extends AppCompatActivity{
         FilterController.setKeywordfilter(string_keyword.getText().toString()); // Always take into account what's written in the "Keyword search" field. This eliminates confusion when words are typed but "Search" isn't explicitly tapped
         ElasticSearchController.loadFromElasticSearch();
         FeelTripApplication.getListViewAdapter(getBaseContext()).notifyDataSetChanged();
+        if (FeelTripApplication.getFrag().equals("map")) {
+            updateMap();
+        }
 
     }
 
@@ -620,6 +623,9 @@ public class MainScreen extends AppCompatActivity{
         FilterController.setKeywordfilter(string_keyword.getText().toString());
         ElasticSearchController.loadFromElasticSearch();
         FeelTripApplication.getListViewAdapter(getBaseContext()).notifyDataSetChanged();
+        if (FeelTripApplication.getFrag().equals("map")) {
+            updateMap();
+        }
     }
 
     private void addItemsOnEmotionalStateSpinner(){ //TODO: Redo the way this is called so the feelings can be dynamically loaded
