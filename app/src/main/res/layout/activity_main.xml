@@ -39,6 +39,8 @@
                 android:id="@+id/user_search"
                 android:layout_width="190dp"
                 android:layout_height="50dp"
+                android:textColorHint="@color/gray"
+                android:textColor="@color/gray"
                 android:hint="Search"
                 android:background="#FFF">
             </EditText>
