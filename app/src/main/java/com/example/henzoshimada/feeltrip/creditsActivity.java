@@ -20,5 +20,7 @@ public class creditsActivity extends AppCompatActivity {
         ImageView gabbyCard = (ImageView)findViewById(R.id.gabbyCard);
         YoYo.with(Techniques.Landing).duration(1000).delay(0).playOn(creditLayout);
         YoYo.with(Techniques.Tada).duration(1000).delay(500).playOn(gabbyCard);
+        ImageView jaxCard = (ImageView)findViewById(R.id.jaxCard);
+        YoYo.with(Techniques.Tada).duration(1000).delay(500).playOn(jaxCard);
     }
 }

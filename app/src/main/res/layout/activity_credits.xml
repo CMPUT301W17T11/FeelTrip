@@ -34,7 +34,22 @@ android:id = "@+id/loginActivity">
         android:layout_height="wrap_content"
         android:textSize="15sp"
         android:id="@+id/gabbyText"
-        android:text="For providing hand drawn emoticons towards our Overwatch theme. You are the bomb.com and thank you so much for your hard work and we really appriciated your kindess :D!"/>
+        android:text="For providing hand drawn emoticons towards our Overwatch theme. You are the bomb.com and thank you so much for your hard work. We really appriciated your kindess :D!"/>
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:adjustViewBounds="true"
+        android:maxHeight="400sp"
+        android:src ="@drawable/jacquelinecard"
+        android:id ="@+id/jaxCard"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="15sp"
+        android:id="@+id/gabbyText"
+        android:text="For the amazing galaxy theme, you are amazing in every single way shape and form and we all love you!"/>
 </LinearLayout>
 
 
